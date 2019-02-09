@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Abstractions", "BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj", "{C85FA1C3-F067-4654-A3AB-B1E0EA2A13EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter", "BtcTransmuter\BtcTransmuter.csproj", "{8FE15314-1F22-4AAB-9856-30A62C2933EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Email", "BtcTransmuter.Extension.Email\BtcTransmuter.Extension.Email.csproj", "{8BDBFBB0-1326-4A02-A9BC-C2F10B510426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Data", "BtcTransmuter.Data\BtcTransmuter.Data.csproj", "{0C0781FD-A7AC-4B74-B55D-462A023EBF76}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C85FA1C3-F067-4654-A3AB-B1E0EA2A13EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85FA1C3-F067-4654-A3AB-B1E0EA2A13EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85FA1C3-F067-4654-A3AB-B1E0EA2A13EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85FA1C3-F067-4654-A3AB-B1E0EA2A13EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE15314-1F22-4AAB-9856-30A62C2933EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE15314-1F22-4AAB-9856-30A62C2933EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE15314-1F22-4AAB-9856-30A62C2933EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE15314-1F22-4AAB-9856-30A62C2933EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BDBFBB0-1326-4A02-A9BC-C2F10B510426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BDBFBB0-1326-4A02-A9BC-C2F10B510426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BDBFBB0-1326-4A02-A9BC-C2F10B510426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BDBFBB0-1326-4A02-A9BC-C2F10B510426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0781FD-A7AC-4B74-B55D-462A023EBF76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0781FD-A7AC-4B74-B55D-462A023EBF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0781FD-A7AC-4B74-B55D-462A023EBF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0781FD-A7AC-4B74-B55D-462A023EBF76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {623ECF2C-6051-42EB-84C4-177F59F2392F}
+	EndGlobalSection
+EndGlobal

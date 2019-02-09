@@ -1,0 +1,55 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Extension.Email\\BtcTransmuter.Extension.Email.csproj",
+    "projectName": "BtcTransmuter.Extension.Email",
+    "projectPath": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Extension.Email\\BtcTransmuter.Extension.Email.csproj",
+    "outputPath": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Extension.Email\\obj\\",
+    "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+    ],
+    "originalTargetFrameworks": [
+      "netcoreapp2.1"
+    ],
+    "frameworks": {
+      "netcoreapp2.1": {
+        "projectReferences": {
+          "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Abstractions\\BtcTransmuter.Abstractions.csproj": {
+            "projectPath": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Abstractions\\BtcTransmuter.Abstractions.csproj"
+          }
+        }
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.1": {
+      "dependencies": {
+        "Microsoft.Extensions.Hosting.Abstractions": {
+          "target": "Package",
+          "version": "[2.1.1, )"
+        },
+        "Microsoft.NETCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.1.0, )",
+          "autoReferenced": true
+        },
+        "Pop3": {
+          "target": "Package",
+          "version": "[2.2.2, )"
+        }
+      },
+      "imports": [
+        "net461"
+      ],
+      "assetTargetFallback": true,
+      "warn": true
+    }
+  }
+}
