@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions;
+using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data;
 
 namespace BtcTransmuter.Extension.Email.Triggers
@@ -12,10 +13,7 @@ namespace BtcTransmuter.Extension.Email.Triggers
             ReceivedEmailTriggerData triggerData,
             ReceivedEmailTriggerParameters parameters)
         {
-            if (triggerData.ExternalServiceId != recipeTrigger.ExternalServiceId)
-            {
-                return Task.FromResult(false);
-            }
+           
 
             if (!string.IsNullOrEmpty(parameters.FromEmail) && parameters.FromEmail.Equals(triggerData.FromEmail,
                     StringComparison.InvariantCultureIgnoreCase))

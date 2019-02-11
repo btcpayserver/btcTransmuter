@@ -1,5 +1,6 @@
 using System;
 using BtcTransmuter.Abstractions;
+using BtcTransmuter.Abstractions.ExternalServices;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices
 {

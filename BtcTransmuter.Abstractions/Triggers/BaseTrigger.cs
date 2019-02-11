@@ -1,7 +1,6 @@
 using BtcTransmuter.Data.Models;
-using Newtonsoft.Json.Linq;
 
-namespace BtcTransmuter.Abstractions
+namespace BtcTransmuter.Abstractions.Triggers
 {
     public abstract class BaseTrigger<TData> : ITrigger
     {
@@ -12,7 +11,7 @@ namespace BtcTransmuter.Abstractions
         public virtual TData Data
         {
             get => this.Get<TData>();
-            set => this.Set<TData>();
+            set => this.Set(value);
         }
     }
 }

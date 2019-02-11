@@ -43,6 +43,10 @@
         "Newtonsoft.Json": {
           "target": "Package",
           "version": "[12.0.1, )"
+        },
+        "wilx.System.Linq.Dynamic.Core": {
+          "target": "Package",
+          "version": "[2.1.0, )"
         }
       },
       "imports": [

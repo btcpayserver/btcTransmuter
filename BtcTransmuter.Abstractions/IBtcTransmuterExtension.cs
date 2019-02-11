@@ -7,6 +7,5 @@ namespace BtcTransmuter.Abstractions
     {
         string Name { get; }
         string Version { get; }
-        
     }
 }

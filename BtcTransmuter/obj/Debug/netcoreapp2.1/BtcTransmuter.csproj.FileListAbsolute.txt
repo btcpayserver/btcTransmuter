@@ -1,3 +1,0 @@
-C:\Git\BtcTransmuterVNext\BtcTransmuter\obj\Debug\netcoreapp2.1\BtcTransmuter.csproj.CoreCompileInputs.cache
-C:\Git\BtcTransmuterVNext\BtcTransmuter\obj\Debug\netcoreapp2.1\BtcTransmuter.AssemblyInfoInputs.cache
-C:\Git\BtcTransmuterVNext\BtcTransmuter\obj\Debug\netcoreapp2.1\BtcTransmuter.AssemblyInfo.cs

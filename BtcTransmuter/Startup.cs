@@ -39,7 +39,8 @@ namespace BtcTransmuter
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<User>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

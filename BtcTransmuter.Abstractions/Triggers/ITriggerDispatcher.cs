@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace BtcTransmuter.Abstractions
+namespace BtcTransmuter.Abstractions.Triggers
 {
     public interface ITriggerDispatcher
     {

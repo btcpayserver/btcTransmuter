@@ -9,9 +9,9 @@ namespace BtcTransmuter.Data.Models
             return JObject.Parse(i.DataJson ?? "{}").ToObject<T>();
         }
 
-        public static T Set<T>(this IHasJsonData i)
+        public static void Set<T>(this IHasJsonData i, T data)
         {
-            return JObject.Parse(i.DataJson ?? "{}").ToObject<T>();
+            i.DataJson = JObject.FromObject(data).ToString();
         }
     }
 }

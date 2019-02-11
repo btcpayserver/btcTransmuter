@@ -1,14 +1,33 @@
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using BtcTransmuter.Abstractions;
+using BtcTransmuter.Abstractions.ExternalServices;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices
 {
-    public class SmtpServiceService: BaseExternalService<Pop3ExternalServiceData>
+    public class SmtpService : BaseExternalService<Pop3ExternalServiceData>
     {
         protected override string ExternalServiceType => EmailBtcTransmuterExtension.SmtpExternalServiceType;
 
-        public SmtpServiceService(ExternalServiceData data) : base(data)
+        public SmtpService(ExternalServiceData data) : base(data)
         {
         }
 
+        public async Task SendEmail(MailMessage message)
+        {
+            using (var client = new SmtpClient()
+            {
+                Port = Data.Port,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Host = Data.Server,
+                Credentials = new NetworkCredential(Data.Username, Data.Password),
+                EnableSsl = Data.SSL
+            })
+            {
+                await client.SendMailAsync(message);
+            }
+        }
     }
 }

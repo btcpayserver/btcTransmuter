@@ -9,11 +9,4 @@ namespace BtcTransmuter.Abstractions.Recipes
     {
         Task<IEnumerable<Recipe>> GetRecipes(RecipesQuery query);
     }
-
-
-    public class RecipesQuery
-    {
-        public bool Enabled { get; set; }
-        public string RecipeTriggerId { get; set; }
-    }
 }

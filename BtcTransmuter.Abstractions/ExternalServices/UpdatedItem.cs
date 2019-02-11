@@ -1,6 +1,6 @@
 using System;
 
-namespace BtcTransmuter.Abstractions
+namespace BtcTransmuter.Abstractions.ExternalServices
 {
     public class UpdatedItem<T> : EventArgs
     {

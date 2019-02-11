@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions;
+using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Extension.Email.ExternalServices;
 using BtcTransmuter.Extension.Email.Triggers;
 using Microsoft.Extensions.Hosting;

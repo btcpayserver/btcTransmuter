@@ -1,6 +1,6 @@
 using BtcTransmuter.Data.Models;
 
-namespace BtcTransmuter.Abstractions
+namespace BtcTransmuter.Abstractions.Triggers
 {
     public interface ITrigger: IHasJsonData
     {

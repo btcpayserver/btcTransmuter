@@ -1,1 +1,11 @@
 # Created by .ignore support plugin (hsz.mobi)
+
+BtcTransmuter/obj/Debug/netcoreapp2\.1/Razor/Views/Shared/
+
+BtcTransmuter/obj/Debug/netcoreapp2\.1/
+
+BtcTransmuter/bin/Debug/netcoreapp2\.1/
+
+BtcTransmuter\.Abstractions/bin/Debug/netcoreapp2\.1/
+
+BtcTransmuter/obj/

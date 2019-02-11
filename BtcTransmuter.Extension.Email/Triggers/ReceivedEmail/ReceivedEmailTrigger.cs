@@ -1,4 +1,5 @@
 using BtcTransmuter.Abstractions;
+using BtcTransmuter.Abstractions.Triggers;
 
 namespace BtcTransmuter.Extension.Email.Triggers
 {

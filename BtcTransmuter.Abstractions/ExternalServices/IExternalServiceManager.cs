@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BtcTransmuter.Abstractions
+namespace BtcTransmuter.Abstractions.ExternalServices
 {
     public interface IExternalServiceManager
     {
@@ -13,10 +12,5 @@ namespace BtcTransmuter.Abstractions
         Task UpdateInternalData(string id, object data);
         event EventHandler<UpdatedItem<ExternalServiceData>> ExternalServiceDataUpdated;
         Task<IEnumerable<ExternalServiceData>> GetExternalServicesData(ExternalServicesDataQuery query);
-    }
-
-    public class ExternalServicesDataQuery
-    {
-        public string[] Type { get; set; }
     }
 }
