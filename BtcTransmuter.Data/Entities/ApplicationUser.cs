@@ -29,7 +29,7 @@ namespace BtcTransmuter.Data
 
         public string ExternalServiceId { get; set; }
 
-
+        public string TriggerId { get; set; }
         public Recipe Recipe { get; set; }
         public ExternalServiceData ExternalService { get; set; }
     }
@@ -39,6 +39,7 @@ namespace BtcTransmuter.Data
         public string RecipeId { get; set; }
         public string ExternalServiceId { get; set; }
 
+        public string ActionName { get; set; }
         public Recipe Recipe { get; set; }
         public ExternalServiceData ExternalService { get; set; }
     }

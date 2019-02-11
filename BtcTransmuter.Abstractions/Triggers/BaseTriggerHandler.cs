@@ -1,20 +1,17 @@
 using System.Threading.Tasks;
+using BtcTransmuter.Data;
+using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions
 {
-    public abstract class BaseTriggerHandler<TTrigger, TTriggerData, TTriggerParameters> : ITriggerHandler<TTriggerData>
-        where TTrigger : ITrigger<TTriggerData> where TTriggerParameters : class
+    public abstract class BaseTriggerHandler<TTriggerData, TTriggerParameters> : ITriggerHandler where TTriggerParameters : class
     {
-        public async Task<bool> IsTriggered(ITrigger<TTriggerData> trigger, object parameters)
+        protected abstract Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger, TTriggerData triggerData ,TTriggerParameters parameters);
+
+        public Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger)
         {
-            if (!(parameters is TTriggerParameters))
-            {
-                return false;
-            }
-
-            return await IsTriggered(trigger, (TTriggerParameters) parameters);
+            return IsTriggered(trigger, recipeTrigger, trigger.Get<TTriggerData>() , recipeTrigger.Get<TTriggerParameters>());
         }
-
-        protected abstract Task<bool> IsTriggered(ITrigger<TTriggerData> trigger, TTriggerParameters parameters);
     }
+
 }

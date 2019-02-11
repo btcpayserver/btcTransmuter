@@ -75,13 +75,12 @@ namespace BtcTransmuter.Extension.Email.HostedServices
                                 ExternalServiceId = service.Key
                             }
                         };
-
                         await _triggerDispatcher.DispatchTrigger(trigger);
                     }
 
                     service.Value.Data.LastCheck = DateTime.Now;
                     await _externalServiceManager.UpdateInternalData(service.Key, service.Value);
-                    await pop3Client.DisconnectAsync();
+                    await pop3Client.DisconnectAsync(); 
                     pop3Client.Dispose();
                 }, cancellationToken));
 

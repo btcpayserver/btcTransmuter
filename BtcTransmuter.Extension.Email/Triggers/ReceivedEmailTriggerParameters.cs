@@ -2,7 +2,6 @@ namespace BtcTransmuter.Extension.Email.Triggers
 {
     public class ReceivedEmailTriggerParameters
     {
-        public string ExternalServiceId { get; set; }
         public string FromEmail { get; set; }
         public string Subject { get; set; }
         public FieldComparer SubjectComparer { get; set; } = FieldComparer.None;

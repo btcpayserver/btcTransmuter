@@ -1,21 +1,23 @@
 using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions;
+using BtcTransmuter.Data;
 
 namespace BtcTransmuter.Extension.Email.Triggers
 {
-    public class ReceivedEmailTriggerHandler : BaseTriggerHandler<ReceivedEmailTrigger, ReceivedEmailTriggerData,
+    public class ReceivedEmailTriggerHandler : BaseTriggerHandler<ReceivedEmailTriggerData,
         ReceivedEmailTriggerParameters>
     {
-        protected override Task<bool> IsTriggered(ITrigger<ReceivedEmailTriggerData> trigger,
+        protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
+            ReceivedEmailTriggerData triggerData,
             ReceivedEmailTriggerParameters parameters)
         {
-            if (trigger.Data.ExternalServiceId != parameters.ExternalServiceId)
+            if (triggerData.ExternalServiceId != recipeTrigger.ExternalServiceId)
             {
                 return Task.FromResult(false);
             }
 
-            if (!string.IsNullOrEmpty(parameters.FromEmail) && parameters.FromEmail.Equals(trigger.Data.FromEmail,
+            if (!string.IsNullOrEmpty(parameters.FromEmail) && parameters.FromEmail.Equals(triggerData.FromEmail,
                     StringComparison.InvariantCultureIgnoreCase))
             {
                 return Task.FromResult(false);
@@ -26,14 +28,14 @@ namespace BtcTransmuter.Extension.Email.Triggers
                 case ReceivedEmailTriggerParameters.FieldComparer.None:
                     break;
                 case ReceivedEmailTriggerParameters.FieldComparer.Equals:
-                    if (!trigger.Data.Subject.Equals(parameters.Subject, StringComparison.CurrentCultureIgnoreCase))
+                    if (!triggerData.Subject.Equals(parameters.Subject, StringComparison.CurrentCultureIgnoreCase))
                     {
                         return Task.FromResult(false);
                     }
 
                     break;
                 case ReceivedEmailTriggerParameters.FieldComparer.Contains:
-                    if (!trigger.Data.Subject.Contains(parameters.Subject, StringComparison.CurrentCultureIgnoreCase))
+                    if (!triggerData.Subject.Contains(parameters.Subject, StringComparison.CurrentCultureIgnoreCase))
                     {
                         return Task.FromResult(false);
                     }
@@ -48,14 +50,14 @@ namespace BtcTransmuter.Extension.Email.Triggers
                 case ReceivedEmailTriggerParameters.FieldComparer.None:
                     break;
                 case ReceivedEmailTriggerParameters.FieldComparer.Equals:
-                    if (!trigger.Data.Body.Equals(parameters.Body, StringComparison.CurrentCultureIgnoreCase))
+                    if (!triggerData.Body.Equals(parameters.Body, StringComparison.CurrentCultureIgnoreCase))
                     {
                         return Task.FromResult(false);
                     }
 
                     break;
                 case ReceivedEmailTriggerParameters.FieldComparer.Contains:
-                    if (!trigger.Data.Body.Contains(parameters.Body, StringComparison.CurrentCultureIgnoreCase))
+                    if (!triggerData.Body.Contains(parameters.Body, StringComparison.CurrentCultureIgnoreCase))
                     {
                         return Task.FromResult(false);
                     }

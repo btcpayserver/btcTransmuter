@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
+using BtcTransmuter.Data;
 
 namespace BtcTransmuter.Abstractions
 {
-    public interface ITriggerHandler<TTriggerData>
+    public interface ITriggerHandler
     {
-        Task<bool> IsTriggered(ITrigger<TTriggerData> trigger, object parameters);
+        Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger);
     }
 }

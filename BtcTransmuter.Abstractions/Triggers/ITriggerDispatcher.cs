@@ -4,6 +4,6 @@ namespace BtcTransmuter.Abstractions
 {
     public interface ITriggerDispatcher
     {
-        Task DispatchTrigger<T>(ITrigger<T> trigger);
+        Task DispatchTrigger(ITrigger trigger);
     }
 }

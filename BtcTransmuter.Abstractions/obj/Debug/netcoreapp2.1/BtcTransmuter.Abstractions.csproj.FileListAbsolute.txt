@@ -1,0 +1,12 @@
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\bin\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.deps.json
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\bin\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.dll
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\bin\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.pdb
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\bin\Debug\netcoreapp2.1\BtcTransmuter.Data.dll
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\bin\Debug\netcoreapp2.1\BtcTransmuter.Data.pdb
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\obj\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.csprojAssemblyReference.cache
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\obj\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.csproj.CoreCompileInputs.cache
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\obj\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.AssemblyInfoInputs.cache
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\obj\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.AssemblyInfo.cs
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\obj\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.csproj.CopyComplete
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\obj\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.dll
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Abstractions\obj\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.pdb

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Git\BtcTransmuterVNext" t="IncludeFlat">
+      <e p=".git\info\exclude" t="IncludeRecursive" />
       <e p="BtcTransmuter" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
@@ -127,6 +128,7 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="BtcTransmuter.Abstractions.csproj" t="IncludeRecursive" />
         <e p="ExternalServices" t="Include">
+          <e p="BaseExternalService.cs" t="Include" />
           <e p="IExternalServiceManager.cs" t="Include" />
           <e p="UpdatedItem.cs" t="Include" />
         </e>
@@ -137,6 +139,9 @@
               <e p="BtcTransmuter.Abstractions.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
+        </e>
+        <e p="Recipes" t="Include">
+          <e p="IRecipeManager.cs" t="Include" />
         </e>
         <e p="Triggers" t="Include">
           <e p="BaseTrigger.cs" t="Include" />
@@ -156,6 +161,10 @@
           <e p="ExternalServiceData.cs" t="Include" />
         </e>
         <e p="Migrations" t="Include" />
+        <e p="Models" t="Include">
+          <e p="IHasJsonData.cs" t="Include" />
+          <e p="IHasJsonDataExtensions.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.1" t="Include">
@@ -165,14 +174,18 @@
         </e>
       </e>
       <e p="BtcTransmuter.Extension.Email" t="IncludeRecursive">
-        <e p="Actions" t="Include" />
+        <e p="Actions" t="Include">
+          <e p="SendEmailAction.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="BtcTransmuter.Extension.Email.csproj" t="IncludeRecursive" />
         <e p="EmailBtcTransmuterExtension.cs" t="Include" />
         <e p="ExternalServices" t="Include">
           <e p="BaseEmailServiceData.cs" t="Include" />
           <e p="Pop3ExternalServiceData.cs" t="Include" />
+          <e p="Pop3Service.cs" t="Include" />
           <e p="SmtpExternalServiceData.cs" t="Include" />
+          <e p="SmtpServiceService.cs" t="Include" />
         </e>
         <e p="HostedServices" t="Include">
           <e p="ReceivingEmailHostedService.cs" t="Include" />
@@ -190,6 +203,18 @@
           <e p="ReceivedEmailTriggerHandler.cs" t="Include" />
           <e p="ReceivedEmailTriggerParameters.cs" t="Include" />
         </e>
+      </e>
+      <e p="BtcTransmuter.Services" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BtcTransmuter.Services.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="BtcTransmuter.Services.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="TriggerDispatcher.cs" t="Include" />
       </e>
       <e p="BtcTransmuterVNext.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

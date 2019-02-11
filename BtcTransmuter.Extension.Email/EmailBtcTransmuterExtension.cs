@@ -9,5 +9,6 @@ namespace BtcTransmuter.Extension.Email
         public string Version => "0.01";
         
         public const string Pop3ExternalServiceType = "Pop3ExternalService";
+        public const string SmtpExternalServiceType = "SmtpExternalService";
     }
 }

@@ -1,0 +1,14 @@
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\obj\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.csprojAssemblyReference.cache
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\obj\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.csproj.CoreCompileInputs.cache
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\obj\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.AssemblyInfoInputs.cache
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\obj\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.AssemblyInfo.cs
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\bin\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.deps.json
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\bin\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.dll
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\bin\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.pdb
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\bin\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.dll
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\bin\Debug\netcoreapp2.1\BtcTransmuter.Data.dll
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\bin\Debug\netcoreapp2.1\BtcTransmuter.Abstractions.pdb
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\bin\Debug\netcoreapp2.1\BtcTransmuter.Data.pdb
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\obj\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.csproj.CopyComplete
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\obj\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.dll
+C:\Git\BtcTransmuterVNext\BtcTransmuter.Extension.Email\obj\Debug\netcoreapp2.1\BtcTransmuter.Extension.Email.pdb
