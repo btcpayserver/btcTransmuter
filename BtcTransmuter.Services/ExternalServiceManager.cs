@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

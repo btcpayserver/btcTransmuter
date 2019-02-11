@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
+using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.Email.ExternalServices;
 using BtcTransmuter.Extension.Email.Triggers;
+using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail;
 using Microsoft.Extensions.Hosting;
 using Pop3;
 
@@ -32,7 +34,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
             {
                 Type = new[]
                 {
-                    EmailBtcTransmuterExtension.Pop3ExternalServiceType
+                    Pop3ExternalServiceDescriptor.Pop3ExternalServiceType
                 }
             });
             _externalServices = new ConcurrentDictionary<string, Pop3Service>(
@@ -97,7 +99,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
 
         private void ExternalServiceManagerOnExternalServiceUpdated(object sender, UpdatedItem<ExternalServiceData> e)
         {
-            if (e.Item.Type != EmailBtcTransmuterExtension.Pop3ExternalServiceType)
+            if (e.Item.Type != Pop3ExternalServiceDescriptor.Pop3ExternalServiceType)
             {
                 return;
             }

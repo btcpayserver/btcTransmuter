@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -44,6 +45,55 @@ namespace BtcTransmuter.Services
                     }
 
                     return await queryable.ToListAsync();
+                }
+            }
+        }
+
+        public async Task AddOrUpdateRecipe(Recipe recipe)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    if (string.IsNullOrEmpty(recipe.Id))
+                    {
+                        await context.Recipes.AddAsync(recipe);
+                    }
+                    else
+                    {
+                        context.Recipes.Attach(recipe);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task RemoveRecipe(string id)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    var recipe = await context.Recipes.FindAsync(id);
+                    if (recipe == null)
+                    {
+                        throw new ArgumentException();
+                    }
+
+                    context.Remove(recipe);
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task<Recipe> GetRecipe(string id)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    return await context.Recipes.FindAsync(id);
                 }
             }
         }

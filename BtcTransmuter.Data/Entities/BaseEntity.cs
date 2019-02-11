@@ -1,6 +1,6 @@
 using BtcTransmuter.Data.Models;
 
-namespace BtcTransmuter.Abstractions
+namespace BtcTransmuter.Data.Entities
 {
     public abstract class BaseEntity: IHasJsonData
     {

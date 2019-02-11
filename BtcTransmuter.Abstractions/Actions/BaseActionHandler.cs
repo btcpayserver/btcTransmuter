@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions.Actions

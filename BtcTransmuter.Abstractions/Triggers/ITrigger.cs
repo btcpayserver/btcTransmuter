@@ -5,6 +5,5 @@ namespace BtcTransmuter.Abstractions.Triggers
     public interface ITrigger: IHasJsonData
     {
         string Id { get; }
-        string Name { get; }
     }
 }

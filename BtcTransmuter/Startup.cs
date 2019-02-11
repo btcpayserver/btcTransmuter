@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Services;
+using ExtCore.WebApplication.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,9 +21,13 @@ namespace BtcTransmuter
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private string extensionsPath;
+
+        public Startup(IHostingEnvironment  hostingEnvironment, IConfiguration configuration)
         {
             Configuration = configuration;
+            
+            extensionsPath = Path.Combine(hostingEnvironment.ContentRootPath, "Extensions");
         }
 
         public IConfiguration Configuration { get; }
@@ -34,6 +42,11 @@ namespace BtcTransmuter
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            
+            services.AddExtCore(this.extensionsPath);
+            
+            services.AddTransmuterServices();
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -58,7 +71,7 @@ namespace BtcTransmuter
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            app.UseExtCore();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

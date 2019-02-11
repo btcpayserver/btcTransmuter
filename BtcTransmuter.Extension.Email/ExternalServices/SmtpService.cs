@@ -3,12 +3,13 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Data.Entities;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices
 {
     public class SmtpService : BaseExternalService<Pop3ExternalServiceData>
     {
-        protected override string ExternalServiceType => EmailBtcTransmuterExtension.SmtpExternalServiceType;
+        protected override string ExternalServiceType => SmtpExternalServiceDescriptor.SmtpExternalServiceType;
 
         public SmtpService(ExternalServiceData data) : base(data)
         {

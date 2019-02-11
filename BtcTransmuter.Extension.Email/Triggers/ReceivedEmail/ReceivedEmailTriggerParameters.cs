@@ -1,4 +1,4 @@
-namespace BtcTransmuter.Extension.Email.Triggers
+namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 {
     public class ReceivedEmailTriggerParameters
     {

@@ -5,6 +5,7 @@ using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
 
 namespace BtcTransmuter.Services
  {

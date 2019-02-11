@@ -16,11 +16,13 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="BtcTransmuter.csproj" t="IncludeRecursive" />
         <e p="Controllers" t="Include">
+          <e p="AdminController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
         </e>
         <e p="Dockerfile" t="Include" />
         <e p="Models" t="Include">
           <e p="ErrorViewModel.cs" t="Include" />
+          <e p="ExtensionsViewModel.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -37,11 +39,12 @@
         <e p="Views" t="Include">
           <e p="_ViewImports.cshtml" t="Include" />
           <e p="_ViewStart.cshtml" t="Include" />
+          <e p="Admin" t="Include">
+            <e p="Extensions.cshtml" t="Include" />
+          </e>
           <e p="Home" t="Include">
             <e p="About.cshtml" t="Include" />
-            <e p="Contact.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
-            <e p="Privacy.cshtml" t="Include" />
           </e>
           <e p="Shared" t="Include">
             <e p="_CookieConsentPartial.cshtml" t="Include" />
@@ -126,6 +129,7 @@
       <e p="BtcTransmuter.Abstractions" t="IncludeRecursive">
         <e p="Actions" t="Include">
           <e p="BaseActionHandler.cs" t="Include" />
+          <e p="IActionDescriptor.cs" t="Include" />
           <e p="IActionDispatcher.cs" t="Include" />
           <e p="IActionHandler.cs" t="Include" />
         </e>
@@ -134,11 +138,11 @@
         <e p="ExternalServices" t="Include">
           <e p="BaseExternalService.cs" t="Include" />
           <e p="ExternalServicesDataQuery.cs" t="Include" />
+          <e p="IExternalServiceDescriptor.cs" t="Include" />
           <e p="IExternalServiceManager.cs" t="Include" />
           <e p="IUseExternalService.cs" t="Include" />
           <e p="UpdatedItem.cs" t="Include" />
         </e>
-        <e p="IBtcTransmuterExtension.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.1" t="Include">
@@ -154,6 +158,7 @@
           <e p="BaseTrigger.cs" t="Include" />
           <e p="BaseTriggerHandler.cs" t="Include" />
           <e p="ITrigger.cs" t="Include" />
+          <e p="ITriggerDescriptor.cs" t="Include" />
           <e p="ITriggerDispatcher.cs" t="Include" />
           <e p="ITriggerHandler.cs" t="Include" />
         </e>
@@ -163,9 +168,13 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="BtcTransmuter.Data.csproj" t="IncludeRecursive" />
         <e p="Entities" t="Include">
-          <e p="ApplicationUser.cs" t="Include" />
           <e p="BaseEntity.cs" t="Include" />
           <e p="ExternalServiceData.cs" t="Include" />
+          <e p="Recipe.cs" t="Include" />
+          <e p="RecipeAction.cs" t="Include" />
+          <e p="RecipeInvocation.cs" t="Include" />
+          <e p="RecipeTrigger.cs" t="Include" />
+          <e p="User.cs" t="Include" />
         </e>
         <e p="Migrations" t="Include" />
         <e p="Models" t="Include">
@@ -183,7 +192,9 @@
       <e p="BtcTransmuter.Extension.Email" t="IncludeRecursive">
         <e p="Actions" t="Include">
           <e p="SendEmail" t="Include">
-            <e p="SendEmailAction.cs" t="Include" />
+            <e p="SendEmailActionDescriptor.cs" t="Include" />
+            <e p="SendEmailData.cs" t="Include" />
+            <e p="SendEmailDataActionHandler.cs" t="Include" />
           </e>
         </e>
         <e p="bin" t="ExcludeRecursive" />
@@ -192,9 +203,11 @@
         <e p="ExternalServices" t="Include">
           <e p="BaseEmailServiceData.cs" t="Include" />
           <e p="Pop3ExternalServiceData.cs" t="Include" />
+          <e p="Pop3ExternalServiceDescriptor.cs" t="Include" />
           <e p="Pop3Service.cs" t="Include" />
           <e p="SmtpExternalServiceData.cs" t="Include" />
-          <e p="SmtpServiceService.cs" t="Include" />
+          <e p="SmtpExternalServiceDescriptor.cs" t="Include" />
+          <e p="SmtpService.cs" t="Include" />
         </e>
         <e p="HostedServices" t="Include">
           <e p="ReceivingEmailHostedService.cs" t="Include" />
@@ -206,14 +219,18 @@
             </e>
           </e>
         </e>
+        <e p="Scripts" t="Include" />
+        <e p="Styles" t="Include" />
         <e p="Triggers" t="Include">
           <e p="ReceivedEmail" t="Include">
             <e p="ReceivedEmailTrigger.cs" t="Include" />
             <e p="ReceivedEmailTriggerData.cs" t="Include" />
+            <e p="ReceivedEmailTriggerDescriptor.cs" t="Include" />
             <e p="ReceivedEmailTriggerHandler.cs" t="Include" />
             <e p="ReceivedEmailTriggerParameters.cs" t="Include" />
           </e>
         </e>
+        <e p="Views" t="Include" />
       </e>
       <e p="BtcTransmuter.Services" t="IncludeRecursive">
         <e p="ActionDispatcher.cs" t="Include" />
@@ -228,6 +245,7 @@
           </e>
         </e>
         <e p="RecipeManager.cs" t="Include" />
+        <e p="TransmuterExtensions.cs" t="Include" />
         <e p="TriggerDispatcher.cs" t="Include" />
       </e>
       <e p="BtcTransmuterVNext.sln" t="IncludeFlat" />

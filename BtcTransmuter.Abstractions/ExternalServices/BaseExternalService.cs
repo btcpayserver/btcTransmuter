@@ -1,4 +1,5 @@
 using System;
+using BtcTransmuter.Data.Entities;
 
 namespace BtcTransmuter.Abstractions.ExternalServices
 {

@@ -5,7 +5,6 @@ namespace BtcTransmuter.Abstractions.Triggers
     public abstract class BaseTrigger<TData> : ITrigger
     {
         public virtual string Id => GetType().FullName;
-        public abstract string Name { get; }
         public string DataJson { get; set; }
 
         public virtual TData Data

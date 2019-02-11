@@ -30,6 +30,14 @@
   "frameworks": {
     "netcoreapp2.1": {
       "dependencies": {
+        "ExtCore.Infrastructure": {
+          "target": "Package",
+          "version": "[3.3.0, )"
+        },
+        "ExtCore.Mvc.Infrastructure": {
+          "target": "Package",
+          "version": "[3.3.0, )"
+        },
         "Microsoft.Extensions.Hosting.Abstractions": {
           "target": "Package",
           "version": "[2.1.1, )"

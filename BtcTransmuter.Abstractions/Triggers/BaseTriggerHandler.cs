@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions.Triggers

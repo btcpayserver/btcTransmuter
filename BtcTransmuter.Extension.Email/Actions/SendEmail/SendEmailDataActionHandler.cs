@@ -2,19 +2,11 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.Email.ExternalServices;
 
-namespace BtcTransmuter.Extension.Email.Actions
+namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
-    public class SendEmailData
-    {
-        public string From { get; set; }
-        public string To { get; set; }
-        public string Email { get; set; }
-        public string Body { get; set; }
-        public string Subject { get; set; }
-    }
-
     public class SendEmailDataActionHandler : BaseActionHandler<SendEmailData>
     {
         protected override async Task<bool> Execute(object triggerData, RecipeAction recipeAction,

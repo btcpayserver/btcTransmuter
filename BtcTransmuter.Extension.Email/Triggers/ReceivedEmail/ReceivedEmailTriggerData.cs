@@ -1,7 +1,6 @@
-using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.ExternalServices;
 
-namespace BtcTransmuter.Extension.Email.Triggers
+namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 {
     public class ReceivedEmailTriggerData: IUseExternalService
     {

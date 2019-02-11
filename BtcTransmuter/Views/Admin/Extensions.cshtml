@@ -1,0 +1,39 @@
+@model BtcTransmuter.Models.ExtensionsViewModel
+@{
+    ViewData["Title"] = "Extensions";
+}
+<h2>@ViewData["Title"]</h2>
+
+
+<ul>
+    @foreach (var extension in Model.Extensions)
+    {
+        <li>@extension.Name - @extension.Version</li>
+    }
+</ul>
+
+
+
+
+<ul>
+    @foreach (var actionDescriptor in Model.ActionDescriptors)
+    {
+        <li>@actionDescriptor.Name -  @actionDescriptor.Description</li>
+    }
+</ul>
+
+
+<ul>
+    @foreach (var triggerDescriptor in Model.TriggerDescriptors)
+    {
+        <li>@triggerDescriptor.Name -  @triggerDescriptor.Description</li>
+    }
+</ul>
+
+
+<ul>
+    @foreach (var externalServiceDescriptor in Model.ExternalServiceDescriptors)
+    {
+        <li>@externalServiceDescriptor.Name -  @externalServiceDescriptor.Description</li>
+    }
+</ul>

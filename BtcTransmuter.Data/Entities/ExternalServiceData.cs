@@ -1,6 +1,4 @@
-using BtcTransmuter.Data;
-
-namespace BtcTransmuter.Abstractions
+namespace BtcTransmuter.Data.Entities
 {
     public class ExternalServiceData : BaseEntity
     {

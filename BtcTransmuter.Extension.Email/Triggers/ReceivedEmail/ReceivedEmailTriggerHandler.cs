@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data;
+using BtcTransmuter.Data.Entities;
 
-namespace BtcTransmuter.Extension.Email.Triggers
+namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 {
     public class ReceivedEmailTriggerHandler : BaseTriggerHandler<ReceivedEmailTriggerData,
         ReceivedEmailTriggerParameters>
