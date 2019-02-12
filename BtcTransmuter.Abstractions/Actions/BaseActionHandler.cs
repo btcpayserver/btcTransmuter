@@ -9,9 +9,15 @@ namespace BtcTransmuter.Abstractions.Actions
 {
     public abstract class BaseActionHandler<TActionData> : IActionHandler
     {
-        public Task<bool> Execute(object triggerData, RecipeAction recipeAction)
+        protected abstract Task<bool> CanExecute(object triggerData, RecipeAction recipeAction);
+        public async Task<bool> Execute(object triggerData, RecipeAction recipeAction)
         {
-            return Execute(triggerData, recipeAction, recipeAction.Get<TActionData>());
+            if (await CanExecute(triggerData, recipeAction))
+            {
+                return await Execute(triggerData, recipeAction, recipeAction.Get<TActionData>());
+            }
+
+            return false;
         }
 
         protected abstract Task<bool> Execute(object triggerData, RecipeAction recipeAction, TActionData actionData);

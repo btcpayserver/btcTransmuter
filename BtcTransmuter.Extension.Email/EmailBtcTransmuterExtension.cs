@@ -28,6 +28,7 @@ namespace BtcTransmuter.Extension.Email
             serviceCollection.AddSingleton<ITriggerHandler, ReceivedEmailTriggerHandler>();
             serviceCollection.AddSingleton<IActionHandler, SendEmailDataActionHandler>();
             serviceCollection.AddSingleton<IActionDescriptor, SendEmailActionDescriptor >();
+            serviceCollection.AddSingleton<SendEmailActionDescriptor >();
             serviceCollection.AddSingleton<ITriggerDescriptor, ReceivedEmailTriggerDescriptor>();
             serviceCollection.AddSingleton<IExternalServiceDescriptor, Pop3ExternalServiceDescriptor>();
             serviceCollection.AddSingleton<IExternalServiceDescriptor, SmtpExternalServiceDescriptor>();
