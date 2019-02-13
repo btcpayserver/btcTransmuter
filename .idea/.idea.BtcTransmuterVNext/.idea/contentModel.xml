@@ -89,35 +89,35 @@
           </e>
           <e p="lib" t="Include">
             <e p="bootstrap" t="Include">
-              <e p=".bower.json" t="Include" />
               <e p="dist" t="Include">
                 <e p="css" t="Include">
-                  <e p="bootstrap-theme.css" t="Include" />
-                  <e p="bootstrap-theme.css.map" t="Include" />
-                  <e p="bootstrap-theme.min.css" t="Include" />
-                  <e p="bootstrap-theme.min.css.map" t="Include" />
+                  <e p="bootstrap-grid.css" t="Include" />
+                  <e p="bootstrap-grid.css.map" t="Include" />
+                  <e p="bootstrap-grid.min.css" t="Include" />
+                  <e p="bootstrap-grid.min.css.map" t="Include" />
+                  <e p="bootstrap-reboot.css" t="Include" />
+                  <e p="bootstrap-reboot.css.map" t="Include" />
+                  <e p="bootstrap-reboot.min.css" t="Include" />
+                  <e p="bootstrap-reboot.min.css.map" t="Include" />
                   <e p="bootstrap.css" t="Include" />
                   <e p="bootstrap.css.map" t="Include" />
                   <e p="bootstrap.min.css" t="Include" />
                   <e p="bootstrap.min.css.map" t="Include" />
                 </e>
-                <e p="fonts" t="Include">
-                  <e p="glyphicons-halflings-regular.eot" t="Include" />
-                  <e p="glyphicons-halflings-regular.svg" t="Include" />
-                  <e p="glyphicons-halflings-regular.ttf" t="Include" />
-                  <e p="glyphicons-halflings-regular.woff" t="Include" />
-                  <e p="glyphicons-halflings-regular.woff2" t="Include" />
-                </e>
                 <e p="js" t="Include">
+                  <e p="bootstrap.bundle.js" t="Include" />
+                  <e p="bootstrap.bundle.js.map" t="Include" />
+                  <e p="bootstrap.bundle.min.js" t="Include" />
+                  <e p="bootstrap.bundle.min.js.map" t="Include" />
                   <e p="bootstrap.js" t="Include" />
+                  <e p="bootstrap.js.map" t="Include" />
                   <e p="bootstrap.min.js" t="Include" />
-                  <e p="npm.js" t="Include" />
+                  <e p="bootstrap.min.js.map" t="Include" />
                 </e>
               </e>
               <e p="LICENSE" t="Include" />
             </e>
             <e p="jquery" t="Include">
-              <e p=".bower.json" t="Include" />
               <e p="dist" t="Include">
                 <e p="jquery.js" t="Include" />
                 <e p="jquery.min.js" t="Include" />
@@ -126,7 +126,6 @@
               <e p="LICENSE.txt" t="Include" />
             </e>
             <e p="jquery-validation" t="Include">
-              <e p=".bower.json" t="Include" />
               <e p="dist" t="Include">
                 <e p="additional-methods.js" t="Include" />
                 <e p="additional-methods.min.js" t="Include" />
@@ -136,7 +135,6 @@
               <e p="LICENSE.md" t="Include" />
             </e>
             <e p="jquery-validation-unobtrusive" t="Include">
-              <e p=".bower.json" t="Include" />
               <e p="jquery.validate.unobtrusive.js" t="Include" />
               <e p="jquery.validate.unobtrusive.min.js" t="Include" />
               <e p="LICENSE.txt" t="Include" />
