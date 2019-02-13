@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.Controllers
 {
+    [Authorize]
     public class ExternalServicesController : Controller
     {
         [Authorize]

@@ -1,6 +1,6 @@
 @model ViewRecipeTriggerViewModel
 
-<partial name="@Model.TriggerDescriptor.ViewPartial" model="@Model.RecipeTrigger.DataJson"></partial>/>
+<partial name="@Model.TriggerDescriptor.ViewPartial" model="@Model.RecipeTrigger.DataJson"></partial>
 @if (Model.ExternalServiceDescriptor != null)
 {
     <partial name="@Model.ExternalServiceDescriptor.ViewPartial" model="@Model.ExternalServiceData"></partial>
