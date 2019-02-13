@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
       <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj" />
-      <ProjectReference Include="..\BtcTransmuter.Extension.Email\BtcTransmuter.Extension.Email.csproj" />
     </ItemGroup>
 
 </Project>

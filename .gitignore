@@ -9,3 +9,21 @@ BtcTransmuter/bin/Debug/netcoreapp2\.1/
 BtcTransmuter\.Abstractions/bin/Debug/netcoreapp2\.1/
 
 BtcTransmuter/obj/
+
+BtcTransmuter\.Extension\.Email/obj/Debug/netcoreapp2\.2/
+
+BtcTransmuter\.Extension\.Email/obj/
+
+BtcTransmuter\.Abstractions/bin/Debug/netcoreapp2\.2/
+
+BtcTransmuter\.Abstractions/obj/
+
+BtcTransmuter\.Data/bin/Debug/netcoreapp2\.2/
+
+BtcTransmuter\.Data/obj/Debug/netcoreapp2/
+
+BtcTransmuter\.Data/obj/Debug/netcoreapp2\.2/
+
+BtcTransmuter\.Data/obj/
+
+BtcTransmuter\.Services/obj/

@@ -1,0 +1,7 @@
+@using BtcTransmuter.Extension.Email.ExternalServices
+@model BtcTransmuter.Data.Entities.ExternalServiceData
+@{
+    var service = new SmtpService(Model);
+}
+
+@Model.Name (@service.Data.Server)

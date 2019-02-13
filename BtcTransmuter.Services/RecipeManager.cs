@@ -34,14 +34,20 @@ namespace BtcTransmuter.Services
                     {
                         queryable = queryable.Where(x => x.Enabled == query.Enabled.Value);
                     }
-                
+
                     if (!string.IsNullOrEmpty(query.RecipeTriggerId))
                     {
                         queryable = queryable.Where(x => x.RecipeTrigger.TriggerId == query.RecipeTriggerId);
-                    }   
+                    }
+
                     if (!string.IsNullOrEmpty(query.UserId))
                     {
-                        queryable = queryable.Where(x => x.UserId== query.UserId);
+                        queryable = queryable.Where(x => x.UserId == query.UserId);
+                    }
+
+                    if (!string.IsNullOrEmpty(query.RecipeId))
+                    {
+                        queryable = queryable.Where(x => x.Id == query.RecipeId);
                     }
 
                     return await queryable.ToListAsync();
@@ -94,6 +100,22 @@ namespace BtcTransmuter.Services
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
                     return await context.Recipes.FindAsync(id);
+                }
+            }
+        }
+
+        public async Task AddRecipeInvocation(RecipeInvocation invocation)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    var recipe = await context.Recipes.FindAsync(invocation.RecipeId);
+                    if (recipe != null)
+                    {
+                        await context.RecipeInvocations.AddAsync(invocation);
+                        await context.SaveChangesAsync();
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Models;
@@ -9,33 +10,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.Controllers
 {
-//    [Authorize(Roles = "Admin")]
-    public class AdminController:Controller
+    [Authorize]
+    public class AdminController : Controller
     {
+        private readonly IEnumerable<BtcTransmuterExtension> _btcTransmuterExtensions;
 
-        private readonly IEnumerable<IExtension> _extensions;
-        private readonly IEnumerable<IExternalServiceDescriptor> _externalServiceDescriptors;
-        private readonly IEnumerable<IActionDescriptor> _actionDescriptors;
-        private readonly IEnumerable<ITriggerDescriptor> _triggerDescriptors;
-
-        public AdminController(IEnumerable<IExtension> extensions, 
-            IEnumerable<IExternalServiceDescriptor> externalServiceDescriptors, 
-            IEnumerable<IActionDescriptor> actionDescriptors, 
-            IEnumerable<ITriggerDescriptor> triggerDescriptors)
+        public AdminController(IEnumerable<BtcTransmuterExtension> btcTransmuterExtensions)
         {
-            _extensions = extensions;
-            _externalServiceDescriptors = externalServiceDescriptors;
-            _actionDescriptors = actionDescriptors;
-            _triggerDescriptors = triggerDescriptors;
+            _btcTransmuterExtensions = btcTransmuterExtensions;
         }
+
         public IActionResult Extensions()
         {
             return View(new ExtensionsViewModel()
             {
-                Extensions = _extensions,
-                ActionDescriptors = _actionDescriptors,
-                TriggerDescriptors = _triggerDescriptors,
-                ExternalServiceDescriptors =  _externalServiceDescriptors
+                Extensions = _btcTransmuterExtensions
             });
         }
     }

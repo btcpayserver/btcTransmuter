@@ -1,9 +1,0 @@
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\bin\Debug\netcoreapp2.1\BtcTransmuter.Data.deps.json
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\bin\Debug\netcoreapp2.1\BtcTransmuter.Data.dll
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\bin\Debug\netcoreapp2.1\BtcTransmuter.Data.pdb
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\obj\Debug\netcoreapp2.1\BtcTransmuter.Data.csprojAssemblyReference.cache
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\obj\Debug\netcoreapp2.1\BtcTransmuter.Data.csproj.CoreCompileInputs.cache
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\obj\Debug\netcoreapp2.1\BtcTransmuter.Data.AssemblyInfoInputs.cache
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\obj\Debug\netcoreapp2.1\BtcTransmuter.Data.AssemblyInfo.cs
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\obj\Debug\netcoreapp2.1\BtcTransmuter.Data.dll
-C:\Git\BtcTransmuterVNext\BtcTransmuter.Data\obj\Debug\netcoreapp2.1\BtcTransmuter.Data.pdb

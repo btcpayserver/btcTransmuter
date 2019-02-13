@@ -8,5 +8,6 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
         public string ExternalServiceType => SmtpExternalServiceType;
         public string Name => "SMTP External Service";
         public string Description => "SMTP External Service to be able to send emails as an action";
+        public string ViewPartial => "ViewSmtpExternalService";
     }
 }

@@ -5,5 +5,6 @@ namespace BtcTransmuter.Abstractions.Triggers
         string TriggerId{ get;  }
         string Name{ get;}
         string Description{ get;  }
+        string ViewPartial { get; }
     }
 }

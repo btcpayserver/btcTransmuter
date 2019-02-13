@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "64e7d7f28d0ee44c9ef42da634adc342d3762f2f"
+    "signature": "fbc6f72639993aa94af0dee543f8e76c0712ed21"
   },
   "compilationOptions": {},
   "targets": {
@@ -2217,6 +2217,17 @@
           }
         }
       },
+      "NetCore.AutoRegisterDi/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "2.1.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NetCore.AutoRegisterDi.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Newtonsoft.Json/12.0.1": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
@@ -3382,7 +3393,10 @@
       "BtcTransmuter.Abstractions/1.0.0": {
         "dependencies": {
           "BtcTransmuter.Data": "1.0.0",
+          "ExtCore.Infrastructure": "3.3.0",
+          "ExtCore.Mvc.Infrastructure": "3.3.0",
           "Microsoft.Extensions.Identity.Stores": "2.1.6",
+          "NetCore.AutoRegisterDi": "1.0.0",
           "Newtonsoft.Json": "12.0.1",
           "wilx.System.Linq.Dynamic.Core": "2.1.0"
         },
@@ -4533,6 +4547,13 @@
       "sha512": "sha512-+FWlwd//+Tt56316p00hVePBCouXyEzT86Jb3+AuRotTND0IYn0OO3obs1gnQEs/txEnt+rF2JBGLItTG+Be6A==",
       "path": "microsoft.win32.registry/4.5.0",
       "hashPath": "microsoft.win32.registry.4.5.0.nupkg.sha512"
+    },
+    "NetCore.AutoRegisterDi/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-beWelOOFeCwQg+yWA2rtCgaJHbjOekJbCv6aTLxUpXafkRjHrVtccDsPjrZhiRyOl5ziavXuXR/pj8gF0fSi6Q==",
+      "path": "netcore.autoregisterdi/1.0.0",
+      "hashPath": "netcore.autoregisterdi.1.0.0.nupkg.sha512"
     },
     "Newtonsoft.Json/12.0.1": {
       "type": "package",

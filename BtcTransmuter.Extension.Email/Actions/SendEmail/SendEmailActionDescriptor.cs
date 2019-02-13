@@ -10,5 +10,6 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
         string IActionDescriptor.Description =>
             "Send an email using an smtp external service";
 
+        public string ViewPartial => "ViewSendEmailAction";
     }
 }

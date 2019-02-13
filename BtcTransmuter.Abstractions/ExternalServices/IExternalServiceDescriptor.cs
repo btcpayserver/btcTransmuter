@@ -5,5 +5,6 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         string ExternalServiceType { get;  }
         string Name { get;  }
         string Description { get;}
+        string ViewPartial { get; }
     }
 }

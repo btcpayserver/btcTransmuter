@@ -2,6 +2,7 @@ namespace BtcTransmuter.Data.Entities
 {
     public class ExternalServiceData : BaseEntity
     {
+        public string Name { get; set; }
         public string Type { get; set; }
         public string UserId { get; set; }
 

@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.1.6" />
+      <PackageReference Include="ExtCore.Mvc.Infrastructure" Version="4.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
+      <PackageReference Include="NetCore.AutoRegisterDi" Version="1.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
         <PackageReference Include="wilx.System.Linq.Dynamic.Core" Version="2.1.0" />
     </ItemGroup>

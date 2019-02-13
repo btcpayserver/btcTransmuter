@@ -1,0 +1,69 @@
+@model BtcTransmuter.Controllers.GetRecipesViewModel
+
+
+@{
+    ViewData["Title"] = "Recipes";
+}
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <partial name="_StatusMessage" for="StatusMessage" />
+    </div>
+</div>
+<h2>@ViewData["Title"]</h2>
+<p>
+    <a asp-action="CreateRecipe">Create New</a>
+</p>
+@if (!Model.Recipes.Any())
+{
+    <div class="card">
+        <h5 class="card-header text-center">
+            No Recipes!
+        </h5>
+    </div>
+}
+<div class="card-columns">
+
+    @foreach (var recipe in Model.Recipes)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@Html.Raw(recipe.Name)</h5>
+                <p class="card-text">@Html.Raw(recipe.Description)</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div>Trigger</div>
+                    <partial name="ViewRecipeTrigger" model="@(new ViewRecipeTriggerViewModel()
+                                                              {
+                                                                  RecipeTrigger = recipe.RecipeTrigger,
+                                                                  ExternalServiceData = recipe.RecipeTrigger.ExternalService,
+                                                                  TriggerDescriptor = Model.GetDescriptorForTrigger(recipe.RecipeTrigger.TriggerId),
+                                                                  ExternalServiceDescriptor = Model.GetDescriptorForExternalService(recipe.RecipeTrigger.ExternalService?.Type)
+                                                              })"></partial>
+                      </li>
+                <li class="list-group-item">
+                    <div>Actions</div>
+                    <ul>
+                        @foreach (var action in recipe.RecipeActions)
+                        {
+                            <partial name="ViewRecipeAction" model="@(new ViewRecipeActionViewModel()
+                                                                   {
+                                                                       RecipeAction = action,
+                                                                       ExternalServiceData = action.ExternalService,
+                                                                       ActionDescriptor = Model.GetDescriptorForAction(action.ActionId),
+                                                                       ExternalServiceDescriptor = Model.GetDescriptorForExternalService(action.ExternalService?.Type)
+                                                                   })"></partial>
+                        }
+                    </ul>
+                </li>
+            </ul>
+            <div class="card-footer">
+                <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> |
+                <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs (@recipe.RecipeInvocations.Count)</a>
+            </div>
+
+        </div>
+    }
+
+</div>

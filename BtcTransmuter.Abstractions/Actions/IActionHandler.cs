@@ -6,6 +6,6 @@ namespace BtcTransmuter.Abstractions.Actions
 {
     public interface IActionHandler
     {
-        Task<bool> Execute(object triggerData, RecipeAction recipeAction);
+        Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction);
     }
 }

@@ -6,5 +6,6 @@ namespace BtcTransmuter.Abstractions.Recipes
         
         public string RecipeTriggerId { get; set; }
         public string UserId { get; set; }
+        public string RecipeId { get; set; }
     }
 }

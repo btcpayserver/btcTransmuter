@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
+using ExtCore.Infrastructure;
 using ExtCore.WebApplication.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,32 +36,42 @@ namespace BtcTransmuter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+            services.Configure<IdentityOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase= false;
+                options.Password.RequireUppercase= false;
+                options.Password.RequiredUniqueChars= 0;
+                options.Password.RequireNonAlphanumeric= false;
             });
 
             
-            services.AddExtCore(this.extensionsPath);
+            services.AddExtCore(this.extensionsPath, true);
             
             services.AddTransmuterServices();
             
+            
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase(
+                options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<User>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceScopeFactory serviceScopeFactory)
         {
+            using (var scope = serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -71,8 +82,6 @@ namespace BtcTransmuter
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            app.UseExtCore();
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
@@ -84,6 +93,8 @@ namespace BtcTransmuter
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            
+            app.UseExtCore();
         }
     }
 }

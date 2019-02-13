@@ -2,8 +2,10 @@ namespace BtcTransmuter.Abstractions.Actions
 {
     public interface IActionDescriptor
     {
-        string ActionId { get;  }
-        string Name { get;  }
-        string Description { get;}
+        string ActionId { get; }
+        string Name { get; }
+        string Description { get; }
+
+        string ViewPartial { get; }
     }
 }

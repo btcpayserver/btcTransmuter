@@ -1,5 +1,6 @@
 using System;
 using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Extension.Email.Actions;
@@ -15,28 +16,20 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 namespace BtcTransmuter.Extension.Email
 {
-    public class EmailBtcTransmuterExtension : ExtensionBase, IConfigureAction, IConfigureServicesAction
+
+    
+    public class EmailBtcTransmuterExtension : BtcTransmuterExtension
     {
+        public override string Name => "Emails Plugin";
+        public override string Version  => "0.001";
+        protected override int Priority => 0;
+        
 
-        public void Execute(IApplicationBuilder applicationBuilder, IServiceProvider serviceProvider)
+        public override void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
         {
-        }
-
-        public void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
-        {
-            serviceCollection.AddSingleton<IExtension, EmailBtcTransmuterExtension>();
-            serviceCollection.AddSingleton<ITriggerHandler, ReceivedEmailTriggerHandler>();
-            serviceCollection.AddSingleton<IActionHandler, SendEmailDataActionHandler>();
-            serviceCollection.AddSingleton<IActionDescriptor, SendEmailActionDescriptor >();
+            base.Execute(serviceCollection,serviceProvider);
             serviceCollection.AddSingleton<SendEmailActionDescriptor >();
-            serviceCollection.AddSingleton<ITriggerDescriptor, ReceivedEmailTriggerDescriptor>();
-            serviceCollection.AddSingleton<IExternalServiceDescriptor, Pop3ExternalServiceDescriptor>();
-            serviceCollection.AddSingleton<IExternalServiceDescriptor, SmtpExternalServiceDescriptor>();
             serviceCollection.AddHostedService<ReceivingEmailHostedService>();
         }
-
-        int IConfigureServicesAction.Priority => 0;
-
-        int IConfigureAction.Priority => 0;
     }
 }

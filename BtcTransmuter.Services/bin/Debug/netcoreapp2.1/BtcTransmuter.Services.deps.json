@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "64e7d7f28d0ee44c9ef42da634adc342d3762f2f"
+    "signature": "6c4480d6657fcbf2a350d87b5186998dff69592b"
   },
   "compilationOptions": {},
   "targets": {
@@ -9,8 +9,7 @@
       "BtcTransmuter.Services/1.0.0": {
         "dependencies": {
           "BtcTransmuter.Abstractions": "1.0.0",
-          "BtcTransmuter.Data": "1.0.0",
-          "BtcTransmuter.Extension.Email": "1.0.0"
+          "BtcTransmuter.Data": "1.0.0"
         },
         "runtime": {
           "BtcTransmuter.Services.dll": {}
@@ -2215,6 +2214,17 @@
           }
         }
       },
+      "NetCore.AutoRegisterDi/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "2.1.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NetCore.AutoRegisterDi.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Newtonsoft.Json/12.0.1": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
@@ -2231,14 +2241,6 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.1.20722"
-          }
-        }
-      },
-      "Pop3/2.2.2": {
-        "runtime": {
-          "lib/netstandard2.0/Pop3.dll": {
-            "assemblyVersion": "2.2.2.0",
-            "fileVersion": "2.2.2.0"
           }
         }
       },
@@ -3380,7 +3382,10 @@
       "BtcTransmuter.Abstractions/1.0.0": {
         "dependencies": {
           "BtcTransmuter.Data": "1.0.0",
+          "ExtCore.Infrastructure": "3.3.0",
+          "ExtCore.Mvc.Infrastructure": "3.3.0",
           "Microsoft.Extensions.Identity.Stores": "2.1.6",
+          "NetCore.AutoRegisterDi": "1.0.0",
           "Newtonsoft.Json": "12.0.1",
           "wilx.System.Linq.Dynamic.Core": "2.1.0"
         },
@@ -3395,18 +3400,6 @@
         },
         "runtime": {
           "BtcTransmuter.Data.dll": {}
-        }
-      },
-      "BtcTransmuter.Extension.Email/1.0.0": {
-        "dependencies": {
-          "BtcTransmuter.Abstractions": "1.0.0",
-          "ExtCore.Infrastructure": "3.3.0",
-          "ExtCore.Mvc.Infrastructure": "3.3.0",
-          "Microsoft.Extensions.Hosting.Abstractions": "2.1.1",
-          "Pop3": "2.2.2"
-        },
-        "runtime": {
-          "BtcTransmuter.Extension.Email.dll": {}
         }
       }
     }
@@ -4544,6 +4537,13 @@
       "path": "microsoft.win32.registry/4.5.0",
       "hashPath": "microsoft.win32.registry.4.5.0.nupkg.sha512"
     },
+    "NetCore.AutoRegisterDi/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-beWelOOFeCwQg+yWA2rtCgaJHbjOekJbCv6aTLxUpXafkRjHrVtccDsPjrZhiRyOl5ziavXuXR/pj8gF0fSi6Q==",
+      "path": "netcore.autoregisterdi/1.0.0",
+      "hashPath": "netcore.autoregisterdi.1.0.0.nupkg.sha512"
+    },
     "Newtonsoft.Json/12.0.1": {
       "type": "package",
       "serviceable": true,
@@ -4557,13 +4557,6 @@
       "sha512": "sha512-5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
       "path": "newtonsoft.json.bson/1.0.1",
       "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
-    },
-    "Pop3/2.2.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-nKuQ5yiASDd4IE1O07MpaBV7zIMdHdzErLnrVlIh3NOJjsZmgQK4yAGmWDW9z/58ekYlIL3V50lq2rCIopJsQQ==",
-      "path": "pop3/2.2.2",
-      "hashPath": "pop3.2.2.2.nupkg.sha512"
     },
     "Remotion.Linq/2.2.0": {
       "type": "package",
@@ -5341,11 +5334,6 @@
       "sha512": ""
     },
     "BtcTransmuter.Data/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "BtcTransmuter.Extension.Email/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
