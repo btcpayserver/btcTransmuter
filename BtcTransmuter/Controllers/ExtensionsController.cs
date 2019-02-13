@@ -1,25 +1,24 @@
 using System.Collections.Generic;
-using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Extensions;
-using BtcTransmuter.Abstractions.ExternalServices;
-using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Models;
-using ExtCore.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.Controllers
 {
     [Authorize]
-    public class AdminController : Controller
+    
+    [Route("extensions")]
+    public class ExtensionsController : Controller
     {
         private readonly IEnumerable<BtcTransmuterExtension> _btcTransmuterExtensions;
 
-        public AdminController(IEnumerable<BtcTransmuterExtension> btcTransmuterExtensions)
+        public ExtensionsController(IEnumerable<BtcTransmuterExtension> btcTransmuterExtensions)
         {
             _btcTransmuterExtensions = btcTransmuterExtensions;
         }
 
+        [HttpGet("")]
         public IActionResult Extensions()
         {
             return View(new ExtensionsViewModel()

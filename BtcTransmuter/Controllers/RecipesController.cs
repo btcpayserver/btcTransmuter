@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BtcTransmuter.Controllers
 {
     [Authorize]
+    [Route("recipes")]
     public class RecipesController : Controller
     {
         private readonly IRecipeManager _recipeManager;

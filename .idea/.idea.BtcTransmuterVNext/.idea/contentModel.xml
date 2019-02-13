@@ -16,7 +16,7 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="BtcTransmuter.csproj" t="IncludeRecursive" />
         <e p="Controllers" t="Include">
-          <e p="AdminController.cs" t="Include" />
+          <e p="ExtensionsController.cs" t="Include" />
           <e p="ExternalServicesController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
           <e p="RecipesController.cs" t="Include" />
@@ -43,11 +43,6 @@
             </e>
           </e>
         </e>
-        <e p="Pages" t="Include">
-          <e p="ExternalServices" t="Include">
-            <e p="GetServices.cshtml" t="Include" />
-          </e>
-        </e>
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
@@ -59,8 +54,11 @@
         <e p="Views" t="Include">
           <e p="_ViewImports.cshtml" t="Include" />
           <e p="_ViewStart.cshtml" t="Include" />
-          <e p="Admin" t="Include">
+          <e p="Extensions" t="Include">
             <e p="Extensions.cshtml" t="Include" />
+          </e>
+          <e p="ExternalServices" t="Include">
+            <e p="GetServices.cshtml" t="Include" />
           </e>
           <e p="Home" t="Include">
             <e p="Index.cshtml" t="Include" />

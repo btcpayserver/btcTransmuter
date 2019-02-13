@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BtcTransmuter.Controllers
 {
     [Authorize]
+    [Route("external-services")]
     public class ExternalServicesController : Controller
     {
         private readonly IExternalServiceManager _externalServiceManager;
@@ -23,9 +24,9 @@ namespace BtcTransmuter.Controllers
             _externalServiceDescriptors = externalServiceDescriptors;
         }
         [HttpGet("")]
-        public IActionResult GetServices()
+        public async Task<IActionResult> GetServices()
         {
-            var externalServices = _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+            var externalServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 UserId = _userManager.GetUserId(User)
             });
@@ -34,6 +35,23 @@ namespace BtcTransmuter.Controllers
                 ExternalServices = externalServices,
                 Descriptors = _externalServiceDescriptors
             });
+        }
+
+        [HttpGet("create")]
+        public async Task<IActionResult> CreateExternalService(string id)
+        {
+            return Ok();
+        } 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> EditExternalService(string id)
+        {
+            return Ok();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> RemoveExternalService(string id)
+        {
+            return Ok();
         }
     }
 
