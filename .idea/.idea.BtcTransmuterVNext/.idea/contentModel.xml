@@ -95,6 +95,7 @@
           <e p="IActionDescriptor.cs" t="Include" />
           <e p="IActionDispatcher.cs" t="Include" />
           <e p="IActionHandler.cs" t="Include" />
+          <e p="IActionValidator.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="BtcTransmuter.Abstractions.csproj" t="IncludeRecursive" />
@@ -106,8 +107,12 @@
           <e p="ExternalServicesDataQuery.cs" t="Include" />
           <e p="IExternalServiceDescriptor.cs" t="Include" />
           <e p="IExternalServiceManager.cs" t="Include" />
+          <e p="IExternalServiceValidator.cs" t="Include" />
           <e p="IUseExternalService.cs" t="Include" />
           <e p="UpdatedItem.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="ValidationResult.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -127,6 +132,7 @@
           <e p="ITriggerDescriptor.cs" t="Include" />
           <e p="ITriggerDispatcher.cs" t="Include" />
           <e p="ITriggerHandler.cs" t="Include" />
+          <e p="ITriggerValidator.cs" t="Include" />
         </e>
       </e>
       <e p="BtcTransmuter.Data" t="IncludeRecursive">

@@ -1,14 +1,17 @@
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Models;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions.Actions
 {
-    public abstract class BaseActionHandler<TActionData> : IActionHandler
+    public abstract class BaseActionHandler<TActionData> : IActionHandler, IActionValidator
     {
+        public abstract string ActionId { get; }
+        public abstract ValidationResult Validate(string data);
         protected abstract Task<bool> CanExecute(object triggerData, RecipeAction recipeAction);
         public async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction)
         {

@@ -1,15 +1,18 @@
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Abstractions.Models;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions.Triggers
 {
-    public abstract class BaseTriggerHandler<TTriggerData, TTriggerParameters> : ITriggerHandler where TTriggerParameters : class
+    public abstract class BaseTriggerHandler<TTriggerData, TTriggerParameters> : ITriggerValidator,ITriggerHandler where TTriggerParameters : class
     {
         protected abstract Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger, TTriggerData triggerData ,TTriggerParameters parameters);
 
+        public abstract string TriggerId { get; }
         public Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger)
         {
             if (recipeTrigger.TriggerId != trigger.Id)
@@ -31,5 +34,7 @@ namespace BtcTransmuter.Abstractions.Triggers
         {
             return Task.FromResult((object) trigger.Get<TTriggerData>());
         }
+
+        public abstract ValidationResult Validate(string data);
     }
 }

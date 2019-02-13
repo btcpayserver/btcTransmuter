@@ -7,7 +7,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
 {
     public class Pop3Service: BaseExternalService<Pop3ExternalServiceData>
     {
-        protected override string ExternalServiceType => Pop3ExternalServiceDescriptor.Pop3ExternalServiceType;
+        public override string ExternalServiceType => Pop3ExternalServiceDescriptor.Pop3ExternalServiceType;
 
         public Pop3Service(ExternalServiceData data) : base(data)
         {
