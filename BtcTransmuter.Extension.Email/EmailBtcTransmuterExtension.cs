@@ -23,7 +23,9 @@ namespace BtcTransmuter.Extension.Email
         public override string Name => "Emails Plugin";
         public override string Version  => "0.001";
         protected override int Priority => 0;
-        
+        public override string[] Scripts => new string[0];
+        public override string[] Stylesheets => new string[0];
+
 
         public override void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
         {

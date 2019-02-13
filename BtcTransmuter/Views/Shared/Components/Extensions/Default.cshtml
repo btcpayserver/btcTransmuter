@@ -1,0 +1,15 @@
+@model BtcTransmuter.Areas.ViewComponents.ExtensionsViewComponentViewModel
+
+@foreach (var ext in Model.Extensions)
+{
+    foreach (var stylesheet in ext.Stylesheets)
+    {
+        <link type="text/css" rel="stylesheet" href="@stylesheet"/>
+        
+    }
+    foreach (var script in ext.Scripts)
+    {
+        
+        <script src="@script"></script>
+    }    
+}

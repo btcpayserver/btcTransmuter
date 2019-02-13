@@ -27,6 +27,7 @@
           <e p="CreateRecipeViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
           <e p="ExtensionsViewModel.cs" t="Include" />
+          <e p="GetExternalServicesViewModel.cs" t="Include" />
           <e p="GetRecipeLogsViewModel.cs" t="Include" />
           <e p="GetRecipesViewModel.cs" t="Include" />
           <e p="RemoveRecipeViewModel.cs" t="Include" />
@@ -42,11 +43,19 @@
             </e>
           </e>
         </e>
+        <e p="Pages" t="Include">
+          <e p="ExternalServices" t="Include">
+            <e p="GetServices.cshtml" t="Include" />
+          </e>
+        </e>
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
         </e>
         <e p="Startup.cs" t="Include" />
+        <e p="ViewComponents" t="Include">
+          <e p="ExtensionsViewComponent.cs" t="Include" />
+        </e>
         <e p="Views" t="Include">
           <e p="_ViewImports.cshtml" t="Include" />
           <e p="_ViewStart.cshtml" t="Include" />
@@ -68,6 +77,11 @@
             <e p="_Layout.cshtml" t="Include" />
             <e p="_LoginPartial.cshtml" t="Include" />
             <e p="_StatusMessage.cshtml" t="Include" />
+            <e p="Components" t="Include">
+              <e p="Extensions" t="Include">
+                <e p="Default.cshtml" t="Include" />
+              </e>
+            </e>
             <e p="Error.cshtml" t="Include" />
             <e p="VuePartial.cshtml" t="Include" />
           </e>

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
@@ -38,7 +37,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetRecipes(string statusMessage = null)
+        public async Task<IActionResult> GetRecipes([FromQuery]string statusMessage = null)
         {
             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
             {
@@ -76,6 +75,7 @@ namespace BtcTransmuter.Controllers
             };
             return View(new GetRecipesViewModel()
             {
+                StatusMessage = statusMessage,
                 Recipes = recipes,
                 ActionDescriptors = _actionDescriptors,
                 TriggerDescriptors = _triggerDescriptors,
