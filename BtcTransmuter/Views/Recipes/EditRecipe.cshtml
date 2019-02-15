@@ -35,7 +35,19 @@
     </div>
     
     <ul>
+        @if (Model.Trigger != null)
+        {
+            <li>
+                @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger);
+            </li>
+        }
         
+        @foreach (var action in Model.Actions)
+        {
+            <li>
+                @await Component.InvokeAsync("ViewRecipeAction", action);
+            </li>
+        }
     </ul>
     
     

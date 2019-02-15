@@ -1,7 +1,8 @@
 @model ViewRecipeActionViewModel
 
 <partial name="@Model.ActionDescriptor.ViewPartial" model="@Model.RecipeAction.DataJson"></partial>
-@if (Model.ExternalServiceDescriptor != null)
-{
-    <partial name="@Model.ExternalServiceDescriptor.ViewPartial" model="@Model.ExternalServiceData"></partial>
-}
+@if (Model.ExternalServiceData != null)
+ {
+     
+     @await Component.InvokeAsync("ViewExternalService", Model.ExternalServiceData);
+ }

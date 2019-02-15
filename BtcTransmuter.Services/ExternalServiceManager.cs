@@ -129,6 +129,10 @@ namespace BtcTransmuter.Services
                     {
                         queryable = queryable.Where(x => x.UserId == query.UserId);
                     }
+                    if (!string.IsNullOrEmpty(query.ExternalServiceId))
+                    {
+                        queryable = queryable.Where(x => x.Id == query.ExternalServiceId);
+                    }
 
                     return await queryable.ToListAsync();
                 }

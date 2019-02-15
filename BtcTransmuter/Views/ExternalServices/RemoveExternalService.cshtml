@@ -1,0 +1,33 @@
+@model BtcTransmuter.Controllers.RemoveExternalServiceViewModel
+
+
+@{
+    ViewData["Title"] = "Remove";
+}
+
+<h2>Remove</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Recipe</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalService.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExternalService.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalService.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExternalService.Type)
+        </dd>
+    </dl>
+    
+    <form asp-action="RemoveExternalServicePost" asp-route-id="@Model.ExternalService.Id"  method="post">
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="GetServices">Back to List</a>
+    </form>
+</div>

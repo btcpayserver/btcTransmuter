@@ -1,7 +1,7 @@
 @model ViewRecipeTriggerViewModel
 
 <partial name="@Model.TriggerDescriptor.ViewPartial" model="@Model.RecipeTrigger.DataJson"></partial>
-@if (Model.ExternalServiceDescriptor != null)
+@if (Model.ExternalServiceData != null)
 {
-    <partial name="@Model.ExternalServiceDescriptor.ViewPartial" model="@Model.ExternalServiceData"></partial>
+    @await Component.InvokeAsync("ViewExternalService", Model.ExternalServiceData);
 }

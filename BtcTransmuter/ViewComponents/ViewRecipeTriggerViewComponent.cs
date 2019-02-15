@@ -13,14 +13,10 @@ namespace BtcTransmuter.Areas.ViewComponents
     public class ViewRecipeTriggerViewComponent : ViewComponent
     {
         private readonly IEnumerable<ITriggerDescriptor> _triggerDescriptors;
-        private readonly IEnumerable<IExternalServiceDescriptor> _externalServiceDescriptors;
-        private readonly IEnumerable<BtcTransmuterExtension> _extensions;
 
-        public ViewRecipeTriggerViewComponent(IEnumerable<ITriggerDescriptor> triggerDescriptors,
-            IEnumerable<IExternalServiceDescriptor> externalServiceDescriptors)
+        public ViewRecipeTriggerViewComponent(IEnumerable<ITriggerDescriptor> triggerDescriptors)
         {
             triggerDescriptors = triggerDescriptors;
-            _externalServiceDescriptors = externalServiceDescriptors;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(RecipeTrigger recipeTrigger)
@@ -29,10 +25,8 @@ namespace BtcTransmuter.Areas.ViewComponents
             {
                 RecipeTrigger = recipeTrigger,
                 ExternalServiceData = recipeTrigger.ExternalService,
-                TriggerDescriptor = 
-                    _triggerDescriptors.Single(descriptor => descriptor.TriggerId == recipeTrigger.TriggerId),
-                ExternalServiceDescriptor = _externalServiceDescriptors
-                    .Single(descriptor => descriptor.ExternalServiceType == recipeTrigger.ExternalService.Type)
+                TriggerDescriptor =
+                    _triggerDescriptors.Single(descriptor => descriptor.TriggerId == recipeTrigger.TriggerId)
             });
         }
     }

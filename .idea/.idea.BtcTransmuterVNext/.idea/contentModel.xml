@@ -22,7 +22,6 @@
           <e p="RecipesController.cs" t="Include" />
         </e>
         <e p="Dockerfile" t="Include" />
-        <e p="Extensions" t="Include" />
         <e p="Models" t="Include">
           <e p="CreateRecipeViewModel.cs" t="Include" />
           <e p="EditRecipeViewModel.cs" t="Include" />
@@ -31,8 +30,10 @@
           <e p="GetExternalServicesViewModel.cs" t="Include" />
           <e p="GetRecipeLogsViewModel.cs" t="Include" />
           <e p="GetRecipesViewModel.cs" t="Include" />
+          <e p="RemoveExternalServiceViewModel.cs" t="Include" />
           <e p="RemoveRecipeViewModel.cs" t="Include" />
           <e p="StatusMessageModel.cs" t="Include" />
+          <e p="ViewExternalServiceViewModel.cs" t="Include" />
           <e p="ViewRecipeActionViewModel.cs" t="Include" />
           <e p="ViewRecipeTriggerViewModel.cs" t="Include" />
         </e>
@@ -51,6 +52,7 @@
         <e p="Startup.cs" t="Include" />
         <e p="ViewComponents" t="Include">
           <e p="ExtensionsViewComponent.cs" t="Include" />
+          <e p="ViewExternalServiceViewComponent.cs" t="Include" />
           <e p="ViewRecipeActionViewComponent.cs" t="Include" />
           <e p="ViewRecipeTriggerViewComponent.cs" t="Include" />
         </e>
@@ -61,7 +63,10 @@
             <e p="Extensions.cshtml" t="Include" />
           </e>
           <e p="ExternalServices" t="Include">
+            <e p="CreateExternalService.cshtml" t="Include" />
+            <e p="EditExternalService.cshtml" t="Include" />
             <e p="GetServices.cshtml" t="Include" />
+            <e p="RemoveExternalService.cshtml" t="Include" />
           </e>
           <e p="Home" t="Include">
             <e p="Index.cshtml" t="Include" />
@@ -79,6 +84,9 @@
             <e p="_StatusMessage.cshtml" t="Include" />
             <e p="Components" t="Include">
               <e p="Extensions" t="Include">
+                <e p="Default.cshtml" t="Include" />
+              </e>
+              <e p="ViewExternalService" t="Include">
                 <e p="Default.cshtml" t="Include" />
               </e>
               <e p="ViewRecipeAction" t="Include">

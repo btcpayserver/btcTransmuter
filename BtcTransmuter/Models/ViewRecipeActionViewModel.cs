@@ -9,6 +9,5 @@ namespace BtcTransmuter.Models
         public ExternalServiceData ExternalServiceData { get; set; }
         public RecipeAction RecipeAction { get; set; }
         public IActionDescriptor ActionDescriptor { get; set; }
-        public IExternalServiceDescriptor ExternalServiceDescriptor { get; set; }
     }
 }

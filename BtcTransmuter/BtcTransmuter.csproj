@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions" />
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\site.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
