@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,37 +22,25 @@ namespace BtcTransmuter.Controllers
     {
         private readonly IRecipeManager _recipeManager;
         private readonly UserManager<User> _userManager;
-        private readonly IEnumerable<IActionDescriptor> _actionDescriptors;
-        private readonly IEnumerable<ITriggerDescriptor> _triggerDescriptors;
-        private readonly IEnumerable<IExternalServiceDescriptor> _externalServiceDescriptors;
 
-        public RecipesController(IRecipeManager recipeManager, UserManager<User> userManager,
-            IEnumerable<IActionDescriptor> actionDescriptors, 
-            IEnumerable<ITriggerDescriptor> triggerDescriptors,
-            IEnumerable<IExternalServiceDescriptor> externalServiceDescriptors)
+        public RecipesController(IRecipeManager recipeManager, UserManager<User> userManager)
         {
             _recipeManager = recipeManager;
             _userManager = userManager;
-            _actionDescriptors = actionDescriptors;
-            _triggerDescriptors = triggerDescriptors;
-            _externalServiceDescriptors = externalServiceDescriptors;
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetRecipes([FromQuery]string statusMessage = null)
+        public async Task<IActionResult> GetRecipes([FromQuery] string statusMessage = null)
         {
             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
             {
                 UserId = _userManager.GetUserId(User)
             });
-          
+
             return View(new GetRecipesViewModel()
             {
                 StatusMessage = statusMessage,
-                Recipes = recipes,
-                ActionDescriptors = _actionDescriptors,
-                TriggerDescriptors = _triggerDescriptors,
-                ExternalServiceDescriptors = _externalServiceDescriptors
+                Recipes = recipes
             });
         }
 
@@ -143,15 +132,107 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("create")]
-        public IActionResult CreateRecipe()
+        public IActionResult CreateRecipe(string statusMessage)
         {
-            return View(new CreateRecipeViewModel());
+            return View(new CreateRecipeViewModel()
+            {
+                StatusMessage = statusMessage
+            });
         }
 
         [HttpPost("create")]
-        public IActionResult CreateRecipePost(CreateRecipeViewModel viewModel)
+        public async Task<IActionResult> CreateRecipe(CreateRecipeViewModel viewModel)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var recipe = new Recipe()
+            {
+                Enabled = false,
+                Name = viewModel.Name,
+                Description = viewModel.Description,
+                UserId = _userManager.GetUserId(User)
+            };
+            await _recipeManager.AddOrUpdateRecipe(recipe);
+            if (string.IsNullOrEmpty(recipe.Id))
+            {
+                ModelState.AddModelError(string.Empty, "Could not save recipe");
+                return View(viewModel);
+            }
+
+            return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe created"});
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> EditRecipe(string id, string statusMessage)
+        {
+            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            {
+                UserId = _userManager.GetUserId(User),
+                RecipeId = id
+            });
+
+            if (!recipes.Any())
+            {
+                return RedirectToAction("GetRecipes", new
+                {
+                    statusMessage = new StatusMessageModel()
+                    {
+                        Message = "Recipe not found",
+                        Severity = StatusMessageModel.StatusSeverity.Error
+                    }.ToString()
+                });
+            }
+
+            var recipe = recipes.First();
+            return View(new EditRecipeViewModel()
+            {
+                StatusMessage = statusMessage,
+                Name = recipe.Name,
+                Enabled = recipe.Enabled,
+                Description = recipe.Description,
+                Actions = recipe.RecipeActions,
+                Trigger = recipe.RecipeTrigger
+            });
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> EditRecipe(string id, EditRecipeViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            {
+                UserId = _userManager.GetUserId(User),
+                RecipeId = id
+            });
+
+            if (!recipes.Any())
+            {
+                return RedirectToAction("GetRecipes", new
+                {
+                    statusMessage = new StatusMessageModel()
+                    {
+                        Message = "Recipe not found",
+                        Severity = StatusMessageModel.StatusSeverity.Error
+                    }.ToString()
+                });
+            }
+
+            var recipe = recipes.First();
+
+            recipe.Name = recipe.Name;
+            recipe.Enabled = recipe.Enabled;
+            recipe.Description = recipe.Description;
+
+            await _recipeManager.AddOrUpdateRecipe(recipe);
+
+            return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe edited"});
         }
     }
 }
