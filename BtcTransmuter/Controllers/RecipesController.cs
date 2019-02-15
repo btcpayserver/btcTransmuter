@@ -44,36 +44,7 @@ namespace BtcTransmuter.Controllers
             {
                 UserId = _userManager.GetUserId(User)
             });
-            recipes = new List<Recipe>()
-            {
-                new Recipe()
-                {
-                    Id = "1",
-                    Name = "Test Recipe",
-                    UserId = _userManager.GetUserId(User),
-                    RecipeTrigger = new RecipeTrigger()
-                    {
-                        Id = "1",
-                        RecipeId = "1",
-                        TriggerId = new ReceivedEmailTrigger().Id,
-                        ExternalServiceId = "1"
-                    },
-                    Description = "test desc",
-                    Enabled = true,
-                    RecipeInvocations = new List<RecipeInvocation>(),
-                    RecipeActions = new List<RecipeAction>()
-                    {
-                        new RecipeAction()
-                        {
-                            Id = "2",
-                            RecipeId = "1",
-                            ExternalServiceId = "2",
-                            ActionId = new SendEmailActionDescriptor().ActionId,
-                            
-                        }
-                    }
-                }
-            };
+          
             return View(new GetRecipesViewModel()
             {
                 StatusMessage = statusMessage,

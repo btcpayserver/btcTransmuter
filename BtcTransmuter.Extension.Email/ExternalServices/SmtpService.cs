@@ -1,15 +1,18 @@
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices
 {
-    public class SmtpService : BaseExternalService<Pop3ExternalServiceData>
+    public class SmtpService : BaseExternalService<SmtpExternalServiceData>, IExternalServiceDescriptor
     {
-        public override string ExternalServiceType => SmtpExternalServiceDescriptor.SmtpExternalServiceType;
+        public override string ExternalServiceType => "SmtpExternalService";
+
+        public string Name => "SMTP External Service";
+        public string Description => "SMTP External Service to be able to send emails as an action";
+        public string ViewPartial => "ViewSmtpExternalService";
 
         public SmtpService(ExternalServiceData data) : base(data)
         {

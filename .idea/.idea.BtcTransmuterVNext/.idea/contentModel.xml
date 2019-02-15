@@ -111,8 +111,8 @@
           <e p="IUseExternalService.cs" t="Include" />
           <e p="UpdatedItem.cs" t="Include" />
         </e>
-        <e p="Models" t="Include">
-          <e p="ValidationResult.cs" t="Include" />
+        <e p="Helpers" t="Include">
+          <e p="ValidationHelper.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -170,7 +170,6 @@
       <e p="BtcTransmuter.Extension.Email" t="IncludeRecursive">
         <e p="Actions" t="Include">
           <e p="SendEmail" t="Include">
-            <e p="SendEmailActionDescriptor.cs" t="Include" />
             <e p="SendEmailData.cs" t="Include" />
             <e p="SendEmailDataActionHandler.cs" t="Include" />
           </e>
@@ -181,10 +180,8 @@
         <e p="ExternalServices" t="Include">
           <e p="BaseEmailServiceData.cs" t="Include" />
           <e p="Pop3ExternalServiceData.cs" t="Include" />
-          <e p="Pop3ExternalServiceDescriptor.cs" t="Include" />
           <e p="Pop3Service.cs" t="Include" />
           <e p="SmtpExternalServiceData.cs" t="Include" />
-          <e p="SmtpExternalServiceDescriptor.cs" t="Include" />
           <e p="SmtpService.cs" t="Include" />
         </e>
         <e p="HostedServices" t="Include">
@@ -203,7 +200,6 @@
           <e p="ReceivedEmail" t="Include">
             <e p="ReceivedEmailTrigger.cs" t="Include" />
             <e p="ReceivedEmailTriggerData.cs" t="Include" />
-            <e p="ReceivedEmailTriggerDescriptor.cs" t="Include" />
             <e p="ReceivedEmailTriggerHandler.cs" t="Include" />
             <e p="ReceivedEmailTriggerParameters.cs" t="Include" />
           </e>

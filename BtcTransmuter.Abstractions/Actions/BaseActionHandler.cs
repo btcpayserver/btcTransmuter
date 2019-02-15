@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions.Models;
-using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 
@@ -11,8 +11,8 @@ namespace BtcTransmuter.Abstractions.Actions
     public abstract class BaseActionHandler<TActionData> : IActionHandler, IActionValidator
     {
         public abstract string ActionId { get; }
-        public abstract ValidationResult Validate(string data);
         protected abstract Task<bool> CanExecute(object triggerData, RecipeAction recipeAction);
+
         public async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction)
         {
             if (await CanExecute(triggerData, recipeAction))
@@ -26,7 +26,8 @@ namespace BtcTransmuter.Abstractions.Actions
             };
         }
 
-        protected abstract Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction, TActionData actionData);
+        protected abstract Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
+            TActionData actionData);
 
         /// <summary>
         /// https://dotnetfiddle.net/MoqJFk
@@ -40,6 +41,11 @@ namespace BtcTransmuter.Abstractions.Actions
                     var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(new[] {p}, null, match.Groups[1].Value);
                     return (e.Compile().DynamicInvoke(@object) ?? "").ToString();
                 });
+        }
+
+        public virtual ICollection<ValidationResult> Validate(string data)
+        {
+            return ValidationHelper.Validate<TActionData>(data);
         }
     }
 }

@@ -7,14 +7,21 @@ using BtcTransmuter.Data.Entities;
 namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 {
     public class ReceivedEmailTriggerHandler : BaseTriggerHandler<ReceivedEmailTriggerData,
-        ReceivedEmailTriggerParameters>
+        ReceivedEmailTriggerParameters>, ITriggerDescriptor
     {
+        public override string TriggerId => new ReceivedEmailTrigger().Id;
+        public string Name => "Receive Email";
+
+        public string Description =>
+            "Trigger a recipe by receiving a specifically formatted email through a pop3 external service.";
+
+        public string ViewPartial => "ViewReceivedEmailTrigger";
+
+
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             ReceivedEmailTriggerData triggerData,
             ReceivedEmailTriggerParameters parameters)
         {
-           
-
             if (!string.IsNullOrEmpty(parameters.FromEmail) && parameters.FromEmail.Equals(triggerData.FromEmail,
                     StringComparison.InvariantCultureIgnoreCase))
             {

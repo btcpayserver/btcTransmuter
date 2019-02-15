@@ -22,7 +22,8 @@ namespace BtcTransmuter.Extension.Email.HostedServices
         private readonly ITriggerDispatcher _triggerDispatcher;
         private ConcurrentDictionary<string, Pop3Service> _externalServices;
 
-        public ReceivingEmailHostedService(IExternalServiceManager externalServiceManager, ITriggerDispatcher triggerDispatcher)
+        public ReceivingEmailHostedService(IExternalServiceManager externalServiceManager,
+            ITriggerDispatcher triggerDispatcher)
         {
             _externalServiceManager = externalServiceManager;
             _triggerDispatcher = triggerDispatcher;
@@ -34,13 +35,13 @@ namespace BtcTransmuter.Extension.Email.HostedServices
             {
                 Type = new[]
                 {
-                    Pop3ExternalServiceDescriptor.Pop3ExternalServiceType
+                    Pop3Service.Pop3ExternalServiceType
                 }
             });
             _externalServices = new ConcurrentDictionary<string, Pop3Service>(
                 pop3Services
                     .Select(service => new KeyValuePair<string, Pop3Service>(service.Id, new Pop3Service(service))));
-            
+
             _externalServiceManager.ExternalServiceDataUpdated += ExternalServiceManagerOnExternalServiceUpdated;
             _ = Loop(cancellationToken);
         }
@@ -49,7 +50,6 @@ namespace BtcTransmuter.Extension.Email.HostedServices
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-
                 var tasks = _externalServices.Select(service => Task.Run(async () =>
                 {
                     var pop3Client = new Pop3Client();
@@ -84,7 +84,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
 
                     service.Value.Data.LastCheck = DateTime.Now;
                     await _externalServiceManager.UpdateInternalData(service.Key, service.Value);
-                    await pop3Client.DisconnectAsync(); 
+                    await pop3Client.DisconnectAsync();
                     pop3Client.Dispose();
                 }, cancellationToken));
 
@@ -99,7 +99,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
 
         private void ExternalServiceManagerOnExternalServiceUpdated(object sender, UpdatedItem<ExternalServiceData> e)
         {
-            if (e.Item.Type != Pop3ExternalServiceDescriptor.Pop3ExternalServiceType)
+            if (e.Item.Type != Pop3Service.Pop3ExternalServiceType)
             {
                 return;
             }

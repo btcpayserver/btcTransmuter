@@ -25,13 +25,5 @@ namespace BtcTransmuter.Extension.Email
         protected override int Priority => 0;
         public override string[] Scripts => new string[0];
         public override string[] Stylesheets => new string[0];
-
-
-        public override void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
-        {
-            base.Execute(serviceCollection,serviceProvider);
-            serviceCollection.AddSingleton<SendEmailActionDescriptor >();
-            serviceCollection.AddHostedService<ReceivingEmailHostedService>();
-        }
     }
 }
