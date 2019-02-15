@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using BtcTransmuter.Abstractions.ExternalServices;
 
 namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
