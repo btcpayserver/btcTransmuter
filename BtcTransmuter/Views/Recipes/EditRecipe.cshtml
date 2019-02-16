@@ -11,10 +11,6 @@
     </div>
 </div>
 <h2>@ViewData["Title"]</h2>
-<p>
-    <a asp-action="GetRecipes">Back to list</a>
-</p>
-
 
 <form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -33,7 +29,7 @@
         <input type="checkbox" asp-for="Enabled" class="form-check"></input>
         <span asp-validation-for="Enabled" class="text-danger"></span>
     </div>
-    
+
     <ul>
         @if (Model.Trigger != null)
         {
@@ -41,15 +37,25 @@
                 @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger);
             </li>
         }
-        
+        else
+        {
+            <li>
+                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers">Add Trigger</a>
+            </li>
+        }
+
         @foreach (var action in Model.Actions)
         {
             <li>
                 @await Component.InvokeAsync("ViewRecipeAction", action);
             </li>
         }
+        <li>
+            <a asp-action="EditRecipeAction" asp-controller="RecipeActions">Add Action</a>
+        </li>
     </ul>
-    
-    
+
+
     <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>
 </form>

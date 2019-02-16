@@ -19,7 +19,9 @@
           <e p="ExtensionsController.cs" t="Include" />
           <e p="ExternalServicesController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
+          <e p="RecipeActionsController.cs" t="Include" />
           <e p="RecipesController.cs" t="Include" />
+          <e p="RecipeTriggersController.cs" t="Include" />
         </e>
         <e p="Dockerfile" t="Include" />
         <e p="Models" t="Include">
@@ -64,6 +66,7 @@
           </e>
           <e p="ExternalServices" t="Include">
             <e p="CreateExternalService.cshtml" t="Include" />
+            <e p="CreateExternalServiceData.cshtml" t="Include" />
             <e p="EditExternalService.cshtml" t="Include" />
             <e p="GetServices.cshtml" t="Include" />
             <e p="RemoveExternalService.cshtml" t="Include" />
@@ -195,6 +198,7 @@
         <e p="EmailBtcTransmuterExtension.cs" t="Include" />
         <e p="ExternalServices" t="Include">
           <e p="BaseEmailServiceData.cs" t="Include" />
+          <e p="Pop3Controller.cs" t="Include" />
           <e p="Pop3ExternalServiceData.cs" t="Include" />
           <e p="Pop3Service.cs" t="Include" />
           <e p="SmtpExternalServiceData.cs" t="Include" />

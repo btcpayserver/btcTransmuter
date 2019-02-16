@@ -17,9 +17,9 @@
 @if (!Model.Recipes.Any())
 {
     <div class="card">
-        <h5 class="card-header text-center">
+        <h3 class="card-header text-center">
             No Recipes!
-        </h5>
+        </h3>
     </div>
 }
 <div class="card-columns">
@@ -28,16 +28,24 @@
     {
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">@Html.Raw(recipe.Name)</h5>
+                <h3 class="card-title">@Html.Raw(recipe.Name)</h3>
                 <p class="card-text">@Html.Raw(recipe.Description)</p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <div>Trigger</div>
-                    @await Component.InvokeAsync("ViewRecipeTrigger", recipe.RecipeTrigger);
+                    <h4>Trigger</h4>
+                    @if (recipe.RecipeTrigger == null)
+                    {
+                        <span>No trigger set yet</span>
+                    }
+                    else
+                    {
+                        
+                        @await Component.InvokeAsync("ViewRecipeTrigger", recipe.RecipeTrigger);
+                    }
                 </li>
                 <li class="list-group-item">
-                    <div>Actions</div>
+                    <h4>Actions</h4>
                     <ul>
                         @foreach (var action in recipe.RecipeActions)
                         {
@@ -50,7 +58,8 @@
                 </li>
             </ul>
             <div class="card-footer">
-                <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> |
+                <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@recipe.Id">Edit</a> -
+                <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
                 <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs (@recipe.RecipeInvocations.Count)</a>
             </div>
 

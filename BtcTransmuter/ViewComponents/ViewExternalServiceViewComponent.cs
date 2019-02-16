@@ -20,10 +20,11 @@ namespace BtcTransmuter.Areas.ViewComponents
             _externalServiceDescriptors = externalServiceDescriptors;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(ExternalServiceData serviceData)
+        public async Task<IViewComponentResult> InvokeAsync(ExternalServiceData serviceData, bool showAllData)
         {
             return View(new ViewExternalServiceViewModel()
             {
+                ShowAllData= showAllData,
                 ExternalServiceData = serviceData,
                 ExternalServiceDescriptor = _externalServiceDescriptors
                     .Single(descriptor => descriptor.ExternalServiceType == serviceData.Type)

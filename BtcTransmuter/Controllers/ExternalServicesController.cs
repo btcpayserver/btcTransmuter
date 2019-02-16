@@ -68,13 +68,35 @@ namespace BtcTransmuter.Controllers
             {
                 Name = model.Name,
                 Type = model.Type,
-                UserId = _userManager.GetUserId(User),
+                UserId = _userManager.GetUserId(User)
             };
-            await _externalServiceManager.AddOrUpdateExternalServiceData(externalService);
 
-            return RedirectToAction("EditExternalService",
-                new {externalService.Id, statusMessage = "External Service created"});
+
+            return RedirectToAction("EditExternalServiceInnerData", new
+            {
+                externalServiceData = externalService
+            });
+//            await _externalServiceManager.AddOrUpdateExternalServiceData(externalService);
+//
+//            return RedirectToAction("EditExternalService",
+//                new {externalService.Id, statusMessage = "External Service created"});
         }
+
+
+        [HttpGet("data")]
+        public async Task<IActionResult> EditExternalServiceInnerData(ExternalServiceData externalServiceData)
+        {
+            return View(new EditExternalServiceInnerDataVieModel()
+            {
+                Data = externalServiceData
+            });
+        }
+
+        public class EditExternalServiceInnerDataVieModel
+        {
+            public ExternalServiceData Data { get; set; }
+        }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> EditExternalService(string id, string statusMessage)
@@ -142,7 +164,6 @@ namespace BtcTransmuter.Controllers
 
 
             return RedirectToAction("EditExternalService", new {id, statusMessage = "External Service updated"});
-            ;
         }
 
         [HttpGet("{id}/remove")]

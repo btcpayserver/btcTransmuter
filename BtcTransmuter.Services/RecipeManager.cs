@@ -67,7 +67,8 @@ namespace BtcTransmuter.Services
                     }
                     else
                     {
-                        context.Recipes.Attach(recipe);
+                        context.Recipes.Attach(recipe).State = EntityState.Modified;
+
                     }
 
                     await context.SaveChangesAsync();

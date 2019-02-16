@@ -33,7 +33,7 @@
     </dl>
     
     <form asp-action="RemoveRecipePost" asp-route-id="@Model.Recipe.Id"  method="post">
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="GetRecipes">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-primary" /> 
+        <a asp-action="GetRecipes" class="btn btn-secondary">Back to List</a>
     </form>
 </div>

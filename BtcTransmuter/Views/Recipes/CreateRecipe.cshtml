@@ -11,9 +11,6 @@
     </div>
 </div>
 <h2>@ViewData["Title"]</h2>
-<p>
-    <a asp-action="GetRecipes">Back to list</a>
-</p>
 
 
 <form method="post">
@@ -29,4 +26,5 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="GetRecipes"  class="btn btn-secondary">Back to list</a>
 </form>

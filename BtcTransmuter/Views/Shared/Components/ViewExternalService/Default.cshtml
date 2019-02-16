@@ -1,3 +1,7 @@
 @model ViewExternalServiceViewModel
 
+@if (Model.ShowAllData)
+{
+    @($"{Model.ExternalServiceData.Name}({Model.ExternalServiceDescriptor.Name})")
+}
 <partial name="@Model.ExternalServiceDescriptor.ViewPartial" model="@Model.ExternalServiceData.DataJson"></partial>

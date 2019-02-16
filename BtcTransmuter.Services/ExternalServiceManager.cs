@@ -71,7 +71,7 @@ namespace BtcTransmuter.Services
                     }
                     else
                     {
-                        context.Attach(externalServiceData);
+                        context.Attach(externalServiceData).State = EntityState.Modified;
                         context.ExternalServices.Update(externalServiceData);
                     }
 

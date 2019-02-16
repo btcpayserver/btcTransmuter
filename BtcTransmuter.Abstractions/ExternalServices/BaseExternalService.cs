@@ -22,6 +22,10 @@ namespace BtcTransmuter.Abstractions.ExternalServices
             _data = data;
         }
 
+        protected BaseExternalService()
+        {
+        }
+
         public virtual ICollection<ValidationResult> Validate(string data)
         {
             return ValidationHelper.Validate<T>(data);

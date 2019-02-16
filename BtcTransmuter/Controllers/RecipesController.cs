@@ -1,14 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions.Actions;
-using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
-using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
-using BtcTransmuter.Extension.Email.Actions.SendEmail;
-using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail;
 using BTCPayServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -47,47 +40,25 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}/remove")]
         public async Task<IActionResult> RemoveRecipe(string id)
         {
-            var recipe = await _recipeManager.GetRecipes(new RecipesQuery()
+            var recipe = await GetRecipeForUser(id);
+            if (recipe == null)
             {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = id
-            });
-            if (!recipe.Any())
-            {
-                return RedirectToAction("GetRecipes", new
-                {
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "Recipe not found",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
+                return GetNotFoundActionResult();
             }
 
             return View(new RemoveRecipeViewModel()
             {
-                Recipe = recipe.First()
+                Recipe = recipe
             });
         }
 
         [HttpPost("{id}/remove")]
         public async Task<IActionResult> RemoveRecipePost(string id)
         {
-            var recipe = await _recipeManager.GetRecipes(new RecipesQuery()
+            var recipe = await GetRecipeForUser(id);
+            if (recipe == null)
             {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = id
-            });
-            if (!recipe.Any())
-            {
-                return RedirectToAction("GetRecipes", new
-                {
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "Recipe not found",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
+                return GetNotFoundActionResult();
             }
 
             await _recipeManager.RemoveRecipe(id);
@@ -95,7 +66,7 @@ namespace BtcTransmuter.Controllers
             {
                 statusMessage = new StatusMessageModel()
                 {
-                    Message = $"Recipe {recipe.First().Name} deleted successfully",
+                    Message = $"Recipe {recipe.Name} deleted successfully",
                     Severity = StatusMessageModel.StatusSeverity.Success
                 }.ToString()
             });
@@ -105,25 +76,12 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}/logs")]
         public async Task<IActionResult> GetRecipeLogs(string id)
         {
-            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            var recipe = await GetRecipeForUser(id);
+            if (recipe == null)
             {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = id
-            });
-
-            if (!recipes.Any())
-            {
-                return RedirectToAction("GetRecipes", new
-                {
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "Recipe not found",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
+                return GetNotFoundActionResult();
             }
 
-            var recipe = recipes.First();
             return View(new GetRecipeLogsViewModel()
             {
                 Name = recipe.Name,
@@ -168,25 +126,12 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> EditRecipe(string id, string statusMessage)
         {
-            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            var recipe = await GetRecipeForUser(id);
+            if (recipe == null)
             {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = id
-            });
-
-            if (!recipes.Any())
-            {
-                return RedirectToAction("GetRecipes", new
-                {
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "Recipe not found",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
+                return GetNotFoundActionResult();
             }
 
-            var recipe = recipes.First();
             return View(new EditRecipeViewModel()
             {
                 StatusMessage = statusMessage,
@@ -206,33 +151,42 @@ namespace BtcTransmuter.Controllers
                 return View(viewModel);
             }
 
-            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            var recipe = await GetRecipeForUser(id);
+            if (recipe == null)
             {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = id
-            });
-
-            if (!recipes.Any())
-            {
-                return RedirectToAction("GetRecipes", new
-                {
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "Recipe not found",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
+                return GetNotFoundActionResult();
             }
 
-            var recipe = recipes.First();
-
-            recipe.Name = recipe.Name;
-            recipe.Enabled = recipe.Enabled;
-            recipe.Description = recipe.Description;
+            recipe.Name = viewModel.Name;
+            recipe.Enabled = viewModel.Enabled;
+            recipe.Description = viewModel.Description;
 
             await _recipeManager.AddOrUpdateRecipe(recipe);
 
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe edited"});
+        }
+
+        private async Task<Recipe> GetRecipeForUser(string recipeId)
+        {
+            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            {
+                UserId = _userManager.GetUserId(User),
+                RecipeId = recipeId
+            });
+
+            return recipes.FirstOrDefault();
+        }
+
+        private RedirectToActionResult GetNotFoundActionResult()
+        {
+            return RedirectToAction("GetRecipes", new
+            {
+                statusMessage = new StatusMessageModel()
+                {
+                    Message = "Recipe not found",
+                    Severity = StatusMessageModel.StatusSeverity.Error
+                }.ToString()
+            });
         }
     }
 }

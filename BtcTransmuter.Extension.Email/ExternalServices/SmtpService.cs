@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices
 {
@@ -13,6 +14,14 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
         public string Name => "SMTP External Service";
         public string Description => "SMTP External Service to be able to send emails as an action";
         public string ViewPartial => "ViewSmtpExternalService";
+        public IActionResult EditData(ExternalServiceData data)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SmtpService() : base()
+        {
+        }
 
         public SmtpService(ExternalServiceData data) : base(data)
         {

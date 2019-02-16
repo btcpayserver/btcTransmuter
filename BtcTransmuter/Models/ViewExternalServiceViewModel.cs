@@ -7,5 +7,6 @@ namespace BtcTransmuter.Models
     {
         public ExternalServiceData ExternalServiceData { get; set; }
         public IExternalServiceDescriptor ExternalServiceDescriptor { get; set; }
+        public bool ShowAllData { get; set; }
     }
 }

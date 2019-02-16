@@ -16,7 +16,7 @@ namespace BtcTransmuter.Areas.ViewComponents
 
         public ViewRecipeTriggerViewComponent(IEnumerable<ITriggerDescriptor> triggerDescriptors)
         {
-            triggerDescriptors = triggerDescriptors;
+            _triggerDescriptors = triggerDescriptors;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(RecipeTrigger recipeTrigger)
