@@ -1,2 +1,18 @@
-@model string
-Send Email @Model
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Email.Actions.SendEmail
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<SendEmailData>();
+}
+
+<div>
+    Send Email to @data.To 
+    @if (!string.IsNullOrEmpty(data.Subject))
+    {
+        <span>with subject @data.Subject</span>
+    }
+    @if (!string.IsNullOrEmpty(data.Body))
+    {
+        <span>with body @data.Subject</span>
+    }
+</div>

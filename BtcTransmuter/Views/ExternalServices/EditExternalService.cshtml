@@ -1,6 +1,6 @@
 @model BtcTransmuter.Controllers.EditExternalServiceViewModel
 @{
-    ViewData["Title"] = "Edit External Service";
+    ViewData["Title"] = $"{(string.IsNullOrEmpty( Model.ExternalServiceData.Id)? "Create" : "Edit")} External Service";
 }
 
 <div class="row">
@@ -20,10 +20,12 @@
     </div>
     <div class="form-group">
         @await Component.InvokeAsync("ViewExternalService", new {serviceData = Model.ExternalServiceData, showAllData = false})
+        
+        <a asp-action="EditExternalServiceInnerData" asp-controller="ExternalServices" asp-route-id="@Model.ExternalServiceData.Id"> Edit</a>
     </div>
 
     <div class="mt-2">
-        <button type="submit" class="btn btn-primary">Next</button>
+        <button type="submit" class="btn btn-primary">@(string.IsNullOrEmpty( Model.ExternalServiceData.Id)? "Next" : "Save")</button>
         <a asp-action="GetServices" class="btn btn-secondary">Back to list</a>
     </div>
 </form>

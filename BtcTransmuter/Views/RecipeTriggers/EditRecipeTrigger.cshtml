@@ -1,6 +1,6 @@
 @model BtcTransmuter.Controllers.EditRecipeTriggerViewModel
 @{
-    ViewData["Title"] = "Edit Recipe Trigger";
+    ViewData["Title"] = $"{(string.IsNullOrEmpty( Model.RecipeTrigger?.Id)? "Create" : "Edit")} Recipe Trigger";
 }
 
 <div class="row">
@@ -26,7 +26,7 @@
     }
 
     <div class="mt-2">
-        <button type="submit" class="btn btn-primary">Next</button>
+        <button type="submit" class="btn btn-primary">@(string.IsNullOrEmpty( Model.RecipeTrigger?.Id)? "Next" : "Save")</button>
         <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@Model.RecipeId" class="btn btn-secondary">Back to recipe</a>
     </div>
 </form>

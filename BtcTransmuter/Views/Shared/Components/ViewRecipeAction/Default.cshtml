@@ -1,9 +1,7 @@
 @model ViewRecipeActionViewModel
 
-<partial name="@Model.ActionDescriptor.ViewPartial" model="@Model.RecipeAction.DataJson"></partial>
-<a asp-action="EditRecipeAction" asp-controller="RecipeActions" 
-   asp-route-id="@Model.RecipeAction.RecipeId" 
-   asp-route-recipeActionId="@Model.RecipeAction.ActionId"> Edit</a>
+<partial name="@Model.ActionDescriptor.ViewPartial" model="@Model.RecipeAction"></partial>
+
 @if (Model.ExternalServiceData != null)
 {
     <div>

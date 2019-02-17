@@ -27,3 +27,7 @@ BtcTransmuter\.Data/obj/Debug/netcoreapp2\.2/
 BtcTransmuter\.Data/obj/
 
 BtcTransmuter\.Services/obj/
+
+BtcTransmuter/mydb\.db
+
+\.idea/\.idea\.BtcTransmuterVNext/\.idea/

@@ -5,4 +5,3 @@
     @($"{Model.ExternalServiceData.Name}({Model.ExternalServiceDescriptor.Name})")
 }
 @await Html.PartialAsync(Model.ExternalServiceDescriptor.ViewPartial, Model.ExternalServiceData)
-<a asp-action="EditExternalServiceInnerData" asp-controller="ExternalServices" asp-route-id="@Model.ExternalServiceData.Id"> Edit</a>

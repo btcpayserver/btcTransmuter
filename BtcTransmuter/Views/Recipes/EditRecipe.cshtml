@@ -1,6 +1,4 @@
 @model BtcTransmuter.Controllers.EditRecipeViewModel
-
-
 @{
     ViewData["Title"] = "Edit Recipe";
 }
@@ -29,8 +27,6 @@
         <input type="checkbox" asp-for="Enabled" class="form-check"></input>
         <span asp-validation-for="Enabled" class="text-danger"></span>
     </div>
-
-
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <h4>Trigger</h4>
@@ -38,14 +34,16 @@
             {
                 <span>No trigger set yet</span>
 
-                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.Id">Add Trigger</a>
+                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.Id">Add</a>
             }
             else
             {
                 @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
-                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" 
-                   asp-route-id="Model.Trigger.RecipeId" 
-                   asp-route-recipeTriggerId="@Model.Trigger.Id"> Edit</a>
+                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers"
+                   asp-route-id="@Model.Trigger.RecipeId"
+                   asp-route-recipeTriggerId="@Model.Trigger.Id">
+                    Edit
+                </a>
             }
         </li>
         <li class="list-group-item">
@@ -54,8 +52,9 @@
                 @foreach (var action in Model.Actions)
                 {
                     <li class="list-group-item">
-                        @await Component.InvokeAsync("ViewRecipeAction", action);
+                        @await Component.InvokeAsync("ViewRecipeAction", action)
 
+                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
                     </li>
                 }
                 @if (!Model.Actions.Any())
@@ -63,14 +62,12 @@
                     <li class="list-group-item border-top-0">
                         No Actions
 
-                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
+                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add</a>
                     </li>
                 }
             </ul>
         </li>
     </ul>
-
-
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
         <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>

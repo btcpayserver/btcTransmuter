@@ -60,7 +60,7 @@
                         @foreach (var action in recipe.RecipeActions)
                         {
                             <li class="list-group-item">
-                                @await Component.InvokeAsync("ViewRecipeAction", action);
+                                @await Component.InvokeAsync("ViewRecipeAction", action)
 
                             </li>
                         }

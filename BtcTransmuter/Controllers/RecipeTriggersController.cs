@@ -62,6 +62,7 @@ namespace BtcTransmuter.Controllers
 
             if (!ModelState.IsValid)
             {
+                model.RecipeTrigger = model.RecipeTrigger;
                 model.Triggers = new SelectList(_triggerDescriptors, nameof(ITriggerDescriptor.TriggerId),
                     nameof(ITriggerDescriptor.Name), model.TriggerId);
 
@@ -74,6 +75,7 @@ namespace BtcTransmuter.Controllers
             {
                 recipeTrigger = new RecipeTrigger()
                 {
+                    Id = recipeTriggerId,
                     RecipeId = id,
                     TriggerId = model.TriggerId,
                 };

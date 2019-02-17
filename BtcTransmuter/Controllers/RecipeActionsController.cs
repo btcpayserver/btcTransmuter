@@ -20,12 +20,14 @@ namespace BtcTransmuter.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IEnumerable<IActionDescriptor> _actionDescriptors;
 
-        public RecipeActionsController(IRecipeManager recipeManager, UserManager<User> userManager, IEnumerable<IActionDescriptor> actionDescriptors)
+        public RecipeActionsController(IRecipeManager recipeManager, UserManager<User> userManager,
+            IEnumerable<IActionDescriptor> actionDescriptors)
         {
             _recipeManager = recipeManager;
             _userManager = userManager;
             _actionDescriptors = actionDescriptors;
         }
+
         [HttpGet("{recipeActionId?}")]
         public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, string statusMessage)
         {
@@ -35,49 +37,66 @@ namespace BtcTransmuter.Controllers
                 return GetNotFoundActionResult();
             }
 
-            var model = new EditRecipeActionViewModel()
+            RecipeAction recipeAction = null;
+            if (!string.IsNullOrEmpty(recipeActionId))
             {
+                recipeAction = recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
+                if (recipeAction == null)
+                {
+                    return GetNotFoundActionResult();
+                }
+            }
+
+            return View(new EditRecipeActionViewModel()
+            {
+                RecipeId = id,
+                ActionId = recipeAction?.ActionId,
+                RecipeAction = recipeAction,
+                StatusMessage = statusMessage,
                 Actions = new SelectList(_actionDescriptors, nameof(IActionDescriptor.ActionId),
-                    nameof(IActionDescriptor.Name), recipeActionId),
-                StatusMessage = statusMessage
-            };
-            if (string.IsNullOrEmpty(recipeActionId))
-            {
-                return View(model);
-            }
-
-            var recipeAction = recipe.RecipeActions.Single(action => action.Id == recipeActionId);
-            if (recipeAction == null)
-            {
-                return GetNotFoundActionResult();
-            }
-            
-
-            return View(model);
+                    nameof(IActionDescriptor.Name),  recipeAction?.ActionId)
+            });
         }
 
         [HttpPost("{recipeActionId?}")]
-        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, EditRecipeActionViewModel model)
+        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId,
+            EditRecipeActionViewModel model)
         {
             var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
             }
-            
-            
+
+            var recipeAction = recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
+
             if (!ModelState.IsValid)
             {
+                model.RecipeAction = recipeAction;
                 model.Actions = new SelectList(_actionDescriptors, nameof(IActionDescriptor.ActionId),
                     nameof(IActionDescriptor.Name), model.ActionId);
                 return View(model);
             }
 
-            return RedirectToAction("EditRecipe","Recipes", new { id=id});
+            if (string.IsNullOrEmpty(recipeActionId) || recipeAction.ActionId != model.ActionId)
+            {
+                recipeAction = new RecipeAction()
+                {
+                    Id = recipeActionId,
+                    RecipeId = id,
+                    ActionId = model.ActionId,
+                };
+            }
+
+            var serviceDescriptor =
+                _actionDescriptors.Single(descriptor =>
+                    descriptor.ActionId == recipeAction.ActionId);
+            return await serviceDescriptor.EditData(recipeAction);
         }
+
         private RedirectToActionResult GetNotFoundActionResult()
         {
-            return RedirectToAction("GetRecipes","Recipes", new
+            return RedirectToAction("GetRecipes", "Recipes", new
             {
                 statusMessage = new StatusMessageModel()
                 {
@@ -86,13 +105,5 @@ namespace BtcTransmuter.Controllers
                 }.ToString()
             });
         }
-    }
-
-    public class EditRecipeActionViewModel
-    {
-        public string ActionId { get; set; }
-        public SelectList Actions { get; set; }
-        public string StatusMessage { get; set; }
-        
     }
 }

@@ -1,0 +1,53 @@
+@using System.Reflection
+@model BtcTransmuter.Extension.Email.ExternalServices.SendEmailController.SendEmailViewModel
+@{
+    ViewData["Title"] = "Edit Send Email Action";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ExternalServiceId" class="control-label"></label>
+        <select asp-for="ExternalServiceId" asp-items="Model.ExternalServices" class="form-control"></select>
+        <span asp-validation-for="ExternalServiceId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="From" class="control-label"></label>
+        <input asp-for="From" class="form-control"/>
+        <span asp-validation-for="From" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="To" class="control-label"></label>
+        <input asp-for="To" class="form-control"/>
+        <span asp-validation-for="To" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Subject" class="control-label"></label>
+        <input asp-for="Subject" class="form-control"/>
+        <span asp-validation-for="Subject" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Body" class="control-label"></label>
+        <textarea asp-for="Body" class="form-control"></textarea>
+        <span asp-validation-for="Body" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="RecipeId"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to list</a>
+    </div>
+</form>
+
+<pre class="mt-2">
+You can use <kbd>{TriggerData.XXX}</kbd> in the fields where XXX  is the property name of a field present in the data that triggered the trigger. 
+
+You can mix and match as many as you want. 
+
+<b>Please rewrite this section and add cool magic to display available properties for this recipe action</b>
+
+</pre>

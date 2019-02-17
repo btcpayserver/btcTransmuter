@@ -32,4 +32,10 @@
     <dd>
         @service.Data.Username
     </dd>
+    <dt>
+        Last checked
+    </dt>
+    <dd>
+        @(service.Data.LastCheck.HasValue? service.Data.LastCheck.Value.ToString("g"): "Never")
+    </dd>
 </dl>
