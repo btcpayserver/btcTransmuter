@@ -198,11 +198,16 @@
         <e p="EmailBtcTransmuterExtension.cs" t="Include" />
         <e p="ExternalServices" t="Include">
           <e p="BaseEmailServiceData.cs" t="Include" />
-          <e p="Pop3Controller.cs" t="Include" />
-          <e p="Pop3ExternalServiceData.cs" t="Include" />
-          <e p="Pop3Service.cs" t="Include" />
-          <e p="SmtpExternalServiceData.cs" t="Include" />
-          <e p="SmtpService.cs" t="Include" />
+          <e p="Pop3" t="Include">
+            <e p="Pop3Controller.cs" t="Include" />
+            <e p="Pop3ExternalServiceData.cs" t="Include" />
+            <e p="Pop3Service.cs" t="Include" />
+          </e>
+          <e p="Smtp" t="Include">
+            <e p="SmtpController.cs" t="Include" />
+            <e p="SmtpExternalServiceData.cs" t="Include" />
+            <e p="SmtpService.cs" t="Include" />
+          </e>
         </e>
         <e p="HostedServices" t="Include">
           <e p="ReceivingEmailHostedService.cs" t="Include" />
@@ -233,6 +238,9 @@
             <e p="ViewReceivedEmailTrigger.cshtml" t="Include" />
             <e p="ViewSendEmailAction.cshtml" t="Include" />
             <e p="ViewSmtpExternalService.cshtml" t="Include" />
+          </e>
+          <e p="Smtp" t="Include">
+            <e p="EditData.cshtml" t="Include" />
           </e>
         </e>
       </e>

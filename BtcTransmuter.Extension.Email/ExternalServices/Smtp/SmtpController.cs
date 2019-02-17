@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
@@ -7,20 +6,19 @@ using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices
 {
-    [Route("email-plugin/external-services/pop3")]
+    [Route("email-plugin/external-services/smtp")]
     [Authorize]
-    public class Pop3Controller : Controller
+    public class SmtpController : Controller
     {
         private readonly IExternalServiceManager _externalServiceManager;
         private readonly UserManager<User> _userManager;
         private readonly IMemoryCache _memoryCache;
 
-        public Pop3Controller(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
+        public SmtpController(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
             IMemoryCache memoryCache)
         {
             _externalServiceManager = externalServiceManager;
@@ -37,13 +35,13 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
                 return result.Error;
             }
 
-            var pop3Service = new Pop3Service(result.Data);
+            var smtpService = new SmtpService(result.Data);
 
-            return View(pop3Service.Data);
+            return View(smtpService.Data);
         }
 
         [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, Pop3ExternalServiceData data)
+        public async Task<IActionResult> EditData(string identifier, SmtpExternalServiceData data)
         {
             var result = await GetExternalServiceData(identifier);
             if (result.Error != null)
@@ -58,25 +56,11 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
             }
 
             externalServiceData.Set(data);
-
-            var pop3Service = new Pop3Service(externalServiceData);
-            var testConnection = await pop3Service.CreateClientAndConnect();
-            if (testConnection == null)
-            {
-                ModelState.AddModelError(string.Empty, "Could not connect successfully");
-
-                return View(data);
-            }
-
-            testConnection.Dispose();
-
-
-            externalServiceData.Set(data);
             await _externalServiceManager.AddOrUpdateExternalServiceData(externalServiceData);
             return RedirectToAction("EditExternalService", "ExternalServices", new
             {
                 id = externalServiceData.Id,
-                statusMessage = "Pop3 Data updated"
+                statusMessage = "Smtp Data updated"
             });
         }
         
@@ -85,7 +69,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
             ExternalServiceData data = null;
             if (identifier.StartsWith("new"))
             {
-                if (!_memoryCache.TryGetValue<ExternalServiceData>(identifier, out data))
+                if (!_memoryCache.TryGetValue(identifier, out data))
                 {
                     return (RedirectToAction("GetServices", "ExternalServices", new
                     {
@@ -105,7 +89,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
                 var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
                 {
                     UserId = _userManager.GetUserId(User),
-                    Type = new string[] {Pop3Service.Pop3ExternalServiceType},
+                    Type = new string[] { SmtpService.SmtpExternalServiceType},
                     ExternalServiceId = identifier
                 });
                 if (!services.Any())

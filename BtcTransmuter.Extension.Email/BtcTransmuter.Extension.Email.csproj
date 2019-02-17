@@ -25,6 +25,7 @@
       <Content Include="Views\Shared\ViewReceivedEmailTrigger.cshtml" />
       <Content Include="Views\Shared\ViewSendEmailAction.cshtml" />
       <Content Include="Views\Shared\ViewSmtpExternalService.cshtml" />
+      <Content Include="Views\Smtp\EditData.cshtml" />
     </ItemGroup>
 
 </Project>
