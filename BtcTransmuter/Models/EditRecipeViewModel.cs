@@ -6,6 +6,7 @@ namespace BtcTransmuter.Controllers
 {
     public class EditRecipeViewModel
     {
+        public string Id { get; set; }
         public string StatusMessage { get; set; }
         [Required] public string Name { get; set; }
         [Required] public string Description { get; set; }

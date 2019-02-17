@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
-using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BTCPayServer.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +29,7 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{recipeActionId?}")]
         public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, string statusMessage)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -58,9 +57,9 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpPost("{recipeActionId?}")]
-        public async Task<IActionResult> EditRecipeAction(string id, string actionId, EditRecipeActionViewModel model)
+        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, EditRecipeActionViewModel model)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -76,18 +75,6 @@ namespace BtcTransmuter.Controllers
 
             return RedirectToAction("EditRecipe","Recipes", new { id=id});
         }
-
-        private async Task<Recipe> GetRecipeForUser(string recipeId)
-        {
-            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
-            {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = recipeId
-            });
-
-            return recipes.FirstOrDefault();
-        }
-
         private RedirectToActionResult GetNotFoundActionResult()
         {
             return RedirectToAction("GetRecipes","Recipes", new

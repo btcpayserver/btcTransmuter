@@ -30,32 +30,46 @@
         <span asp-validation-for="Enabled" class="text-danger"></span>
     </div>
 
-    <ul>
-        @if (Model.Trigger != null)
-        {
-            <li>
-                @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger);
-            </li>
-        }
-        else
-        {
-            <li>
-                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers">Add Trigger</a>
-            </li>
-        }
 
-        @foreach (var action in Model.Actions)
-        {
-            <li>
-                @await Component.InvokeAsync("ViewRecipeAction", action);
-            </li>
-        }
-        <li>
-            <a asp-action="EditRecipeAction" asp-controller="RecipeActions">Add Action</a>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <h4>Trigger</h4>
+            @if (Model.Trigger == null)
+            {
+                <span>No trigger set yet</span>
+
+                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.Id">Add Trigger</a>
+            }
+            else
+            {
+                @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
+            }
+        </li>
+        <li class="list-group-item">
+            <h4>Actions</h4>
+            <ul class="list-group list-group-flush">
+                @foreach (var action in Model.Actions)
+                {
+                    <li class="list-group-item">
+                        @await Component.InvokeAsync("ViewRecipeAction", action);
+
+                    </li>
+                }
+                @if (!Model.Actions.Any())
+                {
+                    <li class="list-group-item border-top-0">
+                        No Actions
+
+                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
+                    </li>
+                }
+            </ul>
         </li>
     </ul>
 
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>
+    </div>
 </form>

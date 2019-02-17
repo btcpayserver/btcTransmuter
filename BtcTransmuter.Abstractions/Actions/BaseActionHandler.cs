@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -8,7 +6,7 @@ using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions.Actions
 {
-    public abstract class BaseActionHandler<TActionData> : IActionHandler, IActionValidator
+    public abstract class BaseActionHandler<TActionData> : IActionHandler
     {
         public abstract string ActionId { get; }
         protected abstract Task<bool> CanExecute(object triggerData, RecipeAction recipeAction);
@@ -41,11 +39,6 @@ namespace BtcTransmuter.Abstractions.Actions
                     var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(new[] {p}, null, match.Groups[1].Value);
                     return (e.Compile().DynamicInvoke(@object) ?? "").ToString();
                 });
-        }
-
-        public virtual ICollection<ValidationResult> Validate(string data)
-        {
-            return ValidationHelper.Validate<TActionData>(data);
         }
     }
 }

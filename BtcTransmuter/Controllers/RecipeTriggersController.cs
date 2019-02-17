@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
@@ -20,16 +21,18 @@ namespace BtcTransmuter.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IEnumerable<ITriggerDescriptor> _triggerDescriptors;
 
-        public RecipeTriggersController(IRecipeManager recipeManager, UserManager<User> userManager, IEnumerable<ITriggerDescriptor> triggerDescriptors)
+        public RecipeTriggersController(IRecipeManager recipeManager, UserManager<User> userManager,
+            IEnumerable<ITriggerDescriptor> triggerDescriptors)
         {
             _recipeManager = recipeManager;
             _userManager = userManager;
             _triggerDescriptors = triggerDescriptors;
         }
+
         [HttpGet("{recipeTriggerId?}")]
         public async Task<IActionResult> EditRecipeTrigger(string id, string recipeTriggerId, string statusMessage)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -37,20 +40,26 @@ namespace BtcTransmuter.Controllers
 
             return View(new EditRecipeTriggerViewModel()
             {
-                StatusMessage = statusMessage
+                RecipeId = id,
+                TriggerId = recipe.RecipeTrigger?.TriggerId,
+                RecipeTrigger = recipe.RecipeTrigger,
+                StatusMessage = statusMessage,
+                Triggers = new SelectList(_triggerDescriptors, nameof(ITriggerDescriptor.TriggerId),
+                    nameof(ITriggerDescriptor.Name), recipe.RecipeTrigger?.TriggerId)
             });
         }
 
         [HttpPost("{recipeTriggerId?}")]
-        public async Task<IActionResult> EditRecipeTrigger(string id, string recipeTriggerId,  EditRecipeTriggerViewModel model)
+        public async Task<IActionResult> EditRecipeTrigger(string id, string recipeTriggerId,
+            EditRecipeTriggerViewModel model)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
             }
-            
-            
+
+
             if (!ModelState.IsValid)
             {
                 model.Triggers = new SelectList(_triggerDescriptors, nameof(ITriggerDescriptor.TriggerId),
@@ -59,23 +68,27 @@ namespace BtcTransmuter.Controllers
                 return View(model);
             }
 
-            return View();
-        }
+            var recipeTrigger = model.RecipeTrigger;
 
-        private async Task<Recipe> GetRecipeForUser(string recipeId)
-        {
-            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            if (string.IsNullOrEmpty(recipeTriggerId) || recipe.RecipeTrigger.TriggerId != model.TriggerId)
             {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = recipeId
-            });
+                recipeTrigger = new RecipeTrigger()
+                {
+                    RecipeId = id,
+                    TriggerId = model.TriggerId,
+                };
+            }
 
-            return recipes.FirstOrDefault();
+            var serviceDescriptor =
+                _triggerDescriptors.Single(descriptor =>
+                    descriptor.TriggerId == recipeTrigger.TriggerId);
+            return await serviceDescriptor.EditData(recipeTrigger);
         }
+
 
         private RedirectToActionResult GetNotFoundActionResult()
         {
-            return RedirectToAction("GetRecipes","Recipes", new
+            return RedirectToAction("GetRecipes", "Recipes", new
             {
                 statusMessage = new StatusMessageModel()
                 {
@@ -84,13 +97,5 @@ namespace BtcTransmuter.Controllers
                 }.ToString()
             });
         }
-    }
-
-    public class EditRecipeTriggerViewModel
-    {
-        public string TriggerId { get; set; }
-        public SelectList Triggers { get; set; }
-        public string StatusMessage { get; set; }
-        
     }
 }

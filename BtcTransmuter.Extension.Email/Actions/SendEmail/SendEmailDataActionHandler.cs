@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.Email.ExternalServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
@@ -15,6 +16,10 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
             "Send an email using an smtp external service";
 
         public string ViewPartial => "ViewSendEmailAction";
+        public Task<IActionResult> EditData(RecipeAction data)
+        {
+            throw new System.NotImplementedException();
+        }
 
         protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
         {

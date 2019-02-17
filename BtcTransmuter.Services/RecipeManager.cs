@@ -68,7 +68,46 @@ namespace BtcTransmuter.Services
                     else
                     {
                         context.Recipes.Attach(recipe).State = EntityState.Modified;
+                    }
 
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task AddOrUpdateRecipeTrigger(RecipeTrigger trigger)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    if (string.IsNullOrEmpty(trigger.Id))
+                    {
+                        await context.RecipeTriggers.AddAsync(trigger);
+                    }
+                    else
+                    {
+                        context.RecipeTriggers.Attach(trigger).State = EntityState.Modified;
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task AddOrUpdateRecipeAction(RecipeAction action)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    if (string.IsNullOrEmpty(action.Id))
+                    {
+                        await context.RecipeActions.AddAsync(action);
+                    }
+                    else
+                    {
+                        context.RecipeActions.Attach(action).State = EntityState.Modified;
                     }
 
                     await context.SaveChangesAsync();
@@ -94,15 +133,15 @@ namespace BtcTransmuter.Services
             }
         }
 
-        public async Task<Recipe> GetRecipe(string id)
+        public async Task<Recipe> GetRecipe(string id, string userId = null)
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
+            var recipes = await GetRecipes(new RecipesQuery()
             {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    return await context.Recipes.FindAsync(id);
-                }
-            }
+                UserId = userId,
+                RecipeId = id
+            });
+
+            return recipes.FirstOrDefault();
         }
 
         public async Task AddRecipeInvocation(RecipeInvocation invocation)

@@ -1,0 +1,50 @@
+@using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
+@model BtcTransmuter.Extension.Email.Triggers.ReceivedEmail.ReceivedEmailController.ReceivedEmailViewModel
+
+@{
+    ViewData["Title"] = "Edit Received Email Trigger";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ExternalServiceId" class="control-label"></label>
+        <select asp-for="ExternalServiceId" asp-items="Model.ExternalServices" class="form-control"></select>
+        <span asp-validation-for="ExternalServiceId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="FromEmail" class="control-label"></label>
+        <input type="email" asp-for="FromEmail" class="form-control"/>
+        <span asp-validation-for="FromEmail" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Body" class="control-label"></label>
+        <div class="input-group">
+            <input asp-for="Body" class="form-control"/>
+            <div class="input-group-append">
+                <select asp-for="BodyComparer" asp-items="Html.GetEnumSelectList<ReceivedEmailTriggerParameters.FieldComparer>()" class="form-control"></select>
+            </div>
+        </div>
+        <span asp-validation-for="Body" class="text-danger"></span>
+        <span asp-validation-for="BodyComparer" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Subject" class="control-label"></label>
+        <div class="input-group">
+            <input asp-for="Subject" class="form-control"/>
+            <div class="input-group-append">
+                <select asp-for="SubjectComparer" asp-items="Html.GetEnumSelectList<ReceivedEmailTriggerParameters.FieldComparer>()" class="form-control"></select>
+            </div>
+        </div>
+        <span asp-validation-for="Subject" class="text-danger"></span>
+        <span asp-validation-for="SubjectComparer" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="RecipeId" />
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to list</a>
+    </div>
+</form>

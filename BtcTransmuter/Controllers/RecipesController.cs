@@ -40,7 +40,7 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}/remove")]
         public async Task<IActionResult> RemoveRecipe(string id)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -55,7 +55,7 @@ namespace BtcTransmuter.Controllers
         [HttpPost("{id}/remove")]
         public async Task<IActionResult> RemoveRecipePost(string id)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -76,7 +76,7 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}/logs")]
         public async Task<IActionResult> GetRecipeLogs(string id)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -126,7 +126,7 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> EditRecipe(string id, string statusMessage)
         {
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -134,6 +134,7 @@ namespace BtcTransmuter.Controllers
 
             return View(new EditRecipeViewModel()
             {
+                Id = id,
                 StatusMessage = statusMessage,
                 Name = recipe.Name,
                 Enabled = recipe.Enabled,
@@ -151,7 +152,7 @@ namespace BtcTransmuter.Controllers
                 return View(viewModel);
             }
 
-            var recipe = await GetRecipeForUser(id);
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
             {
                 return GetNotFoundActionResult();
@@ -164,17 +165,6 @@ namespace BtcTransmuter.Controllers
             await _recipeManager.AddOrUpdateRecipe(recipe);
 
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe edited"});
-        }
-
-        private async Task<Recipe> GetRecipeForUser(string recipeId)
-        {
-            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
-            {
-                UserId = _userManager.GetUserId(User),
-                RecipeId = recipeId
-            });
-
-            return recipes.FirstOrDefault();
         }
 
         private RedirectToActionResult GetNotFoundActionResult()

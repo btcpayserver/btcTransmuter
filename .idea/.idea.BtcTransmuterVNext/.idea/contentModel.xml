@@ -26,6 +26,7 @@
         <e p="Dockerfile" t="Include" />
         <e p="Models" t="Include">
           <e p="CreateRecipeViewModel.cs" t="Include" />
+          <e p="EditRecipeTriggerViewModel.cs" t="Include" />
           <e p="EditRecipeViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
           <e p="ExtensionsViewModel.cs" t="Include" />
@@ -81,6 +82,9 @@
             <e p="GetRecipes.cshtml" t="Include" />
             <e p="RemoveRecipe.cshtml" t="Include" />
           </e>
+          <e p="RecipeTriggers" t="Include">
+            <e p="EditRecipeTrigger.cshtml" t="Include" />
+          </e>
           <e p="Shared" t="Include">
             <e p="_Layout.cshtml" t="Include" />
             <e p="_LoginPartial.cshtml" t="Include" />
@@ -114,7 +118,6 @@
           <e p="IActionDescriptor.cs" t="Include" />
           <e p="IActionDispatcher.cs" t="Include" />
           <e p="IActionHandler.cs" t="Include" />
-          <e p="IActionValidator.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="BtcTransmuter.Abstractions.csproj" t="IncludeRecursive" />
@@ -151,7 +154,6 @@
           <e p="ITriggerDescriptor.cs" t="Include" />
           <e p="ITriggerDispatcher.cs" t="Include" />
           <e p="ITriggerHandler.cs" t="Include" />
-          <e p="ITriggerValidator.cs" t="Include" />
         </e>
       </e>
       <e p="BtcTransmuter.Data" t="IncludeRecursive">
@@ -189,6 +191,7 @@
       <e p="BtcTransmuter.Extension.Email" t="IncludeRecursive">
         <e p="Actions" t="Include">
           <e p="SendEmail" t="Include">
+            <e p="SendEmailController.cs" t="Include" />
             <e p="SendEmailData.cs" t="Include" />
             <e p="SendEmailDataActionHandler.cs" t="Include" />
           </e>
@@ -223,6 +226,7 @@
         <e p="Styles" t="Include" />
         <e p="Triggers" t="Include">
           <e p="ReceivedEmail" t="Include">
+            <e p="ReceivedEmailController.cs" t="Include" />
             <e p="ReceivedEmailTrigger.cs" t="Include" />
             <e p="ReceivedEmailTriggerData.cs" t="Include" />
             <e p="ReceivedEmailTriggerHandler.cs" t="Include" />
@@ -231,6 +235,9 @@
         </e>
         <e p="Views" t="Include">
           <e p="Pop3" t="Include">
+            <e p="EditData.cshtml" t="Include" />
+          </e>
+          <e p="ReceivedEmail" t="Include">
             <e p="EditData.cshtml" t="Include" />
           </e>
           <e p="Shared" t="Include">

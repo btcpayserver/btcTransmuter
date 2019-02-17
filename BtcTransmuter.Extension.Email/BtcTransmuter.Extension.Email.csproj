@@ -21,6 +21,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="Views\Pop3\EditData.cshtml" />
+      <Content Include="Views\ReceivedEmail\EditData.cshtml" />
       <Content Include="Views\Shared\ViewPop3ExternalService.cshtml" />
       <Content Include="Views\Shared\ViewReceivedEmailTrigger.cshtml" />
       <Content Include="Views\Shared\ViewSendEmailAction.cshtml" />

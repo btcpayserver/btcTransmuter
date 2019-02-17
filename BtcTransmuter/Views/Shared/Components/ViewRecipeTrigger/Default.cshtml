@@ -1,8 +1,7 @@
 @model ViewRecipeTriggerViewModel
 
 <partial name="@Model.TriggerDescriptor.ViewPartial" model="@Model.RecipeTrigger.DataJson"></partial>
-<a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.RecipeTrigger.RecipeId" asp-route-recipeTriggerId="@Model.RecipeTrigger.Id"> Edit</a>
 @if (Model.ExternalServiceData != null)
 {
-    @await Component.InvokeAsync("ViewExternalService", Model.ExternalServiceData);
+    @await Component.InvokeAsync("ViewExternalService", Model.ExternalServiceData)
 }

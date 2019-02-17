@@ -15,7 +15,7 @@ using NetCore.AutoRegisterDi;
 
 namespace BtcTransmuter.Abstractions.Extensions
 {
-    public abstract class BtcTransmuterExtension: ExtensionBase, IConfigureAction, IConfigureServicesAction
+    public abstract class BtcTransmuterExtension : ExtensionBase, IConfigureAction, IConfigureServicesAction
     {
         int IConfigureServicesAction.Priority => Priority;
 
@@ -26,7 +26,9 @@ namespace BtcTransmuter.Abstractions.Extensions
 
         public IEnumerable<IActionDescriptor> Actions => GetInstancesOfTypeInOurAssembly<IActionDescriptor>();
         public IEnumerable<ITriggerDescriptor> Triggers => GetInstancesOfTypeInOurAssembly<ITriggerDescriptor>();
-        public IEnumerable<IExternalServiceDescriptor> ExternalServices => GetInstancesOfTypeInOurAssembly<IExternalServiceDescriptor>();
+
+        public IEnumerable<IExternalServiceDescriptor> ExternalServices =>
+            GetInstancesOfTypeInOurAssembly<IExternalServiceDescriptor>();
 
 
         public virtual void Execute(IApplicationBuilder applicationBuilder, IServiceProvider serviceProvider)
@@ -35,36 +37,39 @@ namespace BtcTransmuter.Abstractions.Extensions
 
         public virtual void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
         {
-            
-            RegisterInstances<IActionDescriptor>(serviceCollection);
-            RegisterInstances<IActionHandler>(serviceCollection);
-            RegisterInstances<ITriggerDescriptor>(serviceCollection);
-            RegisterInstances<ITriggerHandler>(serviceCollection);
-            RegisterInstances<IHostedService>(serviceCollection);
-            RegisterInstances<IExternalServiceDescriptor>(serviceCollection);
+            RegisterInstances(serviceCollection, new Type[]
+            {
+                typeof(IActionDescriptor),
+                typeof(IActionHandler),
+                typeof(ITriggerDescriptor),
+                typeof(ITriggerHandler),
+                typeof(IHostedService),
+                typeof(IExternalServiceDescriptor),
+            });
             serviceCollection.AddSingleton(this);
         }
 
-        private void RegisterInstances<T>(IServiceCollection serviceCollection) where T : class
+        private void RegisterInstances(IServiceCollection serviceCollection, Type[] validTypes)
         {
-            var t = typeof(T);
             var types = serviceCollection
                 .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(GetType()))
                 .Where(type =>
                 {
-                    return t.IsAssignableFrom(type) && !type.IsAbstract && type.IsClass;
+                    return validTypes.Any(type1 => type1.IsAssignableFrom(type)) && !type.IsAbstract &&
+                           type.IsClass;
                 });
-                
+
             foreach (var type in types.TypesToConsider)
             {
-                    Console.WriteLine($"Registering {type.FullName}");
+                Console.WriteLine($"Registering {type.FullName}");
             }
+
             types.AsPublicImplementedInterfaces();
         }
+
         private IEnumerable<T> GetInstancesOfTypeInOurAssembly<T>() where T : class
         {
             return ExtensionManager.GetInstances<T>(assembly => assembly == Assembly.GetAssembly(GetType()));
         }
-
     }
 }

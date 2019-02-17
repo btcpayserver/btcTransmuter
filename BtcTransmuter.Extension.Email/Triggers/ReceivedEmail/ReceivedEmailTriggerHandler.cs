@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.Email.ExternalServices;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 {
@@ -16,6 +20,25 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
             "Trigger a recipe by receiving a specifically formatted email through a pop3 external service.";
 
         public string ViewPartial => "ViewReceivedEmailTrigger";
+        public Task<IActionResult> EditData(RecipeTrigger data)
+        {
+            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
+            {
+                var identifier = $"{Guid.NewGuid()}";
+                var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
+                memoryCache.Set(identifier, data, new MemoryCacheEntryOptions()
+                {
+                    SlidingExpiration = TimeSpan.FromMinutes(60)
+                });
+
+                return Task.FromResult<IActionResult>(new RedirectToActionResult(
+                    nameof(ReceivedEmailController.EditData),
+                    "ReceivedEmail", new
+                    {
+                        identifier
+                    }));
+            }
+        }
 
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,

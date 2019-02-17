@@ -1,0 +1,32 @@
+@model BtcTransmuter.Controllers.EditRecipeTriggerViewModel
+@{
+    ViewData["Title"] = "Edit Recipe Trigger";
+}
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <partial name="_StatusMessage" model="@Model.StatusMessage"/>
+    </div>
+</div>
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="TriggerId" class="control-label"></label>
+        <select asp-for="TriggerId" asp-items="Model.Triggers" class="form-control"> </select>
+        <span asp-validation-for="TriggerId" class="text-danger"></span>
+    </div>
+
+    @if (Model.RecipeTrigger != null)
+    {
+        <div class="form-group">
+            @await Component.InvokeAsync("ViewRecipeTrigger", new {recipeTrigger = Model.RecipeTrigger, showAllData = false})
+        </div>
+    }
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Next</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@Model.RecipeId" class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>

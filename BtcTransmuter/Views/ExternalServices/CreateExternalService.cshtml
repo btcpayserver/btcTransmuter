@@ -23,6 +23,9 @@
         <select asp-items="Model.Types" asp-for="Type" class="form-control"></select>
         <span asp-validation-for="Type" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Next</button>
-    <a asp-action="GetServices"  class="btn btn-secondary">Back to list</a>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Next</button>
+        <a asp-action="GetServices" class="btn btn-secondary">Back to list</a>
+    </div>
 </form>

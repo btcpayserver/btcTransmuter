@@ -33,7 +33,8 @@
         <input type="checkbox" asp-for="SSL" class="form-check"/>
         <span asp-validation-for="SSL" class="text-danger"></span>
     </div>
-    
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="GetServices" asp-controller="ExternalServices"  class="btn btn-secondary">Back to list</a>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to list</a>
+    </div>
 </form>

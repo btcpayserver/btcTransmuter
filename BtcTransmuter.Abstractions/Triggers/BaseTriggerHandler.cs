@@ -8,7 +8,7 @@ using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions.Triggers
 {
-    public abstract class BaseTriggerHandler<TTriggerData, TTriggerParameters> : ITriggerValidator, ITriggerHandler
+    public abstract class BaseTriggerHandler<TTriggerData, TTriggerParameters> : ITriggerHandler
         where TTriggerParameters : class
     {
         protected abstract Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
@@ -39,9 +39,5 @@ namespace BtcTransmuter.Abstractions.Triggers
             return Task.FromResult((object) trigger.Get<TTriggerData>());
         }
 
-        public virtual ICollection<ValidationResult> Validate(string data)
-        {
-            return ValidationHelper.Validate<TTriggerData>(data);
-        }
     }
 }
