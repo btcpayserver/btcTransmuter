@@ -49,7 +49,7 @@ namespace BtcTransmuter
             services.AddExtCore(this.extensionsPath, true);
             
             services.AddTransmuterServices();
-            
+            services.AddMemoryCache();
             
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
@@ -65,6 +65,7 @@ namespace BtcTransmuter
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceScopeFactory serviceScopeFactory)
         {
+            DependencyHelper.ServiceScopeFactory = serviceScopeFactory;
             using (var scope = serviceScopeFactory.CreateScope())
             {
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())

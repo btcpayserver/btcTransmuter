@@ -14,7 +14,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
         public string Name => "SMTP External Service";
         public string Description => "SMTP External Service to be able to send emails as an action";
         public string ViewPartial => "ViewSmtpExternalService";
-        public IActionResult EditData(ExternalServiceData data)
+        public Task<IActionResult> EditData(ExternalServiceData data)
         {
             throw new System.NotImplementedException();
         }

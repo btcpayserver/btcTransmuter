@@ -13,8 +13,5 @@
     <ItemGroup>
       <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Helpers" />
-    </ItemGroup>
 
 </Project>

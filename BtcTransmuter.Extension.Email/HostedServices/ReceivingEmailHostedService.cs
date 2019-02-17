@@ -52,11 +52,9 @@ namespace BtcTransmuter.Extension.Email.HostedServices
             {
                 var tasks = _externalServices.Select(service => Task.Run(async () =>
                 {
-                    var pop3Client = new Pop3Client();
-                    await pop3Client.ConnectAsync(service.Value.Data.Server, service.Value.Data.Username,
-                        service.Value.Data.Password, service.Value.Data.SSL);
+                    var pop3Client = await service.Value.CreateClientAndConnect();
 
-                    if (!pop3Client.IsConnected)
+                    if (pop3Client == null)
                     {
                         return;
                     }

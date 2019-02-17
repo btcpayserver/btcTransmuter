@@ -14,9 +14,9 @@ namespace BtcTransmuter.Areas.ViewComponents
             _extensions = extensions;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public Task<IViewComponentResult> InvokeAsync()
         {
-            return View(new ExtensionsViewComponentViewModel(_extensions));
+            return Task.FromResult<IViewComponentResult>(View(new ExtensionsViewComponentViewModel(_extensions)));
         }
     }
 

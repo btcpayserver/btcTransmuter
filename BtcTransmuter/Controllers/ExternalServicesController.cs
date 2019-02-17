@@ -43,7 +43,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("create")]
-        public async Task<IActionResult> CreateExternalService(string statusMessage)
+        public IActionResult CreateExternalService(string statusMessage)
         {
             return View(new CreateExternalServiceViewModel()
             {
@@ -71,30 +71,11 @@ namespace BtcTransmuter.Controllers
                 UserId = _userManager.GetUserId(User)
             };
 
+            var serviceDescriptor =
+                _externalServiceDescriptors.Single(descriptor =>
+                    descriptor.ExternalServiceType == externalService.Type);
 
-            return RedirectToAction("EditExternalServiceInnerData", new
-            {
-                externalServiceData = externalService
-            });
-//            await _externalServiceManager.AddOrUpdateExternalServiceData(externalService);
-//
-//            return RedirectToAction("EditExternalService",
-//                new {externalService.Id, statusMessage = "External Service created"});
-        }
-
-
-        [HttpGet("data")]
-        public async Task<IActionResult> EditExternalServiceInnerData(ExternalServiceData externalServiceData)
-        {
-            return View(new EditExternalServiceInnerDataVieModel()
-            {
-                Data = externalServiceData
-            });
-        }
-
-        public class EditExternalServiceInnerDataVieModel
-        {
-            public ExternalServiceData Data { get; set; }
+            return await serviceDescriptor.EditData(externalService);
         }
 
 
@@ -127,6 +108,35 @@ namespace BtcTransmuter.Controllers
                 StatusMessage = statusMessage
             });
         }
+
+
+        [HttpGet("{id}/data")]
+        public async Task<IActionResult> EditExternalServiceInnerData(string id)
+        {
+            var externalServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+            {
+                UserId = _userManager.GetUserId(User),
+                ExternalServiceId = id
+            });
+            if (!EnumerableExtensions.Any(externalServices))
+            {
+                return RedirectToAction("GetServices", new
+                {
+                    statusMessage = new StatusMessageModel()
+                    {
+                        Message = "External Service not found",
+                        Severity = StatusMessageModel.StatusSeverity.Error
+                    }.ToString()
+                });
+            }
+
+            var externalService = externalServices.First();
+            var serviceDescriptor =
+                _externalServiceDescriptors.Single(descriptor =>
+                    descriptor.ExternalServiceType == externalService.Type);
+            return await serviceDescriptor.EditData(externalService);
+        }
+
 
         [HttpPost("{id}")]
         public async Task<IActionResult> EditExternalService(string id, EditExternalServiceViewModel model)

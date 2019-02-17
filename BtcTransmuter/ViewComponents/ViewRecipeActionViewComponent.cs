@@ -17,15 +17,15 @@ namespace BtcTransmuter.Areas.ViewComponents
             _actionDescriptors = actionDescriptors;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(RecipeAction recipeAction)
+        public Task<IViewComponentResult> InvokeAsync(RecipeAction recipeAction)
         {
-            return View(new ViewRecipeActionViewModel()
+            return Task.FromResult<IViewComponentResult>(View(new ViewRecipeActionViewModel()
             {
                 RecipeAction = recipeAction,
                 ExternalServiceData = recipeAction.ExternalService,
                 ActionDescriptor =
                     _actionDescriptors.Single(descriptor => descriptor.ActionId == recipeAction.ActionId)
-            });
+            }));
         }
     }
 }

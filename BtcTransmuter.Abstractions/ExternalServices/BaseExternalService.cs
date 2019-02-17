@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Data.Models;
 
 namespace BtcTransmuter.Abstractions.ExternalServices
 {
-    public abstract class BaseExternalService<T> : IExternalServiceValidator
+    public abstract class BaseExternalService<T> 
     {
         private ExternalServiceData _data;
         public abstract string ExternalServiceType { get; }
-        public T Data { get; set; }
 
-        public BaseExternalService(ExternalServiceData data)
+        public T Data
+        {
+            get => _data.Get<T>();
+            set => _data.Set(value);
+        }
+
+        protected BaseExternalService(ExternalServiceData data)
         {
             if (data.Type != ExternalServiceType)
             {
@@ -24,11 +30,6 @@ namespace BtcTransmuter.Abstractions.ExternalServices
 
         protected BaseExternalService()
         {
-        }
-
-        public virtual ICollection<ValidationResult> Validate(string data)
-        {
-            return ValidationHelper.Validate<T>(data);
         }
     }
 }

@@ -3,6 +3,33 @@
 
 @{
     var service = new Pop3Service(Model);
+    Console.WriteLine($"##################################### {(service == null ? "1" : "0")}");
+    
+    
 }
-
-@Model.Name (@service.Data.Server)
+<ul class="list-group">
+    <li class="list-group-item">
+        
+        @service.Name 
+    </li>
+    <li class="list-group-item">
+        
+        @service.Data.Server 
+    </li>
+    <li class="list-group-item">
+        
+        @service.Data.Username 
+    </li>
+    <li class="list-group-item">
+        
+        @service.Data.Password 
+    </li>
+    <li class="list-group-item">
+        
+        @service.Data.Port 
+    </li>
+    <li class="list-group-item">
+        
+        @service.Data.SSL 
+    </li>
+</ul>

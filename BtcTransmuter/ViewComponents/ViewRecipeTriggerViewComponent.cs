@@ -19,15 +19,15 @@ namespace BtcTransmuter.Areas.ViewComponents
             _triggerDescriptors = triggerDescriptors;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(RecipeTrigger recipeTrigger)
+        public Task<IViewComponentResult> InvokeAsync(RecipeTrigger recipeTrigger)
         {
-            return View(new ViewRecipeTriggerViewModel()
+            return Task.FromResult<IViewComponentResult>(View(new ViewRecipeTriggerViewModel()
             {
                 RecipeTrigger = recipeTrigger,
                 ExternalServiceData = recipeTrigger.ExternalService,
                 TriggerDescriptor =
                     _triggerDescriptors.Single(descriptor => descriptor.TriggerId == recipeTrigger.TriggerId)
-            });
+            }));
         }
     }
 }

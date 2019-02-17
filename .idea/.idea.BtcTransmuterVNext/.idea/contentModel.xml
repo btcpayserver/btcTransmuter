@@ -126,11 +126,11 @@
           <e p="ExternalServicesDataQuery.cs" t="Include" />
           <e p="IExternalServiceDescriptor.cs" t="Include" />
           <e p="IExternalServiceManager.cs" t="Include" />
-          <e p="IExternalServiceValidator.cs" t="Include" />
           <e p="IUseExternalService.cs" t="Include" />
           <e p="UpdatedItem.cs" t="Include" />
         </e>
         <e p="Helpers" t="Include">
+          <e p="DependencyHelper.cs" t="Include" />
           <e p="ValidationHelper.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
@@ -225,6 +225,9 @@
           </e>
         </e>
         <e p="Views" t="Include">
+          <e p="Pop3" t="Include">
+            <e p="EditData.cshtml" t="Include" />
+          </e>
           <e p="Shared" t="Include">
             <e p="ViewPop3ExternalService.cshtml" t="Include" />
             <e p="ViewReceivedEmailTrigger.cshtml" t="Include" />

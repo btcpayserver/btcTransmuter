@@ -5,37 +5,37 @@
 <h2>@ViewData["Title"]</h2>
 
 
-<ul>
+<ul class="list-group list-group-flush">
     @foreach (var extension in Model.Extensions)
     {
-        <li><h2>@extension.Name</h2> - @extension.Version</li>
+        <li class="list-group-item border-top-0"><h2>@extension.Name <span class="badge badge-secondary">@extension.Version</span></h2> </li>
                                                 
-        <li>
+        <li class="list-group-item">
             
-            <ul>
-                <li><h3>Actions</h3></li>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item border-top-0"><h3>Actions</h3></li>
                 @foreach (var actionDescriptor in extension.Actions)
                 {
-                    <li>@actionDescriptor.Name - @actionDescriptor.Description</li>
+                    <li class="list-group-item">@actionDescriptor.Name - @actionDescriptor.Description</li>
                 }
             </ul>
         </li>
-        <li>
-            <ul>
-                <li><h3>Triggers</h3></li>
+        <li class="list-group-item">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item border-top-0"><h3>Triggers</h3></li>
                 @foreach (var triggerDescriptor in extension.Triggers)
                 {
-                    <li>@triggerDescriptor.Name -  @triggerDescriptor.Description</li>
+                    <li class="list-group-item">@triggerDescriptor.Name -  @triggerDescriptor.Description</li>
                 }
             </ul>
 
         </li>
-        <li>
-            <ul>
-                <li><h3>External Services</h3></li>
+        <li class="list-group-item">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item border-top-0"><h3>External Services</h3></li>
                 @foreach (var externalServiceDescriptor in extension.ExternalServices)
                 {
-                    <li>@externalServiceDescriptor.Name -  @externalServiceDescriptor.Description</li>
+                    <li class="list-group-item">@externalServiceDescriptor.Name -  @externalServiceDescriptor.Description</li>
                 }
             </ul>
         </li>

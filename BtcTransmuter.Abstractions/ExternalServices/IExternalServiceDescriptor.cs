@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         string Name { get;  }
         string Description { get;}
         string ViewPartial { get; }
-        IActionResult EditData(ExternalServiceData data);
+        Task<IActionResult> EditData(ExternalServiceData data);
 
 
     }
