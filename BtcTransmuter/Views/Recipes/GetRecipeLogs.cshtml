@@ -9,8 +9,18 @@
 <table class="table">
     <thead>
     <tr>
-
-        <th></th>
+        <th>
+            Time
+        </th>
+        <th>
+            Action 
+        </th>
+        <th>
+            Result
+        </th>
+        <th>
+            Trigger Data
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -18,7 +28,18 @@
     {
         <tr>
             <td>
-                @Json.Serialize(item);
+                @Html.DisplayFor(modelItem => item.Timestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipeActionId)
+            </td>
+            <td>
+                
+                @Html.DisplayFor(modelItem => item.ActionResult)
+            </td>
+            <td>
+                
+                @Html.DisplayFor(modelItem => item.TriggerDataJson)
             </td>
         </tr>
     }
