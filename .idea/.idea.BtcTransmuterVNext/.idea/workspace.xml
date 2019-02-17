@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce0d6e5d-f16e-4329-81d7-3823033ce6cb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewPop3ExternalService.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewPop3ExternalService.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSmtpExternalService.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSmtpExternalService.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerParameters.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerParameters.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/ReceivedEmail/EditData.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/ReceivedEmail/EditData.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewReceivedEmailTrigger.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewReceivedEmailTrigger.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter.Services/RecipeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter.Services/RecipeManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter/Views/Recipes/EditRecipe.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter/Views/Recipes/EditRecipe.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeAction/Default.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeAction/Default.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeTrigger/Default.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeTrigger/Default.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BtcTransmuter/mydb.db" beforeDir="false" afterPath="$PROJECT_DIR$/BtcTransmuter/mydb.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,117 +44,49 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailController.cs">
+        <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeTrigger/Default.cshtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="471">
-              <caret line="148" column="9" lean-forward="true" selection-start-line="148" selection-start-column="9" selection-end-line="148" selection-end-column="9" />
+            <state relative-caret-position="195">
+              <caret line="13" column="2" lean-forward="true" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
               <folding>
-                <marker date="1550432268875" expanded="true" signature="6:485" ph="..." />
-                <marker date="1550432268875" expanded="true" signature="549:5982" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="673:5980" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="1142:1348" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="1452:2238" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="1561:1626" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="1757:1894" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="1960:2157" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="2317:2496" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="2575:3005" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="3139:4829" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="3248:3313" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="3438:3589" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="3720:3877" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="3915:4449" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="4067:4216" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="4692:4817" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="4937:5696" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="5026:5271" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="5137:5248" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="5407:5652" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="5518:5629" ph="{...}" />
-                <marker date="1550432268875" expanded="true" signature="5775:5974" ph="{...}" />
+                <marker date="1550434318249" expanded="true" signature="128:326" ph="@*...*@" />
+                <marker date="1550434318249" expanded="true" signature="327:614" ph="@..." />
+                <marker date="1550434318249" expanded="true" signature="366:614" ph="{...}" />
+                <marker date="1550434318249" expanded="true" signature="375:611" ph="&lt;div.../&gt;" />
+                <marker date="1550434318249" expanded="true" signature="449:599" ph="@*...*@" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Actions/SendEmail/SendEmailController.cs">
+        <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Recipes/EditRecipe.cshtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-129">
-              <caret line="71" column="2" selection-start-line="71" selection-start-column="2" selection-end-line="71" selection-end-column="2" />
+            <state relative-caret-position="336">
+              <caret line="37" column="13" lean-forward="true" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
               <folding>
-                <marker date="1550421076839" expanded="false" signature="6:436" ph="..." />
-                <marker date="1550421076839" expanded="true" signature="494:4663" ph="{...}" />
-                <marker date="1550421076839" expanded="true" signature="609:4661" ph="{...}" />
-                <marker date="1550421076839" expanded="true" signature="951:1113" ph="{...}" />
-                <marker date="1550421076839" expanded="true" signature="1217:1522" ph="{...}" />
-                <marker date="1550421076839" expanded="true" signature="1277:1512" ph="/* var result = await GetRecipeAction(identifier); ... */" />
-                <marker date="1550421076839" expanded="true" signature="1647:2825" ph="{...}" />
-                <marker date="1550421076839" expanded="true" signature="1707:2815" ph="/* var result = await GetRecipeAction(identifier); ... */" />
-                <marker date="1550421076839" expanded="true" signature="2940:4655" ph="{...}" />
-                <marker date="1550421076839" expanded="true" signature="3000:4645" ph="/* RecipeAction data = null; ... */" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Pop3/EditData.cshtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="10" lean-forward="true" selection-start-line="21" selection-start-column="10" selection-end-line="21" selection-end-column="10" />
-              <folding>
-                <marker date="1550431544853" expanded="true" signature="80:143" ph="@..." />
-                <marker date="1550431544853" expanded="true" signature="175:1642" ph="&lt;form.../&gt;" />
-                <marker date="1550431544853" expanded="true" signature="265:488" ph="&lt;div.../&gt;" />
-                <marker date="1550431544853" expanded="true" signature="493:710" ph="&lt;div.../&gt;" />
-                <marker date="1550431544853" expanded="true" signature="715:944" ph="&lt;div.../&gt;" />
-                <marker date="1550431544853" expanded="true" signature="949:1178" ph="&lt;div.../&gt;" />
-                <marker date="1550431544853" expanded="true" signature="1183:1411" ph="&lt;div.../&gt;" />
-                <marker date="1550431544853" expanded="true" signature="1421:1634" ph="&lt;div.../&gt;" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/ReceivedEmail/EditData.cshtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="44" column="42" selection-start-line="44" selection-start-column="34" selection-end-line="44" selection-end-column="42" />
-              <folding>
-                <marker date="1550431264441" expanded="true" signature="168:227" ph="@..." />
-                <marker date="1550431264441" expanded="true" signature="259:2357" ph="&lt;form.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="349:649" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="654:899" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="904:1475" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="998:1320" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="1093:1305" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="1480:2066" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="1577:1905" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="1675:1890" ph="&lt;div.../&gt;" />
-                <marker date="1550431264441" expanded="true" signature="2118:2349" ph="&lt;div.../&gt;" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Recipes/RemoveRecipe.cshtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="31" column="13" lean-forward="true" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
-              <folding>
-                <marker date="1550330082433" expanded="true" signature="57:95" ph="@..." />
-                <marker date="1550330082433" expanded="true" signature="161:1036" ph="&lt;div.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="202:774" ph="&lt;dl.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="237:316" ph="&lt;dt.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="325:400" ph="&lt;dd.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="409:491" ph="&lt;dt.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="500:578" ph="&lt;dd.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="587:673" ph="&lt;dt.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="682:764" ph="&lt;dd.../&gt;" />
-                <marker date="1550330082433" expanded="true" signature="784:1029" ph="&lt;form.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="55:98" ph="@..." />
+                <marker date="1550434151028" expanded="true" signature="100:245" ph="&lt;div.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="122:238" ph="&lt;div.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="275:2730" ph="&lt;form.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="365:582" ph="&lt;div.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="587:838" ph="&lt;div.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="843:1090" ph="&lt;div.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="1097:2540" ph="&lt;ul.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="1146:1799" ph="&lt;li.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="1216:1785" ph="@..." />
+                <marker date="1550434151028" expanded="true" signature="1243:1443" ph="{...}" />
+                <marker date="1550434151028" expanded="true" signature="1460:1785" ph="{...}" />
+                <marker date="1550434151028" expanded="true" signature="1572:1771" ph="&lt;a.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="1808:2530" ph="&lt;li.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="1878:2516" ph="&lt;ul.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="1935:2167" ph="@..." />
+                <marker date="1550434151028" expanded="true" signature="1973:2167" ph="{...}" />
+                <marker date="1550434151028" expanded="true" signature="2012:2149" ph="&lt;li.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="2184:2498" ph="@..." />
+                <marker date="1550434151028" expanded="true" signature="2210:2498" ph="{...}" />
+                <marker date="1550434151028" expanded="true" signature="2249:2480" ph="&lt;li.../&gt;" />
+                <marker date="1550434151028" expanded="true" signature="2547:2722" ph="&lt;div.../&gt;" />
               </folding>
             </state>
           </provider>
@@ -157,7 +96,7 @@
         <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewPop3ExternalService.cshtml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
-              <caret line="11" column="8" lean-forward="true" selection-start-line="10" selection-start-column="9" selection-end-line="11" selection-end-column="8" />
+              <caret line="11" column="8" selection-start-line="10" selection-start-column="9" selection-end-line="11" selection-end-column="8" />
               <folding>
                 <marker date="1550432705810" expanded="true" signature="110:156" ph="@..." />
                 <marker date="1550432705810" expanded="true" signature="158:509" ph="&lt;dl.../&gt;" />
@@ -177,38 +116,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewReceivedEmailTrigger.cshtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="20" lean-forward="true" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSmtpExternalService.cshtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="8" lean-forward="true" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+            <state>
+              <caret column="32" lean-forward="true" selection-start-column="32" selection-end-column="32" />
               <folding>
-                <marker date="1550432742098" expanded="true" signature="109:155" ph="@..." />
-                <marker date="1550432742098" expanded="true" signature="157:508" ph="&lt;dl.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="188:215" ph="&lt;dt.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="220:256" ph="&lt;dd.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="261:290" ph="&lt;dt.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="295:339" ph="&lt;dd.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="344:370" ph="&lt;dt.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="375:416" ph="&lt;dd.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="421:452" ph="&lt;dt.../&gt;" />
-                <marker date="1550432742098" expanded="true" signature="457:502" ph="&lt;dd.../&gt;" />
+                <marker date="1550433903874" expanded="true" signature="7:92" ph="..." />
+                <marker date="1550433903874" expanded="true" signature="142:206" ph="@..." />
+                <marker date="1550433903874" expanded="true" signature="208:723" ph="&lt;div.../&gt;" />
+                <marker date="1550433903874" expanded="true" signature="236:333" ph="@..." />
+                <marker date="1550433903874" expanded="true" signature="279:333" ph="{...}" />
+                <marker date="1550433903874" expanded="true" signature="338:529" ph="@..." />
+                <marker date="1550433903874" expanded="true" signature="379:529" ph="{...}" />
+                <marker date="1550433903874" expanded="true" signature="534:716" ph="@..." />
+                <marker date="1550433903874" expanded="true" signature="572:716" ph="{...}" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSendEmailAction.cshtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -216,12 +136,134 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerParameters.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
+            <state relative-caret-position="105">
+              <caret line="7" column="43" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
               <folding>
-                <marker date="1550429271074" expanded="true" signature="62:530" ph="{...}" />
-                <marker date="1550429271074" expanded="true" signature="112:528" ph="{...}" />
-                <marker date="1550429271074" expanded="true" signature="443:522" ph="{...}" />
+                <marker date="1550433061622" expanded="true" signature="108:591" ph="{...}" />
+                <marker date="1550433061622" expanded="true" signature="158:589" ph="{...}" />
+                <marker date="1550433061622" expanded="true" signature="504:583" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeAction/Default.cshtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" selection-start-line="3" selection-end-line="5" selection-end-column="68" />
+              <folding>
+                <marker date="1550433540890" expanded="true" signature="134:315" ph="&lt;a.../&gt;" />
+                <marker date="1550433540890" expanded="true" signature="316:438" ph="@..." />
+                <marker date="1550433540890" expanded="true" signature="355:438" ph="{...}" />
+                <marker date="1550433540890" expanded="true" signature="362:436" ph="&lt;div.../&gt;" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Abstractions/Actions/IActionHandler.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+              <folding>
+                <marker date="1550080238381" expanded="false" signature="6:124" ph="..." />
+                <marker date="1550080238381" expanded="true" signature="170:312" ph="{...}" />
+                <marker date="1550080238381" expanded="true" signature="208:310" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/RecipeTriggers/EditRecipeTrigger.cshtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="55" selection-start-line="15" selection-start-column="50" selection-end-line="15" selection-end-column="55" />
+              <folding>
+                <marker date="1550428160656" expanded="true" signature="60:111" ph="@..." />
+                <marker date="1550428160656" expanded="true" signature="113:258" ph="&lt;div.../&gt;" />
+                <marker date="1550428160656" expanded="true" signature="135:251" ph="&lt;div.../&gt;" />
+                <marker date="1550428160656" expanded="true" signature="288:1119" ph="&lt;form.../&gt;" />
+                <marker date="1550428160656" expanded="true" signature="378:647" ph="&lt;div.../&gt;" />
+                <marker date="1550428160656" expanded="true" signature="653:872" ph="@..." />
+                <marker date="1550428160656" expanded="true" signature="686:872" ph="{...}" />
+                <marker date="1550428160656" expanded="true" signature="701:866" ph="&lt;div.../&gt;" />
+                <marker date="1550428160656" expanded="true" signature="878:1111" ph="&lt;div.../&gt;" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="84" column="12" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="12" />
+              <folding>
+                <marker date="1550434285516" expanded="false" signature="6:427" ph="..." />
+                <marker date="1550434285516" expanded="true" signature="464:3638" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="574:3636" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="937:1095" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="1252:1941" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="1385:1463" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="1534:1929" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="2123:3223" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="2256:2334" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="2373:2616" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="2780:2981" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="2863:2966" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="3290:3630" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="3378:3618" ph="{...}" />
+                <marker date="1550434285516" expanded="true" signature="3453:3593" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BtcTransmuter.Services/RecipeManager.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1290">
+              <caret line="34" column="39" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="39" />
+              <folding>
+                <marker date="1550433432523" expanded="false" signature="6:284" ph="..." />
+                <marker date="1550433432523" expanded="true" signature="318:5909" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="368:5907" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="514:590" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="669:2232" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="746:2222" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="863:2208" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="1390:1526" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="1597:1751" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="1813:1941" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="2005:2131" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="2292:2920" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="2369:2910" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="2486:2896" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="2561:2669" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="2694:2823" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="2995:3640" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3072:3630" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3189:3616" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3265:3381" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3406:3543" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3712:4352" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3789:4342" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3906:4328" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="3981:4095" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="4120:4255" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="4403:4965" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="4480:4955" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="4597:4941" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="4725:4824" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="5043:5264" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="5128:5206" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="5340:5901" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="5417:5891" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="5534:5877" ph="{...}" />
+                <marker date="1550433432523" expanded="true" signature="5679:5859" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -392,7 +434,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/HostedServices/ReceivingEmailHostedService.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter/ViewComponents/ViewRecipeTriggerViewComponent.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter/ViewComponents/ViewRecipeActionViewComponent.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter/ViewComponents/ExtensionsViewComponent.cs" />
@@ -417,32 +458,33 @@
         <option value="$PROJECT_DIR$/BtcTransmuter/Pages/RecipeTriggers/EditRecipeTrigger.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Views/Recipes/GetRecipes.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Controllers/RecipesController.cs" />
-        <option value="$PROJECT_DIR$/BtcTransmuter/Views/Recipes/EditRecipe.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Views/ExternalServices/CreateExternalService.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Views/ExternalServices/CreateExternalServiceData.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Views/ExternalServices/EditExternalService.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Smtp/EditData.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Views/Shared/_Layout.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeActionsController.cs" />
-        <option value="$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Models/RemoveExternalServiceViewModel.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Models/EditRecipeTriggerViewModel.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Abstractions/Extensions/BtcTransmuterExtension.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Views/Recipes/CreateRecipe.cshtml" />
-        <option value="$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeTrigger/Default.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter/Views/RecipeTriggers/EditRecipeTrigger.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerHandler.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerData.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Abstractions/Recipes/IRecipeManager.cs" />
-        <option value="$PROJECT_DIR$/BtcTransmuter.Services/RecipeManager.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Pages/ReceivedEmail/EditData.cshtml" />
-        <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/ReceivedEmail/EditData.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Pop3/EditData.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailController.cs" />
-        <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerParameters.cs" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewPop3ExternalService.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSmtpExternalService.cshtml" />
+        <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/ReceivedEmail/EditData.cshtml" />
+        <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerParameters.cs" />
+        <option value="$PROJECT_DIR$/BtcTransmuter.Services/RecipeManager.cs" />
+        <option value="$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeAction/Default.cshtml" />
         <option value="$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewReceivedEmailTrigger.cshtml" />
+        <option value="$PROJECT_DIR$/BtcTransmuter/Views/Recipes/EditRecipe.cshtml" />
+        <option value="$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs" />
+        <option value="$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeTrigger/Default.cshtml" />
       </list>
     </option>
   </component>
@@ -521,6 +563,48 @@
               <item name="BtcTransmuter" type="24d0babc:SolutionExplorerModelNode" />
               <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
               <item name="RecipeTriggers" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="BtcTransmuterVNext" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="BtcTransmuter" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Shared" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="BtcTransmuterVNext" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="BtcTransmuter" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Shared" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Components" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="BtcTransmuterVNext" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="BtcTransmuter" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Shared" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Components" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="ViewExternalService" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="BtcTransmuterVNext" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="BtcTransmuter" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Shared" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Components" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="ViewRecipeAction" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="BtcTransmuterVNext" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="BtcTransmuter" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Shared" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Components" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="ViewRecipeTrigger" type="24d0babc:SolutionExplorerModelNode" />
             </path>
             <path>
               <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
@@ -684,12 +768,12 @@
       <workItem from="1550227910089" duration="9011000" />
       <workItem from="1550238512487" duration="22125000" />
       <workItem from="1550385354471" duration="10302000" />
-      <workItem from="1550415223534" duration="15628000" />
+      <workItem from="1550415223534" duration="17292000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="154365000" />
+    <option name="totallyTimeSpent" value="156029000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -704,12 +788,12 @@
     <frame x="1713" y="0" width="1734" height="1417" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2777778" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2777778" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Capture Tool" order="4" />
-      <window_info anchor="bottom" id="Debug" order="0" sideWeight="0.54540026" visible="true" weight="0.34496433" />
+      <window_info active="true" anchor="bottom" id="Debug" order="0" sideWeight="0.54540026" visible="true" weight="0.34496433" />
       <window_info anchor="bottom" id="Build" order="1" sideWeight="0.6863799" weight="0.31324345" />
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" sideWeight="0.58482677" weight="0.3180016" />
@@ -822,6 +906,32 @@
           </properties>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/BtcTransmuter/ViewComponents/ViewExternalServiceViewComponent.cs</url>
+          <line>24</line>
+          <properties documentPath="$PROJECT_DIR$/BtcTransmuter/ViewComponents/ViewExternalServiceViewComponent.cs" initialLine="24">
+            <startOffsets>
+              <option value="878" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1253" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs</url>
+          <line>81</line>
+          <properties documentPath="$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs" initialLine="81">
+            <startOffsets>
+              <option value="2995" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3145" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -898,56 +1008,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Abstractions/Triggers/BaseTriggerHandler.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-          <folding>
-            <marker date="1550419685358" expanded="false" signature="6:269" ph="..." />
-            <marker date="1550419685358" expanded="true" signature="316:1519" ph="{...}" />
-            <marker date="1550419685358" expanded="true" signature="456:1517" ph="{...}" />
-            <marker date="1550419685358" expanded="true" signature="766:1361" ph="{...}" />
-            <marker date="1550419685358" expanded="true" signature="831:906" ph="{...}" />
-            <marker date="1550419685358" expanded="true" signature="1165:1240" ph="{...}" />
-            <marker date="1550419685358" expanded="true" signature="1416:1510" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/ExternalServices/Pop3/Pop3Service.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="12" column="83" selection-start-line="12" selection-start-column="83" selection-end-line="12" selection-end-column="83" />
-          <folding>
-            <marker date="1550418827865" expanded="true" signature="6:301" ph="..." />
-            <marker date="1550418827865" expanded="true" signature="359:2418" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="465:2416" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="899:919" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="986:1006" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="1092:1954" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="1185:1944" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="1347:1685" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="1573:1665" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="1869:1927" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="2018:2410" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="2044:2311" ph="{...}" />
-            <marker date="1550418827865" expanded="true" signature="2343:2400" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Abstractions/ExternalServices/IExternalServiceDescriptor.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-          <folding>
-            <marker date="1550389366272" expanded="false" signature="6:96" ph="..." />
-            <marker date="1550389366272" expanded="true" signature="151:427" ph="{...}" />
-            <marker date="1550389366272" expanded="true" signature="201:425" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter.Abstractions/Actions/IActionDescriptor.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -1023,22 +1083,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/ExternalServices/CreateExternalService.cshtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="10" selection-start-line="29" selection-start-column="10" selection-end-line="29" selection-end-column="10" />
-          <folding>
-            <marker date="1550425975680" expanded="true" signature="64:119" ph="@..." />
-            <marker date="1550425975680" expanded="true" signature="121:266" ph="&lt;div.../&gt;" />
-            <marker date="1550425975680" expanded="true" signature="143:259" ph="&lt;div.../&gt;" />
-            <marker date="1550425975680" expanded="true" signature="297:1049" ph="&lt;form.../&gt;" />
-            <marker date="1550425975680" expanded="true" signature="387:604" ph="&lt;div.../&gt;" />
-            <marker date="1550425975680" expanded="true" signature="609:859" ph="&lt;div.../&gt;" />
-            <marker date="1550425975680" expanded="true" signature="865:1041" ph="&lt;div.../&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/ExternalServices/CreateExternalServiceData.cshtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
@@ -1083,36 +1127,6 @@
             <marker date="1550244851871" expanded="true" signature="436:524" ph="&lt;dt.../&gt;" />
             <marker date="1550244851871" expanded="true" signature="533:617" ph="&lt;dd.../&gt;" />
             <marker date="1550244851871" expanded="true" signature="637:876" ph="&lt;form.../&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Recipes/EditRecipe.cshtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="636">
-          <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="70" selection-end-column="22" />
-          <folding>
-            <marker date="1550425944478" expanded="true" signature="55:98" ph="@..." />
-            <marker date="1550425944478" expanded="true" signature="100:245" ph="&lt;div.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="122:238" ph="&lt;div.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="275:2514" ph="&lt;form.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="365:582" ph="&lt;div.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="587:838" ph="&lt;div.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="843:1090" ph="&lt;div.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="1097:2324" ph="&lt;ul.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="1146:1583" ph="&lt;li.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="1216:1569" ph="@..." />
-            <marker date="1550425944478" expanded="true" signature="1243:1443" ph="{...}" />
-            <marker date="1550425944478" expanded="true" signature="1460:1569" ph="{...}" />
-            <marker date="1550425944478" expanded="true" signature="1592:2314" ph="&lt;li.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="1662:2300" ph="&lt;ul.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="1719:1951" ph="@..." />
-            <marker date="1550425944478" expanded="true" signature="1757:1951" ph="{...}" />
-            <marker date="1550425944478" expanded="true" signature="1796:1933" ph="&lt;li.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="1968:2282" ph="@..." />
-            <marker date="1550425944478" expanded="true" signature="1994:2282" ph="{...}" />
-            <marker date="1550425944478" expanded="true" signature="2033:2264" ph="&lt;li.../&gt;" />
-            <marker date="1550425944478" expanded="true" signature="2331:2506" ph="&lt;div.../&gt;" />
           </folding>
         </state>
       </provider>
@@ -1170,18 +1184,6 @@
             <marker date="1550422070773" expanded="true" signature="2118:2317" ph="{...}" />
             <marker date="1550422070773" expanded="true" signature="2173:2291" ph="&lt;li.../&gt;" />
             <marker date="1550422070773" expanded="true" signature="2396:2744" ph="&lt;div.../&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Abstractions/Triggers/ITriggerDescriptor.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
-          <folding>
-            <marker date="1550419916215" expanded="false" signature="6:96" ph="..." />
-            <marker date="1550419916215" expanded="true" signature="143:390" ph="{...}" />
-            <marker date="1550419916215" expanded="true" signature="185:388" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1267,30 +1269,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="99" column="5" selection-start-line="99" selection-start-column="5" selection-end-line="99" selection-end-column="5" />
-          <folding>
-            <marker date="1550427503811" expanded="false" signature="6:427" ph="..." />
-            <marker date="1550427503811" expanded="true" signature="464:3637" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="574:3635" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="937:1095" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="1252:1941" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="1385:1463" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="1534:1929" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="2123:3222" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="2256:2334" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="2373:2616" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="2779:2980" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="2862:2965" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="3289:3629" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="3377:3617" ph="{...}" />
-            <marker date="1550427503811" expanded="true" signature="3452:3592" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeActionsController.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="426">
@@ -1312,57 +1290,6 @@
             <marker date="1550427189068" expanded="true" signature="2994:3234" ph="{...}" />
             <marker date="1550427189068" expanded="true" signature="3069:3209" ph="{...}" />
             <marker date="1550427189068" expanded="true" signature="3296:3460" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Shared/_Layout.cshtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="621">
-          <caret line="48" column="32" selection-start-line="48" selection-start-column="32" selection-end-line="48" selection-end-column="32" />
-          <folding>
-            <marker date="1550427044200" expanded="true" signature="16:2289" ph="&lt;html.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="23:344" ph="&lt;head.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="345:2281" ph="&lt;body.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="354:1724" ph="&lt;header.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="367:1714" ph="&lt;nav.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="486:1703" ph="&lt;div.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="629:920" ph="&lt;button.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="933:1688" ph="&lt;div.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1025:1668" ph="&lt;ul.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1069:1227" ph="&lt;li.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1248:1400" ph="&lt;li.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1421:1593" ph="&lt;li.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1725:2230" ph="&lt;div.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1753:1818" ph="&lt;main.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1823:2223" ph="&lt;footer.../&gt;" />
-            <marker date="1550427044200" expanded="true" signature="1877:2209" ph="&lt;div.../&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/ViewComponents/ViewRecipeTriggerViewComponent.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="23" column="60" lean-forward="true" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
-          <folding>
-            <marker date="1550416235238" expanded="false" signature="6:316" ph="..." />
-            <marker date="1550416235238" expanded="true" signature="362:1185" ph="{...}" />
-            <marker date="1550416235238" expanded="true" signature="428:1183" ph="{...}" />
-            <marker date="1550416235238" expanded="true" signature="611:685" ph="{...}" />
-            <marker date="1550416235238" expanded="true" signature="769:1177" ph="{...}" />
-            <marker date="1550416235238" expanded="true" signature="887:1164" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeTrigger/Default.cshtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="33" lean-forward="true" selection-start-column="33" selection-end-column="33" />
-          <folding>
-            <marker date="1550428019688" expanded="true" signature="137:263" ph="@..." />
-            <marker date="1550428019688" expanded="true" signature="176:263" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1492,24 +1419,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/RecipeTriggers/EditRecipeTrigger.cshtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="6" lean-forward="true" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-          <folding>
-            <marker date="1550428160656" expanded="true" signature="60:111" ph="@..." />
-            <marker date="1550428160656" expanded="true" signature="113:258" ph="&lt;div.../&gt;" />
-            <marker date="1550428160656" expanded="true" signature="135:251" ph="&lt;div.../&gt;" />
-            <marker date="1550428160656" expanded="true" signature="288:1119" ph="&lt;form.../&gt;" />
-            <marker date="1550428160656" expanded="true" signature="378:647" ph="&lt;div.../&gt;" />
-            <marker date="1550428160656" expanded="true" signature="653:872" ph="@..." />
-            <marker date="1550428160656" expanded="true" signature="686:872" ph="{...}" />
-            <marker date="1550428160656" expanded="true" signature="701:866" ph="&lt;div.../&gt;" />
-            <marker date="1550428160656" expanded="true" signature="878:1111" ph="&lt;div.../&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/ExternalServices/BaseEmailServiceData.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1517,51 +1426,6 @@
           <folding>
             <marker date="1550239363218" expanded="true" signature="102:469" ph="{...}" />
             <marker date="1550239363218" expanded="true" signature="151:467" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Services/RecipeManager.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
-          <folding>
-            <marker date="1550430586377" expanded="true" signature="6:284" ph="..." />
-            <marker date="1550430586377" expanded="true" signature="318:5715" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="368:5713" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="514:590" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="669:2038" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="746:2028" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="863:2014" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="1196:1332" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="1403:1557" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="1619:1747" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="1811:1937" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2098:2726" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2175:2716" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2292:2702" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2367:2475" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2500:2629" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2801:3446" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2878:3436" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="2995:3422" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="3071:3187" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="3212:3349" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="3518:4158" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="3595:4148" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="3712:4134" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="3787:3901" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="3926:4061" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="4209:4771" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="4286:4761" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="4403:4747" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="4531:4630" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="4849:5070" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="4934:5012" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="5146:5707" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="5223:5697" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="5340:5683" ph="{...}" />
-            <marker date="1550430586377" expanded="true" signature="5485:5665" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1690,9 +1554,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Recipes/RemoveRecipe.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="13" lean-forward="true" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+          <folding>
+            <marker date="1550330082433" expanded="true" signature="57:95" ph="@..." />
+            <marker date="1550330082433" expanded="true" signature="161:1036" ph="&lt;div.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="202:774" ph="&lt;dl.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="237:316" ph="&lt;dt.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="325:400" ph="&lt;dd.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="409:491" ph="&lt;dt.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="500:578" ph="&lt;dd.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="587:673" ph="&lt;dt.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="682:764" ph="&lt;dd.../&gt;" />
+            <marker date="1550330082433" expanded="true" signature="784:1029" ph="&lt;form.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSmtpExternalService.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="8" lean-forward="true" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+          <folding>
+            <marker date="1550432742098" expanded="true" signature="109:155" ph="@..." />
+            <marker date="1550432742098" expanded="true" signature="157:508" ph="&lt;dl.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="188:215" ph="&lt;dt.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="220:256" ph="&lt;dd.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="261:290" ph="&lt;dt.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="295:339" ph="&lt;dd.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="344:370" ph="&lt;dt.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="375:416" ph="&lt;dd.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="421:452" ph="&lt;dt.../&gt;" />
+            <marker date="1550432742098" expanded="true" signature="457:502" ph="&lt;dd.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Actions/SendEmail/SendEmailController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-129">
+        <state relative-caret-position="876">
           <caret line="71" column="2" selection-start-line="71" selection-start-column="2" selection-end-line="71" selection-end-column="2" />
           <folding>
             <marker date="1550421076839" expanded="false" signature="6:436" ph="..." />
@@ -1709,22 +1611,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerParameters.cs">
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSendEmailAction.cshtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
+        <state relative-caret-position="15">
+          <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Pop3/EditData.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" column="59" lean-forward="true" selection-start-line="33" selection-start-column="59" selection-end-line="33" selection-end-column="59" />
           <folding>
-            <marker date="1550429271074" expanded="true" signature="62:530" ph="{...}" />
-            <marker date="1550429271074" expanded="true" signature="112:528" ph="{...}" />
-            <marker date="1550429271074" expanded="true" signature="443:522" ph="{...}" />
+            <marker date="1550431544853" expanded="true" signature="80:143" ph="@..." />
+            <marker date="1550431544853" expanded="true" signature="175:1642" ph="&lt;form.../&gt;" />
+            <marker date="1550431544853" expanded="true" signature="265:488" ph="&lt;div.../&gt;" />
+            <marker date="1550431544853" expanded="true" signature="493:710" ph="&lt;div.../&gt;" />
+            <marker date="1550431544853" expanded="true" signature="715:944" ph="&lt;div.../&gt;" />
+            <marker date="1550431544853" expanded="true" signature="949:1178" ph="&lt;div.../&gt;" />
+            <marker date="1550431544853" expanded="true" signature="1183:1411" ph="&lt;div.../&gt;" />
+            <marker date="1550431544853" expanded="true" signature="1421:1634" ph="&lt;div.../&gt;" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="148" column="9" lean-forward="true" selection-start-line="148" selection-start-column="9" selection-end-line="148" selection-end-column="9" />
+        <state relative-caret-position="690">
+          <caret line="46" column="13" lean-forward="true" selection-start-line="46" selection-start-column="13" selection-end-line="46" selection-end-column="13" />
           <folding>
             <marker date="1550432268875" expanded="true" signature="6:485" ph="..." />
             <marker date="1550432268875" expanded="true" signature="549:5982" ph="{...}" />
@@ -1753,58 +1667,105 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Pop3/EditData.cshtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="10" lean-forward="true" selection-start-line="21" selection-start-column="10" selection-end-line="21" selection-end-column="10" />
-          <folding>
-            <marker date="1550431544853" expanded="true" signature="80:143" ph="@..." />
-            <marker date="1550431544853" expanded="true" signature="175:1642" ph="&lt;form.../&gt;" />
-            <marker date="1550431544853" expanded="true" signature="265:488" ph="&lt;div.../&gt;" />
-            <marker date="1550431544853" expanded="true" signature="493:710" ph="&lt;div.../&gt;" />
-            <marker date="1550431544853" expanded="true" signature="715:944" ph="&lt;div.../&gt;" />
-            <marker date="1550431544853" expanded="true" signature="949:1178" ph="&lt;div.../&gt;" />
-            <marker date="1550431544853" expanded="true" signature="1183:1411" ph="&lt;div.../&gt;" />
-            <marker date="1550431544853" expanded="true" signature="1421:1634" ph="&lt;div.../&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/ReceivedEmail/EditData.cshtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="44" column="42" selection-start-line="44" selection-start-column="34" selection-end-line="44" selection-end-column="42" />
+        <state relative-caret-position="606">
+          <caret line="43" column="10" lean-forward="true" selection-start-line="43" selection-start-column="10" selection-end-line="43" selection-end-column="10" />
           <folding>
-            <marker date="1550431264441" expanded="true" signature="168:227" ph="@..." />
-            <marker date="1550431264441" expanded="true" signature="259:2357" ph="&lt;form.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="349:649" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="654:899" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="904:1475" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="998:1320" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="1093:1305" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="1480:2066" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="1577:1905" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="1675:1890" ph="&lt;div.../&gt;" />
-            <marker date="1550431264441" expanded="true" signature="2118:2349" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="168:227" ph="@..." />
+            <marker date="1550433052587" expanded="true" signature="259:2357" ph="&lt;form.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="349:649" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="654:899" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="904:1475" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="998:1320" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="1093:1305" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="1480:2066" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="1577:1905" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="1675:1890" ph="&lt;div.../&gt;" />
+            <marker date="1550433052587" expanded="true" signature="2118:2349" ph="&lt;div.../&gt;" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Recipes/RemoveRecipe.cshtml">
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/ViewComponents/ViewRecipeTriggerViewComponent.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="13" lean-forward="true" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        <state relative-caret-position="300">
+          <caret line="28" column="39" lean-forward="true" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
           <folding>
-            <marker date="1550330082433" expanded="true" signature="57:95" ph="@..." />
-            <marker date="1550330082433" expanded="true" signature="161:1036" ph="&lt;div.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="202:774" ph="&lt;dl.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="237:316" ph="&lt;dt.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="325:400" ph="&lt;dd.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="409:491" ph="&lt;dt.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="500:578" ph="&lt;dd.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="587:673" ph="&lt;dt.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="682:764" ph="&lt;dd.../&gt;" />
-            <marker date="1550330082433" expanded="true" signature="784:1029" ph="&lt;form.../&gt;" />
+            <marker date="1550416235238" expanded="false" signature="6:316" ph="..." />
+            <marker date="1550416235238" expanded="true" signature="362:1185" ph="{...}" />
+            <marker date="1550416235238" expanded="true" signature="428:1183" ph="{...}" />
+            <marker date="1550416235238" expanded="true" signature="611:685" ph="{...}" />
+            <marker date="1550416235238" expanded="true" signature="769:1177" ph="{...}" />
+            <marker date="1550416235238" expanded="true" signature="887:1164" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/ExternalServices/CreateExternalService.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="28" lean-forward="true" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+          <folding>
+            <marker date="1550425975680" expanded="true" signature="64:119" ph="@..." />
+            <marker date="1550425975680" expanded="true" signature="121:266" ph="&lt;div.../&gt;" />
+            <marker date="1550425975680" expanded="true" signature="143:259" ph="&lt;div.../&gt;" />
+            <marker date="1550425975680" expanded="true" signature="297:1049" ph="&lt;form.../&gt;" />
+            <marker date="1550425975680" expanded="true" signature="387:604" ph="&lt;div.../&gt;" />
+            <marker date="1550425975680" expanded="true" signature="609:859" ph="&lt;div.../&gt;" />
+            <marker date="1550425975680" expanded="true" signature="865:1041" ph="&lt;div.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/ViewComponents/ViewExternalServiceViewComponent.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="22" column="85" selection-start-line="22" selection-start-column="74" selection-end-line="22" selection-end-column="85" />
+          <folding>
+            <marker date="1550417200338" expanded="false" signature="6:315" ph="..." />
+            <marker date="1550417200338" expanded="true" signature="361:1271" ph="{...}" />
+            <marker date="1550417200338" expanded="true" signature="429:1269" ph="{...}" />
+            <marker date="1550417200338" expanded="true" signature="659:749" ph="{...}" />
+            <marker date="1550417200338" expanded="true" signature="855:1263" ph="{...}" />
+            <marker date="1550417200338" expanded="true" signature="975:1250" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Shared/_Layout.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="48" column="32" selection-start-line="48" selection-start-column="32" selection-end-line="48" selection-end-column="32" />
+          <folding>
+            <marker date="1550427044200" expanded="true" signature="16:2289" ph="&lt;html.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="23:344" ph="&lt;head.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="345:2281" ph="&lt;body.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="354:1724" ph="&lt;header.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="367:1714" ph="&lt;nav.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="486:1703" ph="&lt;div.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="629:920" ph="&lt;button.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="933:1688" ph="&lt;div.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1025:1668" ph="&lt;ul.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1069:1227" ph="&lt;li.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1248:1400" ph="&lt;li.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1421:1593" ph="&lt;li.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1725:2230" ph="&lt;div.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1753:1818" ph="&lt;main.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1823:2223" ph="&lt;footer.../&gt;" />
+            <marker date="1550427044200" expanded="true" signature="1877:2209" ph="&lt;div.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Abstractions/Triggers/ITriggerDescriptor.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="11" column="15" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
+          <folding>
+            <marker date="1550419916215" expanded="false" signature="6:96" ph="..." />
+            <marker date="1550419916215" expanded="true" signature="143:390" ph="{...}" />
+            <marker date="1550419916215" expanded="true" signature="185:388" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1812,7 +1773,7 @@
     <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewPop3ExternalService.cshtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
-          <caret line="11" column="8" lean-forward="true" selection-start-line="10" selection-start-column="9" selection-end-line="11" selection-end-column="8" />
+          <caret line="11" column="8" selection-start-line="10" selection-start-column="9" selection-end-line="11" selection-end-column="8" />
           <folding>
             <marker date="1550432705810" expanded="true" signature="110:156" ph="@..." />
             <marker date="1550432705810" expanded="true" signature="158:509" ph="&lt;dl.../&gt;" />
@@ -1828,36 +1789,190 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSmtpExternalService.cshtml">
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Triggers/ReceivedEmail/ReceivedEmailTriggerParameters.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="8" lean-forward="true" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+        <state relative-caret-position="105">
+          <caret line="7" column="43" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
           <folding>
-            <marker date="1550432742098" expanded="true" signature="109:155" ph="@..." />
-            <marker date="1550432742098" expanded="true" signature="157:508" ph="&lt;dl.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="188:215" ph="&lt;dt.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="220:256" ph="&lt;dd.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="261:290" ph="&lt;dt.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="295:339" ph="&lt;dd.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="344:370" ph="&lt;dt.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="375:416" ph="&lt;dd.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="421:452" ph="&lt;dt.../&gt;" />
-            <marker date="1550432742098" expanded="true" signature="457:502" ph="&lt;dd.../&gt;" />
+            <marker date="1550433061622" expanded="true" signature="108:591" ph="{...}" />
+            <marker date="1550433061622" expanded="true" signature="158:589" ph="{...}" />
+            <marker date="1550433061622" expanded="true" signature="504:583" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewReceivedEmailTrigger.cshtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="20" lean-forward="true" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+        <state>
+          <caret column="32" lean-forward="true" selection-start-column="32" selection-end-column="32" />
+          <folding>
+            <marker date="1550433903874" expanded="true" signature="7:92" ph="..." />
+            <marker date="1550433903874" expanded="true" signature="142:206" ph="@..." />
+            <marker date="1550433903874" expanded="true" signature="208:723" ph="&lt;div.../&gt;" />
+            <marker date="1550433903874" expanded="true" signature="236:333" ph="@..." />
+            <marker date="1550433903874" expanded="true" signature="279:333" ph="{...}" />
+            <marker date="1550433903874" expanded="true" signature="338:529" ph="@..." />
+            <marker date="1550433903874" expanded="true" signature="379:529" ph="{...}" />
+            <marker date="1550433903874" expanded="true" signature="534:716" ph="@..." />
+            <marker date="1550433903874" expanded="true" signature="572:716" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Extension.Email/Views/Shared/ViewSendEmailAction.cshtml">
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeAction/Default.cshtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="5" selection-end-column="68" />
+          <folding>
+            <marker date="1550433540890" expanded="true" signature="134:315" ph="&lt;a.../&gt;" />
+            <marker date="1550433540890" expanded="true" signature="316:438" ph="@..." />
+            <marker date="1550433540890" expanded="true" signature="355:438" ph="{...}" />
+            <marker date="1550433540890" expanded="true" signature="362:436" ph="&lt;div.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Abstractions/Actions/IActionHandler.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+          <folding>
+            <marker date="1550080238381" expanded="false" signature="6:124" ph="..." />
+            <marker date="1550080238381" expanded="true" signature="170:312" ph="{...}" />
+            <marker date="1550080238381" expanded="true" signature="208:310" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/RecipeTriggers/EditRecipeTrigger.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="55" selection-start-line="15" selection-start-column="50" selection-end-line="15" selection-end-column="55" />
+          <folding>
+            <marker date="1550428160656" expanded="true" signature="60:111" ph="@..." />
+            <marker date="1550428160656" expanded="true" signature="113:258" ph="&lt;div.../&gt;" />
+            <marker date="1550428160656" expanded="true" signature="135:251" ph="&lt;div.../&gt;" />
+            <marker date="1550428160656" expanded="true" signature="288:1119" ph="&lt;form.../&gt;" />
+            <marker date="1550428160656" expanded="true" signature="378:647" ph="&lt;div.../&gt;" />
+            <marker date="1550428160656" expanded="true" signature="653:872" ph="@..." />
+            <marker date="1550428160656" expanded="true" signature="686:872" ph="{...}" />
+            <marker date="1550428160656" expanded="true" signature="701:866" ph="&lt;div.../&gt;" />
+            <marker date="1550428160656" expanded="true" signature="878:1111" ph="&lt;div.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Recipes/EditRecipe.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="37" column="13" lean-forward="true" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+          <folding>
+            <marker date="1550434151028" expanded="true" signature="55:98" ph="@..." />
+            <marker date="1550434151028" expanded="true" signature="100:245" ph="&lt;div.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="122:238" ph="&lt;div.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="275:2730" ph="&lt;form.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="365:582" ph="&lt;div.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="587:838" ph="&lt;div.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="843:1090" ph="&lt;div.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="1097:2540" ph="&lt;ul.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="1146:1799" ph="&lt;li.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="1216:1785" ph="@..." />
+            <marker date="1550434151028" expanded="true" signature="1243:1443" ph="{...}" />
+            <marker date="1550434151028" expanded="true" signature="1460:1785" ph="{...}" />
+            <marker date="1550434151028" expanded="true" signature="1572:1771" ph="&lt;a.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="1808:2530" ph="&lt;li.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="1878:2516" ph="&lt;ul.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="1935:2167" ph="@..." />
+            <marker date="1550434151028" expanded="true" signature="1973:2167" ph="{...}" />
+            <marker date="1550434151028" expanded="true" signature="2012:2149" ph="&lt;li.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="2184:2498" ph="@..." />
+            <marker date="1550434151028" expanded="true" signature="2210:2498" ph="{...}" />
+            <marker date="1550434151028" expanded="true" signature="2249:2480" ph="&lt;li.../&gt;" />
+            <marker date="1550434151028" expanded="true" signature="2547:2722" ph="&lt;div.../&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter.Services/RecipeManager.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1290">
+          <caret line="34" column="39" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="39" />
+          <folding>
+            <marker date="1550433432523" expanded="false" signature="6:284" ph="..." />
+            <marker date="1550433432523" expanded="true" signature="318:5909" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="368:5907" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="514:590" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="669:2232" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="746:2222" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="863:2208" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="1390:1526" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="1597:1751" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="1813:1941" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="2005:2131" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="2292:2920" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="2369:2910" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="2486:2896" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="2561:2669" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="2694:2823" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="2995:3640" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3072:3630" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3189:3616" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3265:3381" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3406:3543" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3712:4352" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3789:4342" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3906:4328" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="3981:4095" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="4120:4255" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="4403:4965" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="4480:4955" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="4597:4941" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="4725:4824" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="5043:5264" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="5128:5206" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="5340:5901" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="5417:5891" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="5534:5877" ph="{...}" />
+            <marker date="1550433432523" expanded="true" signature="5679:5859" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Views/Shared/Components/ViewRecipeTrigger/Default.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="2" lean-forward="true" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
+          <folding>
+            <marker date="1550434318249" expanded="true" signature="128:326" ph="@*...*@" />
+            <marker date="1550434318249" expanded="true" signature="327:614" ph="@..." />
+            <marker date="1550434318249" expanded="true" signature="366:614" ph="{...}" />
+            <marker date="1550434318249" expanded="true" signature="375:611" ph="&lt;div.../&gt;" />
+            <marker date="1550434318249" expanded="true" signature="449:599" ph="@*...*@" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BtcTransmuter/Controllers/RecipeTriggersController.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="84" column="12" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="12" />
+          <folding>
+            <marker date="1550434285516" expanded="false" signature="6:427" ph="..." />
+            <marker date="1550434285516" expanded="true" signature="464:3638" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="574:3636" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="937:1095" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="1252:1941" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="1385:1463" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="1534:1929" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="2123:3223" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="2256:2334" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="2373:2616" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="2780:2981" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="2863:2966" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="3290:3630" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="3378:3618" ph="{...}" />
+            <marker date="1550434285516" expanded="true" signature="3453:3593" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>

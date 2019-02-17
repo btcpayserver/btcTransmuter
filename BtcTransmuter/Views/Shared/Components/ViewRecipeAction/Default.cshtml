@@ -1,10 +1,12 @@
 @model ViewRecipeActionViewModel
 
 <partial name="@Model.ActionDescriptor.ViewPartial" model="@Model.RecipeAction.DataJson"></partial>
-<a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.RecipeAction.RecipeId" asp-route-recipeActionId="@Model.RecipeAction.ActionId"> Edit</a>
+<a asp-action="EditRecipeAction" asp-controller="RecipeActions" 
+   asp-route-id="@Model.RecipeAction.RecipeId" 
+   asp-route-recipeActionId="@Model.RecipeAction.ActionId"> Edit</a>
 @if (Model.ExternalServiceData != null)
- {
-     
-     @await Component.InvokeAsync("ViewExternalService", Model.ExternalServiceData);
-     
- }
+{
+    <div>
+        External Service: @Model.ExternalServiceData.Name
+    </div>
+}

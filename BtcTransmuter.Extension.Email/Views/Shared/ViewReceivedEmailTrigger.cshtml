@@ -1,3 +1,22 @@
-@model string
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
+@model BtcTransmuter.Data.Entities.RecipeTrigger
+@{
+    var data = Model.Get<ReceivedEmailTriggerParameters>();
+}
 
-Receive Email @Model
+<div>
+    Receive Email
+    @if (!string.IsNullOrEmpty(data.FromEmail))
+    {
+        <span>from @data.FromEmail</span>
+    }
+    @if (!string.IsNullOrEmpty(data.Subject))
+    {
+        <span>with subject @Enum.GetName(typeof(ReceivedEmailTriggerParameters.FieldComparer), data.SubjectComparer) @data.Subject</span>
+    }
+    @if (!string.IsNullOrEmpty(data.Body))
+    {
+        <span>with body @Enum.GetName(typeof(ReceivedEmailTriggerParameters.FieldComparer), data.BodyComparer) @data.Subject</span>
+    }
+</div>

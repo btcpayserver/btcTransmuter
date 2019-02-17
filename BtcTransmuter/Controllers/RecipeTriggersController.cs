@@ -68,7 +68,7 @@ namespace BtcTransmuter.Controllers
                 return View(model);
             }
 
-            var recipeTrigger = model.RecipeTrigger;
+            var recipeTrigger = recipe.RecipeTrigger;
 
             if (string.IsNullOrEmpty(recipeTriggerId) || recipe.RecipeTrigger.TriggerId != model.TriggerId)
             {

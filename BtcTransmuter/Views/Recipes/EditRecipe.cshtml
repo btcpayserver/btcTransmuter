@@ -43,6 +43,9 @@
             else
             {
                 @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
+                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" 
+                   asp-route-id="Model.Trigger.RecipeId" 
+                   asp-route-recipeTriggerId="@Model.Trigger.Id"> Edit</a>
             }
         </li>
         <li class="list-group-item">
