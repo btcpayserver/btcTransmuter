@@ -4,29 +4,32 @@
 @{
     var service = new Pop3Service(Model);
 }
-<ul class="list-group">
-    <li class="list-group-item">
-        
-        @service.Name 
-    </li>
-    <li class="list-group-item">
-        
-        @service.Data.Server 
-    </li>
-    <li class="list-group-item">
-        
-        @service.Data.Username 
-    </li>
-    <li class="list-group-item">
-        
-        @service.Data.Password 
-    </li>
-    <li class="list-group-item">
-        
-        @service.Data.Port 
-    </li>
-    <li class="list-group-item">
-        
-        @service.Data.SSL 
-    </li>
-</ul>
+
+<dl class="dl-horizontal">
+    <dt>
+        Name
+    </dt>
+    <dd>
+        @service.Name
+    </dd>
+    <dt>
+        Server
+    </dt>
+    <dd>
+        @service.Data.Server
+
+    </dd>
+    <dt>
+        SSL
+    </dt>
+    <dd>
+        @service.Data.SSL
+
+    </dd>
+    <dt>
+        Username
+    </dt>
+    <dd>
+        @service.Data.Username
+    </dd>
+</dl>
