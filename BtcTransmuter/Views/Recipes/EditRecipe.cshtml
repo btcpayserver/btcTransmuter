@@ -38,23 +38,35 @@
             }
             else
             {
-                @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
-                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers"
-                   asp-route-id="@Model.Trigger.RecipeId"
-                   asp-route-recipeTriggerId="@Model.Trigger.Id">
-                    Edit
-                </a>
+                <div class="d-flex justify-content-between align-items-center">
+                    @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
+                    <div>
+                        <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers"
+                           asp-route-id="@Model.Trigger.RecipeId"
+                           asp-route-recipeTriggerId="@Model.Trigger.Id">
+                            Edit
+                        </a>
+                        <a asp-action="RemoveRecipeTrigger" asp-controller="RecipeTriggers"
+                           asp-route-id="@Model.Trigger.RecipeId"
+                           asp-route-recipeTriggerId="@Model.Trigger.Id">
+                            Remove
+                        </a>
+                    </div>
+                </div>
             }
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item px-0">
             <h4>Actions</h4>
-            <ul class="list-group list-group-flush">
+            <ul class="list-group list-group-flush ">
                 @foreach (var action in Model.Actions)
                 {
-                    <li class="list-group-item">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
                         @await Component.InvokeAsync("ViewRecipeAction", action)
+                        <div>
+                            <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
+                            <a asp-action="RemoveRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Remove</a>
 
-                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
+                        </div>
                     </li>
                 }
                 @if (!Model.Actions.Any())
@@ -70,6 +82,7 @@
     </ul>
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="RemoveRecipe" asp-route-id="@Model.Id" class="btn btn-danger">Remove</a>
         <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>
     </div>
 </form>
