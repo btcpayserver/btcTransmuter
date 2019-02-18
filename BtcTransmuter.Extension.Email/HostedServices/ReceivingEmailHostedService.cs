@@ -59,7 +59,8 @@ namespace BtcTransmuter.Extension.Email.HostedServices
                         return;
                     }
 
-                    var emails = await pop3Client.ListAsync();
+                    var emails = await pop3Client.ListAndRetrieveHeaderAsync();
+                    
                     var validEmails = emails.Where(message =>
                         !service.Value.Data.LastCheck.HasValue ||
                         DateTime.Parse(message.Date) >= service.Value.Data.LastCheck.Value).ToList();
@@ -89,6 +90,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
                 }, cancellationToken));
 
                 await Task.WhenAll(tasks);
+                await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
             }
         }
 

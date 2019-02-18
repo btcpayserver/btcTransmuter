@@ -60,7 +60,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
 
                 return pop3Client.IsConnected ? pop3Client : null;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
