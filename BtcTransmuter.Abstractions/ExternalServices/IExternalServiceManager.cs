@@ -7,7 +7,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
 {
     public interface IExternalServiceManager
     {
-        Task<ExternalServiceData> GetExternalServiceData(string id);
+        Task<ExternalServiceData> GetExternalServiceData(string id, string userId = null);
         Task RemoveExternalServiceData(string id);
         Task AddOrUpdateExternalServiceData(ExternalServiceData externalServiceData);
         Task UpdateInternalData(string id, object data);

@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+
 namespace BtcTransmuter.Data.Entities
 {
     public class ExternalServiceData : BaseEntity
@@ -7,5 +10,9 @@ namespace BtcTransmuter.Data.Entities
         public string UserId { get; set; }
 
         public User User { get; set; }
+        
+        
+        public ICollection<RecipeTrigger> RecipeTriggers { get; set; }
+        public ICollection<RecipeAction> RecipeActions { get; set; }
     }
 }

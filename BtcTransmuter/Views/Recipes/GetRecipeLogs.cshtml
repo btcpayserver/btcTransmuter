@@ -1,7 +1,7 @@
 @model BtcTransmuter.Controllers.GetRecipeLogsViewModel
 
 @{
-    ViewData["Title"] = $"{Model.Name} Recipe Invocations";
+    ViewData["Title"] = $"{Model.Name} Recipe Logs";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -13,7 +13,7 @@
             Time
         </th>
         <th>
-            Action 
+            Action
         </th>
         <th>
             Result
@@ -31,14 +31,17 @@
                 @Html.DisplayFor(modelItem => item.Timestamp)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RecipeActionId)
+                @await Component.InvokeAsync("ViewRecipeAction", new
+                {
+                    recipeAction = item.RecipeAction
+                })
             </td>
             <td>
-                
+
                 @Html.DisplayFor(modelItem => item.ActionResult)
             </td>
             <td>
-                
+
                 @Html.DisplayFor(modelItem => item.TriggerDataJson)
             </td>
         </tr>

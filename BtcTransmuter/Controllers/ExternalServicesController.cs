@@ -29,7 +29,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetServices()
+        public async Task<IActionResult> GetServices(string statusMessage)
         {
             var externalServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
@@ -38,6 +38,7 @@ namespace BtcTransmuter.Controllers
             return View(new GetExternalServicesViewModel()
             {
                 ExternalServices = externalServices,
+                StatusMessage = statusMessage,
                 Descriptors = _externalServiceDescriptors
             });
         }
@@ -179,48 +180,25 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}/remove")]
         public async Task<IActionResult> RemoveExternalService(string id)
         {
-            var externalServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+            var data = await GetDataToDelete(id);
+            if (data.Error != null)
             {
-                UserId = _userManager.GetUserId(User),
-                ExternalServiceId = id
-            });
-            if (!EnumerableExtensions.Any(externalServices))
-            {
-                return RedirectToAction("GetServices", new
-                {
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "External Service  not found",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
+                return data.Error;
             }
 
-            var externalService = Enumerable.First(externalServices);
             return View(new RemoveExternalServiceViewModel()
             {
-                ExternalService = externalService
+                ExternalService = data.Data
             });
         }
 
         [HttpPost("{id}/remove")]
         public async Task<IActionResult> RemoveExternalServicePost(string id)
         {
-            var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+            var data = await GetDataToDelete(id);
+            if (data.Error != null)
             {
-                UserId = _userManager.GetUserId(User),
-                ExternalServiceId = id
-            });
-            if (!EnumerableExtensions.Any(services))
-            {
-                return RedirectToAction("GetServices", new
-                {
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "External Service not found",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
+                return data.Error;
             }
 
             await _externalServiceManager.RemoveExternalServiceData(id);
@@ -228,10 +206,41 @@ namespace BtcTransmuter.Controllers
             {
                 statusMessage = new StatusMessageModel()
                 {
-                    Message = $"Recipe {services.First().Name} deleted successfully",
+                    Message = $"Recipe {data.Data.Name} deleted successfully",
                     Severity = StatusMessageModel.StatusSeverity.Success
                 }.ToString()
             });
+        }
+
+        private async Task<(ExternalServiceData Data, IActionResult Error)> GetDataToDelete(string id)
+        {
+            var externalService =
+                await _externalServiceManager.GetExternalServiceData(id, _userManager.GetUserId(User));
+            if (externalService == null)
+            {
+                return (null, RedirectToAction("GetServices", new
+                {
+                    statusMessage = new StatusMessageModel()
+                    {
+                        Message = "External Service not found",
+                        Severity = StatusMessageModel.StatusSeverity.Error
+                    }.ToString()
+                }));
+            }
+
+            if (externalService.RecipeActions.Any() || externalService.RecipeTriggers.Any())
+            {
+                return (null, RedirectToAction("GetServices", new
+                {
+                    statusMessage = new StatusMessageModel()
+                    {
+                        Message = "Cannot remove external service, it is being used by recipe actions/triggers",
+                        Severity = StatusMessageModel.StatusSeverity.Error
+                    }.ToString()
+                }));
+            }
+
+            return (externalService, null);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace BtcTransmuter.Controllers
     {
         public IEnumerable<ExternalServiceData> ExternalServices { get; set; }
         public IEnumerable<IExternalServiceDescriptor> Descriptors { get; set; }
+        public string StatusMessage { get; set; }
     }
 
     public class CreateExternalServiceViewModel

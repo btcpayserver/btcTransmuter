@@ -23,15 +23,13 @@ namespace BtcTransmuter.Services
         }
 
 
-        public async Task<ExternalServiceData> GetExternalServiceData(string id)
+        public async Task<ExternalServiceData> GetExternalServiceData(string id, string userId)
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
+            return (await GetExternalServicesData(new ExternalServicesDataQuery()
             {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    return await context.ExternalServices.FindAsync(id);
-                }
-            }
+                ExternalServiceId = id,
+                UserId = userId
+            })).FirstOrDefault();
         }
 
         public async Task RemoveExternalServiceData(string id)
@@ -118,7 +116,10 @@ namespace BtcTransmuter.Services
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
-                    var queryable = context.ExternalServices.AsQueryable();
+                    var queryable = context.ExternalServices
+                        .Include(data => data.RecipeActions)
+                        .Include(data => data.RecipeTriggers)
+                        .AsQueryable();
 
                     if (query.Type != null && query.Type.Any())
                     {
@@ -129,6 +130,7 @@ namespace BtcTransmuter.Services
                     {
                         queryable = queryable.Where(x => x.UserId == query.UserId);
                     }
+
                     if (!string.IsNullOrEmpty(query.ExternalServiceId))
                     {
                         queryable = queryable.Where(x => x.Id == query.ExternalServiceId);
