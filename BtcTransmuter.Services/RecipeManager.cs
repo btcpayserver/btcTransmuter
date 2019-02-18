@@ -125,11 +125,16 @@ namespace BtcTransmuter.Services
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
-                    var recipe = await context.Recipes.FindAsync(id);
+                    var recipe = await GetRecipe(id);
                     if (recipe == null)
                     {
                         throw new ArgumentException();
                     }
+
+                    context.Attach(recipe);
+                    context.AttachRange(recipe.RecipeActions);
+                    context.AttachRange(recipe.RecipeTrigger);
+                    context.AttachRange(recipe.RecipeInvocations);
 
                     context.Remove(recipe);
                     await context.SaveChangesAsync();
@@ -158,6 +163,38 @@ namespace BtcTransmuter.Services
                     if (recipe != null)
                     {
                         await context.RecipeInvocations.AddAsync(invocation);
+                        await context.SaveChangesAsync();
+                    }
+                }
+            }
+        }
+
+        public async Task RemoveRecipeAction(string recipeActionId)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    var recipe = await context.RecipeActions.FindAsync(recipeActionId);
+                    if (recipe != null)
+                    {
+                        context.RecipeActions.Remove(recipe);
+                        await context.SaveChangesAsync();
+                    }
+                }
+            }
+        }
+
+        public async Task RemoveRecipeTrigger(string recipeTriggerId)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    var recipe = await context.RecipeTriggers.FindAsync(recipeTriggerId);
+                    if (recipe != null)
+                    {
+                        context.RecipeTriggers.Remove(recipe);
                         await context.SaveChangesAsync();
                     }
                 }

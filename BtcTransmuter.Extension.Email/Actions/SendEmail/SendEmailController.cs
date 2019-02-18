@@ -24,7 +24,6 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
     [Authorize]
     public class SendEmailController : Controller
     {
-        
         private readonly IRecipeManager _recipeManager;
         private readonly IExternalServiceManager _externalServiceManager;
         private readonly UserManager<User> _userManager;
@@ -82,6 +81,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
             to.Body = fromData.Body;
             to.Subject = fromData.Subject;
             to.To = fromData.To;
+            to.From = fromData.From;
         }
 
         [HttpPost("{identifier}")]
@@ -97,7 +97,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
             {
                 var pop3Services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
                 {
-                    Type = new[] {Pop3Service.Pop3ExternalServiceType},
+                    Type = new[] {SmtpService.SmtpExternalServiceType},
                     UserId = _userManager.GetUserId(User)
                 });
 
@@ -122,7 +122,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
         {
             if (!_memoryCache.TryGetValue(identifier, out RecipeAction data))
             {
-                return (RedirectToAction("GetServices", "ExternalServices", new
+                return (RedirectToAction("GetRecipes", "Recipes", new
                 {
                     statusMessage = "Error:Data could not be found or data session expired"
                 }), null);
@@ -132,7 +132,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
 
             if (recipe == null)
             {
-                return (RedirectToAction("GetServices", "ExternalServices", new
+                return (RedirectToAction("GetRecipes", "Recipes", new
                 {
                     statusMessage = "Error:Data could not be found or data session expired"
                 }), null);

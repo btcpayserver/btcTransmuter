@@ -17,6 +17,6 @@
     }
     @if (!string.IsNullOrEmpty(data.Body))
     {
-        <span>with body @Enum.GetName(typeof(ReceivedEmailTriggerParameters.FieldComparer), data.BodyComparer) @data.Subject</span>
+        <span>with body @Enum.GetName(typeof(ReceivedEmailTriggerParameters.FieldComparer), data.BodyComparer) @data.Body</span>
     }
 </div>

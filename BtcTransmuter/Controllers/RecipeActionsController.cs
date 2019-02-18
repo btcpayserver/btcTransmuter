@@ -54,7 +54,7 @@ namespace BtcTransmuter.Controllers
                 RecipeAction = recipeAction,
                 StatusMessage = statusMessage,
                 Actions = new SelectList(_actionDescriptors, nameof(IActionDescriptor.ActionId),
-                    nameof(IActionDescriptor.Name),  recipeAction?.ActionId)
+                    nameof(IActionDescriptor.Name), recipeAction?.ActionId)
             });
         }
 
@@ -92,6 +92,63 @@ namespace BtcTransmuter.Controllers
                 _actionDescriptors.Single(descriptor =>
                     descriptor.ActionId == recipeAction.ActionId);
             return await serviceDescriptor.EditData(recipeAction);
+        }
+
+
+        [HttpGet("{recipeActionId}/remove")]
+        public async Task<IActionResult> RemoveRecipeAction(string id, string recipeActionId)
+        {
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
+            if (recipe == null)
+            {
+                return GetNotFoundActionResult();
+            }
+
+            RecipeAction recipeAction = null;
+            if (!string.IsNullOrEmpty(recipeActionId))
+            {
+                recipeAction = recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
+                if (recipeAction == null)
+                {
+                    return GetNotFoundActionResult();
+                }
+            }
+
+            return View(new RemoveRecipeActionViewModel()
+            {
+                RecipeAction = recipeAction
+            });
+        }
+
+        [HttpPost("{recipeActionId}/remove")]
+        public async Task<IActionResult> RemoveRecipeActionPost(string id, string recipeActionId)
+        {
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
+            if (recipe == null)
+            {
+                return GetNotFoundActionResult();
+            }
+
+            RecipeAction recipeAction = null;
+            if (!string.IsNullOrEmpty(recipeActionId))
+            {
+                recipeAction = recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
+                if (recipeAction == null)
+                {
+                    return GetNotFoundActionResult();
+                }
+            }
+
+            await _recipeManager.RemoveRecipeAction(recipeActionId);
+            return RedirectToAction("EditRecipe", "Recipes", new
+            {
+                id,
+                statusMessage = new StatusMessageModel()
+                {
+                    Message = $"Recipe Action removed",
+                    Severity = StatusMessageModel.StatusSeverity.Success
+                }.ToString()
+            });
         }
 
         private RedirectToActionResult GetNotFoundActionResult()

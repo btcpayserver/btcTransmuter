@@ -80,8 +80,10 @@ namespace BtcTransmuter.Extension.Email.HostedServices
                         await _triggerDispatcher.DispatchTrigger(trigger);
                     }
 
-                    service.Value.Data.LastCheck = DateTime.Now;
-                    await _externalServiceManager.UpdateInternalData(service.Key, service.Value);
+                    var newData = service.Value.Data;
+                    newData.LastCheck = DateTime.Now;
+                    service.Value.Data = newData;
+                    await _externalServiceManager.UpdateInternalData(service.Key, service.Value.Data);
                     await pop3Client.DisconnectAsync();
                     pop3Client.Dispose();
                 }, cancellationToken));

@@ -86,6 +86,42 @@ namespace BtcTransmuter.Controllers
                     descriptor.TriggerId == recipeTrigger.TriggerId);
             return await serviceDescriptor.EditData(recipeTrigger);
         }
+        
+        [HttpGet("{recipeTriggerId}/remove")]
+        public async Task<IActionResult> RemoveRecipeTrigger(string id, string recipeTriggerId)
+        {
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
+            if (recipe?.RecipeTrigger == null)
+            {
+                return GetNotFoundActionResult();
+            }
+
+            return View(new RemoveRecipeTriggerViewModel()
+            {
+                RecipeTrigger = recipe.RecipeTrigger
+            });
+        }
+
+        [HttpPost("{recipeTriggerId}/remove")]
+        public async Task<IActionResult> RemoveRecipeTriggerPost(string id, string recipeTriggerId)
+        {
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
+            if (recipe?.RecipeTrigger == null)
+            {
+                return GetNotFoundActionResult();
+            }
+
+            await _recipeManager.RemoveRecipeTrigger(recipeTriggerId);
+            return RedirectToAction("EditRecipe", "Recipes", new
+            {
+                id,
+                statusMessage = new StatusMessageModel()
+                {
+                    Message = $"Recipe Trigger removed",
+                    Severity = StatusMessageModel.StatusSeverity.Success
+                }.ToString()
+            });
+        }
 
 
         private RedirectToActionResult GetNotFoundActionResult()

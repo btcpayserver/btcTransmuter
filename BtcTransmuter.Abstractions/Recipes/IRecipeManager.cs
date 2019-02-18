@@ -15,5 +15,7 @@ namespace BtcTransmuter.Abstractions.Recipes
         Task RemoveRecipe(string id);
         Task<Recipe> GetRecipe(string id, string userId = null);
         Task AddRecipeInvocation(RecipeInvocation invocation);
+        Task RemoveRecipeAction(string recipeActionId);
+        Task RemoveRecipeTrigger(string recipeTriggerId);
     }
 }

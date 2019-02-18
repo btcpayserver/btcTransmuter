@@ -299,12 +299,13 @@ namespace BtcTransmuter.Data.Migrations
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeAction", b =>
                 {
                     b.HasOne("BtcTransmuter.Data.Entities.ExternalServiceData", "ExternalService")
-                        .WithMany()
+                        .WithMany("RecipeActions")
                         .HasForeignKey("ExternalServiceId");
 
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
                         .WithMany("RecipeActions")
-                        .HasForeignKey("RecipeId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeInvocation", b =>
@@ -315,18 +316,20 @@ namespace BtcTransmuter.Data.Migrations
 
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
                         .WithMany("RecipeInvocations")
-                        .HasForeignKey("RecipeId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeTrigger", b =>
                 {
                     b.HasOne("BtcTransmuter.Data.Entities.ExternalServiceData", "ExternalService")
-                        .WithMany()
+                        .WithMany("RecipeTriggers")
                         .HasForeignKey("ExternalServiceId");
 
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
                         .WithOne("RecipeTrigger")
-                        .HasForeignKey("BtcTransmuter.Data.Entities.RecipeTrigger", "RecipeId");
+                        .HasForeignKey("BtcTransmuter.Data.Entities.RecipeTrigger", "RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

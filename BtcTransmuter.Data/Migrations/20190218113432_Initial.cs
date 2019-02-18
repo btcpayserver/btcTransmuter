@@ -158,6 +158,7 @@ namespace BtcTransmuter.Data.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     DataJson = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true)
                 },
@@ -217,7 +218,7 @@ namespace BtcTransmuter.Data.Migrations
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -244,7 +245,7 @@ namespace BtcTransmuter.Data.Migrations
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,8 +256,8 @@ namespace BtcTransmuter.Data.Migrations
                     RecipeId = table.Column<string>(nullable: true),
                     RecipeActionId = table.Column<string>(nullable: true),
                     TriggerDataJson = table.Column<string>(nullable: true),
-                    Timestamp = table.Column<DateTime>(nullable: false),
-                    ActionResult = table.Column<string>(nullable: true)
+                    ActionResult = table.Column<string>(nullable: true),
+                    Timestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -272,7 +273,7 @@ namespace BtcTransmuter.Data.Migrations
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

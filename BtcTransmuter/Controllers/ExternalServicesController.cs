@@ -83,12 +83,9 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> EditExternalService(string id, string statusMessage)
         {
-            var externalServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-            {
-                UserId = _userManager.GetUserId(User),
-                ExternalServiceId = id
-            });
-            if (!EnumerableExtensions.Any(externalServices))
+            var externalService =
+                await _externalServiceManager.GetExternalServiceData(id, _userManager.GetUserId(User));
+            if (externalService == null)
             {
                 return RedirectToAction("GetServices", new
                 {
@@ -99,8 +96,7 @@ namespace BtcTransmuter.Controllers
                     }.ToString()
                 });
             }
-
-            var externalService = externalServices.First();
+            
             return View(new EditExternalServiceViewModel()
             {
                 Name = externalService.Name,
@@ -114,12 +110,9 @@ namespace BtcTransmuter.Controllers
         [HttpGet("{id}/data")]
         public async Task<IActionResult> EditExternalServiceInnerData(string id)
         {
-            var externalServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-            {
-                UserId = _userManager.GetUserId(User),
-                ExternalServiceId = id
-            });
-            if (!EnumerableExtensions.Any(externalServices))
+            var externalService =
+                await _externalServiceManager.GetExternalServiceData(id, _userManager.GetUserId(User));
+            if (externalService == null)
             {
                 return RedirectToAction("GetServices", new
                 {
@@ -131,7 +124,6 @@ namespace BtcTransmuter.Controllers
                 });
             }
 
-            var externalService = externalServices.First();
             var serviceDescriptor =
                 _externalServiceDescriptors.Single(descriptor =>
                     descriptor.ExternalServiceType == externalService.Type);
@@ -142,12 +134,9 @@ namespace BtcTransmuter.Controllers
         [HttpPost("{id}")]
         public async Task<IActionResult> EditExternalService(string id, EditExternalServiceViewModel model)
         {
-            var externalServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-            {
-                UserId = _userManager.GetUserId(User),
-                ExternalServiceId = id
-            });
-            if (!EnumerableExtensions.Any(externalServices))
+            var externalService =
+                await _externalServiceManager.GetExternalServiceData(id, _userManager.GetUserId(User));
+            if (externalService == null)
             {
                 return RedirectToAction("GetServices", new
                 {
@@ -158,10 +147,6 @@ namespace BtcTransmuter.Controllers
                     }.ToString()
                 });
             }
-
-
-            var externalService = externalServices.First();
-
 
             if (!ModelState.IsValid)
             {

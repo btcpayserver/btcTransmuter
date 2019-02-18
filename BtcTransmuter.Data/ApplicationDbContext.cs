@@ -20,6 +20,26 @@ namespace BtcTransmuter.Data
         public DbSet<RecipeInvocation> RecipeInvocations { get; set; }
         public DbSet<RecipeTrigger> RecipeTriggers { get; set; }
         public DbSet<RecipeAction> RecipeActions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            
+            builder.Entity<Recipe>()
+                .HasMany(l => l.RecipeActions)
+                .WithOne(action => action.Recipe)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<Recipe>()
+                .HasOne(l => l.RecipeTrigger)
+                .WithOne(action => action.Recipe)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<Recipe>()
+                .HasMany(l => l.RecipeInvocations)
+                .WithOne(action => action.Recipe)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
     
     public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>

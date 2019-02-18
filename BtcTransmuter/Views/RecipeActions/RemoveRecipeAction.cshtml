@@ -1,0 +1,18 @@
+@using Microsoft.EntityFrameworkCore
+@model BtcTransmuter.Controllers.RemoveRecipeActionViewModel
+
+@{
+    ViewData["Title"] = $"Remove Recipe Action";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+
+<hr />
+@await Component.InvokeAsync("ViewRecipeAction", new {recipeAction = Model.RecipeAction})
+<form method="post" asp-action="RemoveRecipeActionPost" asp-route-recipeActionId="@Model.RecipeAction.Id" asp-route-id="@Model.RecipeAction.RecipeId" class="mt-2">
+    <input type="submit" value="Delete" class="btn btn-primary"/>
+
+    <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@Model.RecipeAction.RecipeId" class="btn btn-secondary">Back to recipe</a>
+</form>
