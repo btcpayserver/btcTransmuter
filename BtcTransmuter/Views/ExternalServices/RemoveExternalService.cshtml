@@ -26,8 +26,8 @@
         </dd>
     </dl>
     
-    <form asp-action="RemoveExternalServicePost" asp-route-id="@Model.ExternalService.Id"  method="post">
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="GetServices">Back to List</a>
+    <form asp-action="RemoveExternalServicePost" asp-route-id="@Model.ExternalService.Id"  method="post" class="mt-2">
+        <input type="submit" value="Delete" class="btn btn-primary" /> 
+        <a asp-action="GetServices" class="btn btn-secondary">Back to List</a>
     </form>
 </div>

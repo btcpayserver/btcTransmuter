@@ -125,7 +125,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
         {
             if (!_memoryCache.TryGetValue(identifier, out RecipeTrigger data))
             {
-                return (RedirectToAction("GetServices", "ExternalServices", new
+                return (RedirectToAction("GetRecipes", "Recipes", new
                 {
                     statusMessage = "Error:Data could not be found or data session expired"
                 }), null);
@@ -135,7 +135,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 
             if (recipe == null)
             {
-                return (RedirectToAction("GetServices", "ExternalServices", new
+                return (RedirectToAction("GetRecipes", "Recipes", new
                 {
                     statusMessage = "Error:Data could not be found or data session expired"
                 }), null);

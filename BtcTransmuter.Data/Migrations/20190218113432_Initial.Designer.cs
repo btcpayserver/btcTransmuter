@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BtcTransmuter.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190213132321_addNameToServices")]
-    partial class addNameToServices
+    [Migration("20190218113432_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -301,12 +301,13 @@ namespace BtcTransmuter.Data.Migrations
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeAction", b =>
                 {
                     b.HasOne("BtcTransmuter.Data.Entities.ExternalServiceData", "ExternalService")
-                        .WithMany()
+                        .WithMany("RecipeActions")
                         .HasForeignKey("ExternalServiceId");
 
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
                         .WithMany("RecipeActions")
-                        .HasForeignKey("RecipeId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeInvocation", b =>
@@ -317,18 +318,20 @@ namespace BtcTransmuter.Data.Migrations
 
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
                         .WithMany("RecipeInvocations")
-                        .HasForeignKey("RecipeId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeTrigger", b =>
                 {
                     b.HasOne("BtcTransmuter.Data.Entities.ExternalServiceData", "ExternalService")
-                        .WithMany()
+                        .WithMany("RecipeTriggers")
                         .HasForeignKey("ExternalServiceId");
 
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
                         .WithOne("RecipeTrigger")
-                        .HasForeignKey("BtcTransmuter.Data.Entities.RecipeTrigger", "RecipeId");
+                        .HasForeignKey("BtcTransmuter.Data.Entities.RecipeTrigger", "RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
