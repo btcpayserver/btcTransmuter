@@ -1,0 +1,51 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Extension.BtcPayServer\\BtcTransmuter.Extension.BtcPayServer.csproj",
+    "projectName": "BtcTransmuter.Extension.BtcPayServer",
+    "projectPath": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Extension.BtcPayServer\\BtcTransmuter.Extension.BtcPayServer.csproj",
+    "outputPath": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Extension.BtcPayServer\\obj\\",
+    "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+    ],
+    "originalTargetFrameworks": [
+      "netcoreapp2.2"
+    ],
+    "frameworks": {
+      "netcoreapp2.2": {
+        "projectReferences": {
+          "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Abstractions\\BtcTransmuter.Abstractions.csproj": {
+            "projectPath": "C:\\Git\\BtcTransmuterVNext\\BtcTransmuter.Abstractions\\BtcTransmuter.Abstractions.csproj"
+          }
+        }
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.2": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.2.0, )",
+          "autoReferenced": true
+        },
+        "NBitpayClient": {
+          "target": "Package",
+          "version": "[1.0.0.31, )"
+        }
+      },
+      "imports": [
+        "net461"
+      ],
+      "assetTargetFallback": true,
+      "warn": true
+    }
+  }
+}

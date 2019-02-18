@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BtcTransmuter.Areas.ViewComponents
+namespace BtcTransmuter.ViewComponents
 {
     public class ExtensionsViewComponent : ViewComponent
     {
@@ -17,16 +17,6 @@ namespace BtcTransmuter.Areas.ViewComponents
         public Task<IViewComponentResult> InvokeAsync()
         {
             return Task.FromResult<IViewComponentResult>(View(new ExtensionsViewComponentViewModel(_extensions)));
-        }
-    }
-
-    public class ExtensionsViewComponentViewModel
-    {
-        public IEnumerable<BtcTransmuterExtension> Extensions { get; }
-
-        public ExtensionsViewComponentViewModel(IEnumerable<BtcTransmuterExtension> extensions)
-        {
-            Extensions = extensions;
         }
     }
 }

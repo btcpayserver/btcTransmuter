@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions.Extensions;
-using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BtcTransmuter.Areas.ViewComponents
+namespace BtcTransmuter.ViewComponents
 {
     public class ViewRecipeTriggerViewComponent : ViewComponent
     {

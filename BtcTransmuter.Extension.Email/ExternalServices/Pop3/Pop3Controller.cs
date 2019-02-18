@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
@@ -7,10 +6,9 @@ using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices
+namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 {
     [Route("email-plugin/external-services/pop3")]
     [Authorize]
@@ -62,7 +60,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices
             var pop3Service = new Pop3Service(externalServiceData);
             var testConnection = await pop3Service.CreateClientAndConnect();
             if (testConnection == null)
-            {
+            { 
                 ModelState.AddModelError(string.Empty, "Could not connect successfully");
 
                 return View(data);

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices
+namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
 {
     [Route("email-plugin/external-services/smtp")]
     [Authorize]

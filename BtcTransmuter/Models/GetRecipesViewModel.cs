@@ -1,11 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
-using BtcTransmuter.Abstractions.Actions;
-using BtcTransmuter.Abstractions.ExternalServices;
-using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 
-namespace BtcTransmuter.Controllers
+namespace BtcTransmuter.Models
 {
     public class GetRecipesViewModel
     {

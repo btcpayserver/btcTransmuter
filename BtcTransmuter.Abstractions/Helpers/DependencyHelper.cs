@@ -1,10 +1,11 @@
-using System;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-public static class DependencyHelper
+namespace BtcTransmuter.Abstractions.Helpers
 {
-    public static IServiceScopeFactory ServiceScopeFactory { get; set; }
+    public static class DependencyHelper
+    {
+        public static IServiceScopeFactory ServiceScopeFactory { get; set; }
+    }
 }
 
 

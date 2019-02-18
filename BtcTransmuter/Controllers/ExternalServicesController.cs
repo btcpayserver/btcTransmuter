@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
-using BTCPayServer.Models;
+using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

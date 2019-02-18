@@ -1,0 +1,41 @@
+@model BtcTransmuter.Extension.Email.ExternalServices.Pop3.EditBtcPayServerDataViewModel
+
+@{
+    ViewData["Title"] = "Edit Btcpayserver External Service Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Server" class="control-label"></label>
+        <input asp-for="Server" class="form-control"/>
+        <span asp-validation-for="Server" class="text-danger"></span>
+    </div>
+    @if (!Model.Paired)
+    {
+        <div class="form-group">
+            <label asp-for="PairingCode" class="control-label"></label>
+            <input asp-for="PairingCode" class="form-control"/>
+            <span asp-validation-for="PairingCode" class="text-danger"></span>
+        </div>
+        
+        if (!string.IsNullOrEmpty(Model.PairingUrl))
+        {
+            <span>Authorize Client </span>
+            <a href="@Model.PairingUrl" target="_blank"> @Model.PairingUrl</a>
+        }
+        else
+        {
+            <span>Pairing code is optional, fill in server field and click next to generate pairing link</span>
+        }
+    }
+    <input type="hidden" asp-for="LastCheck"/>
+    <input type="hidden" asp-for="Seed"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>

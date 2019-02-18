@@ -1,6 +1,6 @@
 using BtcTransmuter.Data.Entities;
 
-namespace BtcTransmuter.Controllers
+namespace BtcTransmuter.Models
 {
     public class RemoveExternalServiceViewModel
     {

@@ -1,0 +1,28 @@
+@using BtcTransmuter.Extension.Email.ExternalServices.Pop3
+@model BtcTransmuter.Data.Entities.ExternalServiceData
+
+@{
+    var service = new BtcPayServerService(Model);
+}
+
+<dl class="dl-horizontal">
+    <dt>
+        Name
+    </dt>
+    <dd>
+        @service.Name
+    </dd>
+    <dt>
+        Server
+    </dt>
+    <dd>
+        @service.Data.Server
+
+    </dd>
+    <dt>
+        Last checked
+    </dt>
+    <dd>
+        @(service.Data.LastCheck.HasValue? service.Data.LastCheck.Value.ToString("g"): "Never")
+    </dd>
+</dl>

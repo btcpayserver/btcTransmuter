@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Pop3;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices
+namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 {
     public class Pop3Service : BaseExternalService<Pop3ExternalServiceData>, IExternalServiceDescriptor
     {

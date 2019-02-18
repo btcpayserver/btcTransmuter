@@ -9,6 +9,7 @@ using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.Email.ExternalServices;
+using BtcTransmuter.Extension.Email.ExternalServices.Pop3;
 using BtcTransmuter.Extension.Email.Triggers;
 using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail;
 using Microsoft.Extensions.Hosting;

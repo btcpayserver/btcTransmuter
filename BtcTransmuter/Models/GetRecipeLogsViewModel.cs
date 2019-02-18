@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BtcTransmuter.Data.Entities;
 
-namespace BtcTransmuter.Controllers
+namespace BtcTransmuter.Models
 {
     public class GetRecipeLogsViewModel
     {

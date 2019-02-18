@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+    <ProjectReference Include="..\BtcTransmuter.Extension.BtcPayServer\BtcTransmuter.Extension.BtcPayServer.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Email\BtcTransmuter.Extension.Email.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Services\BtcTransmuter.Services.csproj" />
   </ItemGroup>

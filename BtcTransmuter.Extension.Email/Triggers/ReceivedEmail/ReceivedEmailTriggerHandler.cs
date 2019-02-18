@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;

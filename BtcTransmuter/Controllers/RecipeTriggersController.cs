@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
-using BTCPayServer.Models;
+using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

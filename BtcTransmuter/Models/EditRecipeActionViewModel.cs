@@ -1,7 +1,7 @@
 using BtcTransmuter.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BtcTransmuter.Controllers
+namespace BtcTransmuter.Models
 {
     public class EditRecipeActionViewModel
     {

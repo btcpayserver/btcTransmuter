@@ -6,7 +6,7 @@ using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BtcTransmuter.Areas.ViewComponents
+namespace BtcTransmuter.ViewComponents
 {
     public class ViewRecipeActionViewComponent : ViewComponent
     {

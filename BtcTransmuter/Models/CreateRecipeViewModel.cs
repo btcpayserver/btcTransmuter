@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BtcTransmuter.Controllers
+namespace BtcTransmuter.Models
 {
     public class CreateRecipeViewModel
     {

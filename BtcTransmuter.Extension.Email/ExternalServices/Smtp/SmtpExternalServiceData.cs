@@ -1,4 +1,4 @@
-namespace BtcTransmuter.Extension.Email.ExternalServices
+namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
 {
     public class SmtpExternalServiceData : BaseEmailServiceData
     {

@@ -1,24 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
-using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
-using BtcTransmuter.Extension.Email.Actions.SendEmail;
-using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail;
+using BtcTransmuter.Extension.Email.ExternalServices.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices
+namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
     [Route("email-plugin/actions/send-email")]
     [Authorize]

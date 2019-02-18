@@ -3,12 +3,13 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices
+namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
 {
     public class SmtpService : BaseExternalService<SmtpExternalServiceData>, IExternalServiceDescriptor
     {

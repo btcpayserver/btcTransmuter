@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 
-public class ValidationHelper
+namespace BtcTransmuter.Abstractions.Helpers
 {
-    public static ICollection<ValidationResult> Validate<T>(string data)
+    public class ValidationHelper
     {
-        try
+        public static ICollection<ValidationResult> Validate<T>(string data)
         {
-            var parsedData = JObject.Parse(data).ToObject<T>();
-            var vc = new ValidationContext(parsedData);
-            var result = new List<ValidationResult>();
-            Validator.TryValidateObject(data, vc, result);
-            return result;
-        }
-        catch (Exception e)
-        {
-            return new List<ValidationResult>()
+            try
             {
-                new ValidationResult("Could not parse action data")
-            };
+                var parsedData = JObject.Parse(data).ToObject<T>();
+                var vc = new ValidationContext(parsedData);
+                var result = new List<ValidationResult>();
+                Validator.TryValidateObject(data, vc, result);
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<ValidationResult>()
+                {
+                    new ValidationResult("Could not parse action data")
+                };
+            }
         }
-    }
 
     
     
+    }
 }

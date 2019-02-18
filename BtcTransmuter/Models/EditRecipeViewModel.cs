@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BtcTransmuter.Data.Entities;
 
-namespace BtcTransmuter.Controllers
+namespace BtcTransmuter.Models
 {
     public class EditRecipeViewModel
     {

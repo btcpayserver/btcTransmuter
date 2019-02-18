@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace BTCPayServer.Models
+namespace BtcTransmuter.Models
 {
     public class StatusMessageModel
     {
