@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -32,13 +33,21 @@ namespace BtcTransmuter.Abstractions.Actions
         /// </summary>
         protected static string InterpolateString(string value, object @object)
         {
-            return Regex.Replace(value, @"{(.+?)}",
-                match =>
-                {
-                    var p = Expression.Parameter(@object.GetType(), "TriggerData");
-                    var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(new[] {p}, null, match.Groups[1].Value);
-                    return (e.Compile().DynamicInvoke(@object) ?? "").ToString();
-                });
+            try
+            {
+                return Regex.Replace(value, @"{(.+?)}",
+                    match =>
+                    {
+                        var p = Expression.Parameter(@object.GetType(), "TriggerData");
+                        var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(new[] {p}, null,
+                            match.Groups[1].Value);
+                        return (e.Compile().DynamicInvoke(@object) ?? "").ToString();
+                    });
+            }
+            catch (Exception e)
+            {
+                return value;
+            }
         }
     }
 }

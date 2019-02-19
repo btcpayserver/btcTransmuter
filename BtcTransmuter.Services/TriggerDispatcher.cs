@@ -8,44 +8,50 @@ using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 
 namespace BtcTransmuter.Services
- {
-     public class TriggerDispatcher : ITriggerDispatcher
-     {
-         private readonly IEnumerable<ITriggerHandler> _handlers;
-         private readonly IRecipeManager _recipeManager;
-         private readonly IActionDispatcher _actionDispatcher;
- 
-         public TriggerDispatcher(IEnumerable<ITriggerHandler> handlers, IRecipeManager recipeManager,
-             IActionDispatcher actionDispatcher)
-         {
-             _handlers = handlers;
-             _recipeManager = recipeManager;
-             _actionDispatcher = actionDispatcher;
-         }
- 
-         public async Task DispatchTrigger(ITrigger trigger)
-         {
-             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
-             {
-                 Enabled = true,
-                 RecipeTriggerId = trigger.Id
-             });
- 
- 
-             var triggeredRecipes = new List<(Recipe Recipe, object TriggerData)>();
-             foreach (var recipe in recipes)
-             {
-                 foreach (var triggerHandler in _handlers)
-                 {
-                     if (await triggerHandler.IsTriggered(trigger, recipe.RecipeTrigger))
-                     {
-                         triggeredRecipes.Add((recipe, await triggerHandler.GetData(trigger)));
-                     }
-                 }
-             }
- 
-             await Task.WhenAll(triggeredRecipes.SelectMany(recipe =>
-                 recipe.Recipe.RecipeActions.Select(action => _actionDispatcher.Dispatch(recipe.TriggerData, action))));
-         }
-     }
- }
+{
+    public class TriggerDispatcher : ITriggerDispatcher
+    {
+        private readonly IEnumerable<ITriggerHandler> _handlers;
+        private readonly IRecipeManager _recipeManager;
+        private readonly IActionDispatcher _actionDispatcher;
+
+        public TriggerDispatcher(IEnumerable<ITriggerHandler> handlers, IRecipeManager recipeManager,
+            IActionDispatcher actionDispatcher)
+        {
+            _handlers = handlers;
+            _recipeManager = recipeManager;
+            _actionDispatcher = actionDispatcher;
+        }
+
+        public async Task DispatchTrigger(ITrigger trigger)
+        {
+            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            {
+                Enabled = true,
+                RecipeTriggerId = trigger.Id
+            });
+
+
+            var triggeredRecipes = new List<(Recipe Recipe, object TriggerData)>();
+            foreach (var recipe in recipes)
+            {
+                foreach (var triggerHandler in _handlers)
+                {
+                    try
+                    {
+                        if (await triggerHandler.IsTriggered(trigger, recipe.RecipeTrigger))
+                        {
+                            triggeredRecipes.Add((recipe, await triggerHandler.GetData(trigger)));
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            await Task.WhenAll(triggeredRecipes.SelectMany(recipe =>
+                recipe.Recipe.RecipeActions.Select(action => _actionDispatcher.Dispatch(recipe.TriggerData, action))));
+        }
+    }
+}

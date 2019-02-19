@@ -23,18 +23,33 @@ namespace BtcTransmuter.Services
         {
             foreach (var actionHandler in _handlers)
             {
-                var result = await actionHandler.Execute(triggerData, recipeAction);
-                if (result.Executed)
+                try
+                {
+                    var result = await actionHandler.Execute(triggerData, recipeAction);
+                    if (result.Executed)
+                    {
+                        await _recipeManager.AddRecipeInvocation(new RecipeInvocation()
+                        {
+                            RecipeId = recipeAction.RecipeId,
+                            Timestamp = DateTime.Now,
+                            RecipeActionId = recipeAction.Id,
+                            ActionResult = result.Result,
+                            TriggerDataJson = JObject.FromObject(triggerData).ToString()
+                        });
+                    }
+                }
+                catch (Exception e)
                 {
                     await _recipeManager.AddRecipeInvocation(new RecipeInvocation()
                     {
                         RecipeId = recipeAction.RecipeId,
                         Timestamp = DateTime.Now,
                         RecipeActionId = recipeAction.Id,
-                        ActionResult = result.Result,
+                        ActionResult = e.Message,
                         TriggerDataJson = JObject.FromObject(triggerData).ToString()
                     });
                 }
+                
             }
         }
     }
