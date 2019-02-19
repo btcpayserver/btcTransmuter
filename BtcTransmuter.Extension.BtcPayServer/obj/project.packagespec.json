@@ -40,9 +40,9 @@
           "version": "[2.2.0, )",
           "autoReferenced": true
         },
-        "NBitpayClient": {
+        "NBitcoin": {
           "target": "Package",
-          "version": "[1.0.0.31, )"
+          "version": "[4.1.1.82, )"
         }
       },
       "imports": [

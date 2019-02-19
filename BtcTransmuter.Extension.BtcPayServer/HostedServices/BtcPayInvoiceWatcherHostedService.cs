@@ -57,6 +57,9 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
 
         private async Task CheckInvoiceChangeInService(KeyValuePair<string, BtcPayServerService> pair)
         {
+            try
+            {
+
             var (key, service) = pair;
             if (!await service.CheckAccess())
             {
@@ -71,7 +74,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
             }
             var client = service.ConstructClient();
 
-            var invoices = await client.GetInvoicesAsync(data.PairedDate);
+            var invoices = await client.GetInvoicesAsync<BtcPayInvoice>(data.PairedDate);
 
             foreach (var invoice in invoices)
             {
@@ -111,6 +114,12 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
 
             service.Data = data;
             await _externalServiceManager.UpdateInternalData(key, service.Data);
+            
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

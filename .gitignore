@@ -295,3 +295,5 @@ __pycache__/
 # Project specific #
 ####################
 BtcTransmuter/mydb.db
+
+BtcTransmuter\.Extension\.BtcPayServer/obj/Debug/netcoreapp2\.2/

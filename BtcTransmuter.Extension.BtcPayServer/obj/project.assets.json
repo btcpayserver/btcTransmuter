@@ -1768,7 +1768,7 @@
           }
         }
       },
-      "NBitcoin/4.1.1.78": {
+      "NBitcoin/4.1.1.82": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
@@ -1782,19 +1782,6 @@
         },
         "runtime": {
           "lib/netcoreapp2.1/NBitcoin.dll": {}
-        }
-      },
-      "NBitpayClient/1.0.0.31": {
-        "type": "package",
-        "dependencies": {
-          "NBitcoin": "4.1.1.78",
-          "NETStandard.Library": "1.6.1"
-        },
-        "compile": {
-          "lib/netstandard1.3/NBitpayClient.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/NBitpayClient.dll": {}
         }
       },
       "NetCore.AutoRegisterDi/1.0.0": {
@@ -5633,10 +5620,10 @@
         "version.txt"
       ]
     },
-    "NBitcoin/4.1.1.78": {
-      "sha512": "9o6fFqUSJCBxPurqBZf9fyIjK2w8AfUMLVy+8T6yQLc94WQiEZr6CEXCWrE7HaIeW20CoMrjcpAI3IiGuleXdQ==",
+    "NBitcoin/4.1.1.82": {
+      "sha512": "shJzIX41+hhsGrVoVsqg/JkO7gnjcyasNUHXZqsGcgmO+H73Xj8G0bP8cq1PxXQI+pipEDR+vbx5Xb7c+yOzZg==",
       "type": "package",
-      "path": "nbitcoin/4.1.1.78",
+      "path": "nbitcoin/4.1.1.82",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5652,20 +5639,8 @@
         "lib/netstandard1.3/NBitcoin.xml",
         "lib/netstandard2.0/NBitcoin.dll",
         "lib/netstandard2.0/NBitcoin.xml",
-        "nbitcoin.4.1.1.78.nupkg.sha512",
+        "nbitcoin.4.1.1.82.nupkg.sha512",
         "nbitcoin.nuspec"
-      ]
-    },
-    "NBitpayClient/1.0.0.31": {
-      "sha512": "NxYuISNSwoUOmTIBvOgy9uMKDdkFo8N3aOF4gEmWJC1x/uRTAbfF/Wd77EbvFdD288oYlxUO1DgFvXfHkwVhKw==",
-      "type": "package",
-      "path": "nbitpayclient/1.0.0.31",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard1.3/NBitpayClient.dll",
-        "nbitpayclient.1.0.0.31.nupkg.sha512",
-        "nbitpayclient.nuspec"
       ]
     },
     "NetCore.AutoRegisterDi/1.0.0": {
@@ -10238,7 +10213,7 @@
       "BtcTransmuter.Abstractions >= 1.0.0",
       "Microsoft.Extensions.Hosting.Abstractions >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
-      "NBitpayClient >= 1.0.0.31"
+      "NBitcoin >= 4.1.1.82"
     ]
   },
   "packageFolders": {
@@ -10296,9 +10271,9 @@
             "version": "[2.2.0, )",
             "autoReferenced": true
           },
-          "NBitpayClient": {
+          "NBitcoin": {
             "target": "Package",
-            "version": "[1.0.0.31, )"
+            "version": "[4.1.1.82, )"
           }
         },
         "imports": [

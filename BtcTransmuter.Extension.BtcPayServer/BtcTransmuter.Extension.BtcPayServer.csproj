@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
-      <PackageReference Include="NBitpayClient" Version="1.0.0.31" />
+        <PackageReference Include="NBitcoin" Version="4.1.1.82" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,5 +20,11 @@
     <ItemGroup>
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
     </ItemGroup>
+    <ItemGroup>
+      <Reference Include="NBitpayClient, Version=1.0.0.31, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\hacks\NBitpayClient.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 
 </Project>

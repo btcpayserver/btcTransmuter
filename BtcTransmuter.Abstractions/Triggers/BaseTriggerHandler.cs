@@ -18,7 +18,7 @@ namespace BtcTransmuter.Abstractions.Triggers
 
         public Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger)
         {
-            if (recipeTrigger.TriggerId != trigger.Id)
+            if (recipeTrigger.TriggerId != trigger.Id || trigger.Id != TriggerId)
             {
                 return Task.FromResult(false);
             }
