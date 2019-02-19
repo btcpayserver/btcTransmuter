@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NBitcoin;
 using NBitpayClient;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
+namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
     public class BtcPayServerService : BaseExternalService<BtcPayServerExternalServiceData>, IExternalServiceDescriptor
     {

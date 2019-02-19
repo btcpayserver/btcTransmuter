@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 using NBitcoin;
 using NBitpayClient;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
+namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
     [Route(" /external-services/btcpayserver")]
     [Authorize]
@@ -88,7 +88,10 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 
             if (!await service.CheckAccess())
             {
+                data.Seed = data.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString();
+                service.Data = data;
                 data.PairingUrl = await service.GetPairingUrl();
+                data.Paired = false;
                 if (!string.IsNullOrEmpty(data.PairingCode))
                 {
                     var client = service.ConstructClient();

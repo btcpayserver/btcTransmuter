@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
+namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
     public class BtcPayServerExternalServiceData
     {

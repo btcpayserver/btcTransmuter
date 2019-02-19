@@ -5,7 +5,7 @@ using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
-using BtcTransmuter.Extension.Email.ExternalServices.Pop3;
+using BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

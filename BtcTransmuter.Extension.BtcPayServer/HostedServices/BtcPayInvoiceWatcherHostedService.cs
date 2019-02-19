@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer;
 using BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged;
-using BtcTransmuter.Extension.Email.ExternalServices.Pop3;
 using Microsoft.Extensions.Hosting;
 using NBitcoin;
 
-
-namespace BtcTransmuter.Extension.Email.HostedServices
+namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
 {
     public class BtcPayInvoiceWatcherHostedService : IHostedService
     {

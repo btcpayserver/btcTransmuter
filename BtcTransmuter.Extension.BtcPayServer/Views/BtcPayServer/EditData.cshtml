@@ -1,4 +1,4 @@
-@model BtcTransmuter.Extension.Email.ExternalServices.Pop3.EditBtcPayServerDataViewModel
+@model BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer.EditBtcPayServerDataViewModel
 
 @{
     ViewData["Title"] = "Edit Btcpayserver External Service Data";
@@ -26,7 +26,7 @@
             <input asp-for="PairingCode" class="form-control"/>
             <span asp-validation-for="PairingCode" class="text-danger"></span>
         </div>
-        
+
         if (!string.IsNullOrEmpty(Model.PairingUrl))
         {
             <span>Authorize Client </span>
@@ -35,10 +35,9 @@
     }
     else
     {
-        
+
         <div class="alert alert-success"> Currently Paired</div>
     }
-    <input type="hidden" asp-for="Seed"/>
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
         <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>

@@ -1,6 +1,6 @@
 using BtcTransmuter.Abstractions.Extensions;
 
-namespace BtcTransmuter.Extension.Email
+namespace BtcTransmuter.Extension.BtcPayServer
 {
     public class BtcPayServerBtcTransmuterExtension : BtcTransmuterExtension
     {

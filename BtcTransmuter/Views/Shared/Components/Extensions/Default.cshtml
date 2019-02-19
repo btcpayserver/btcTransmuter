@@ -2,7 +2,7 @@
 
 @foreach (var ext in Model.Extensions)
 {
-    if (string.IsNullOrEmpty(ext.HeaderPartial))
+    if (!string.IsNullOrEmpty(ext.HeaderPartial))
     {
         @await Html.PartialAsync(ext.HeaderPartial); 
     }
