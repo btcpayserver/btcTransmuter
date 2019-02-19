@@ -50,7 +50,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         }
 
         [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, EditBtcPayServerDataViewModel data)
+        public async Task<IActionResult> EditData(string identifier, EditBtcPayServerDataViewModel data, string action)
         {
             var result = await GetExternalServiceData(identifier);
             if (result.Error != null)
@@ -58,6 +58,10 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
                 return result.Error;
             }
 
+            if (action == "unpair")
+            {
+                data.Seed = null;
+            }
             //current External Service data
             var externalServiceData = result.Data;
 
