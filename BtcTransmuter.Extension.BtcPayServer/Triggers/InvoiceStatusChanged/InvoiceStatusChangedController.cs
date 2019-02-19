@@ -19,21 +19,21 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
     [Route("btcpayserver-plugin/triggers/invoice-status-changed")]
     public class InvoiceStatusChangedController : Controller
     {
-        private readonly (string Text, string Value)[] AllowedStatuses = new []
+        private readonly SelectListItem[] AllowedStatuses = new SelectListItem[]
         {
-            ("Any Status", null),
-            ("New",  Invoice.STATUS_NEW),
-            ("Paid", Invoice.STATUS_PAID),
-            ("Invalid", Invoice.STATUS_INVALID),
-            ("Confirmed", Invoice.STATUS_CONFIRMED),
-            ("Complete", Invoice.STATUS_COMPLETE)
+            new SelectListItem() {Text = "Any Status", Value = null},
+            new SelectListItem() {Text = "New", Value = Invoice.STATUS_NEW},
+            new SelectListItem() {Text = "Paid", Value = Invoice.STATUS_PAID},
+            new SelectListItem() {Text = "Invalid", Value = Invoice.STATUS_INVALID},
+            new SelectListItem() {Text = "Confirmed", Value = Invoice.STATUS_CONFIRMED},
+            new SelectListItem() {Text = "Complete", Value = Invoice.STATUS_COMPLETE}
         };
+
         private readonly IRecipeManager _recipeManager;
         private readonly IExternalServiceManager _externalServiceManager;
         private readonly UserManager<User> _userManager;
         private readonly IMemoryCache _memoryCache;
-        
-        
+
 
         public InvoiceStatusChangedController(
             IRecipeManager recipeManager,
@@ -98,14 +98,15 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
             {
                 return result.Error;
             }
-            
+
             if (!ModelState.IsValid)
             {
-                var btcPayServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-                {
-                    Type = new[] {BtcPayServerService.BtcPayServerServiceType},
-                    UserId = _userManager.GetUserId(User)
-                });
+                var btcPayServices = await _externalServiceManager.GetExternalServicesData(
+                    new ExternalServicesDataQuery()
+                    {
+                        Type = new[] {BtcPayServerService.BtcPayServerServiceType},
+                        UserId = _userManager.GetUserId(User)
+                    });
 
 
                 data.Statuses = new SelectList(AllowedStatuses, "Value", "Text", data.Status);
@@ -154,9 +155,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
             public string RecipeId { get; set; }
             public SelectList ExternalServices { get; set; }
             [Required] public string ExternalServiceId { get; set; }
-            public SelectList Statuses{ get; set; }
-            
-            
+            public SelectList Statuses { get; set; }
         }
     }
 }

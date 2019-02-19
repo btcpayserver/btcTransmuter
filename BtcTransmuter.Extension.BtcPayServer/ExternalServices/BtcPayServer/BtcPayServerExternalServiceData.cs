@@ -11,6 +11,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         public string Seed { get; set; }
 
         public DateTime? LastCheck { get; set; }
-        public Dictionary<string, string> MonitoredInvoiceStatuses { get; set; }
+        public DateTime? PairedDate { get; set; }
+        public Dictionary<string, string> MonitoredInvoiceStatuses { get; set; } = new Dictionary<string, string>();
     }
 }

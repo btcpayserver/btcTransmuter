@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
@@ -73,6 +74,11 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             {
                 data.LastCheck = oldData.LastCheck;
                 data.MonitoredInvoiceStatuses = oldData.MonitoredInvoiceStatuses;
+                data.PairedDate = oldData.PairedDate;
+            }
+            else
+            {
+                data.PairedDate = DateTime.Now;
             }
 
             externalServiceData.Set((BtcPayServerExternalServiceData) data);

@@ -65,9 +65,13 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
 
             var data = service.Data;
             data.LastCheck = DateTime.Now;
+            if (data.MonitoredInvoiceStatuses == null)
+            {
+                data.MonitoredInvoiceStatuses = new Dictionary<string, string>();
+            }
             var client = service.ConstructClient();
 
-            var invoices = await client.GetInvoicesAsync();
+            var invoices = await client.GetInvoicesAsync(data.PairedDate);
 
             foreach (var invoice in invoices)
             {
