@@ -1,3 +1,4 @@
+@using BtcTransmuter.Helpers
 @model GetRecipeLogsViewModel
 
 @{
@@ -5,7 +6,10 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-
+@{
+    
+        
+}
 <table class="table">
     <thead>
     <tr>
@@ -37,12 +41,13 @@
                 })
             </td>
             <td>
-
-                @Html.DisplayFor(modelItem => item.ActionResult)
+                <partial name="PosData" model="@PosDataParser.ParsePosData(item.ActionResult)"/>
             </td>
-            <td>
+            <td >
 
-                @Html.DisplayFor(modelItem => item.TriggerDataJson)
+                <div style="max-width: 250px; height: 250px; overflow:scroll">
+                    <partial name="PosData" model="@PosDataParser.ParsePosData(item.TriggerDataJson)"/>
+                </div>
             </td>
         </tr>
     }
