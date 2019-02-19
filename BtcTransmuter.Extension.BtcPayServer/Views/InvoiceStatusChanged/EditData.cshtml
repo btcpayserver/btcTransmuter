@@ -1,0 +1,28 @@
+@model BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.InvoiceStatusChangedTriggerViewModel
+
+
+@{
+    ViewData["Title"] = "Edit Invoice Status Change trigger";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ExternalServiceId" class="control-label"></label>
+        <select asp-for="ExternalServiceId" asp-items="Model.ExternalServices" class="form-control"></select>
+        <span asp-validation-for="ExternalServiceId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <select asp-for="Status" asp-items="Model.Statuses" class="form-control"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="RecipeId" />
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to list</a>
+    </div>
+</form>

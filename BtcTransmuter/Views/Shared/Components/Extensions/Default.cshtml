@@ -2,14 +2,8 @@
 
 @foreach (var ext in Model.Extensions)
 {
-    foreach (var stylesheet in ext.Stylesheets)
+    if (string.IsNullOrEmpty(ext.HeaderPartial))
     {
-        <link type="text/css" rel="stylesheet" href="@stylesheet"/>
-        
+        @await Html.PartialAsync(ext.HeaderPartial); 
     }
-    foreach (var script in ext.Scripts)
-    {
-        
-        <script src="@script"></script>
-    }    
 }

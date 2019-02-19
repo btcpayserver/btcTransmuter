@@ -12,7 +12,7 @@ using NBitpayClient;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 {
-    [Route("btcpayserver-plugin/external-services/btcpayserver")]
+    [Route(" /external-services/btcpayserver")]
     [Authorize]
     public class BtcPayServerController : Controller
     {
@@ -42,11 +42,10 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 
             return View(new EditBtcPayServerDataViewModel()
             {
-                Seed = client.Data.Seed?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
+                Seed = client.Data.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
                 Server = client.Data.Server,
-                PairingUrl = client.GetPairingUrl(),
-                LastCheck = client.Data.LastCheck,
-                Paired = client.CheckAccess()
+                PairingUrl = await client.GetPairingUrl(),
+                Paired = await client.CheckAccess()
             });
         }
 
@@ -59,41 +58,52 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
                 return result.Error;
             }
 
+            //current External Service data
             var externalServiceData = result.Data;
 
-            externalServiceData.Set(data);
+            //current External Service data
+            var oldData = externalServiceData.Get<BtcPayServerExternalServiceData>();
 
+
+            if (oldData.Seed == data.Seed && oldData.Server == data.Server)
+            {
+                data.LastCheck = oldData.LastCheck;
+                data.MonitoredInvoiceStatuses = oldData.MonitoredInvoiceStatuses;
+            }
+
+            externalServiceData.Set((BtcPayServerExternalServiceData) data);
             var service = new BtcPayServerService(externalServiceData);
-
 
             if (!ModelState.IsValid)
             {
-                data.PairingUrl = service.GetPairingUrl();
-                return View(data);
+                return View(new EditBtcPayServerDataViewModel()
+                {
+                    Seed = service.Data.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
+                    Server = service.Data.Server,
+                    PairingUrl = await service.GetPairingUrl(),
+                    Paired = await service.CheckAccess()
+                });
             }
 
-            if (!service.CheckAccess())
+
+            if (!await service.CheckAccess())
             {
-                data.PairingUrl = service.GetPairingUrl();
+                data.PairingUrl = await service.GetPairingUrl();
                 if (!string.IsNullOrEmpty(data.PairingCode))
                 {
                     var client = service.ConstructClient();
                     await client.AuthorizeClient(new PairingCode(data.PairingCode));
-                    if (!service.CheckAccess())
+                    if (!await service.CheckAccess())
                     {
                         ModelState.AddModelError(string.Empty, "Could not pair with pairing code");
-
-                        data.PairingUrl = service.GetPairingUrl();
                         return View(data);
                     }
                 }
+
                 ModelState.AddModelError(string.Empty, "Cannot proceed until paired");
 
-                data.PairingUrl = service.GetPairingUrl();
                 return View(data);
-               
             }
-
 
             await _externalServiceManager.AddOrUpdateExternalServiceData(externalServiceData);
             return RedirectToAction("EditExternalService", "ExternalServices", new

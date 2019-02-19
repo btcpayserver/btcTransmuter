@@ -65,23 +65,24 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
             }
         }
 
-        public bool CheckAccess()
+        public async Task<bool> CheckAccess()
         {
             var client = ConstructClient();
-            return client != null && client.TestAccess(Facade.Merchant);
+            return client != null && await client.TestAccessAsync(Facade.Merchant);
         }
 
-        public string GetPairingUrl()
+        public async Task<string> GetPairingUrl()
         {
             try
             {
                 var client = ConstructClient();
-                if (client == null  ||  CheckAccess())
+                
+                if (client == null  ||  await CheckAccess())
                 {
                     return null;
                 }
 
-                return client.RequestClientAuthorization("BtcTransmuter", Facade.Merchant).CreateLink(client.BaseUrl)
+                return (await client.RequestClientAuthorizationAsync("BtcTransmuter", Facade.Merchant)).CreateLink(client.BaseUrl)
                     .ToString();
             }
             catch (Exception e)

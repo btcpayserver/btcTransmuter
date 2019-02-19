@@ -1,0 +1,15 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
+@model BtcTransmuter.Data.Entities.RecipeTrigger
+@{
+    var data = Model.Get<InvoiceStatusChangedTriggerParameters>();
+}
+
+<div>
+    Btcpayserver Invoice Status Change 
+    @if (!string.IsNullOrEmpty(data.Status))
+    {
+        <span>to @data.Status</span>
+    }
+
+</div>

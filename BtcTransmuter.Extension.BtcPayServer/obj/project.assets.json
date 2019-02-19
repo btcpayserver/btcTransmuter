@@ -10236,6 +10236,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
       "BtcTransmuter.Abstractions >= 1.0.0",
+      "Microsoft.Extensions.Hosting.Abstractions >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
       "NBitpayClient >= 1.0.0.31"
     ]
@@ -10285,6 +10286,10 @@
     "frameworks": {
       "netcoreapp2.2": {
         "dependencies": {
+          "Microsoft.Extensions.Hosting.Abstractions": {
+            "target": "Package",
+            "version": "[2.2.0, )"
+          },
           "Microsoft.NETCore.App": {
             "suppressParent": "All",
             "target": "Package",

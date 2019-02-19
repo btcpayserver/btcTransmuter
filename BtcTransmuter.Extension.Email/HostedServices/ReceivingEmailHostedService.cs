@@ -51,48 +51,51 @@ namespace BtcTransmuter.Extension.Email.HostedServices
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var tasks = _externalServices.Select(service => Task.Run(async () =>
-                {
-                    var pop3Client = await service.Value.CreateClientAndConnect();
-
-                    if (pop3Client == null)
-                    {
-                        return;
-                    }
-
-                    var emails = await pop3Client.ListAndRetrieveHeaderAsync();
-                    
-                    var validEmails = emails.Where(message =>
-                        !service.Value.Data.LastCheck.HasValue ||
-                        DateTime.Parse(message.Date) >= service.Value.Data.LastCheck.Value).ToList();
-
-                    await pop3Client.RetrieveAsync(validEmails);
-                    foreach (var email in validEmails)
-                    {
-                        var trigger = new ReceivedEmailTrigger()
-                        {
-                            Data = new ReceivedEmailTriggerData()
-                            {
-                                Body = email.Body,
-                                Subject = email.Subject,
-                                FromEmail = email.From,
-                                ExternalServiceId = service.Key
-                            }
-                        };
-                        await _triggerDispatcher.DispatchTrigger(trigger);
-                    }
-
-                    var newData = service.Value.Data;
-                    newData.LastCheck = DateTime.Now;
-                    service.Value.Data = newData;
-                    await _externalServiceManager.UpdateInternalData(service.Key, service.Value.Data);
-                    await pop3Client.DisconnectAsync();
-                    pop3Client.Dispose();
-                }, cancellationToken));
+                var tasks = _externalServices.Select(Selector);
 
                 await Task.WhenAll(tasks);
                 await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
             }
+        }
+
+        private async Task Selector(KeyValuePair<string, Pop3Service> service)
+        {
+            var pop3Client = await service.Value.CreateClientAndConnect();
+
+            if (pop3Client == null)
+            {
+                return;
+            }
+
+            var emails = await pop3Client.ListAndRetrieveHeaderAsync();
+
+            var validEmails = emails.Where(message =>
+                !service.Value.Data.LastCheck.HasValue ||
+                DateTime.Parse(message.Date) >= service.Value.Data.LastCheck.Value).ToList();
+
+            await pop3Client.RetrieveAsync(validEmails);
+            foreach (var email in validEmails)
+            {
+                var trigger = new ReceivedEmailTrigger()
+                {
+                    Data = new ReceivedEmailTriggerData()
+                    {
+                        Body = email.Body,
+                        Subject = email.Subject,
+                        FromEmail = email.From,
+                        ExternalServiceId = service.Key
+                    }
+                };
+                await _triggerDispatcher.DispatchTrigger(trigger);
+            }
+
+            var newData = service.Value.Data;
+            newData.LastCheck = DateTime.Now;
+            service.Value.Data = newData;
+            await _externalServiceManager.UpdateInternalData(service.Key, service.Value.Data);
+            await pop3Client.DisconnectAsync();
+            pop3Client.Dispose();
+
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

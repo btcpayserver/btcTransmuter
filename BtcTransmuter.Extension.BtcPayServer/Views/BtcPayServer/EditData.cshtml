@@ -14,6 +14,11 @@
         <input asp-for="Server" class="form-control"/>
         <span asp-validation-for="Server" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Seed" class="control-label"></label>
+        <input asp-for="Seed" class="form-control"/>
+        <span asp-validation-for="Seed" class="text-danger"></span>
+    </div>
     @if (!Model.Paired)
     {
         <div class="form-group">
@@ -27,12 +32,12 @@
             <span>Authorize Client </span>
             <a href="@Model.PairingUrl" target="_blank"> @Model.PairingUrl</a>
         }
-        else
-        {
-            <span>Pairing code is optional, fill in server field and click next to generate pairing link</span>
-        }
     }
-    <input type="hidden" asp-for="LastCheck"/>
+    else
+    {
+        
+        <div class="alert alert-success"> Currently Paired</div>
+    }
     <input type="hidden" asp-for="Seed"/>
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
