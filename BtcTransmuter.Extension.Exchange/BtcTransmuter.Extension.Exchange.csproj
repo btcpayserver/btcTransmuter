@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <Content Include="Views\Exchange\EditData.cshtml" />
+      <Content Include="Views\PlaceOrder\EditData.cshtml" />
     </ItemGroup>
 
 

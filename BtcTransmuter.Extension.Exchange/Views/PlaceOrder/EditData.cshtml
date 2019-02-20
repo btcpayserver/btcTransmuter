@@ -1,0 +1,65 @@
+@using System.Reflection
+@using ExchangeSharp
+@model BtcTransmuter.Extension.Exchange.Actions.PlaceOrder.PlaceOrderController.PlaceOrderViewModel
+@{
+    ViewData["Title"] = "Edit Place order Action";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ExternalServiceId" class="control-label"></label>
+        <select asp-for="ExternalServiceId" asp-items="Model.ExternalServices" class="form-control"></select>
+        <span asp-validation-for="ExternalServiceId" class="text-danger"></span>
+    </div>
+      
+    <div class="form-group">
+        <label asp-for="MarketSymbol" class="control-label"></label>
+        <input asp-for="MarketSymbol" class="form-control"/>
+        <span asp-validation-for="MarketSymbol" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="OrderType" class="control-label"></label>
+        <select asp-items="@Html.GetEnumSelectList(typeof(OrderType))" asp-for="OrderType" class="form-control"/>
+        <span asp-validation-for="OrderType" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Amount" class="control-label"></label>
+        <input asp-for="Amount" class="form-control"/>
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control"/>
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StopPrice" class="control-label"></label>
+        <input asp-for="StopPrice" class="form-control"/>
+        <span asp-validation-for="StopPrice" class="text-danger"></span>
+    </div>
+  
+    
+    <div class="form-group">
+        <label asp-for="IsBuy" class="control-label"></label>
+        <input asp-for="IsBuy" class="form-check"/>
+        <span asp-validation-for="IsBuy" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsMargin" class="control-label"></label>
+        <input asp-for="IsMargin" class="form-check"/>
+        <span asp-validation-for="IsMargin" class="text-danger"></span>
+    </div>
+
+
+    <input type="hidden" asp-for="RecipeId"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to list</a>
+    </div>
+</form>
+@await Component.InvokeAsync("RecipeActionFooter", new { recipeId = @Model.RecipeId})

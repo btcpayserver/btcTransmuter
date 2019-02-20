@@ -42,12 +42,4 @@
         <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to list</a>
     </div>
 </form>
-
-<pre class="mt-2">
-You can use <kbd>{TriggerData.XXX}</kbd> in the fields where XXX  is the property name of a field present in the data that triggered the trigger. 
-
-You can mix and match as many as you want. 
-
-<b>Please rewrite this section and add cool magic to display available properties for this recipe action</b>
-
-</pre>
+@await Component.InvokeAsync("RecipeActionFooter", new { recipeId = @Model.RecipeId})

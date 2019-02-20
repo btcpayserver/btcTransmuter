@@ -25,7 +25,7 @@
         <div class="input-group">
             <input asp-for="Body" class="form-control"/>
             <div class="input-group-append">
-                <select asp-for="BodyComparer" asp-items="Html.GetEnumSelectList<ReceivedEmailTriggerParameters.FieldComparer>()" class="form-control"></select>
+                <select asp-for="BodyComparer" asp-items="@Html.GetEnumSelectList(typeof(ReceivedEmailTriggerParameters.FieldComparer))" class="form-control"></select>
             </div>
         </div>
         <span asp-validation-for="Body" class="text-danger"></span>
@@ -36,7 +36,7 @@
         <div class="input-group">
             <input asp-for="Subject" class="form-control"/>
             <div class="input-group-append">
-                <select asp-for="SubjectComparer" asp-items="Html.GetEnumSelectList<ReceivedEmailTriggerParameters.FieldComparer>()" class="form-control"></select>
+                <select asp-for="SubjectComparer" asp-items="@Html.GetEnumSelectList( typeof(ReceivedEmailTriggerParameters.FieldComparer))" class="form-control"></select>
             </div>
         </div>
         <span asp-validation-for="Subject" class="text-danger"></span>
