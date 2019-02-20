@@ -15,7 +15,6 @@
         <select asp-for="ExternalServiceId" asp-items="Model.ExternalServices" class="form-control"></select>
         <span asp-validation-for="ExternalServiceId" class="text-danger"></span>
     </div>
-      
     <div class="form-group">
         <label asp-for="MarketSymbol" class="control-label"></label>
         <input asp-for="MarketSymbol" class="form-control"/>
@@ -23,10 +22,9 @@
     </div>
     <div class="form-group">
         <label asp-for="OrderType" class="control-label"></label>
-        <select asp-items="@Html.GetEnumSelectList(typeof(OrderType))" asp-for="OrderType" class="form-control"/>
+        <select asp-items="@Html.GetEnumSelectList(typeof(OrderType))" asp-for="OrderType" class="form-control"></select>
         <span asp-validation-for="OrderType" class="text-danger"></span>
     </div>
-    
     <div class="form-group">
         <label asp-for="Amount" class="control-label"></label>
         <input asp-for="Amount" class="form-control"/>
@@ -42,8 +40,6 @@
         <input asp-for="StopPrice" class="form-control"/>
         <span asp-validation-for="StopPrice" class="text-danger"></span>
     </div>
-  
-    
     <div class="form-group">
         <label asp-for="IsBuy" class="control-label"></label>
         <input asp-for="IsBuy" class="form-check"/>
