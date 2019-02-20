@@ -1,7 +1,7 @@
-@model BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer.EditBtcPayServerDataViewModel
+@model BtcTransmuter.Extension.Exchange.ExternalServices.Exchange.ExchangeController.EditExchangeExternalServiceDataViewModel
 
 @{
-    ViewData["Title"] = "Edit Btcpayserver External Service Data";
+    ViewData["Title"] = "Edit Exchange External Service Data";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -10,35 +10,33 @@
 <form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="Server" class="control-label"></label>
-        <input asp-for="Server" class="form-control"/>
-        <span asp-validation-for="Server" class="text-danger"></span>
+        <label asp-for="ExchangeName" class="control-label"></label>
+        <select asp-items="Model.Exchanges" asp-for="ExchangeName" class="form-control"></select>
+        <span asp-validation-for="ExchangeName" class="text-danger"></span>
     </div>
-    @if (!Model.Paired)
-    {
-        <div class="form-group">
-            <label asp-for="PairingCode" class="control-label"></label>
-            <input asp-for="PairingCode" class="form-control"/>
-            <span asp-validation-for="PairingCode" class="text-danger"></span>
-        </div>
-
-        if (!string.IsNullOrEmpty(Model.PairingUrl))
-        {
-            <span>Authorize Client </span>
-            <a href="@Model.PairingUrl" target="_blank"> @Model.PairingUrl</a>
-        }
-    }
-    else
-    {
-        <div class="alert alert-success"> Currently Paired</div>
-    }
-    <input type="hidden" name="Seed" value="@Model.Seed"/>
+    
+    <div class="form-group">
+        <label asp-for="PublicKey" class="control-label"></label>
+        <input asp-for="PublicKey" class="form-control"/>
+        <span asp-validation-for="PublicKey" class="text-danger"></span>
+    </div>  
+    <div class="form-group">
+        <label asp-for="PrivateKey" class="control-label"></label>
+        <input asp-for="PrivateKey" class="form-control"/>
+        <span asp-validation-for="PrivateKey" class="text-danger"></span>
+    </div>    
+    <div class="form-group">
+        <label asp-for="PassPhrase" class="control-label"></label>
+        <input asp-for="PassPhrase" class="form-control"/>
+        <span asp-validation-for="PassPhrase" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="OverrideUrl" class="control-label"></label>
+        <input asp-for="OverrideUrl" class="form-control"/>
+        <span asp-validation-for="OverrideUrl" class="text-danger"></span>
+    </div>
     <div class="mt-2">
 
-        @if (Model.Paired)
-        {
-            <button type="submit" value="unpair" name="action" class="btn btn-danger">Unpair</button>
-        }
         <button type="submit" class="btn btn-primary">Save</button>
         <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>
     </div>

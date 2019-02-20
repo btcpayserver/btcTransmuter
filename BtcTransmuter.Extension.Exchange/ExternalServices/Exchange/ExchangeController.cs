@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
+using ExchangeSharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
@@ -38,8 +41,8 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
 
             var client = new ExchangeService(result.Data);
 
-
-            return View(client.GetData());
+            return View(new EditExchangeExternalServiceDataViewModel(client.GetData(),
+                ExchangeService.GetAvailableExchanges()));
         }
 
         [HttpPost("{identifier}")]
@@ -53,24 +56,26 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
 
             //current External Service data
             var externalServiceData = result.Data;
-            
+
             if (!ModelState.IsValid)
             {
-                return View(data);
+                return View(new EditExchangeExternalServiceDataViewModel(data,
+                    ExchangeService.GetAvailableExchanges()));
             }
-            
+
             //current External Service data
             var oldData = externalServiceData.Get<ExchangeExternalServiceData>();
             externalServiceData.Set(data);
             var exchangeService = new ExchangeService(externalServiceData);
 
-            if(! await exchangeService.TestAccess())
+            if (!await exchangeService.TestAccess())
             {
                 ModelState.AddModelError(String.Empty, "Could not connect with current settings");
-                
-                return View(data);
+
+                return View(new EditExchangeExternalServiceDataViewModel(data,
+                    ExchangeService.GetAvailableExchanges()));
             }
-            
+
             await _externalServiceManager.AddOrUpdateExternalServiceData(externalServiceData);
             return RedirectToAction("EditExternalService", "ExternalServices", new
             {
@@ -121,6 +126,29 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
             }
 
             return (null, data);
+        }
+
+        public class EditExchangeExternalServiceDataViewModel : ExchangeExternalServiceData
+        {
+            public SelectList Exchanges { get; set; }
+
+            public EditExchangeExternalServiceDataViewModel(ExchangeExternalServiceData serviceData,
+                IEnumerable<IExchangeAPI> exchangeApis)
+            {
+                OverrideUrl = serviceData.OverrideUrl;
+                ExchangeName = serviceData.ExchangeName;
+                PublicKey = serviceData.PublicKey;
+                PassPhrase = serviceData.PassPhrase;
+                PrivateKey = serviceData.PrivateKey;
+                LastCheck = serviceData.LastCheck;
+                PairedDate = serviceData.PairedDate;
+                Exchanges = new SelectList(exchangeApis, nameof(IExchangeAPI.Name), nameof(IExchangeAPI.Name),
+                    ExchangeName);
+            }
+
+            public EditExchangeExternalServiceDataViewModel()
+            {
+            }
         }
     }
 }

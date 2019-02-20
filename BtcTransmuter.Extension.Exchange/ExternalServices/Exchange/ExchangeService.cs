@@ -50,6 +50,11 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
             }
         }
 
+        public static IExchangeAPI[] GetAvailableExchanges()
+        {
+            return ExchangeAPI.GetExchangeAPIs();
+        }
+
 
         public ExchangeAPI ConstructClient()
         {

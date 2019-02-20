@@ -12,20 +12,14 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         private ExternalServiceData _data;
         public abstract string ExternalServiceType { get; }
 
-        internal T Data
-        {
-            get => _data.Get<T>();
-            set => _data.Set(value);
-        }
-
         public T GetData()
         {
-            return Data;
+            return _data.Get<T>();
         }
 
         public void SetData(T data)
         {
-            Data = data;
+            _data.Set(data);
         }
 
         protected BaseExternalService(ExternalServiceData data)
