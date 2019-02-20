@@ -1,6 +1,5 @@
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Extension.BtcPayServer.HostedServices;
-using NBitpayClient;
 
 namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 {

@@ -3,6 +3,7 @@
 
 @{
     var service = new BtcPayServerService(Model);
+    var data = service.GetData();
 }
 
 <dl class="dl-horizontal">
@@ -16,13 +17,13 @@
         Server
     </dt>
     <dd>
-        @service.Data.Server
+        @data.Server
 
     </dd>
     <dt>
         Last checked
     </dt>
     <dd>
-        @(service.Data.LastCheck.HasValue? service.Data.LastCheck.Value.ToString("g"): "Never")
+        @(data.LastCheck.HasValue? data.LastCheck.Value.ToString("g"): "Never")
     </dd>
 </dl>

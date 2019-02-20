@@ -37,7 +37,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 
             var pop3Service = new Pop3Service(result.Data);
 
-            return View(pop3Service.Data);
+            return View(pop3Service.GetData());
         }
 
         [HttpPost("{identifier}")]

@@ -13,7 +13,7 @@ using NBitpayClient;
 
 namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
-    [Route(" /external-services/btcpayserver")]
+    [Route("btcpayserver-plugin/external-services/btcpayserver")]
     [Authorize]
     public class BtcPayServerController : Controller
     {
@@ -40,11 +40,11 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 
             var client = new BtcPayServerService(result.Data);
 
-
+            var clientData = client.GetData();
             return View(new EditBtcPayServerDataViewModel()
             {
-                Seed = client.Data.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
-                Server = client.Data.Server,
+                Seed = clientData.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
+                Server = clientData.Server,
                 PairingUrl = await client.GetPairingUrl(),
                 Paired = await client.CheckAccess()
             });
@@ -86,10 +86,11 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 
             if (!ModelState.IsValid)
             {
+                var serviceData = service.GetData();
                 return View(new EditBtcPayServerDataViewModel()
                 {
-                    Seed = service.Data.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
-                    Server = service.Data.Server,
+                    Seed = serviceData.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
+                    Server = serviceData.Server,
                     PairingUrl = await service.GetPairingUrl(),
                     Paired = await service.CheckAccess()
                 });
@@ -99,7 +100,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             if (!await service.CheckAccess())
             {
                 data.Seed = data.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString();
-                service.Data = data;
+                service.SetData(data);
                 data.PairingUrl = await service.GetPairingUrl();
                 data.Paired = false;
                 if (!string.IsNullOrEmpty(data.PairingCode))

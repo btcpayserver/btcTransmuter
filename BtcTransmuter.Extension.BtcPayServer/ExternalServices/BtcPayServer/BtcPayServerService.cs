@@ -55,9 +55,10 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         {
             try
             {
-                var seed = new Mnemonic(Data.Seed);
+                var data = GetData();
+                var seed = new Mnemonic(data.Seed);
 
-               return new Bitpay(seed.DeriveExtKey().PrivateKey, Data.Server);
+               return new Bitpay(seed.DeriveExtKey().PrivateKey, data.Server);
             }
             catch (Exception e)
             {
@@ -87,7 +88,8 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             }
             catch (Exception e)
             {
-                return new Uri(Data.Server, "api-tokens").ToString();
+                var data = GetData();
+                return new Uri(data.Server, "api-tokens").ToString();
             }
 
         }

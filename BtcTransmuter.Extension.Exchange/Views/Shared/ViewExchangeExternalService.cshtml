@@ -1,9 +1,8 @@
-@using BtcTransmuter.Extension.Email.ExternalServices
-@using BtcTransmuter.Extension.Email.ExternalServices.Pop3
+@using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
 @model BtcTransmuter.Data.Entities.ExternalServiceData
 
 @{
-    var service = new Pop3Service(Model);
+    var service = new ExchangeService(Model);
     var data = service.GetData();
 }
 
@@ -15,25 +14,22 @@
         @service.Name
     </dd>
     <dt>
-        Server
+        Exchange
     </dt>
     <dd>
-        @data.Server
+        @data.ExchangeName
+    </dd>
+    @if (!string.IsNullOrEmpty(data.OverrideUrl))
+    {
+        <dt>
+            OverrideUrl
+        </dt>
+        <dd>
+            @data.OverrideUrl
 
-    </dd>
-    <dt>
-        SSL
-    </dt>
-    <dd>
-        @data.SSL
-
-    </dd>
-    <dt>
-        Username
-    </dt>
-    <dd>
-        @data.Username
-    </dd>
+        </dd>   
+    }
+    
     <dt>
         Last checked
     </dt>

@@ -67,11 +67,13 @@ namespace BtcTransmuter.Extension.Email.HostedServices
                 return;
             }
 
+            var data = service.Value.GetData();
+
             var emails = await pop3Client.ListAndRetrieveHeaderAsync();
 
             var validEmails = emails.Where(message =>
-                !service.Value.Data.LastCheck.HasValue ||
-                DateTime.Parse(message.Date) >= service.Value.Data.LastCheck.Value).ToList();
+                !data.LastCheck.HasValue ||
+                DateTime.Parse(message.Date) >= data.LastCheck.Value).ToList();
 
             await pop3Client.RetrieveAsync(validEmails);
             foreach (var email in validEmails)
@@ -89,10 +91,9 @@ namespace BtcTransmuter.Extension.Email.HostedServices
                 await _triggerDispatcher.DispatchTrigger(trigger);
             }
 
-            var newData = service.Value.Data;
-            newData.LastCheck = DateTime.Now;
-            service.Value.Data = newData;
-            await _externalServiceManager.UpdateInternalData(service.Key, service.Value.Data);
+            data.LastCheck = DateTime.Now;
+            service.Value.SetData(data);
+            await _externalServiceManager.UpdateInternalData(service.Key, data);
             await pop3Client.DisconnectAsync();
             pop3Client.Dispose();
 

@@ -1,8 +1,8 @@
-@using BtcTransmuter.Extension.Email.ExternalServices
 @using BtcTransmuter.Extension.Email.ExternalServices.Smtp
 @model BtcTransmuter.Data.Entities.ExternalServiceData
 @{
     var service = new SmtpService(Model);
+    var data = service.GetData();
 }
 
 <dl class="dl-horizontal">
@@ -16,20 +16,20 @@
         Server
     </dt>
     <dd>
-        @service.Data.Server
+        @data.Server
 
     </dd>
     <dt>
         SSL
     </dt>
     <dd>
-        @service.Data.SSL
+        @data.SSL
 
     </dd>
     <dt>
         Username
     </dt>
     <dd>
-        @service.Data.Username
+        @data.Username
     </dd>
 </dl>

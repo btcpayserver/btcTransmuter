@@ -52,14 +52,15 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
 
         public async Task SendEmail(MailMessage message)
         {
+            var data = GetData();
             using (var client = new SmtpClient()
             {
-                Port = Data.Port,
+                Port = data.Port,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Host = Data.Server,
-                Credentials = new NetworkCredential(Data.Username, Data.Password),
-                EnableSsl = Data.SSL
+                Host = data.Server,
+                Credentials = new NetworkCredential(data.Username, data.Password),
+                EnableSsl = data.SSL
             })
             {
                 await client.SendMailAsync(message);

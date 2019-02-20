@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DigitalRuby.ExchangeSharp" Version="0.5.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Views\Exchange\EditData.cshtml" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
+    </ItemGroup>
+
+</Project>

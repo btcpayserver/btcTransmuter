@@ -66,7 +66,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
                 return;
             }
 
-            var data = service.Data;
+            var data = service.GetData();
             data.LastCheck = DateTime.Now;
             if (data.MonitoredInvoiceStatuses == null)
             {
@@ -112,8 +112,8 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
             }
 
 
-            service.Data = data;
-            await _externalServiceManager.UpdateInternalData(key, service.Data);
+            service.SetData(  data);
+            await _externalServiceManager.UpdateInternalData(key, data);
             
             }
             catch (Exception e)
