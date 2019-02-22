@@ -133,7 +133,8 @@ namespace BtcTransmuter.Services
 
                     context.Attach(recipe);
                     context.AttachRange(recipe.RecipeActions);
-                    context.AttachRange(recipe.RecipeTrigger);
+                    if(recipe.RecipeTrigger!= null)
+                        context.AttachRange(recipe.RecipeTrigger);
                     context.AttachRange(recipe.RecipeInvocations);
 
                     context.Remove(recipe);
