@@ -9,10 +9,8 @@
         <partial name="_StatusMessage" model="@Model.StatusMessage"/>
     </div>
 </div>
-<h2>@ViewData["Title"]</h2>
-<p>
-    <a asp-action="CreateExternalService">Create New</a>
-</p>
+<h2>@ViewData["Title"] <a asp-action="CreateExternalService" class="badge badge-primary">Create New </a></h2>
+
 <table class="table">
     <thead>
     <tr>

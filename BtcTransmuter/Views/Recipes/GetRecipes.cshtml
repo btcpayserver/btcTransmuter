@@ -10,9 +10,9 @@
         <partial name="_StatusMessage" model="@Model.StatusMessage"/>
     </div>
 </div>
-<h2>@ViewData["Title"]</h2>
+<h2>@ViewData["Title"]  <a asp-action="CreateRecipe" class="badge badge-primary">Create New</a></h2>
 <p>
-    <a asp-action="CreateRecipe">Create New</a>
+   
 </p>
 @if (!Model.Recipes.Any())
 {
