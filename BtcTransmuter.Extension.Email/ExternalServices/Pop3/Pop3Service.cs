@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
+using MailKit.Net.Pop3;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Pop3;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 {
@@ -56,10 +56,13 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
             {
                 var pop3Client = new Pop3Client();
                 var data = GetData();
-                await pop3Client.ConnectAsync(data.Server, data.Username,
-                    data.Password, data.SSL);
+                pop3Client.ServerCertificateValidationCallback = (s,c,h,e) => true;
 
-                return pop3Client.IsConnected ? pop3Client : null;
+                await pop3Client.ConnectAsync(data.Server, data.Port, data.SSL);
+                
+                await pop3Client.AuthenticateAsync(data.Username, data.Password);
+
+                return pop3Client.IsConnected && pop3Client.IsAuthenticated? pop3Client : null;
             }
             catch (Exception)
             {

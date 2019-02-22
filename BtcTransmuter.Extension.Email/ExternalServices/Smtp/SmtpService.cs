@@ -1,3 +1,4 @@
+
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -8,6 +9,9 @@ using BtcTransmuter.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using MailKit.Net.Smtp;
+using MimeKit;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
 {
@@ -50,20 +54,16 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
         {
         }
 
-        public async Task SendEmail(MailMessage message)
+        public async Task SendEmail(MimeMessage message)
         {
             var data = GetData();
-            using (var client = new SmtpClient()
+            using (var client = new SmtpClient())
             {
-                Port = data.Port,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Host = data.Server,
-                Credentials = new NetworkCredential(data.Username, data.Password),
-                EnableSsl = data.SSL
-            })
-            {
-                await client.SendMailAsync(message);
+                client.ServerCertificateValidationCallback = (s,c,h,e) => true;
+                await client.ConnectAsync(data.Server, data.Port, data.SSL);
+                await client.AuthenticateAsync(data.Username, data.Password);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
             }
         }
     }

@@ -4,16 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
-using BtcTransmuter.Extension.Email.ExternalServices;
 using BtcTransmuter.Extension.Email.ExternalServices.Pop3;
-using BtcTransmuter.Extension.Email.Triggers;
 using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail;
 using Microsoft.Extensions.Hosting;
-using Pop3;
+using MimeKit.Text;
 
 namespace BtcTransmuter.Extension.Email.HostedServices
 {
@@ -69,22 +66,24 @@ namespace BtcTransmuter.Extension.Email.HostedServices
 
             var data = service.Value.GetData();
 
-            var emails = await pop3Client.ListAndRetrieveHeaderAsync();
 
-            var validEmails = emails.Where(message =>
+
+            var validEmails = pop3Client.Select((message, i) => (message, i)).Where(tuple =>
                 !data.LastCheck.HasValue ||
-                DateTime.Parse(message.Date) >= data.LastCheck.Value).ToList();
+                tuple.Item1.Date >= data.LastCheck.Value).Select(tuple => tuple.Item2).ToList();
 
-            await pop3Client.RetrieveAsync(validEmails);
-            foreach (var email in validEmails)
+            
+            
+            var emails = await pop3Client.GetMessagesAsync(validEmails);
+            foreach (var email in emails)
             {
                 var trigger = new ReceivedEmailTrigger()
                 {
                     Data = new ReceivedEmailTriggerData()
                     {
-                        Body = email.Body,
+                        Body = email.GetTextBody(TextFormat.Plain),
                         Subject = email.Subject,
-                        FromEmail = email.From,
+                        FromEmail = email.From.ToString(),
                         ExternalServiceId = service.Key
                     }
                 };
@@ -94,7 +93,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
             data.LastCheck = DateTime.Now;
             service.Value.SetData(data);
             await _externalServiceManager.UpdateInternalData(service.Key, data);
-            await pop3Client.DisconnectAsync();
+            await pop3Client.DisconnectAsync(true);
             pop3Client.Dispose();
 
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
@@ -10,6 +11,8 @@ using BtcTransmuter.Extension.Email.Triggers.ReceivedEmail;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using MimeKit;
+using MimeKit.Text;
 
 namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
@@ -53,11 +56,17 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
         {
             var smtpService = new SmtpService(recipeAction.ExternalService);
 
-            var message = new MailMessage(
-                InterpolateString(actionData.From, triggerData),
-                InterpolateString(actionData.To, triggerData),
-                InterpolateString(actionData.Subject, triggerData),
-                InterpolateString(actionData.Body, triggerData));
+            var message = new MimeMessage(new List<InternetAddress>()
+                {
+                    InternetAddress.Parse(InterpolateString(actionData.From, triggerData))
+                }, new List<InternetAddress>()
+                {
+                    InternetAddress.Parse(InterpolateString(actionData.To, triggerData))
+                }, InterpolateString(actionData.Subject, triggerData),
+                new TextPart(TextFormat.Plain)
+                {
+                    Text = InterpolateString(actionData.Body, triggerData)
+                });
 
             await smtpService.SendEmail(message);
             return new ActionHandlerResult()
