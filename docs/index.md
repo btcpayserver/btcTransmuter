@@ -1,10 +1,10 @@
-#BtcTransmuter Docs
+# BtcTransmuter Docs
 
-##Introduction - What is BtcTransmuter?
+## Introduction - What is BtcTransmuter?
 
 BtcTransmuter is a free, open-source & self-hosted tool that allows you to actions that execute automatically upon specified conditions. Its primary focus is the integration of cryptocurrency services to help users manage their funds and business workflow.
 
-##How does it work?
+## How does it work?
 There are 3 main components in BtcTransmuter - External Services, Recipes and Extensions. 
 
 * External services integrated with third parties, such as a BTCPayServer instance or a Cryptocurrency Exchange.
@@ -12,7 +12,7 @@ There are 3 main components in BtcTransmuter - External Services, Recipes and Ex
 * Extensions provide a way to add more external service types, actions and triggers without needing to modify the original code.
 
 
-##How do I deploy?
+## How do I deploy?
 You don't, this is alpha software man!
 
 ##What extensions are provided?
@@ -22,7 +22,7 @@ Currently there are 3 extensions that come bundled with the main application:
 * Exchange - Provides you a way to connect to a variety of exchanges and place orders on them
 
 
-##How do I write an extension?
+## How do I write an extension?
 
 An extension must be its own .net core class library project that references `BtcTransmuter.Abstractions`
 There must be a class implementing `BtcTransmuterExtension` in this library. This file bootstraps the plugin name and adds all the services to system on startup.
@@ -32,7 +32,7 @@ You must also ensure the following folders are embedded in the project:
     <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
 </ItemGroup>
 ```
-###Adding a Trigger
+### Adding a Trigger
 
 * Implement `BaseTrigger` This class will be used to transport the event data
 * Implement `BaseTriggerHandler` This handles:
@@ -46,7 +46,7 @@ You must also ensure the following folders are embedded in the project:
   This handles displaying the trigger settings in a recipe
 * Implement a Controller that allows a user to create/edit the necessary data to set the trigger on a recipe.
 
-###Adding an Action
+### Adding an Action
 * Implement `BaseActionHandler` This handles:
   * Describing the action to the main system. 
   * Telling the main UI how to create/edit a recipe action using it.
@@ -59,7 +59,7 @@ You must also ensure the following folders are embedded in the project:
 * Implement a Controller that allows a user to create/edit the necessary data to set the action on a recipe.
 
 
-###Adding an External Service
+### Adding an External Service
 * Implement `BaseExternalService` & `IExternalServiceDescriptor`
 * Implement a Partial View (named as the same value as the property `ViewPartial` in the `IExternalServiceDescriptor` implementation)
 * Implement a Controller that allows a user to create/edit the necessary data for an external service.
