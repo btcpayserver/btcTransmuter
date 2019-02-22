@@ -14,13 +14,13 @@ using MimeKit.Text;
 
 namespace BtcTransmuter.Extension.Email.HostedServices
 {
-    public class ReceivingEmailHostedService : IHostedService
+    public class Pop3ReceivingEmailHostedService : IHostedService
     {
         private readonly IExternalServiceManager _externalServiceManager;
         private readonly ITriggerDispatcher _triggerDispatcher;
         private ConcurrentDictionary<string, Pop3Service> _externalServices;
 
-        public ReceivingEmailHostedService(IExternalServiceManager externalServiceManager,
+        public Pop3ReceivingEmailHostedService(IExternalServiceManager externalServiceManager,
             ITriggerDispatcher triggerDispatcher)
         {
             _externalServiceManager = externalServiceManager;
