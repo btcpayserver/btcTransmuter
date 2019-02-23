@@ -1,0 +1,14 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Timer.Triggers.Timer
+@model BtcTransmuter.Data.Entities.RecipeTrigger
+@{
+    var data = Model.Get<TimerTriggerParameters>();
+}
+
+<div>
+    Timer every @data.TriggerEveryAmount @Enum.GetName(typeof(TimerTriggerParameters.TimerResetEvery), data.TriggerEvery)  
+    @if (data.StartOn.HasValue)
+    {
+        <span>from @data.StartOn.Value.ToString("g") onwards</span>
+    }
+</div>

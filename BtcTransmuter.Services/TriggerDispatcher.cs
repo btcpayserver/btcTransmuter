@@ -32,7 +32,7 @@ namespace BtcTransmuter.Services
             });
 
 
-            var triggeredRecipes = new List<(Recipe Recipe, object TriggerData)>();
+            var triggeredRecipes = new List<(Recipe Recipe, object TriggerData, ITriggerHandler triggerHandler)>();
             foreach (var recipe in recipes)
             {
                 foreach (var triggerHandler in _handlers)
@@ -41,7 +41,7 @@ namespace BtcTransmuter.Services
                     {
                         if (await triggerHandler.IsTriggered(trigger, recipe.RecipeTrigger))
                         {
-                            triggeredRecipes.Add((recipe, await triggerHandler.GetData(trigger)));
+                            triggeredRecipes.Add((recipe, await triggerHandler.GetData(trigger), triggerHandler));
                         }
                     }
                     catch
@@ -52,6 +52,14 @@ namespace BtcTransmuter.Services
 
             await Task.WhenAll(triggeredRecipes.SelectMany(recipe =>
                 recipe.Recipe.RecipeActions.Select(action => _actionDispatcher.Dispatch(recipe.TriggerData, action))));
+
+            foreach (var keyValuePair in triggeredRecipes.GroupBy(tuple => tuple.triggerHandler)
+                .ToDictionary(tuples => tuples.Key, tuples => tuples.ToArray()))
+            {
+               await  keyValuePair.Key.AfterExecution(keyValuePair.Value.Select(tuple => tuple.Recipe));
+            }
+            
+            
         }
     }
 }

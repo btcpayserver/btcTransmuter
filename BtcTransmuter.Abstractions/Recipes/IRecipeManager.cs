@@ -11,6 +11,7 @@ namespace BtcTransmuter.Abstractions.Recipes
         Task<IEnumerable<Recipe>> GetRecipes(RecipesQuery query);
         Task AddOrUpdateRecipe(Recipe recipe);
         Task AddOrUpdateRecipeTrigger(RecipeTrigger trigger);
+        Task AddOrUpdateRecipeTriggers(IEnumerable<RecipeTrigger> triggers);
         Task AddOrUpdateRecipeAction(RecipeAction action);
         Task RemoveRecipe(string id);
         Task<Recipe> GetRecipe(string id, string userId = null);

@@ -31,7 +31,6 @@ namespace BtcTransmuter.Services
                         .Include(recipe => recipe.RecipeTrigger)
                         .ThenInclude(trigger => trigger.ExternalService)
                         .Include(recipe => recipe.RecipeInvocations)
-                        
                         .AsQueryable();
 
                     if (query.Enabled.HasValue)
@@ -81,17 +80,25 @@ namespace BtcTransmuter.Services
 
         public async Task AddOrUpdateRecipeTrigger(RecipeTrigger trigger)
         {
+            await AddOrUpdateRecipeTriggers(new[] {trigger});
+        }
+
+        public async Task AddOrUpdateRecipeTriggers(IEnumerable<RecipeTrigger> triggers)
+        {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
-                    if (string.IsNullOrEmpty(trigger.Id))
+                    foreach (var trigger in triggers)
                     {
-                        await context.RecipeTriggers.AddAsync(trigger);
-                    }
-                    else
-                    {
-                        context.RecipeTriggers.Attach(trigger).State = EntityState.Modified;
+                        if (string.IsNullOrEmpty(trigger.Id))
+                        {
+                            await context.RecipeTriggers.AddAsync(trigger);
+                        }
+                        else
+                        {
+                            context.RecipeTriggers.Attach(trigger).State = EntityState.Modified;
+                        }
                     }
 
                     await context.SaveChangesAsync();
@@ -133,7 +140,7 @@ namespace BtcTransmuter.Services
 
                     context.Attach(recipe);
                     context.AttachRange(recipe.RecipeActions);
-                    if(recipe.RecipeTrigger!= null)
+                    if (recipe.RecipeTrigger != null)
                         context.AttachRange(recipe.RecipeTrigger);
                     context.AttachRange(recipe.RecipeInvocations);
 

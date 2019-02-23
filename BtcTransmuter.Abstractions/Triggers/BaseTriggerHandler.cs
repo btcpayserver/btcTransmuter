@@ -39,5 +39,9 @@ namespace BtcTransmuter.Abstractions.Triggers
             return Task.FromResult((object) trigger.Get<TTriggerData>());
         }
 
+        public virtual Task AfterExecution(IEnumerable<Recipe> tupleItem1)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

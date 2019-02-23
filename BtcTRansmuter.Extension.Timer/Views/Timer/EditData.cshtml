@@ -1,0 +1,32 @@
+@using BtcTransmuter.Extension.Timer.Triggers.Timer
+@model BtcTransmuter.Extension.Timer.Triggers.Timer.TimerController.TimerTriggerViewModel
+
+
+@{
+    ViewData["Title"] = "Edit Timer trigger";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="StartOn" class="control-label"></label>
+        <input type="datetime" asp-for="StartOn" asp-items="" class="form-control datetime"/>
+        <span asp-validation-for="StartOn" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TriggerEveryAmount" class="control-label"></label>
+        <div class="input-group">
+            <input type="number" asp-for="TriggerEveryAmount" placeholder="Amount" class="form-control">
+            <select class="custom-select" asp-for="TriggerEvery"  asp-items="@Html.GetEnumSelectList(typeof(TimerTriggerParameters.TimerResetEvery))">
+            </select>
+        </div>
+    </div>
+    <input type="hidden" asp-for="RecipeId" />
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to Recipe</a>
+    </div>
+</form>
