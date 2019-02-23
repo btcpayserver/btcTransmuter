@@ -33,7 +33,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
 
                 return Task.FromResult<IActionResult>(new RedirectToActionResult(
                     nameof(CreateRecipeController.EditData),
-                    "PlaceOrder", new
+                    "CreateRecipe", new
                     {
                         identifier
                     }));
