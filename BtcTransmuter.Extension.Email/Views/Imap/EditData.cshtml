@@ -1,0 +1,44 @@
+@model BtcTransmuter.Extension.Email.ExternalServices.Imap.ImapExternalServiceData
+
+
+@{
+    ViewData["Title"] = "Edit Imap External Service Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Server" class="control-label"></label>
+        <input asp-for="Server" class="form-control"/>
+        <span asp-validation-for="Server" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Port" class="control-label"></label>
+        <input asp-for="Port" class="form-control"/>
+        <span asp-validation-for="Port" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Username" class="control-label"></label>
+        <input asp-for="Username" class="form-control"/>
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label"></label>
+        <input asp-for="Password" class="form-control"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SSL" class="control-label"></label>
+        <input type="checkbox" asp-for="SSL" class="form-check"/>
+        <span asp-validation-for="SSL" class="text-danger"></span>
+    </div>
+    
+    <input type="hidden" asp-for="LastCheck"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices"  class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>

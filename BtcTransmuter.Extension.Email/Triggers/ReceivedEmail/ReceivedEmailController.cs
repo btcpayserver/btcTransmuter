@@ -5,6 +5,7 @@ using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.Email.ExternalServices;
+using BtcTransmuter.Extension.Email.ExternalServices.Imap;
 using BtcTransmuter.Extension.Email.ExternalServices.Pop3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -46,7 +47,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 
             var pop3Services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
-                Type = new[] {Pop3Service.Pop3ExternalServiceType},
+                Type = new[] {Pop3Service.Pop3ExternalServiceType , ImapService.ImapExternalServiceType},
                 UserId = _userManager.GetUserId(User)
             });
 
@@ -101,7 +102,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
             {
                 var pop3Services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
                 {
-                    Type = new[] {Pop3Service.Pop3ExternalServiceType},
+                    Type = new[] {Pop3Service.Pop3ExternalServiceType , ImapService.ImapExternalServiceType},
                     UserId = _userManager.GetUserId(User)
                 });
 

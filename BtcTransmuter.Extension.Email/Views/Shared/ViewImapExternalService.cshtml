@@ -1,0 +1,44 @@
+@using BtcTransmuter.Extension.Email.ExternalServices
+@using BtcTransmuter.Extension.Email.ExternalServices.Imap
+@using BtcTransmuter.Extension.Email.ExternalServices.Pop3
+@model BtcTransmuter.Data.Entities.ExternalServiceData
+
+@{
+    var service = new ImapService(Model);
+    var data = service.GetData();
+}
+
+<dl class="dl-horizontal">
+    <dt>
+        Name
+    </dt>
+    <dd>
+        @service.Name
+    </dd>
+    <dt>
+        Server
+    </dt>
+    <dd>
+        @data.Server
+
+    </dd>
+    <dt>
+        SSL
+    </dt>
+    <dd>
+        @data.SSL
+
+    </dd>
+    <dt>
+        Username
+    </dt>
+    <dd>
+        @data.Username
+    </dd>
+    <dt>
+        Last checked
+    </dt>
+    <dd>
+        @(data.LastCheck.HasValue? data.LastCheck.Value.ToString("g"): "Never")
+    </dd>
+</dl>

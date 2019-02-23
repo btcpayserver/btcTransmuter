@@ -18,7 +18,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
         public string Name => "Receive Email";
 
         public string Description =>
-            "Trigger a recipe by receiving a specifically formatted email through a pop3 external service.";
+            "Trigger a recipe by receiving a specifically formatted email through a pop3 or imap  external service.";
 
         public string ViewPartial => "ViewReceivedEmailTrigger";
         public Task<IActionResult> EditData(RecipeTrigger data)
