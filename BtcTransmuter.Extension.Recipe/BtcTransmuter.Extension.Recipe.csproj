@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Views\CreateRecipe\EditData.cshtml" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<CreateRecipeData>();
+}
+
+<div>
+    Create Recipe based on <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@data.RecipeTemplateId" target="_blank">@data.RecipeTemplateId</a>
+    @if (data.Enable)
+    {
+        <span> and enable it</span>
+    }
+</div>
