@@ -13,7 +13,7 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="StartOn" class="control-label"></label>
-        <input type="datetime" asp-for="StartOn" asp-items="" class="form-control datetime"/>
+        <input type="datetime-local" asp-for="StartOn"  class="form-control datetime"/>
         <span asp-validation-for="StartOn" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -23,6 +23,8 @@
             <select class="custom-select" asp-for="TriggerEvery"  asp-items="@Html.GetEnumSelectList(typeof(TimerTriggerParameters.TimerResetEvery))">
             </select>
         </div>
+        <span asp-validation-for="TriggerEveryAmount" class="text-danger"></span>
+        <span asp-validation-for="TriggerEvery" class="text-danger"></span>
     </div>
     <input type="hidden" asp-for="RecipeId" />
     <div class="mt-2">
