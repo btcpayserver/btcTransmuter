@@ -12,6 +12,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="Views\CreateRecipe\EditData.cshtml" />
+      <Content Include="Views\ToggleRecipe\EditData.cshtml" />
     </ItemGroup>
 
 </Project>
