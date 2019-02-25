@@ -10,6 +10,7 @@
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="Views\MakeWebRequest\EditData.cshtml" />
       <Content Include="Views\ReceiveWebRequest\EditData.cshtml" />
     </ItemGroup>
 </Project>

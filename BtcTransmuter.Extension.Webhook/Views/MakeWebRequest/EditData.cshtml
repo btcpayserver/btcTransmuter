@@ -1,0 +1,41 @@
+@using BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
+@using BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
+@model BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest.MakeWebRequestController.MakeWebRequestViewModel
+@{
+    ViewData["Title"] = "Edit Make Web Request Action";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Url" class="control-label"></label>
+        <input  asp-for="Url"  class="form-control"/>
+        <span asp-validation-for="Url" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Method" class="control-label"></label>
+        <select asp-for="Method"  class="form-control" asp-items="@(new SelectList(MakeWebRequestController.AllowedMethods, Model.Method))"> </select>
+        <span asp-validation-for="Method" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Body" class="control-label"></label>
+        <textarea  asp-for="Body"  class="form-control"> </textarea>
+        <span asp-validation-for="Body" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="ContentType" class="control-label"></label>
+        <select asp-for="ContentType"  class="form-control" asp-items="@(new SelectList(MakeWebRequestController.ContentTypes, Model.ContentType))"> </select>
+        <span asp-validation-for="ContentType" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="RecipeId" />
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
+    </div>
+</form>
+@await Component.InvokeAsync("RecipeActionFooter", new { recipeId = @Model.RecipeId})

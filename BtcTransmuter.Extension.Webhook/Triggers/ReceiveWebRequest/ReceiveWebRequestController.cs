@@ -20,16 +20,16 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
     [Route("webhook-plugin/triggers/receive-web-request")]
     public class ReceiveWebRequestController : Controller
     {
-        private readonly List<HttpMethod> AllowedMethods = new List<HttpMethod>()
+        public static readonly List<string> AllowedMethods = new List<string>()
         {
-            HttpMethod.Get,
-            HttpMethod.Put,
-            HttpMethod.Head,
-            HttpMethod.Post,
-            HttpMethod.Patch,
-            HttpMethod.Trace,
-            HttpMethod.Delete,
-            HttpMethod.Options
+            HttpMethod.Get.ToString(),
+            HttpMethod.Put.ToString(),
+            HttpMethod.Head.ToString(),
+            HttpMethod.Post.ToString(),
+            HttpMethod.Patch.ToString(),
+            HttpMethod.Trace.ToString(),
+            HttpMethod.Delete.ToString(),
+            HttpMethod.Options.ToString()
         };
 
         private readonly IRecipeManager _recipeManager;
@@ -41,7 +41,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
         public ReceiveWebRequestController(
             IRecipeManager recipeManager,
             UserManager<User> userManager,
-            IMemoryCache memoryCache, 
+            IMemoryCache memoryCache,
             ITriggerDispatcher triggerDispatcher)
         {
             _recipeManager = recipeManager;
@@ -59,8 +59,8 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
                 return result.Error;
             }
 
-            var vm = new ReceiveWebRequestTriggerViewModel(result.Data.Get<ReceiveWebRequestTriggerParameters>(), result.Data.RecipeId);
-            vm.HttpMethods = new SelectList(AllowedMethods, nameof(HttpMethod.Method), nameof(HttpMethod.Method), vm.Method);
+            var vm = new ReceiveWebRequestTriggerViewModel(result.Data.Get<ReceiveWebRequestTriggerParameters>(),
+                result.Data.RecipeId);
             return View(vm);
         }
 
@@ -76,17 +76,17 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
             if (!string.IsNullOrEmpty(data.Body) &&
                 data.BodyComparer == ReceiveWebRequestTriggerParameters.FieldComparer.None)
             {
-                ModelState.AddModelError(nameof(ReceiveWebRequestTriggerViewModel.BodyComparer), "Please choose a comparison type or leave field blank");
+                ModelState.AddModelError(nameof(ReceiveWebRequestTriggerViewModel.BodyComparer),
+                    "Please choose a comparison type or leave field blank");
             }
 
             if (!ModelState.IsValid)
             {
-                data.HttpMethods = new SelectList(AllowedMethods, nameof(HttpMethod.Method), nameof(HttpMethod.Method), data.Method);
                 return View(data);
             }
 
             var recipeTrigger = result.Data;
-            recipeTrigger.Set((ReceiveWebRequestTriggerParameters)data);
+            recipeTrigger.Set((ReceiveWebRequestTriggerParameters) data);
 
             await _recipeManager.AddOrUpdateRecipeTrigger(recipeTrigger);
             return RedirectToAction("EditRecipe", "Recipes", new
@@ -126,12 +126,11 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
             dynamic bodyJson = null;
             try
             {
-
-            using (var stream = new StreamReader(Request.Body))
-            {
-                body = await stream.ReadToEndAsync();
-                bodyJson = JObject.Parse(body);
-            } 
+                using (var stream = new StreamReader(Request.Body))
+                {
+                    body = await stream.ReadToEndAsync();
+                    bodyJson = JObject.Parse(body);
+                }
             }
             catch (Exception)
             {
@@ -142,7 +141,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
             {
                 Data = new ReceiveWebRequestTriggerData()
                 {
-                    Method = new HttpMethod(Request.Method),
+                    Method = Request.Method,
                     RelativeUrl = relativeUrl,
                     Body = body,
                     BodyJson = bodyJson
@@ -154,11 +153,10 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 
         public class ReceiveWebRequestTriggerViewModel : ReceiveWebRequestTriggerParameters
         {
-            public SelectList HttpMethods { get; set; }
             public ReceiveWebRequestTriggerViewModel()
             {
-                
             }
+
             public ReceiveWebRequestTriggerViewModel(ReceiveWebRequestTriggerParameters data, string recipeId)
             {
                 Method = data.Method;
@@ -167,6 +165,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
                 BodyComparer = data.BodyComparer;
                 RecipeId = recipeId;
             }
+
             public string RecipeId { get; private set; }
         }
     }
