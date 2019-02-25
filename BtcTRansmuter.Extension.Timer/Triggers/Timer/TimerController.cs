@@ -70,7 +70,7 @@ namespace BtcTransmuter.Extension.Timer.Triggers.Timer
             return RedirectToAction("EditRecipe", "Recipes", new
             {
                 id = recipeTrigger.RecipeId,
-                statusMessage = "Invoice Timer trigger Updated"
+                statusMessage = "Timer trigger Updated"
             });
         }
 

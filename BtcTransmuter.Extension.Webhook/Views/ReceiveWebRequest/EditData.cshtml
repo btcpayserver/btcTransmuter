@@ -1,0 +1,40 @@
+@using BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
+@model BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest.ReceiveWebRequestController.ReceiveWebRequestTriggerViewModel
+
+
+@{
+    ViewData["Title"] = "Edit Receive Web Request trigger";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="RelativeUrl" class="control-label"></label>
+        <input  asp-for="RelativeUrl"  class="form-control"/>
+        <span asp-validation-for="RelativeUrl" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Method" class="control-label"></label>
+        <select asp-for="Method"  class="form-control" asp-items="Model.HttpMethods"> </select>
+        <span asp-validation-for="Method" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Body" class="control-label"></label>
+        <div class="input-group">
+            <input asp-for="Body" class="form-control">
+            <select class="custom-select" asp-for="BodyComparer"  asp-items="@Html.GetEnumSelectList(typeof(ReceiveWebRequestTriggerParameters.FieldComparer))">
+            </select>
+        </div>
+        <span asp-validation-for="Body" class="text-danger"></span>
+        <span asp-validation-for="BodyComparer" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="RecipeId" />
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to Recipe</a>
+    </div>
+</form>

@@ -22,6 +22,7 @@
     <ProjectReference Include="..\BtcTransmuter.Extension.Exchange\BtcTransmuter.Extension.Exchange.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Recipe\BtcTransmuter.Extension.Recipe.csproj" />
     <ProjectReference Include="..\BtcTRansmuter.Extension.Timer\BtcTRansmuter.Extension.Timer.csproj" />
+    <ProjectReference Include="..\BtcTransmuter.Extension.Webhook\BtcTransmuter.Extension.Webhook.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Services\BtcTransmuter.Services.csproj" />
   </ItemGroup>
 

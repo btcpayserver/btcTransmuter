@@ -1,0 +1,18 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
+@model BtcTransmuter.Data.Entities.RecipeTrigger
+@{
+    var data = Model.Get<ReceiveWebRequestTriggerParameters>();
+}
+
+<div>
+    Receive a @data.Method.Method HTTP request
+    @if (!string.IsNullOrEmpty(@data.RelativeUrl))
+    {
+        <span> with a relative url <kbd>@data.RelativeUrl</kbd></span>
+    }
+    @if (!string.IsNullOrEmpty(@data.Body))
+    {
+        <span> with a body <kbd>@Enum.GetName(typeof(ReceiveWebRequestTriggerParameters.FieldComparer), data.BodyComparer) </kbd>@data.Body</span>
+    }
+</div>
