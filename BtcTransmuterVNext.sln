@@ -5,23 +5,23 @@ VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Abstractions", "BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj", "{C85FA1C3-F067-4654-A3AB-B1E0EA2A13EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter", "BtcTransmuter\BtcTransmuter.csproj", "{8FE15314-1F22-4AAB-9856-30A62C2933EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter", "BtcTransmuter\BtcTransmuter.csproj", "{8FE15314-1F22-4AAB-9856-30A62C2933EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Email", "BtcTransmuter.Extension.Email\BtcTransmuter.Extension.Email.csproj", "{8BDBFBB0-1326-4A02-A9BC-C2F10B510426}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Email", "BtcTransmuter.Extension.Email\BtcTransmuter.Extension.Email.csproj", "{8BDBFBB0-1326-4A02-A9BC-C2F10B510426}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Data", "BtcTransmuter.Data\BtcTransmuter.Data.csproj", "{0C0781FD-A7AC-4B74-B55D-462A023EBF76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Data", "BtcTransmuter.Data\BtcTransmuter.Data.csproj", "{0C0781FD-A7AC-4B74-B55D-462A023EBF76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Services", "BtcTransmuter.Services\BtcTransmuter.Services.csproj", "{9291F9D5-D7F1-4DBC-B482-AC668A128727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Services", "BtcTransmuter.Services\BtcTransmuter.Services.csproj", "{9291F9D5-D7F1-4DBC-B482-AC668A128727}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.BtcPayServer", "BtcTransmuter.Extension.BtcPayServer\BtcTransmuter.Extension.BtcPayServer.csproj", "{FF5AAFF7-B2EF-441B-8BCC-32AF0735680F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.BtcPayServer", "BtcTransmuter.Extension.BtcPayServer\BtcTransmuter.Extension.BtcPayServer.csproj", "{FF5AAFF7-B2EF-441B-8BCC-32AF0735680F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Exchange", "BtcTransmuter.Extension.Exchange\BtcTransmuter.Extension.Exchange.csproj", "{ABE3DB20-7E3D-477F-9F48-D184DC9828A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Exchange", "BtcTransmuter.Extension.Exchange\BtcTransmuter.Extension.Exchange.csproj", "{ABE3DB20-7E3D-477F-9F48-D184DC9828A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTRansmuter.Extension.Timer", "BtcTRansmuter.Extension.Timer\BtcTRansmuter.Extension.Timer.csproj", "{B9849D35-81B6-4CD0-8D47-62F2089C4F7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Timer", "BtcTRansmuter.Extension.Timer\BtcTransmuter.Extension.Timer.csproj", "{B9849D35-81B6-4CD0-8D47-62F2089C4F7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Recipe", "BtcTransmuter.Extension.Recipe\BtcTransmuter.Extension.Recipe.csproj", "{F7F345BF-A429-4D13-99AF-443F67102DEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Recipe", "BtcTransmuter.Extension.Recipe\BtcTransmuter.Extension.Recipe.csproj", "{F7F345BF-A429-4D13-99AF-443F67102DEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Webhook", "BtcTransmuter.Extension.Webhook\BtcTransmuter.Extension.Webhook.csproj", "{C213433D-E2AC-46D9-9818-F5A01D144B47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Webhook", "BtcTransmuter.Extension.Webhook\BtcTransmuter.Extension.Webhook.csproj", "{C213433D-E2AC-46D9-9818-F5A01D144B47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
