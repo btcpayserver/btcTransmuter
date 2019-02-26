@@ -3,62 +3,52 @@
     ViewData["Title"] = "Extensions";
 }
 <h2>@ViewData["Title"]</h2>
+<hr />
 
-
-<ul class="list-group list-group-flush">
+<div>
     @foreach (var extension in Model.Extensions)
     {
-        <li class="list-group-item py-0 border-topy-0">
-            <h2>
-                @extension.Name <span class="badge badge-secondary">@extension.Version</span>
-            </h2>
-        </li>
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    @extension.Name <span class="badge badge-secondary">@extension.Version</span>
+                </h3>
+                <p class="card-text">@extension.Description</p>
 
-        if (extension.Actions.Any())
-        {
-            <li class="list-group-item py-0">
+                @if (extension.Actions.Any())
+                {
+                    <h4>Actions</h4>
+                    <ul class="">
+                        @foreach (var actionDescriptor in extension.Actions)
+                        {
+                            <li class="">@actionDescriptor.Name - @actionDescriptor.Description</li>
+                        }
+                    </ul>
+                }
 
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item py-0 border-topy-0">
-                        <h3>Actions</h3>
-                    </li>
-                    @foreach (var actionDescriptor in extension.Actions)
-                    {
-                        <li class="list-group-item py-0">@actionDescriptor.Name - @actionDescriptor.Description</li>
-                    }
-                </ul>
-            </li>
-        }
-        if (extension.Triggers.Any())
-        {
-            <li class="list-group-item py-0">
-                <ul class="list-group list-group-flush">
+                @if (extension.Triggers.Any())
+                {
+                    <h4>Triggers</h4>
+                    <ul class="">
+                        @foreach (var triggerDescriptor in extension.Triggers)
+                        {
+                            <li class="">@triggerDescriptor.Name - @triggerDescriptor.Description</li>
+                        }
+                    </ul>
+                }
 
-                    <li class="list-group-item py-0 border-topy-0">
-                        <h3>Triggers</h3>
-                    </li>
-                    @foreach (var triggerDescriptor in extension.Triggers)
-                    {
-                        <li class="list-group-item py-0">@triggerDescriptor.Name - @triggerDescriptor.Description</li>
-                    }
-                </ul>
-
-            </li>
-        }
-
-        if (extension.ExternalServices.Any())
-        {
-            <li class="list-group-item py-0">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item py-0 border-topy-0">
-                        <h3>External Services</h3>
-                    </li>
-                    @foreach (var externalServiceDescriptor in extension.ExternalServices)
-                    {
-                        <li class="list-group-item py-0">@externalServiceDescriptor.Name - @externalServiceDescriptor.Description</li>
-                    }
-                </ul>
-            </li>
-        }
+                @if (extension.ExternalServices.Any())
+                {
+                    <h4>External Services</h4>
+                    <ul class="">
+                        @foreach (var externalServiceDescriptor in extension.ExternalServices)
+                        {
+                            <li class="">@externalServiceDescriptor.Name - @externalServiceDescriptor.Description</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+        <br />
     }
-</ul>
+</div>
