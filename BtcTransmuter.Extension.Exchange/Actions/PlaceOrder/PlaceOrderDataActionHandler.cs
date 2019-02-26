@@ -1,45 +1,23 @@
 using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
-using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
 using ExchangeSharp;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
 {
-    public class PlaceOrderDataActionHandler : BaseActionHandler<PlaceOrderData>, IActionDescriptor
+    public class PlaceOrderDataActionHandler : BaseActionHandler<PlaceOrderData>
     {
         public override string ActionId => "PlaceOrder";
-        public string Name => "Place Order";
+        public override string Name => "Place Order";
 
-        public string Description =>
+        public override string Description =>
             "Place an order on an exchange";
 
-        public string ViewPartial => "ViewPlaceOrderAction";
+        public override string ViewPartial => "ViewPlaceOrderAction";
+        public override string ControllerName => "PlaceOrder";
 
-        public Task<IActionResult> EditData(RecipeAction data)
-        {
-            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
-            {
-                var identifier = $"{Guid.NewGuid()}";
-                var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
-                memoryCache.Set(identifier, data, new MemoryCacheEntryOptions()
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(60)
-                });
-
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(
-                    nameof(PlaceOrderController.EditData),
-                    "PlaceOrder", new
-                    {
-                        identifier
-                    }));
-            }
-        }
 
         protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
         {

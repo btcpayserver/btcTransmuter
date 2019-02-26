@@ -11,35 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
 {
-    public class ToggleRecipeActionHandler : BaseActionHandler<ToggleRecipeData>, IActionDescriptor
+    public class ToggleRecipeActionHandler : BaseActionHandler<ToggleRecipeData>
     {
         public override string ActionId => "ToggleRecipe";
-        public string Name => "Toggle Recipe";
+        public override string Name => "Toggle Recipe";
 
-        public string Description =>
+        public override string Description =>
             "Enable/Disable a recipe within the system";
 
-        public string ViewPartial => "ViewToggleRecipeAction";
+        public override string ViewPartial => "ViewToggleRecipeAction";
 
-        public Task<IActionResult> EditData(RecipeAction data)
-        {
-            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
-            {
-                var identifier = $"{Guid.NewGuid()}";
-                var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
-                memoryCache.Set(identifier, data, new MemoryCacheEntryOptions()
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(60)
-                });
-
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(
-                    nameof(ToggleRecipeController.EditData),
-                    "ToggleRecipe", new
-                    {
-                        identifier
-                    }));
-            }
-        }
+        public override string ControllerName => "ToggleRecipe";
 
         protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
         {
@@ -49,7 +31,6 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
         protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
             ToggleRecipeData actionData)
         {
-            
             try
             {
                 using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
@@ -80,13 +61,13 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                    
+
                     await recipeManager.AddOrUpdateRecipe(recipe);
                     return new ActionHandlerResult()
                     {
                         Executed = true,
                         Result =
-                            $"Recipe {recipe.Name} is now {(recipe.Enabled? "Enabled": "Disabled")}"
+                            $"Recipe {recipe.Name} is now {(recipe.Enabled ? "Enabled" : "Disabled")}"
                     };
                 }
             }

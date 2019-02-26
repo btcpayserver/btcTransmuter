@@ -11,15 +11,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
 {
-    public class MakeWebRequestActionHandler : BaseActionHandler<MakeWebRequestData>, IActionDescriptor
+    public class MakeWebRequestActionHandler : BaseActionHandler<MakeWebRequestData>
     {
         public override string ActionId => "MakeWebRequest";
-        public string Name => "Make web request";
+        public override string Name => "Make web request";
 
-        public string Description =>
+        public override string Description =>
             "Make an Http Web Request";
 
-        public string ViewPartial => "ViewMakeWebRequestAction";
+        public override string ViewPartial => "ViewMakeWebRequestAction";
+        public override string ControllerName => "MakeWebRequest";
 
         public Task<IActionResult> EditData(RecipeAction data)
         {
@@ -49,20 +50,20 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
         protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
             MakeWebRequestData actionData)
         {
-            
             try
             {
-              var client = new HttpClient();
-              var result = await client.SendAsync(new HttpRequestMessage(new HttpMethod(actionData.Method), actionData.Url)
-              {
-                  Content = new StringContent(actionData.Body, Encoding.UTF8, actionData.ContentType)
-              });
-              return new ActionHandlerResult()
-              {
-                  Executed = true,
-                  Result =
-                      $"Request sent. Status Code: {result.StatusCode}"
-              };
+                var client = new HttpClient();
+                var result = await client.SendAsync(
+                    new HttpRequestMessage(new HttpMethod(actionData.Method), actionData.Url)
+                    {
+                        Content = new StringContent(actionData.Body, Encoding.UTF8, actionData.ContentType)
+                    });
+                return new ActionHandlerResult()
+                {
+                    Executed = true,
+                    Result =
+                        $"Request sent. Status Code: {result.StatusCode}"
+                };
             }
             catch (Exception e)
             {

@@ -4,41 +4,21 @@ using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
 {
-    public class CreateRecipeActionHandler : BaseActionHandler<CreateRecipeData>, IActionDescriptor
+    public class CreateRecipeActionHandler : BaseActionHandler<CreateRecipeData>
     {
         public override string ActionId => "CreateRecipe";
-        public string Name => "Create Recipe";
+        public override string Name => "Create Recipe";
 
-        public string Description =>
+        public override string Description =>
             "Place a new recipe within the system";
 
-        public string ViewPartial => "ViewCreateRecipeAction";
+        public  override string ViewPartial => "ViewCreateRecipeAction";
 
-        public Task<IActionResult> EditData(RecipeAction data)
-        {
-            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
-            {
-                var identifier = $"{Guid.NewGuid()}";
-                var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
-                memoryCache.Set(identifier, data, new MemoryCacheEntryOptions()
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(60)
-                });
-
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(
-                    nameof(CreateRecipeController.EditData),
-                    "CreateRecipe", new
-                    {
-                        identifier
-                    }));
-            }
-        }
+        public override string ControllerName => "CreateRecipe";
 
         protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
         {
