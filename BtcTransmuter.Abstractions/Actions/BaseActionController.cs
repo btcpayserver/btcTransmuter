@@ -1,8 +1,6 @@
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
-using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -48,35 +46,25 @@ namespace BtcTransmuter.Abstractions.Actions
                 return result.Error;
             }
 
-            if (!ModelState.IsValid)
+            var modelResult = await BuildModel(data, result.Data);
+
+            if (modelResult.showViewModel != null)
             {
-                return View(await BuildViewModel(data));
+                return View(modelResult.showViewModel);
+
             }
 
-            var recipeAction = result.Data;
-            await SetRecipeActionFromViewModel(data, recipeAction);
-
-            await _recipeManager.AddOrUpdateRecipeAction(recipeAction);
+            await _recipeManager.AddOrUpdateRecipeAction(modelResult.ToSave);
             return RedirectToAction("EditRecipe", "Recipes", new
             {
-                id = recipeAction.RecipeId,
+                id = modelResult.ToSave.RecipeId,
                 statusMessage = "Action Updated"
             });
         }
 
-        protected virtual Task SetRecipeActionFromViewModel(TViewModel from, RecipeAction to)
-        {
-            if (from is IUseExternalService fromExternalService)
-            {
-                to.ExternalServiceId = fromExternalService.ExternalServiceId;
-            }
-
-            to.Set((TRecipeActionData) from);
-            return Task.CompletedTask;
-        }
-
         protected abstract Task<TViewModel> BuildViewModel(RecipeAction recipeAction);
-        protected abstract Task<TViewModel> BuildViewModel(TViewModel recipeAction);
+        protected abstract Task<(RecipeAction ToSave, TViewModel showViewModel)> BuildModel(
+            TViewModel viewModel, RecipeAction mainModel);
 
         private async Task<(IActionResult Error, RecipeAction Data )> GetRecipeAction(string identifier)
         {

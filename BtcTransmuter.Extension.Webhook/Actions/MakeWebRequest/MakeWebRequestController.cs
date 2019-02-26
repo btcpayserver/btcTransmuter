@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -53,9 +54,15 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             });
         }
 
-        protected override Task<MakeWebRequestViewModel> BuildViewModel(MakeWebRequestViewModel recipeAction)
+        protected override Task<(RecipeAction ToSave, MakeWebRequestViewModel showViewModel)> BuildModel(MakeWebRequestViewModel viewModel, RecipeAction mainModel)
         {
-            return Task.FromResult(recipeAction);
+            if (ModelState.IsValid)
+            {
+                mainModel.Set<MakeWebRequestData>(viewModel);
+                return Task.FromResult<(RecipeAction ToSave, MakeWebRequestViewModel showViewModel)>((mainModel, null));
+            }
+
+            return Task.FromResult<(RecipeAction ToSave, MakeWebRequestViewModel showViewModel)>((null, viewModel));
         }
 
 

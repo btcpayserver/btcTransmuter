@@ -48,8 +48,16 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
             };
         }
 
-        protected override async Task<SendEmailViewModel> BuildViewModel(SendEmailViewModel recipeAction)
+        protected override async Task<(RecipeAction ToSave, SendEmailViewModel showViewModel)> BuildModel(
+            SendEmailViewModel viewModel, RecipeAction mainModel)
         {
+            if (ModelState.IsValid)
+            {
+                mainModel.ExternalServiceId = viewModel.ExternalServiceId;
+                mainModel.Set<SendEmailData>(viewModel);
+                return (mainModel, null);
+            }
+            
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 Type = new[] {SmtpService.SmtpExternalServiceType},
@@ -57,10 +65,9 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
             });
 
 
-            recipeAction.ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
-                nameof(ExternalServiceData.Name), recipeAction.ExternalServiceId);
-
-            return recipeAction;
+            viewModel.ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
+                nameof(ExternalServiceData.Name), viewModel.ExternalServiceId);
+            return (null, viewModel);
         }
 
         public class SendEmailViewModel : SendEmailData, IUseExternalService

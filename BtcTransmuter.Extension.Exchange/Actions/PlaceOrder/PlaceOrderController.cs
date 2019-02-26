@@ -51,20 +51,27 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                     nameof(ExternalServiceData.Name), @from.ExternalServiceId)
             };
         }
-
-        protected override async Task<PlaceOrderViewModel> BuildViewModel(PlaceOrderViewModel recipeAction)
+        
+        protected override async Task<(RecipeAction ToSave, PlaceOrderViewModel showViewModel)> BuildModel(
+            PlaceOrderViewModel viewModel, RecipeAction mainModel)
         {
+            if (ModelState.IsValid)
+            {
+                mainModel.ExternalServiceId = viewModel.ExternalServiceId;
+                mainModel.Set<PlaceOrderData>(viewModel);
+                return (mainModel, null);
+            }
+            
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 Type = new[] {ExchangeService.ExchangeServiceType},
                 UserId = GetUserId()
             });
 
-            recipeAction.ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
-                nameof(ExternalServiceData.Name), recipeAction.ExternalServiceId);
-            return recipeAction;
+            viewModel.ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
+                nameof(ExternalServiceData.Name), viewModel.ExternalServiceId);
+            return (null, viewModel);
         }
-
 
         public class PlaceOrderViewModel : PlaceOrderData, IUseExternalService
         {

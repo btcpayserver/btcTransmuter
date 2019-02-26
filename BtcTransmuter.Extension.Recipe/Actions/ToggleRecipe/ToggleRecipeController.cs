@@ -41,13 +41,20 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
             };
         }
 
-        protected override async Task<ToggleRecipeViewModel> BuildViewModel(ToggleRecipeViewModel vm)
+        protected override async Task<(RecipeAction ToSave, ToggleRecipeViewModel showViewModel)> BuildModel(
+            ToggleRecipeViewModel viewModel, RecipeAction mainModel)
         {
-            vm.Recipes = new SelectList(
+            if (ModelState.IsValid)
+            {
+                mainModel.Set<ToggleRecipeData>(viewModel);
+                return (mainModel, null);
+            }
+
+            viewModel.Recipes = new SelectList(
                 await _recipeManager.GetRecipes(new RecipesQuery() {UserId = _userManager.GetUserId(User)}),
                 nameof(BtcTransmuter.Data.Entities.Recipe.Id), nameof(BtcTransmuter.Data.Entities.Recipe.Name),
-                vm.TargetRecipeId);
-            return vm;
+                viewModel.TargetRecipeId);
+            return (null, viewModel);
         }
     }
 }

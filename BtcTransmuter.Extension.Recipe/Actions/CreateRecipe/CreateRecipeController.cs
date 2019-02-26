@@ -13,7 +13,8 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
 {
     [Route("recipe-plugin/actions/create-recipe")]
     [Authorize]
-    public class CreateRecipeController : BaseActionController<CreateRecipeController.CreateRecipeViewModel, CreateRecipeData>
+    public class
+        CreateRecipeController : BaseActionController<CreateRecipeController.CreateRecipeViewModel, CreateRecipeData>
     {
         public CreateRecipeController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager) : base(memoryCache, userManager, recipeManager)
@@ -35,13 +36,20 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
             };
         }
 
-        protected override async Task<CreateRecipeViewModel> BuildViewModel(CreateRecipeViewModel vm)
+        protected override async Task<(RecipeAction ToSave, CreateRecipeViewModel showViewModel)> BuildModel(
+            CreateRecipeViewModel viewModel, RecipeAction mainModel)
         {
-            vm.Recipes = new SelectList(
+            if (ModelState.IsValid)
+            {
+                mainModel.Set<CreateRecipeData>(viewModel);
+                return (mainModel, null);
+            }
+
+            viewModel.Recipes = new SelectList(
                 await _recipeManager.GetRecipes(new RecipesQuery() {UserId = _userManager.GetUserId(User)}),
                 nameof(BtcTransmuter.Data.Entities.Recipe.Id), nameof(BtcTransmuter.Data.Entities.Recipe.Name),
-                vm.RecipeTemplateId);
-            return vm;
+                viewModel.RecipeTemplateId);
+            return (null, viewModel);
         }
 
         public class CreateRecipeViewModel : CreateRecipeData
