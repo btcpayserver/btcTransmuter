@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
@@ -12,112 +11,37 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 {
     [Route("email-plugin/external-services/pop3")]
     [Authorize]
-    public class Pop3Controller : Controller
+    public class Pop3Controller : BaseExternalServiceController<Pop3ExternalServiceData>
     {
-        private readonly IExternalServiceManager _externalServiceManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
-
-        public Pop3Controller(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
-            IMemoryCache memoryCache)
+        public Pop3Controller(IExternalServiceManager externalServiceManager, UserManager<User> userManager, IMemoryCache memoryCache) : base(externalServiceManager, userManager, memoryCache)
         {
-            _externalServiceManager = externalServiceManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
-        {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var pop3Service = new Pop3Service(result.Data);
-
-            return View(pop3Service.GetData());
+        protected override string ExternalServiceType => Pop3Service.Pop3ExternalServiceType;
+        protected override Task<Pop3ExternalServiceData> BuildViewModel(ExternalServiceData data)
+        { 
+            return Task.FromResult(new Pop3Service(data).GetData());
         }
 
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, Pop3ExternalServiceData data)
+        protected override async Task<(ExternalServiceData ToSave, Pop3ExternalServiceData showViewModel)> BuildModel(Pop3ExternalServiceData viewModel, ExternalServiceData mainModel)
         {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var externalServiceData = result.Data;
             if (!ModelState.IsValid)
             {
-                return View(data);
+                return (null, viewModel);
             }
+            mainModel.Set(viewModel);
 
-            externalServiceData.Set(data);
-
-            var pop3Service = new Pop3Service(externalServiceData);
-            var testConnection = await pop3Service.CreateClientAndConnect();
+            var imapService = new Pop3Service(mainModel);
+            var testConnection = await imapService.CreateClientAndConnect();
             if (testConnection == null)
             { 
                 ModelState.AddModelError(string.Empty, "Could not connect successfully");
 
-                return View(data);
+                return (null, viewModel);
             }
 
             testConnection.Dispose();
-
-
-            await _externalServiceManager.AddOrUpdateExternalServiceData(externalServiceData);
-            return RedirectToAction("EditExternalService", "ExternalServices", new
-            {
-                id = externalServiceData.Id,
-                statusMessage = "Pop3 Data updated"
-            });
-        }
-        
-        private async Task<(IActionResult Error, ExternalServiceData Data )> GetExternalServiceData(string identifier)
-        {
-            ExternalServiceData data = null;
-            if (identifier.StartsWith("new"))
-            {
-                if (!_memoryCache.TryGetValue(identifier, out data))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-                if (data.UserId != _userManager.GetUserId(User))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-            }
-            else
-            {
-                var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-                {
-                    UserId = _userManager.GetUserId(User),
-                    Type = new string[] {Pop3Service.Pop3ExternalServiceType},
-                    ExternalServiceId = identifier
-                });
-                if (!services.Any())
-                {
-                    return (
-                        RedirectToAction("GetServices", "ExternalServices", new
-                        {
-                            statusMessage = "Error:Data could not be found"
-                        }), null);
-                }
-
-                data = services.First();
-            }
-
-            return (null, data);
+            return (mainModel, null);
         }
     }
 }

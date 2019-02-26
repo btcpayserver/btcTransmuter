@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
@@ -16,117 +15,51 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
 {
     [Route("exchange-plugin/external-services/exchange")]
     [Authorize]
-    public class ExchangeController : Controller
+    public class
+        ExchangeController : BaseExternalServiceController<ExchangeController.EditExchangeExternalServiceDataViewModel>
     {
-        private readonly IExternalServiceManager _externalServiceManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
-
         public ExchangeController(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache) : base(externalServiceManager, userManager, memoryCache)
         {
-            _externalServiceManager = externalServiceManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
+        protected override string ExternalServiceType => ExchangeService.ExchangeServiceType;
+
+        protected override Task<EditExchangeExternalServiceDataViewModel> BuildViewModel(ExternalServiceData data)
         {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var client = new ExchangeService(result.Data);
-
-            return View(new EditExchangeExternalServiceDataViewModel(client.GetData(),
+            return Task.FromResult(new EditExchangeExternalServiceDataViewModel(new ExchangeService(data).GetData(),
                 ExchangeService.GetAvailableExchanges()));
         }
 
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, ExchangeExternalServiceData data)
+        protected override async
+            Task<(ExternalServiceData ToSave, EditExchangeExternalServiceDataViewModel showViewModel)>
+            BuildModel(EditExchangeExternalServiceDataViewModel viewModel, ExternalServiceData mainModel)
         {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
             //current External Service data
-            var externalServiceData = result.Data;
+            var externalServiceData = mainModel;
 
             if (!ModelState.IsValid)
             {
-                return View(new EditExchangeExternalServiceDataViewModel(data,
-                    ExchangeService.GetAvailableExchanges()));
+                return (null,
+                    new EditExchangeExternalServiceDataViewModel(viewModel, ExchangeService.GetAvailableExchanges()));
             }
 
             //current External Service data
-            var oldData = externalServiceData.Get<ExchangeExternalServiceData>();
-            externalServiceData.Set(data);
+            externalServiceData.Set((ExchangeExternalServiceData) viewModel);
             var exchangeService = new ExchangeService(externalServiceData);
 
             if (!await exchangeService.TestAccess())
             {
                 ModelState.AddModelError(String.Empty, "Could not connect with current settings");
 
-                return View(new EditExchangeExternalServiceDataViewModel(data,
-                    ExchangeService.GetAvailableExchanges()));
+
+                return (null,
+                    new EditExchangeExternalServiceDataViewModel(viewModel, ExchangeService.GetAvailableExchanges()));
             }
 
-            await _externalServiceManager.AddOrUpdateExternalServiceData(externalServiceData);
-            return RedirectToAction("EditExternalService", "ExternalServices", new
-            {
-                id = externalServiceData.Id,
-                statusMessage = "Exchange Data updated"
-            });
+            return (externalServiceData, null);
         }
 
-        private async Task<(IActionResult Error, ExternalServiceData Data )> GetExternalServiceData(string identifier)
-        {
-            ExternalServiceData data = null;
-            if (identifier.StartsWith("new"))
-            {
-                if (!_memoryCache.TryGetValue(identifier, out data))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-
-                if (data.UserId != _userManager.GetUserId(User))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-            }
-            else
-            {
-                var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-                {
-                    UserId = _userManager.GetUserId(User),
-                    Type = new string[] {ExchangeService.ExchangeServiceType},
-                    ExternalServiceId = identifier
-                });
-                if (!services.Any())
-                {
-                    return (
-                        RedirectToAction("GetServices", "ExternalServices", new
-                        {
-                            statusMessage = "Error:Data could not be found"
-                        }), null);
-                }
-
-                data = services.First();
-            }
-
-            return (null, data);
-        }
 
         public class EditExchangeExternalServiceDataViewModel : ExchangeExternalServiceData
         {

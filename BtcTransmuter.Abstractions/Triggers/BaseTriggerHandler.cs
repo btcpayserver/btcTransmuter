@@ -1,20 +1,50 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Abstractions.Triggers
 {
-    public abstract class BaseTriggerHandler<TTriggerData, TTriggerParameters> : ITriggerHandler
+    public abstract class BaseTriggerHandler<TTriggerData, TTriggerParameters> : ITriggerHandler, ITriggerDescriptor
         where TTriggerParameters : class
     {
+        public abstract string TriggerId { get; }
+        public abstract string Name { get; }
+        public abstract string Description { get; }
+        public abstract string ViewPartial { get; }
+        protected abstract string ControllerName { get; }
+
+        public Task<IActionResult> EditData(RecipeTrigger data)
+        {
+            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
+            {
+                var identifier = $"{Guid.NewGuid()}";
+                var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
+                memoryCache.Set(identifier, data, new MemoryCacheEntryOptions()
+                {
+                    SlidingExpiration = TimeSpan.FromMinutes(60)
+                });
+
+                return Task.FromResult<IActionResult>(new RedirectToActionResult(
+                    "EditData",
+                    ControllerName, new
+                    {
+                        identifier
+                    }));
+            }
+        }
+
         protected abstract Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             TTriggerData triggerData, TTriggerParameters parameters);
 
-        public abstract string TriggerId { get; }
 
         public Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger)
         {

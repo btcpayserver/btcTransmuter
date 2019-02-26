@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Abstractions.ExternalServices
 {
-    public abstract class BaseExternalService<T> :IExternalServiceDescriptor
+    public abstract class BaseExternalService<T> : IExternalServiceDescriptor
     {
         private ExternalServiceData _data;
         public abstract string ExternalServiceType { get; }
         public abstract string Name { get; }
         public abstract string Description { get; }
         public abstract string ViewPartial { get; }
+        protected abstract string ControllerName { get; }
 
 
         public T GetData()
@@ -37,7 +41,28 @@ namespace BtcTransmuter.Abstractions.ExternalServices
 
             _data = data;
         }
-        public abstract Task<IActionResult> EditData(ExternalServiceData data);
+
+        public virtual Task<IActionResult> EditData(ExternalServiceData externalServiceData)
+        {
+            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
+            {
+                var identifier = externalServiceData.Id ?? $"new_{Guid.NewGuid()}";
+                if (string.IsNullOrEmpty(externalServiceData.Id))
+                {
+                    var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
+                    memoryCache.Set(identifier, externalServiceData, new MemoryCacheEntryOptions()
+                    {
+                        SlidingExpiration = TimeSpan.FromMinutes(60)
+                    });
+                }
+
+                return Task.FromResult<IActionResult>(new RedirectToActionResult("EditData",
+                    ControllerName, new
+                    {
+                        identifier
+                    }));
+            }
+        }
 
         protected BaseExternalService()
         {

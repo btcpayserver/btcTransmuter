@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
@@ -15,79 +14,58 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
     [Route("btcpayserver-plugin/external-services/btcpayserver")]
     [Authorize]
-    public class BtcPayServerController : Controller
+    public class BtcPayServerController : BaseExternalServiceController<EditBtcPayServerDataViewModel>
     {
-        private readonly IExternalServiceManager _externalServiceManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
-
         public BtcPayServerController(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache) : base(externalServiceManager, userManager, memoryCache)
         {
-            _externalServiceManager = externalServiceManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
+        protected override string ExternalServiceType => BtcPayServerService.BtcPayServerServiceType;
+
+        protected override async Task<EditBtcPayServerDataViewModel> BuildViewModel(ExternalServiceData data)
         {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var client = new BtcPayServerService(result.Data);
-
+            var client = new BtcPayServerService(data);
             var clientData = client.GetData();
-            return View(new EditBtcPayServerDataViewModel()
+            return new EditBtcPayServerDataViewModel()
             {
                 Seed = clientData.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
                 Server = clientData.Server,
                 PairingUrl = await client.GetPairingUrl(),
                 Paired = await client.CheckAccess()
-            });
+            };
         }
 
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, EditBtcPayServerDataViewModel data, string action)
+        protected override async Task<(ExternalServiceData ToSave, EditBtcPayServerDataViewModel showViewModel)>
+            BuildModel(EditBtcPayServerDataViewModel viewModel, ExternalServiceData mainModel)
         {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
+            if (viewModel.Action == "unpair")
             {
-                return result.Error;
+                viewModel.Seed = null;
             }
 
-            if (action == "unpair")
-            {
-                data.Seed = null;
-            }
             //current External Service data
-            var externalServiceData = result.Data;
-
-            //current External Service data
-            var oldData = externalServiceData.Get<BtcPayServerExternalServiceData>();
+            var oldData = mainModel.Get<BtcPayServerExternalServiceData>();
 
 
-            if (oldData.Seed == data.Seed && oldData.Server == data.Server)
+            if (oldData.Seed == viewModel.Seed && oldData.Server == viewModel.Server)
             {
-                data.LastCheck = oldData.LastCheck;
-                data.MonitoredInvoiceStatuses = oldData.MonitoredInvoiceStatuses;
-                data.PairedDate = oldData.PairedDate;
+                viewModel.LastCheck = oldData.LastCheck;
+                viewModel.MonitoredInvoiceStatuses = oldData.MonitoredInvoiceStatuses;
+                viewModel.PairedDate = oldData.PairedDate;
             }
             else
             {
-                data.PairedDate = DateTime.Now;
+                viewModel.PairedDate = DateTime.Now;
             }
 
-            externalServiceData.Set((BtcPayServerExternalServiceData) data);
-            var service = new BtcPayServerService(externalServiceData);
+            mainModel.Set((BtcPayServerExternalServiceData) viewModel);
+            var service = new BtcPayServerService(mainModel);
 
             if (!ModelState.IsValid)
             {
                 var serviceData = service.GetData();
-                return View(new EditBtcPayServerDataViewModel()
+                return (null, new EditBtcPayServerDataViewModel()
                 {
                     Seed = serviceData.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
                     Server = serviceData.Server,
@@ -99,76 +77,26 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 
             if (!await service.CheckAccess())
             {
-                data.Seed = data.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString();
-                service.SetData(data);
-                data.PairingUrl = await service.GetPairingUrl();
-                data.Paired = false;
-                if (!string.IsNullOrEmpty(data.PairingCode))
+                viewModel.Seed = viewModel.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString();
+                service.SetData(viewModel);
+                viewModel.PairingUrl = await service.GetPairingUrl();
+                viewModel.Paired = false;
+                if (!string.IsNullOrEmpty(viewModel.PairingCode))
                 {
                     var client = service.ConstructClient();
-                    await client.AuthorizeClient(new PairingCode(data.PairingCode));
+                    await client.AuthorizeClient(new PairingCode(viewModel.PairingCode));
                     if (!await service.CheckAccess())
                     {
                         ModelState.AddModelError(string.Empty, "Could not pair with pairing code");
-                        return View(data);
+                        return (null, viewModel);
                     }
                 }
 
                 ModelState.AddModelError(string.Empty, "Cannot proceed until paired");
-
-                return View(data);
+                return (null, viewModel);
             }
 
-            await _externalServiceManager.AddOrUpdateExternalServiceData(externalServiceData);
-            return RedirectToAction("EditExternalService", "ExternalServices", new
-            {
-                id = externalServiceData.Id,
-                statusMessage = "Btcpayserver Data updated"
-            });
-        }
-
-        private async Task<(IActionResult Error, ExternalServiceData Data )> GetExternalServiceData(string identifier)
-        {
-            ExternalServiceData data = null;
-            if (identifier.StartsWith("new"))
-            {
-                if (!_memoryCache.TryGetValue(identifier, out data))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-
-                if (data.UserId != _userManager.GetUserId(User))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-            }
-            else
-            {
-                var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-                {
-                    UserId = _userManager.GetUserId(User),
-                    Type = new string[] {BtcPayServerService.BtcPayServerServiceType},
-                    ExternalServiceId = identifier
-                });
-                if (!services.Any())
-                {
-                    return (
-                        RedirectToAction("GetServices", "ExternalServices", new
-                        {
-                            statusMessage = "Error:Data could not be found"
-                        }), null);
-                }
-
-                data = services.First();
-            }
-
-            return (null, data);
+            return (mainModel, null);
         }
     }
 }

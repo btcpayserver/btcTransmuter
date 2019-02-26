@@ -7,41 +7,21 @@ using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Timer.Triggers.Timer
 {
     public class TimerTriggerHandler : BaseTriggerHandler<TimerTriggerData,
-        TimerTriggerParameters>, ITriggerDescriptor
+        TimerTriggerParameters>
     {
         public override string TriggerId => new TimerTrigger().Id;
-        public string Name => "Timer";
+        public override string Name => "Timer";
 
-        public string Description =>
+        public override string Description =>
             "Trigger a recipe every X time";
 
-        public string ViewPartial => "ViewTimerTrigger";
-        public Task<IActionResult> EditData(RecipeTrigger data)
-        {
-            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
-            {
-                var identifier = $"{Guid.NewGuid()}";
-                var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
-                memoryCache.Set(identifier, data, new MemoryCacheEntryOptions()
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(60)
-                });
-
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(
-                    nameof(TimerController.EditData),
-                    "Timer", new
-                    {
-                        identifier
-                    }));
-            }
-        }
+        public override string ViewPartial => "ViewTimerTrigger";
+        protected override string ControllerName => "Timer";
 
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,

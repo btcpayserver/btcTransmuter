@@ -2,6 +2,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
     public class EditBtcPayServerDataViewModel : BtcPayServerExternalServiceData
     {
+        public string Action { get; set; }
         public string PairingUrl { get; set; }
 
         public string PairingCode { get; set; }

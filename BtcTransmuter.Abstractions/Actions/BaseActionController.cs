@@ -3,12 +3,14 @@ using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Abstractions.Actions
 {
+    [Authorize]
     public abstract class BaseActionController<TViewModel, TRecipeActionData> : Controller
         where TViewModel : TRecipeActionData
     {

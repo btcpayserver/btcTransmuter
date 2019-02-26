@@ -12,99 +12,27 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
 {
     [Route("email-plugin/external-services/smtp")]
     [Authorize]
-    public class SmtpController : Controller
+    public class SmtpController : BaseExternalServiceController<SmtpExternalServiceData>
     {
-        private readonly IExternalServiceManager _externalServiceManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
-
-        public SmtpController(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
-            IMemoryCache memoryCache)
+        public SmtpController(IExternalServiceManager externalServiceManager, UserManager<User> userManager, IMemoryCache memoryCache) : base(externalServiceManager, userManager, memoryCache)
         {
-            _externalServiceManager = externalServiceManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
+        protected override string ExternalServiceType => SmtpService.SmtpExternalServiceType;
+        protected override Task<SmtpExternalServiceData> BuildViewModel(ExternalServiceData data)
         {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var smtpService = new SmtpService(result.Data);
-
-            return View(smtpService.GetData());
+           return Task.FromResult(new SmtpService(data).GetData());
         }
 
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, SmtpExternalServiceData data)
+        protected override async Task<(ExternalServiceData ToSave, SmtpExternalServiceData showViewModel)> BuildModel(
+            SmtpExternalServiceData viewModel, ExternalServiceData mainModel)
         {
-            var result = await GetExternalServiceData(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var externalServiceData = result.Data;
             if (!ModelState.IsValid)
             {
-                return View(data);
+                return (null, viewModel);
             }
-
-            externalServiceData.Set(data);
-            await _externalServiceManager.AddOrUpdateExternalServiceData(externalServiceData);
-            return RedirectToAction("EditExternalService", "ExternalServices", new
-            {
-                id = externalServiceData.Id,
-                statusMessage = "Smtp Data updated"
-            });
-        }
-        
-        private async Task<(IActionResult Error, ExternalServiceData Data )> GetExternalServiceData(string identifier)
-        {
-            ExternalServiceData data = null;
-            if (identifier.StartsWith("new"))
-            {
-                if (!_memoryCache.TryGetValue(identifier, out data))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-                if (data.UserId != _userManager.GetUserId(User))
-                {
-                    return (RedirectToAction("GetServices", "ExternalServices", new
-                    {
-                        statusMessage = "Error:Data could not be found or data session expired"
-                    }), null);
-                }
-            }
-            else
-            {
-                var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-                {
-                    UserId = _userManager.GetUserId(User),
-                    Type = new string[] { SmtpService.SmtpExternalServiceType},
-                    ExternalServiceId = identifier
-                });
-                if (!services.Any())
-                {
-                    return (
-                        RedirectToAction("GetServices", "ExternalServices", new
-                        {
-                            statusMessage = "Error:Data could not be found"
-                        }), null);
-                }
-
-                data = services.First();
-            }
-
-            return (null, data);
+            mainModel.Set(viewModel);
+            return (mainModel, null);
         }
     }
 }

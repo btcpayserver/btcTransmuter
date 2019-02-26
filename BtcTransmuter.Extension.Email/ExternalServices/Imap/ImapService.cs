@@ -1,13 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
-using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
 using MailKit.Net.Imap;
-using MailKit.Net.Pop3;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices.Imap
 {
@@ -19,6 +14,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Imap
         public override string Name => "Imap External Service";
         public override string Description => "Imap External Service to be able to analyze incoming email as a trigger";
         public override string ViewPartial => "ViewImapExternalService";
+        protected override string ControllerName => "Imap";
 
 
         public ImapService() : base()
@@ -29,27 +25,6 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Imap
         {
         }
 
-        public override Task<IActionResult> EditData(ExternalServiceData externalServiceData)
-        {
-            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
-            {
-                var identifier =externalServiceData.Id?? $"new_{Guid.NewGuid()}";
-                if (string.IsNullOrEmpty(externalServiceData.Id))
-                {
-                    var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
-                    memoryCache.Set(identifier, externalServiceData, new MemoryCacheEntryOptions()
-                    {
-                        SlidingExpiration = TimeSpan.FromMinutes(60)
-                    });
-                }
-                
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(nameof(ImapController.EditData),
-                    "Imap", new
-                    {
-                        identifier
-                    }));
-            }
-        }
 
         public async Task<ImapClient> CreateClientAndConnect()
         {

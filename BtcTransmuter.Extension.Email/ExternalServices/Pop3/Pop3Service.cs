@@ -1,16 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
-using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
 using MailKit.Net.Pop3;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 {
-    public class Pop3Service : BaseExternalService<Pop3ExternalServiceData>, IExternalServiceDescriptor
+    public class Pop3Service : BaseExternalService<Pop3ExternalServiceData>
     {
         public const string Pop3ExternalServiceType = "Pop3ExternalService";
         public override string ExternalServiceType => Pop3ExternalServiceType;
@@ -18,6 +14,8 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
         public override string Name => "Pop3 External Service";
         public override string Description => "Pop3 External Service to be able to analyze incoming email as a trigger";
         public override  string ViewPartial => "ViewPop3ExternalService";
+        
+        protected override string ControllerName => "Pop3";
 
 
         public Pop3Service() : base()
@@ -26,28 +24,6 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
 
         public Pop3Service(ExternalServiceData data) : base(data)
         {
-        }
-
-        public override  Task<IActionResult> EditData(ExternalServiceData externalServiceData)
-        {
-            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
-            {
-                var identifier =externalServiceData.Id?? $"new_{Guid.NewGuid()}";
-                if (string.IsNullOrEmpty(externalServiceData.Id))
-                {
-                    var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
-                    memoryCache.Set(identifier, externalServiceData, new MemoryCacheEntryOptions()
-                    {
-                        SlidingExpiration = TimeSpan.FromMinutes(60)
-                    });
-                }
-                
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(nameof(Pop3Controller.EditData),
-                    "Pop3", new
-                    {
-                        identifier
-                    }));
-            }
         }
 
         public async Task<Pop3Client> CreateClientAndConnect()

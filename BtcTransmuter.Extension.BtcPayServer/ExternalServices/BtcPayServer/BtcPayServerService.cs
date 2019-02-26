@@ -19,6 +19,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         public override string Name => "BtcPayServer External Service";
         public override string Description => "BtcPayServer External Service to be able to interact with its services";
         public override string ViewPartial => "ViewBtcPayServerExternalService";
+        protected override string ControllerName => "BtcPayServer";
 
 
         public BtcPayServerService() : base()
@@ -27,29 +28,6 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 
         public BtcPayServerService(ExternalServiceData data) : base(data)
         {
-        }
-
-        public override Task<IActionResult> EditData(ExternalServiceData externalServiceData)
-        {
-            using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
-            {
-                var identifier = externalServiceData.Id ?? $"new_{Guid.NewGuid()}";
-                if (string.IsNullOrEmpty(externalServiceData.Id))
-                {
-                    var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
-                    memoryCache.Set(identifier, externalServiceData, new MemoryCacheEntryOptions()
-                    {
-                        SlidingExpiration = TimeSpan.FromMinutes(60)
-                    });
-                }
-
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(
-                    nameof(BtcPayServerController.EditData),
-                    "BtcPayServer", new
-                    {
-                        identifier
-                    }));
-            }
         }
 
         public Bitpay ConstructClient()
