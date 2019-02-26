@@ -20,11 +20,11 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
         public const string SmtpExternalServiceType = "SmtpExternalService";
         public override string ExternalServiceType => SmtpExternalServiceType;
 
-        public string Name => "SMTP External Service";
-        public string Description => "SMTP External Service to be able to send emails as an action";
-        public string ViewPartial => "ViewSmtpExternalService";
+        public override  string Name => "SMTP External Service";
+        public override  string Description => "SMTP External Service to be able to send emails as an action";
+        public override  string ViewPartial => "ViewSmtpExternalService";
 
-        public Task<IActionResult> EditData(ExternalServiceData externalServiceData)
+        public override  Task<IActionResult> EditData(ExternalServiceData externalServiceData)
         {
             using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {

@@ -11,14 +11,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Email.ExternalServices.Imap
 {
-    public class ImapService : BaseExternalService<ImapExternalServiceData>, IExternalServiceDescriptor
+    public class ImapService : BaseExternalService<ImapExternalServiceData>
     {
         public const string ImapExternalServiceType = "ImapExternalService";
         public override string ExternalServiceType => ImapExternalServiceType;
 
-        public string Name => "Imap External Service";
-        public string Description => "Imap External Service to be able to analyze incoming email as a trigger";
-        public string ViewPartial => "ViewImapExternalService";
+        public override string Name => "Imap External Service";
+        public override string Description => "Imap External Service to be able to analyze incoming email as a trigger";
+        public override string ViewPartial => "ViewImapExternalService";
 
 
         public ImapService() : base()
@@ -29,7 +29,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Imap
         {
         }
 
-        public Task<IActionResult> EditData(ExternalServiceData externalServiceData)
+        public override Task<IActionResult> EditData(ExternalServiceData externalServiceData)
         {
             using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {

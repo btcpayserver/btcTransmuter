@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
@@ -12,111 +13,36 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
 {
     [Route("recipe-plugin/actions/create-recipe")]
     [Authorize]
-    public class CreateRecipeController : Controller
+    public class CreateRecipeController : BaseActionController<CreateRecipeController.CreateRecipeViewModel, CreateRecipeData>
     {
-        private readonly IRecipeManager _recipeManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
-
-        public CreateRecipeController(
-            IRecipeManager recipeManager,
-            UserManager<User> userManager,
-            IMemoryCache memoryCache)
+        public CreateRecipeController(IMemoryCache memoryCache, UserManager<User> userManager,
+            IRecipeManager recipeManager) : base(memoryCache, userManager, recipeManager)
         {
-            _recipeManager = recipeManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
-        {
-            var result = await GetRecipeAction(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-            var vm = new CreateRecipeViewModel()
-            {
-                RecipeId = result.Data.RecipeId
-            };
-            await SetValues(result.Data, vm);
-
-            return View(vm);
-        }
-
-        private void SetValues(CreateRecipeViewModel from, RecipeAction to)
-        {
-            to.RecipeId = from.RecipeId;
-            to.Set((CreateRecipeData) from);
-        }
-
-        private async Task SetValues(RecipeAction from, CreateRecipeViewModel to)
+        protected override async Task<CreateRecipeViewModel> BuildViewModel(RecipeAction from)
         {
             var data = from.Get<CreateRecipeData>();
-            to.Recipes = new SelectList(await _recipeManager.GetRecipes(new RecipesQuery()
+            return new CreateRecipeViewModel
             {
-                UserId = _userManager.GetUserId(User)
-            }), nameof(BtcTransmuter.Data.Entities.Recipe.Id), nameof(BtcTransmuter.Data.Entities.Recipe.Name), data.RecipeTemplateId);
-            to.RecipeTemplateId = data.RecipeTemplateId;
-            to.Enable = data.Enable;
-            to.RecipeId = from.RecipeId;
-            
+                RecipeId = from.RecipeId,
+                Recipes = new SelectList(
+                    await _recipeManager.GetRecipes(new RecipesQuery() {UserId = _userManager.GetUserId(User)}),
+                    nameof(BtcTransmuter.Data.Entities.Recipe.Id), nameof(BtcTransmuter.Data.Entities.Recipe.Name),
+                    data.RecipeTemplateId),
+                RecipeTemplateId = data.RecipeTemplateId,
+                Enable = data.Enable
+            };
         }
 
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, CreateRecipeViewModel data)
+        protected override async Task<CreateRecipeViewModel> BuildViewModel(CreateRecipeViewModel vm)
         {
-            var result = await GetRecipeAction(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            if (!ModelState.IsValid)
-            {
-                data.Recipes = new SelectList(await _recipeManager.GetRecipes(new RecipesQuery()
-                    {
-                        UserId = _userManager.GetUserId(User)
-                    }), nameof(BtcTransmuter.Data.Entities.Recipe.Id), nameof(BtcTransmuter.Data.Entities.Recipe.Name),
-                    data.RecipeTemplateId);
-                return View(data);
-            }
-
-            var recipeAction = result.Data;
-            SetValues(data, recipeAction);
-
-            await _recipeManager.AddOrUpdateRecipeAction(recipeAction);
-            return RedirectToAction("EditRecipe", "Recipes", new
-            {
-                id = recipeAction.RecipeId,
-                statusMessage = "Create Recipe Action Updated"
-            });
+            vm.Recipes = new SelectList(
+                await _recipeManager.GetRecipes(new RecipesQuery() {UserId = _userManager.GetUserId(User)}),
+                nameof(BtcTransmuter.Data.Entities.Recipe.Id), nameof(BtcTransmuter.Data.Entities.Recipe.Name),
+                vm.RecipeTemplateId);
+            return vm;
         }
-
-        private async Task<(IActionResult Error, RecipeAction Data )> GetRecipeAction(string identifier)
-        {
-            if (!_memoryCache.TryGetValue(identifier, out RecipeAction data))
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            var recipe = await _recipeManager.GetRecipe(data.RecipeId, _userManager.GetUserId(User));
-
-            if (recipe == null)
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            return (null, data);
-        }
-
 
         public class CreateRecipeViewModel : CreateRecipeData
         {

@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
+namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
 {
     public class ToggleRecipeData
     {

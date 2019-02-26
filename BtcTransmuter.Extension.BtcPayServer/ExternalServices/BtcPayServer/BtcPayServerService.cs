@@ -11,14 +11,14 @@ using NBitpayClient;
 
 namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
-    public class BtcPayServerService : BaseExternalService<BtcPayServerExternalServiceData>, IExternalServiceDescriptor
+    public class BtcPayServerService : BaseExternalService<BtcPayServerExternalServiceData>
     {
         public const string BtcPayServerServiceType = "BtcPayServerExternalService";
         public override string ExternalServiceType => BtcPayServerServiceType;
 
-        public string Name => "BtcPayServer External Service";
-        public string Description => "BtcPayServer External Service to be able to interact with its services";
-        public string ViewPartial => "ViewBtcPayServerExternalService";
+        public override string Name => "BtcPayServer External Service";
+        public override string Description => "BtcPayServer External Service to be able to interact with its services";
+        public override string ViewPartial => "ViewBtcPayServerExternalService";
 
 
         public BtcPayServerService() : base()
@@ -29,7 +29,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         {
         }
 
-        public Task<IActionResult> EditData(ExternalServiceData externalServiceData)
+        public override Task<IActionResult> EditData(ExternalServiceData externalServiceData)
         {
             using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {

@@ -297,3 +297,5 @@ __pycache__/
 BtcTransmuter/mydb.db
 
 BtcTransmuter\.Extension\.BtcPayServer/obj/Debug/netcoreapp2\.2/
+
+BtcTransmuter\.Extension\.BtcPayServer/obj/

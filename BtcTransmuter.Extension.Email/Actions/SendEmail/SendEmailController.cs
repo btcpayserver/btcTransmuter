@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
@@ -15,127 +16,54 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
     [Route("email-plugin/actions/send-email")]
     [Authorize]
-    public class SendEmailController : Controller
+    public class SendEmailController : BaseActionController<SendEmailController.SendEmailViewModel, SendEmailData>
     {
-        private readonly IRecipeManager _recipeManager;
         private readonly IExternalServiceManager _externalServiceManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
 
-        public SendEmailController(
-            IRecipeManager recipeManager,
-            IExternalServiceManager externalServiceManager,
-            UserManager<User> userManager,
-            IMemoryCache memoryCache)
+        public SendEmailController(IMemoryCache memoryCache, UserManager<User> userManager,
+            IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
+            userManager, recipeManager)
         {
-            _recipeManager = recipeManager;
             _externalServiceManager = externalServiceManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
+        protected override async Task<SendEmailViewModel> BuildViewModel(RecipeAction from)
         {
-            var result = await GetRecipeAction(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var smtpServices = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+            var fromData = from.Get<SendEmailData>();
+            var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 Type = new[] {SmtpService.SmtpExternalServiceType},
-                UserId = _userManager.GetUserId(User)
+                UserId = GetUserId()
             });
-
-            var vm = new SendEmailViewModel()
+            return new SendEmailViewModel
             {
-                ExternalServices = new SelectList(smtpServices, nameof(ExternalServiceData.Id),
-                    nameof(ExternalServiceData.Name), result.Data.ExternalServiceId),
+                RecipeId = from.RecipeId,
+                ExternalServiceId = from.ExternalServiceId,
+                Body = fromData.Body,
+                Subject = fromData.Subject,
+                To = fromData.To,
+                From = fromData.From,
+                ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
+                    nameof(ExternalServiceData.Name), from.ExternalServiceId),
             };
-            SetValues(result.Data, vm);
-
-            return View(vm);
         }
 
-        private void SetValues(SendEmailViewModel from, RecipeAction to)
+        protected override async Task<SendEmailViewModel> BuildViewModel(SendEmailViewModel recipeAction)
         {
-            to.ExternalServiceId = from.ExternalServiceId;
-            to.RecipeId = from.RecipeId;
-            to.Set((SendEmailData) from);
-        }
-
-        private void SetValues(RecipeAction from, SendEmailViewModel to)
-        {
-            to.RecipeId = from.RecipeId;
-            to.ExternalServiceId = from.ExternalServiceId;
-            var fromData = from.Get<SendEmailData>();
-            to.Body = fromData.Body;
-            to.Subject = fromData.Subject;
-            to.To = fromData.To;
-            to.From = fromData.From;
-        }
-
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, SendEmailViewModel data)
-        {
-            var result = await GetRecipeAction(identifier);
-            if (result.Error != null)
+            var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
-                return result.Error;
-            }
-
-            if (!ModelState.IsValid)
-            {
-                var pop3Services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
-                {
-                    Type = new[] {SmtpService.SmtpExternalServiceType},
-                    UserId = _userManager.GetUserId(User)
-                });
-
-
-                data.ExternalServices = new SelectList(pop3Services, nameof(ExternalServiceData.Id),
-                    nameof(ExternalServiceData.Name), data.ExternalServiceId);
-                return View(data);
-            }
-
-            var recipeAction = result.Data;
-            SetValues(data, recipeAction);
-
-            await _recipeManager.AddOrUpdateRecipeAction(recipeAction);
-            return RedirectToAction("EditRecipe", "Recipes", new
-            {
-                id = recipeAction.RecipeId,
-                statusMessage = "Send Email Action Updated"
+                Type = new[] {SmtpService.SmtpExternalServiceType},
+                UserId = GetUserId()
             });
+
+
+            recipeAction.ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
+                nameof(ExternalServiceData.Name), recipeAction.ExternalServiceId);
+
+            return recipeAction;
         }
 
-        private async Task<(IActionResult Error, RecipeAction Data )> GetRecipeAction(string identifier)
-        {
-            if (!_memoryCache.TryGetValue(identifier, out RecipeAction data))
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            var recipe = await _recipeManager.GetRecipe(data.RecipeId, _userManager.GetUserId(User));
-
-            if (recipe == null)
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            return (null, data);
-        }
-
-
-        public class SendEmailViewModel : SendEmailData
+        public class SendEmailViewModel : SendEmailData, IUseExternalService
         {
             public string RecipeId { get; set; }
             public SelectList ExternalServices { get; set; }

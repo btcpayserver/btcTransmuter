@@ -15,9 +15,9 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
         public const string ExchangeServiceType = "ExchangeExternalService";
         public override string ExternalServiceType => ExchangeServiceType;
 
-        public string Name => "Exchange External Service";
-        public string Description => "Integrate from a wide variety of cryptocurrency exchanges";
-        public string ViewPartial => "ViewExchangeExternalService";
+        public override string Name => "Exchange External Service";
+        public override  string Description => "Integrate from a wide variety of cryptocurrency exchanges";
+        public override  string ViewPartial => "ViewExchangeExternalService";
 
 
         public ExchangeService() : base()
@@ -28,7 +28,7 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
         {
         }
 
-        public Task<IActionResult> EditData(ExternalServiceData externalServiceData)
+        public override  Task<IActionResult> EditData(ExternalServiceData externalServiceData)
         {
             using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {

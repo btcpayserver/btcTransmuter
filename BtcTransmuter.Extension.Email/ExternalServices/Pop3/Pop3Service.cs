@@ -15,9 +15,9 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
         public const string Pop3ExternalServiceType = "Pop3ExternalService";
         public override string ExternalServiceType => Pop3ExternalServiceType;
 
-        public string Name => "Pop3 External Service";
-        public string Description => "Pop3 External Service to be able to analyze incoming email as a trigger";
-        public string ViewPartial => "ViewPop3ExternalService";
+        public override string Name => "Pop3 External Service";
+        public override string Description => "Pop3 External Service to be able to analyze incoming email as a trigger";
+        public override  string ViewPartial => "ViewPop3ExternalService";
 
 
         public Pop3Service() : base()
@@ -28,7 +28,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
         {
         }
 
-        public Task<IActionResult> EditData(ExternalServiceData externalServiceData)
+        public override  Task<IActionResult> EditData(ExternalServiceData externalServiceData)
         {
             using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {

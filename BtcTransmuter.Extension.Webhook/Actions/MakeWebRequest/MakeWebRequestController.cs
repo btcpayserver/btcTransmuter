@@ -1,36 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
 {
     [Route("webhook-plugin/actions/make-web-request")]
     [Authorize]
-    public class MakeWebRequestController : Controller
+    public class MakeWebRequestController : BaseActionController<MakeWebRequestController.MakeWebRequestViewModel,
+        MakeWebRequestData>
     {
-        private readonly IRecipeManager _recipeManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
-
-        public MakeWebRequestController(
-            IRecipeManager recipeManager,
-            UserManager<User> userManager,
-            IMemoryCache memoryCache)
-        {
-            _recipeManager = recipeManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
-        }
-
         public static readonly List<string> AllowedMethods = new List<string>()
         {
             HttpMethod.Get.ToString(),
@@ -49,92 +35,32 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             "text/plain",
         };
 
-
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
+        public MakeWebRequestController(IMemoryCache memoryCache, UserManager<User> userManager,
+            IRecipeManager recipeManager) : base(memoryCache, userManager, recipeManager)
         {
-            var result = await GetRecipeAction(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-            var vm = new MakeWebRequestViewModel()
-            {
-                RecipeId = result.Data.RecipeId
-            };
-            await SetValues(result.Data, vm);
-
-            return View(vm);
         }
 
-        private void SetValues(MakeWebRequestViewModel from, RecipeAction to)
+        protected override Task<MakeWebRequestViewModel> BuildViewModel(RecipeAction recipeAction)
         {
-            to.RecipeId = from.RecipeId;
-            to.Set((MakeWebRequestData) from);
-        }
-
-        private async Task SetValues(RecipeAction from, MakeWebRequestViewModel to)
-        {
-            var data = from.Get<MakeWebRequestData>();
-            to.Url = data.Url;
-            to.Body = data.Body;
-            to.Method = data.Method;
-            to.ContentType= data.ContentType;
-            to.RecipeId = from.RecipeId;
-            
-        }
-
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, MakeWebRequestViewModel data)
-        {
-            var result = await GetRecipeAction(identifier);
-            if (result.Error != null)
+            var data = recipeAction.Get<MakeWebRequestData>();
+            return Task.FromResult(new MakeWebRequestViewModel
             {
-                return result.Error;
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(data);
-            }
-
-            var recipeAction = result.Data;
-            SetValues(data, recipeAction);
-
-            await _recipeManager.AddOrUpdateRecipeAction(recipeAction);
-            return RedirectToAction("EditRecipe", "Recipes", new
-            {
-                id = recipeAction.RecipeId,
-                statusMessage = "Make Web Request Action Updated"
+                Url = data.Url,
+                Body = data.Body,
+                Method = data.Method,
+                ContentType = data.ContentType,
+                RecipeId = recipeAction.RecipeId
             });
         }
 
-        private async Task<(IActionResult Error, RecipeAction Data )> GetRecipeAction(string identifier)
+        protected override Task<MakeWebRequestViewModel> BuildViewModel(MakeWebRequestViewModel recipeAction)
         {
-            if (!_memoryCache.TryGetValue(identifier, out RecipeAction data))
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            var recipe = await _recipeManager.GetRecipe(data.RecipeId, _userManager.GetUserId(User));
-
-            if (recipe == null)
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            return (null, data);
+            return Task.FromResult(recipeAction);
         }
 
 
         public class MakeWebRequestViewModel : MakeWebRequestData
-        { 
+        {
             public string RecipeId { get; set; }
         }
     }
