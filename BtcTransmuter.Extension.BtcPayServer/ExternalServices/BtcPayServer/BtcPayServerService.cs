@@ -33,7 +33,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         {
             using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {
-                var identifier =externalServiceData.Id?? $"new_{Guid.NewGuid()}";
+                var identifier = externalServiceData.Id ?? $"new_{Guid.NewGuid()}";
                 if (string.IsNullOrEmpty(externalServiceData.Id))
                 {
                     var memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
@@ -42,8 +42,9 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
                         SlidingExpiration = TimeSpan.FromMinutes(60)
                     });
                 }
-                
-                return Task.FromResult<IActionResult>(new RedirectToActionResult(nameof(BtcPayServerController.EditData),
+
+                return Task.FromResult<IActionResult>(new RedirectToActionResult(
+                    nameof(BtcPayServerController.EditData),
                     "BtcPayServer", new
                     {
                         identifier
@@ -58,9 +59,9 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
                 var data = GetData();
                 var seed = new Mnemonic(data.Seed);
 
-               return new Bitpay(seed.DeriveExtKey().PrivateKey, data.Server);
+                return new Bitpay(seed.DeriveExtKey().PrivateKey, data.Server);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -77,21 +78,21 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             try
             {
                 var client = ConstructClient();
-                
-                if (client == null  ||  await CheckAccess())
+
+                if (client == null || await CheckAccess())
                 {
                     return null;
                 }
 
-                return (await client.RequestClientAuthorizationAsync("BtcTransmuter", Facade.Merchant)).CreateLink(client.BaseUrl)
+                return (await client.RequestClientAuthorizationAsync("BtcTransmuter", Facade.Merchant))
+                    .CreateLink(client.BaseUrl)
                     .ToString();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 var data = GetData();
                 return new Uri(data.Server, "api-tokens").ToString();
             }
-
         }
     }
 }

@@ -21,11 +21,6 @@
     <ItemGroup>
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
     </ItemGroup>
-    <ItemGroup>
-      <Reference Include="NBitpayClient, Version=1.0.0.31, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\hacks\NBitpayClient.dll</HintPath>
-      </Reference>
-    </ItemGroup>
 
 
 </Project>
