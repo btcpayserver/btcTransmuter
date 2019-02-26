@@ -10,7 +10,6 @@ using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
 
@@ -18,8 +17,11 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 {
     [Authorize]
     [Route("webhook-plugin/triggers/receive-web-request")]
-    public class ReceiveWebRequestController : Controller
+    public class ReceiveWebRequestController : BaseTriggerController<
+        ReceiveWebRequestController.ReceiveWebRequestTriggerViewModel, ReceiveWebRequestTriggerParameters>
     {
+        private readonly ITriggerDispatcher _triggerDispatcher;
+
         public static readonly List<string> AllowedMethods = new List<string>()
         {
             HttpMethod.Get.ToString(),
@@ -32,49 +34,24 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
             HttpMethod.Options.ToString()
         };
 
-        private readonly IRecipeManager _recipeManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IMemoryCache _memoryCache;
-        private readonly ITriggerDispatcher _triggerDispatcher;
 
-
-        public ReceiveWebRequestController(
-            IRecipeManager recipeManager,
-            UserManager<User> userManager,
-            IMemoryCache memoryCache,
-            ITriggerDispatcher triggerDispatcher)
+        public ReceiveWebRequestController(IRecipeManager recipeManager, UserManager<User> userManager,
+            IMemoryCache memoryCache, ITriggerDispatcher triggerDispatcher) : base(recipeManager, userManager, memoryCache)
         {
-            _recipeManager = recipeManager;
-            _userManager = userManager;
-            _memoryCache = memoryCache;
             _triggerDispatcher = triggerDispatcher;
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier)
+        protected override Task<ReceiveWebRequestTriggerViewModel> BuildViewModel(RecipeTrigger data)
         {
-            var result = await GetRecipeTrigger(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            var vm = new ReceiveWebRequestTriggerViewModel(result.Data.Get<ReceiveWebRequestTriggerParameters>(),
-                result.Data.RecipeId);
-            return View(vm);
+            return  Task.FromResult(new ReceiveWebRequestTriggerViewModel(data.Get<ReceiveWebRequestTriggerParameters>(),
+                data.RecipeId));
         }
 
-        [HttpPost("{identifier}")]
-        public async Task<IActionResult> EditData(string identifier, ReceiveWebRequestTriggerViewModel data)
+        protected override Task<(RecipeTrigger ToSave, ReceiveWebRequestTriggerViewModel showViewModel)> BuildModel(
+            ReceiveWebRequestTriggerViewModel viewModel, RecipeTrigger mainModel)
         {
-            var result = await GetRecipeTrigger(identifier);
-            if (result.Error != null)
-            {
-                return result.Error;
-            }
-
-            if (!string.IsNullOrEmpty(data.Body) &&
-                data.BodyComparer == ReceiveWebRequestTriggerParameters.FieldComparer.None)
+            if (!string.IsNullOrEmpty(viewModel.Body) &&
+                viewModel.BodyComparer == ReceiveWebRequestTriggerParameters.FieldComparer.None)
             {
                 ModelState.AddModelError(nameof(ReceiveWebRequestTriggerViewModel.BodyComparer),
                     "Please choose a comparison type or leave field blank");
@@ -82,41 +59,12 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 
             if (!ModelState.IsValid)
             {
-                return View(data);
+                return Task.FromResult<(RecipeTrigger ToSave, ReceiveWebRequestTriggerViewModel showViewModel)>((null, viewModel));
             }
 
-            var recipeTrigger = result.Data;
-            recipeTrigger.Set((ReceiveWebRequestTriggerParameters) data);
-
-            await _recipeManager.AddOrUpdateRecipeTrigger(recipeTrigger);
-            return RedirectToAction("EditRecipe", "Recipes", new
-            {
-                id = recipeTrigger.RecipeId,
-                statusMessage = "Receive Web Request trigger Updated"
-            });
-        }
-
-        private async Task<(IActionResult Error, RecipeTrigger Data )> GetRecipeTrigger(string identifier)
-        {
-            if (!_memoryCache.TryGetValue(identifier, out RecipeTrigger data))
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            var recipe = await _recipeManager.GetRecipe(data.RecipeId, _userManager.GetUserId(User));
-
-            if (recipe == null)
-            {
-                return (RedirectToAction("GetRecipes", "Recipes", new
-                {
-                    statusMessage = "Error:Data could not be found or data session expired"
-                }), null);
-            }
-
-            return (null, data);
+            mainModel.Set((ReceiveWebRequestTriggerParameters) viewModel);
+            
+            return Task.FromResult<(RecipeTrigger ToSave, ReceiveWebRequestTriggerViewModel showViewModel)>((mainModel, null));
         }
 
         [Route("trigger/{relativeUrl?}")]
