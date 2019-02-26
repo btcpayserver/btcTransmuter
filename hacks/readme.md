@@ -1,1 +1,0 @@
-#NBitPayClient hack: the invoice model has some flags to ignore specific properties when serializing to json. The current dlls in this folder are the build of this PR: https://github.com/MetacoSA/NBitpayClient/pull/19
