@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using BtcTransmuter.Abstractions.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
-using ExtCore.Infrastructure;
 using ExtCore.WebApplication.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -76,14 +69,14 @@ namespace BtcTransmuter
             }
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
             }
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
