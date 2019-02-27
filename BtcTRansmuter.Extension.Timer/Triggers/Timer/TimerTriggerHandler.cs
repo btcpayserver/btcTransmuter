@@ -41,13 +41,13 @@ namespace BtcTransmuter.Extension.Timer.Triggers.Timer
             switch (parameters.TriggerEvery)
             {
                 case TimerTriggerParameters.TimerResetEvery.Minute:
-                    return Task.FromResult(parameters.LastTriggered.Value.Subtract(DateTime.Now).TotalMinutes >=
+                    return Task.FromResult(DateTime.Now.Subtract(parameters.LastTriggered.Value).TotalMinutes >=
                                            parameters.TriggerEveryAmount);
                 case TimerTriggerParameters.TimerResetEvery.Hour:
-                    return Task.FromResult(parameters.LastTriggered.Value.Subtract(DateTime.Now).TotalHours >=
+                    return Task.FromResult(DateTime.Now.Subtract(parameters.LastTriggered.Value).TotalHours >=
                                            parameters.TriggerEveryAmount);
                 case TimerTriggerParameters.TimerResetEvery.Day:
-                    return Task.FromResult(parameters.LastTriggered.Value.Subtract(DateTime.Now).TotalDays >=
+                    return Task.FromResult(DateTime.Now.Subtract(parameters.LastTriggered.Value).TotalDays >=
                                            parameters.TriggerEveryAmount);
                 case TimerTriggerParameters.TimerResetEvery.Month:
                     return Task.FromResult(parameters.LastTriggered.Value.MonthDifference(DateTime.Now) >=
