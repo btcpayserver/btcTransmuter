@@ -6,9 +6,13 @@
 }
 
 <div>
-    Timer every @data.TriggerEveryAmount @Enum.GetName(typeof(TimerTriggerParameters.TimerResetEvery), data.TriggerEvery)  
+    Timer every @data.TriggerEveryAmount @Enum.GetName(typeof(TimerTriggerParameters.TimerResetEvery), data.TriggerEvery)@(data.TriggerEveryAmount > 1 ? "s" : "")
     @if (data.StartOn.HasValue)
     {
         <span>from @data.StartOn.Value.ToString("g") onwards</span>
+    }
+    @if (data.LastTriggered.HasValue)
+    {
+        <span>(@data.LastTriggered.Value.ToString("g") last triggered)</span>
     }
 </div>
