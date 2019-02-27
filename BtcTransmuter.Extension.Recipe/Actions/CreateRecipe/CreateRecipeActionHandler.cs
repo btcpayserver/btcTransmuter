@@ -58,6 +58,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
                         action.RecipeId = null;
                         action.Id = null;
                     });
+                    recipe.Enabled = actionData.Enable;
                     await recipeManager.AddOrUpdateRecipe(recipe);
                     return new ActionHandlerResult()
                     {

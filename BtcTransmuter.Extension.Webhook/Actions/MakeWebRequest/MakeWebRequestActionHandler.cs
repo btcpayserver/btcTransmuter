@@ -56,7 +56,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
                 var result = await client.SendAsync(
                     new HttpRequestMessage(new HttpMethod(actionData.Method), actionData.Url)
                     {
-                        Content = new StringContent(actionData.Body, Encoding.UTF8, actionData.ContentType)
+                        Content = new StringContent(actionData.Body?? "", Encoding.UTF8, actionData.ContentType)
                     });
                 return new ActionHandlerResult()
                 {
