@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
@@ -6,6 +7,7 @@ using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace BtcTransmuter.Services
 {
@@ -14,23 +16,27 @@ namespace BtcTransmuter.Services
         private readonly IEnumerable<ITriggerHandler> _handlers;
         private readonly IRecipeManager _recipeManager;
         private readonly IActionDispatcher _actionDispatcher;
+        private readonly ILogger<TriggerDispatcher> _logger;
 
         public TriggerDispatcher(IEnumerable<ITriggerHandler> handlers, IRecipeManager recipeManager,
-            IActionDispatcher actionDispatcher)
+            IActionDispatcher actionDispatcher, ILogger<TriggerDispatcher> logger)
         {
             _handlers = handlers;
             _recipeManager = recipeManager;
             _actionDispatcher = actionDispatcher;
+            _logger = logger;
         }
 
         public async Task DispatchTrigger(ITrigger trigger)
         {
+            _logger.LogInformation($"Trigger being dispatched: {trigger.Id}");
             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
             {
                 Enabled = true,
                 RecipeTriggerId = trigger.Id
             });
-
+            
+            _logger.LogInformation($"{recipes.Count()} possible recipes to be triggered by {trigger.Id}");
 
             var triggeredRecipes = new List<(Recipe Recipe, object TriggerData, ITriggerHandler triggerHandler)>();
             foreach (var recipe in recipes)
@@ -44,12 +50,14 @@ namespace BtcTransmuter.Services
                             triggeredRecipes.Add((recipe, await triggerHandler.GetData(trigger), triggerHandler));
                         }
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        _logger.LogError($"Trigger Handler {triggerHandler} errored out on {e.Message}");
                     }
                 }
             }
 
+            _logger.LogInformation($"{trigger.Id} triggered {triggeredRecipes.Count()}/{recipes.Count()} recipes");
             await Task.WhenAll(triggeredRecipes.SelectMany(recipe =>
                 recipe.Recipe.RecipeActions.Select(action => _actionDispatcher.Dispatch(recipe.TriggerData, action))));
 
