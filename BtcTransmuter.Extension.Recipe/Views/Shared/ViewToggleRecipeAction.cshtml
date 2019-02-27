@@ -7,7 +7,7 @@
 }
 
 <div>
-    Toggle Recipe <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@data.TargetRecipeId" target="_blank">@data.TargetRecipeId</a>
+    Toggle Recipe <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@data.TargetRecipeId" target="_blank">@await Component.InvokeAsync("ViewRecipeName", new {recipeId = data.TargetRecipeId})</a>
     @switch (data.Option)
     {
         case ToggleRecipeData.ToggleRecipeOption.Enable:

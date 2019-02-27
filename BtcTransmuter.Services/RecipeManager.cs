@@ -28,6 +28,8 @@ namespace BtcTransmuter.Services
                     var queryable = context.Recipes
                         .Include(recipe => recipe.RecipeActions)
                         .ThenInclude(action => action.ExternalService)
+                        .Include(recipe => recipe.RecipeActions)
+                        .ThenInclude(action => action.RecipeInvocations)
                         .Include(recipe => recipe.RecipeTrigger)
                         .ThenInclude(trigger => trigger.ExternalService)
                         .Include(recipe => recipe.RecipeInvocations)
@@ -207,6 +209,12 @@ namespace BtcTransmuter.Services
                     }
                 }
             }
+        }
+
+        public async Task<string> GetRecipeName(string recipeId)
+        {
+            var result = await GetRecipe(recipeId);
+            return result?.Name ?? string.Empty;
         }
     }
 }

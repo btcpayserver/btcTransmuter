@@ -70,17 +70,20 @@
                     </li>
                     
                 }
-                <li class="list-group-item">
-                    <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add</a>
-                </li>
+             
                 @if (!Model.Actions.Any())
                 {
                     <li class="list-group-item border-top-0">
-                        No Actions
-
-                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add</a>
+                        No Actions.   <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add</a>
                     </li>
                 }
+                else
+                {
+                    <li class="list-group-item">
+                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
+                    </li> 
+                }
+               
             </ul>
         </li>
     </ul>

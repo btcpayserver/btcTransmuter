@@ -69,7 +69,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             {
                 return new ActionHandlerResult()
                 {
-                    Executed = false,
+                    Executed = true,
                     Result =
                         $"Could not make web request because {e.Message}"
                 };

@@ -6,7 +6,10 @@
 }
 
 <div>
-    Create Recipe based on <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@data.RecipeTemplateId" target="_blank">@data.RecipeTemplateId</a>
+    Create Recipe based on
+    <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@data.RecipeTemplateId" target="_blank">
+        @await Component.InvokeAsync("ViewRecipeName", new {recipeId = data.RecipeTemplateId})
+    </a>
     @if (data.Enable)
     {
         <span> and enable it</span>

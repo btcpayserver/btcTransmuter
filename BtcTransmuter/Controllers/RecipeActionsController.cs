@@ -104,16 +104,25 @@ namespace BtcTransmuter.Controllers
                 return GetNotFoundActionResult();
             }
 
-            RecipeAction recipeAction = null;
-            if (!string.IsNullOrEmpty(recipeActionId))
+            var recipeAction = recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
+            if (recipeAction == null)
             {
-                recipeAction = recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
-                if (recipeAction == null)
-                {
-                    return GetNotFoundActionResult();
-                }
+                return GetNotFoundActionResult();
             }
-
+            
+            if (recipeAction.RecipeInvocations.Any())
+            {
+                return RedirectToAction("EditRecipe", "Recipes", new
+                {
+                    id = id,
+                    statusMessage = new StatusMessageModel()
+                    {
+                        Message = "The action your are trying to delete has been executed in the past and thus cannot be deleted for historical auditing reasons. A workaround is to recreate the recipe and then delete this recipe.",
+                        Severity = StatusMessageModel.StatusSeverity.Error
+                    }.ToString()
+                });
+            }
+            
             return View(new RemoveRecipeActionViewModel()
             {
                 RecipeAction = recipeAction
