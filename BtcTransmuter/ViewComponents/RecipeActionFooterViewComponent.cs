@@ -29,10 +29,10 @@ namespace BtcTransmuter.ViewComponents
 
             if (recipe?.RecipeTrigger != null)
             {
-                var descriptor = _triggerDescriptors.First(triggerDescriptor =>
+                var descriptor = _triggerDescriptors.FirstOrDefault(triggerDescriptor =>
                     triggerDescriptor.TriggerId == recipe?.RecipeTrigger.TriggerId);
 
-                if (descriptor.GetType().IsSubclassOfRawGeneric(typeof(BaseTriggerHandler<,>)))
+                if (descriptor != null && descriptor.GetType().IsSubclassOfRawGeneric(typeof(BaseTriggerHandler<,>)))
                 {
                     var type = descriptor.GetType().BaseType.GetGenericArguments().First();
                     properties = GetRecursiveAvailableProperties(type);

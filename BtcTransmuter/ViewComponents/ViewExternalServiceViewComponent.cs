@@ -25,7 +25,7 @@ namespace BtcTransmuter.ViewComponents
                 ShowAllData = showAllData,
                 ExternalServiceData = serviceData,
                 ExternalServiceDescriptor = _externalServiceDescriptors
-                    .Single(descriptor => descriptor.ExternalServiceType == serviceData.Type)
+                    .SingleOrDefault(descriptor => descriptor.ExternalServiceType == serviceData.Type)
             }));
         }
     }

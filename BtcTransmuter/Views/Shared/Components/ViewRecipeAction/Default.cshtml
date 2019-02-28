@@ -1,6 +1,14 @@
 @model ViewRecipeActionViewModel
 
-<partial name="@Model.ActionDescriptor.ViewPartial" model="@Model.RecipeAction"></partial>
+
+@if (Model.ActionDescriptor == null)
+{
+    <span> Extension for this action is not present</span>
+}
+else
+{
+    <partial name="@Model.ActionDescriptor.ViewPartial" model="@Model.RecipeAction"></partial>
+}
 
 @if (Model.ExternalServiceData != null)
 {

@@ -37,7 +37,18 @@
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                @await Html.PartialAsync(@Model.Descriptors.First(descriptor => descriptor.ExternalServiceType == item.Type).ViewPartial, item)
+                @{
+                    var serviceDescriptor = @Model.Descriptors.FirstOrDefault(descriptor => descriptor.ExternalServiceType == item.Type);
+                }
+                @if (serviceDescriptor == null)
+                {
+                    
+                    <span> Extension for this external service is not present</span>
+                }
+                else
+                {
+                    @await Html.PartialAsync(serviceDescriptor.ViewPartial, item)
+                }
             </td>
             <td>
                 <a asp-action="EditExternalService" asp-route-id="@item.Id">Edit</a> |

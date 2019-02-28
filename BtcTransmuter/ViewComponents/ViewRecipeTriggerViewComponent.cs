@@ -24,7 +24,7 @@ namespace BtcTransmuter.ViewComponents
                 RecipeTrigger = recipeTrigger,
                 ExternalServiceData = recipeTrigger.ExternalService,
                 TriggerDescriptor =
-                    _triggerDescriptors.Single(descriptor => descriptor.TriggerId == recipeTrigger.TriggerId)
+                    _triggerDescriptors.SingleOrDefault(descriptor => descriptor.TriggerId == recipeTrigger.TriggerId)
             }));
         }
     }
