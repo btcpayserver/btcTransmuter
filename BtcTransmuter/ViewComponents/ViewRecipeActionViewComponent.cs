@@ -24,7 +24,7 @@ namespace BtcTransmuter.ViewComponents
                 RecipeAction = recipeAction,
                 ExternalServiceData = recipeAction.ExternalService,
                 ActionDescriptor =
-                    _actionDescriptors.Single(descriptor => descriptor.ActionId == recipeAction.ActionId)
+                    _actionDescriptors.SingleOrDefault(descriptor => descriptor.ActionId == recipeAction.ActionId)
             }));
         }
     }
