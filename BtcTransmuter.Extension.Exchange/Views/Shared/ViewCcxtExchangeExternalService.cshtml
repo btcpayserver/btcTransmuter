@@ -1,0 +1,39 @@
+@using BtcTransmuter.Extension.Exchange.ExternalServices.CcxtExchange
+@model BtcTransmuter.Data.Entities.ExternalServiceData
+
+@{
+    var service = new CcxtExchangeService(Model);
+    var data = service.GetData();
+}
+
+<dl class="dl-horizontal">
+    <dt>
+        Name
+    </dt>
+    <dd>
+        @service.Name
+    </dd>
+    <dt>
+        Exchange
+    </dt>
+    <dd>
+        @data.ExchangeName
+    </dd>
+    @if (!string.IsNullOrEmpty(data.OverrideUrl))
+    {
+        <dt>
+            OverrideUrl
+        </dt>
+        <dd>
+            @data.OverrideUrl
+
+        </dd>   
+    }
+    
+    <dt>
+        Last checked
+    </dt>
+    <dd>
+        @(data.LastCheck.HasValue? data.LastCheck.Value.ToString("g"): "Never")
+    </dd>
+</dl>
