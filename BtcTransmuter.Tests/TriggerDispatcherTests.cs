@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
@@ -6,6 +7,7 @@ using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Internal;
 using Moq;
 using Xunit;
 
@@ -25,7 +27,7 @@ namespace BtcTransmuter.Tests
                         RecipeTrigger = new RecipeTrigger()
                         {
                             TriggerId = new TestTrigger().Id,
-                            DataJson = "sadasd"
+                            DataJson = "{}"
                         }
                     }
                 });
@@ -46,7 +48,64 @@ namespace BtcTransmuter.Tests
 
             actionDispatcher.Verify(dispatcher => dispatcher.Dispatch(It.IsAny<object>(), It.IsAny<RecipeAction>()),
                 Times.Never);
-            
+        }
+
+        [Fact]
+        public async Task TriggerDispatcher_Dispatch_ExecuteActionDispatcher()
+        {
+            var recipeManager = new Mock<IRecipeManager>();
+            recipeManager.Setup(manager => manager.GetRecipes(It.IsAny<RecipesQuery>()))
+                .ReturnsAsync(new List<Recipe>()
+                {
+                    new Recipe()
+                    {
+                        RecipeTrigger = new RecipeTrigger()
+                        {
+                            TriggerId = new TestTrigger().Id,
+                            DataJson = "{}"
+                        },
+                        RecipeActions = new List<RecipeAction>()
+                        {
+                            new RecipeAction()
+                        }
+                    }
+                });
+
+            var logger = new Mock<ILogger<TriggerDispatcher>>();
+            var actionDispatcher = new Mock<IActionDispatcher>();
+            var triggerHandler = new Mock<ITriggerHandler>();
+            triggerHandler.Setup(handler => handler.GetData(It.IsAny<ITrigger>())).ReturnsAsync("hohoho");
+            triggerHandler.Setup(handler => handler.IsTriggered(It.IsAny<ITrigger>(), It.IsAny<RecipeTrigger>()))
+                .ReturnsAsync(true);
+
+            var triggerHandler2 = new Mock<ITriggerHandler>();
+            triggerHandler2.Setup(handler => handler.GetData(It.IsAny<ITrigger>())).ThrowsAsync(new Exception());
+            triggerHandler2.Setup(handler => handler.IsTriggered(It.IsAny<ITrigger>(), It.IsAny<RecipeTrigger>()))
+                .ReturnsAsync(true);
+
+            var triggerHandler3 = new Mock<ITriggerHandler>();
+            triggerHandler3.Setup(handler => handler.GetData(It.IsAny<ITrigger>())).ReturnsAsync("hohoho");
+            triggerHandler3.Setup(handler => handler.IsTriggered(It.IsAny<ITrigger>(), It.IsAny<RecipeTrigger>()))
+                .ThrowsAsync(new Exception());
+
+            var triggerDispatcher =
+                new TriggerDispatcher(
+                    new List<ITriggerHandler>() {triggerHandler.Object, triggerHandler2.Object, triggerHandler3.Object},
+                    recipeManager.Object, actionDispatcher.Object,
+                    logger.Object);
+
+
+            await triggerDispatcher.DispatchTrigger(new TestTrigger()
+            {
+                DataJson = "{}"
+            });
+
+
+            actionDispatcher.Verify(dispatcher => dispatcher.Dispatch("hohoho", It.IsAny<RecipeAction>()),
+                Times.Once);
+            logger.Verify(
+                logger1 => logger1.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<FormattedLogValues>(),
+                    It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()), Times.Exactly(2));
         }
 
         private class TestTrigger : ITrigger
