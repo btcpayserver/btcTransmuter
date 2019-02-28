@@ -9,7 +9,9 @@ You can mix and match as many as you want. If you have a number, you may even do
 @if (!Model.NoRecipeTrigger)
 {
     <span>Properties available under <kbd>TriggerData.</kbd></span>
+    <div style="overflow-y: auto; max-height: 50vh">
     <partial name="PosData" model="@Model.Properties"/>
+</div>
 }
 else
 {

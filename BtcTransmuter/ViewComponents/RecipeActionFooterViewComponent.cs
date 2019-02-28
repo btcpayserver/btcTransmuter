@@ -47,16 +47,21 @@ namespace BtcTransmuter.ViewComponents
         }
 
 
-        private Dictionary<string, object> GetRecursiveAvailableProperties(Type type)
+        private Dictionary<string, object> GetRecursiveAvailableProperties(Type type, int currentDepth = 0)
         {
             var properties = new Dictionary<string, dynamic>();
+            if (currentDepth >= 5)
+            {
+                properties.Add(type.Name, "Too deep, guess the rest bro");
+                return properties;
+            }
             var tProps = type.GetProperties();
             foreach (var prop in tProps)
             {
                 properties.Add(prop.Name,
                     prop.PropertyType.IsPrimitive
                         ? (dynamic) prop.PropertyType.ToString()
-                        : GetRecursiveAvailableProperties(prop.PropertyType));
+                        : GetRecursiveAvailableProperties(prop.PropertyType, currentDepth+1));
             }
 
             return properties;

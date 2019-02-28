@@ -57,7 +57,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
                 mainModel.Set<SendEmailData>(viewModel);
                 return (mainModel, null);
             }
-            
+
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 Type = new[] {SmtpService.SmtpExternalServiceType},

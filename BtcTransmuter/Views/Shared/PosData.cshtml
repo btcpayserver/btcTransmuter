@@ -1,37 +1,38 @@
 @model Dictionary<string, object>
-
-<table class="table table-sm table-responsive-md">
-    @foreach (var posDataItem in Model)
-    {
-        <tr>
-            @if (!string.IsNullOrEmpty(posDataItem.Key))
-            {
-                <th>@posDataItem.Key</th>
-                <td>
-                    @if (posDataItem.Value is string)
-                    {
-                        @posDataItem.Value
-                    }
-                    else
-                    {
-                        <partial name="PosData" model="@posDataItem.Value"/>
-                    }
-
-                </td>
-            }
-            else
-            {
-                <td colspan="2">
-                    @if (posDataItem.Value is string)
-                    {
-                        @posDataItem.Value
-                    }
-                    else
-                    {
-                        <partial name="PosData" model="@posDataItem.Value"/>
-                    }
-                </td>
-            }
-        </tr>
-    }
-</table>
+<ul>@foreach (var posDataItem in Model){<li>@if (!string.IsNullOrEmpty(posDataItem.Key)){<span class="badge badge-primary">@posDataItem.Key</span>if (posDataItem.Value is string){<span>@posDataItem.Value</span>}else{<ul><partial name="PosData" model="@posDataItem.Value"/></ul>}}else{<ul colspan="2"><li>@if (posDataItem.Value is string){<span class="badge badge-primary">@posDataItem.Value</span>}else{<partial name="PosData" model="@posDataItem.Value"/>}</li></ul>}</li>}
+</ul>
+@* <table class="table table-sm table-responsive-md"> *@
+@*     @foreach (var posDataItem in Model) *@
+@*     { *@
+@*         <tr> *@
+@*             @if (!string.IsNullOrEmpty(posDataItem.Key)) *@
+@*             { *@
+@*                 <th>@posDataItem.Key</th> *@
+@*                 <td> *@
+@*                     @if (posDataItem.Value is string) *@
+@*                     { *@
+@*                         @posDataItem.Value *@
+@*                     } *@
+@*                     else *@
+@*                     { *@
+@*                         <partial name="PosData" model="@posDataItem.Value"/> *@
+@*                     } *@
+@* *@
+@*                 </td> *@
+@*             } *@
+@*             else *@
+@*             { *@
+@*                 <td colspan="2"> *@
+@*                     @if (posDataItem.Value is string) *@
+@*                     { *@
+@*                         @posDataItem.Value *@
+@*                     } *@
+@*                     else *@
+@*                     { *@
+@*                         <partial name="PosData" model="@posDataItem.Value"/> *@
+@*                     } *@
+@*                 </td> *@
+@*             } *@
+@*         </tr> *@
+@*     } *@
+@* </table> *@
