@@ -65,7 +65,7 @@ namespace BtcTransmuter.Abstractions.Actions
         {
             try
             {
-                return Regex.Replace(value, @"{(.+?)}",
+                return Regex.Replace(value, @"{{(.+?)}}",
                     match =>
                     {
                         var p = Expression.Parameter(@object.GetType(), "TriggerData");
