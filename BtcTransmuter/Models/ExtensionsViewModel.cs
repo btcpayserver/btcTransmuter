@@ -11,5 +11,7 @@ namespace BtcTransmuter.Models
     public class ExtensionsViewModel
     {
         public IEnumerable<BtcTransmuterExtension> Extensions { get; set; }
+        public string StatusMessage { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }
