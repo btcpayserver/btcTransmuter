@@ -11,65 +11,76 @@
 </div>
 <h2>@ViewData["Title"]</h2>
 <div>
-    @foreach (var extension in Model.Extensions)
-    {
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">
-                    @extension.Name <span class="badge badge-secondary">@extension.Version</span>
-                </h3>
-                <p class="card-text">@extension.Description</p>
+@foreach (var extension in Model.Extensions)
+{
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">
+                @extension.Name <span class="badge badge-secondary">@extension.Version</span>
+            </h3>
+            <p class="card-text">@extension.Description</p>
 
-                @if (extension.Actions.Any())
-                {
-                    <h4>Actions</h4>
-                    <ul class="">
-                        @foreach (var actionDescriptor in extension.Actions)
-                        {
-                            <li class="">@actionDescriptor.Name - @actionDescriptor.Description</li>
-                        }
-                    </ul>
-                }
+            @if (extension.Actions.Any())
+            {
+                <h4>Actions</h4>
+                <ul class="">
+                    @foreach (var actionDescriptor in extension.Actions)
+                    {
+                        <li class="">@actionDescriptor.Name - @actionDescriptor.Description</li>
+                    }
+                </ul>
+            }
 
-                @if (extension.Triggers.Any())
-                {
-                    <h4>Triggers</h4>
-                    <ul class="">
-                        @foreach (var triggerDescriptor in extension.Triggers)
-                        {
-                            <li class="">@triggerDescriptor.Name - @triggerDescriptor.Description</li>
-                        }
-                    </ul>
-                }
+            @if (extension.Triggers.Any())
+            {
+                <h4>Triggers</h4>
+                <ul class="">
+                    @foreach (var triggerDescriptor in extension.Triggers)
+                    {
+                        <li class="">@triggerDescriptor.Name - @triggerDescriptor.Description</li>
+                    }
+                </ul>
+            }
 
-                @if (extension.ExternalServices.Any())
-                {
-                    <h4>External Services</h4>
-                    <ul class="">
-                        @foreach (var externalServiceDescriptor in extension.ExternalServices)
-                        {
-                            <li class="">@externalServiceDescriptor.Name - @externalServiceDescriptor.Description</li>
-                        }
-                    </ul>
-                }
+            @if (extension.ExternalServices.Any())
+            {
+                <h4>External Services</h4>
+                <ul class="">
+                    @foreach (var externalServiceDescriptor in extension.ExternalServices)
+                    {
+                        <li class="">@externalServiceDescriptor.Name - @externalServiceDescriptor.Description</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+    <br/>
+}
+@if (Model.IsAdmin)
+{
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Add Extension </h3>
+                    <form method="post" enctype="multipart/form-data" asp-action="UploadExtension">
+
+                        <div class="form-group">
+                            <input type="file" name="files" accept=".zip" id="files"/>
+                            <button class="btn btn-primary" type="submit">Upload</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <br/>
-    }
-    @if (Model.IsAdmin)
-    {
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">Add Extension</h3>
-                <form method="post" enctype="multipart/form-data" asp-action="UploadExtension">
-
-                    <div class="form-group">
-                        <input type="file" name="files" accept=".zip" id="files"/>
-                        <button class="btn btn-primary" type="submit">Upload</button>
-                    </div>
-                </form>
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Add Extension from repo</h3>
+                    
+                    <a asp-action="BrowseAvailableExtensions" class="btn btn-primary"> Browse available extensions</a>
+                </div>
             </div>
         </div>
-    }
-
-</div>
+    </div>
+}

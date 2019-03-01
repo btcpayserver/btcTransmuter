@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
-using ExtCore.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -49,6 +48,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpPost("upload")]
         public async Task<IActionResult> UploadExtension(List<IFormFile> files)
         {
             var dest = Path.Combine(_hostingEnvironment.ContentRootPath, "Extensions");
@@ -83,6 +83,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpGet("available")]
         public async Task<IActionResult> BrowseAvailableExtensions()
         {
             var result = new List<RemoteAvailableExtension>();
@@ -95,6 +96,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpGet("available/{url}")]
         public async Task<IActionResult> DownloadRemoteExtension(string url)
         {
             using (var client = new System.Net.WebClient())
@@ -117,15 +119,5 @@ namespace BtcTransmuter.Controllers
                 });
             }
         }
-    }
-
-    public class RemoteAvailableExtension : IExtension
-    {
-        public string ZipUrl { get; set; }
-        public string Name { get; }
-        public string Description { get; }
-        public string Url { get; }
-        public string Version { get; }
-        public string Authors { get; }
     }
 }
