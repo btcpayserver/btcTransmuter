@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Data.Common;
+using System.IO;
 using BtcTransmuter.Abstractions.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -18,10 +20,10 @@ namespace BtcTransmuter
     {
         private string extensionsPath;
 
-        public Startup(IHostingEnvironment  hostingEnvironment, IConfiguration configuration)
+        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
         {
             Configuration = configuration;
-            
+
             extensionsPath = Path.Combine(hostingEnvironment.ContentRootPath, "Extensions");
         }
 
@@ -33,23 +35,24 @@ namespace BtcTransmuter
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
-                options.Password.RequireLowercase= false;
-                options.Password.RequireUppercase= false;
-                options.Password.RequiredUniqueChars= 0;
-                options.Password.RequireNonAlphanumeric= false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireNonAlphanumeric = false;
             });
 
-            
+
             services.AddExtCore(this.extensionsPath, true);
             services.AddHttpClient();
             services.AddTransmuterServices();
             services.AddMemoryCache();
-            
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -58,7 +61,8 @@ namespace BtcTransmuter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceScopeFactory serviceScopeFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            IServiceScopeFactory serviceScopeFactory)
         {
             DependencyHelper.ServiceScopeFactory = serviceScopeFactory;
             using (var scope = serviceScopeFactory.CreateScope())
@@ -66,16 +70,29 @@ namespace BtcTransmuter
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     context.Database.Migrate();
+
+
+                    using (var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
+                    {
+                        if (!roleManager.RoleExistsAsync("Admin").Result)
+                        {
+                            if (!roleManager.CreateAsync(new IdentityRole("Admin")).Result.Succeeded)
+                            {
+                                throw new Exception("couldnt create role needed for admin");
+                            }
+                        }
+                    }
                 }
             }
+
             if (env.IsDevelopment())
             {
-                
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
             app.UseStaticFiles();
@@ -89,7 +106,7 @@ namespace BtcTransmuter
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            
+
             app.UseExtCore();
         }
     }
