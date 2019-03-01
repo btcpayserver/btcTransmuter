@@ -1,0 +1,39 @@
+@model System.Collections.Generic.IEnumerable<BtcTransmuter.Controllers.RemoteAvailableExtension>
+
+
+@{
+    ViewData["Title"] = "Browse Available Extensions";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p>
+   
+</p>
+@if (!Model.Any())
+{
+    <div class="card">
+        <h3 class="card-header text-center">
+            Nothing available
+        </h3>
+    </div>
+}
+<div class="card-columns">
+
+    @foreach (var extension in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    @extension.Name <span class="badge badge-primary">@extension.Version</span>
+                </h3>
+                <p class="card-text">@Html.Raw(extension.Description)</p>
+            </div>
+            
+            <div class="card-footer">
+                <a asp-action="DownloadRemoteExtension"  asp-route-url="@extension.ZipUrl">Install</a>
+            </div>
+
+        </div>
+    }
+
+</div>

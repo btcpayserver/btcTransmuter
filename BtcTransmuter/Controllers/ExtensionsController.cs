@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
+using ExtCore.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -57,14 +59,15 @@ namespace BtcTransmuter.Controllers
                 if (formFile.Length > 0)
                 {
                     var filedest = Path.Combine(dest, formFile.FileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(filedest));
-                    using (var stream = new FileStream(filedest, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-
                     if (Path.GetExtension(filedest) == ".zip")
                     {
+                        Directory.CreateDirectory(Path.GetDirectoryName(filedest));
+                        using (var stream = new FileStream(filedest, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+
+
                         ZipFile.ExtractToDirectory(filedest,
                             filedest.TrimEnd(".zip", StringComparison.InvariantCultureIgnoreCase), true);
                         System.IO.File.Delete(filedest);
@@ -78,5 +81,51 @@ namespace BtcTransmuter.Controllers
                 StatusMessage = "Files uploaded, restart server to load plugins"
             });
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BrowseAvailableExtensions()
+        {
+            var result = new List<RemoteAvailableExtension>();
+
+            var newExtensions = result.Where(extension =>
+                !_btcTransmuterExtensions.Any(transmuterExtension =>
+                    transmuterExtension.Name == extension.Name && transmuterExtension.Version == extension.Version));
+
+            return View(newExtensions);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DownloadRemoteExtension(string url)
+        {
+            using (var client = new System.Net.WebClient())
+            {
+                var dest = Path.Combine(_hostingEnvironment.ContentRootPath, "Extensions");
+                var filename = url.Split("/").Last();
+                var filedest = Path.Combine(dest, filename);
+                Directory.CreateDirectory(Path.GetDirectoryName(filedest));
+
+                client.DownloadFileAsync(new Uri(url),
+                    filedest);
+
+                ZipFile.ExtractToDirectory(filedest,
+                    filedest.TrimEnd(".zip", StringComparison.InvariantCultureIgnoreCase), true);
+                System.IO.File.Delete(filedest);
+
+                return RedirectToAction("Extensions", new
+                {
+                    StatusMessage = "Files uploaded, restart server to load plugins"
+                });
+            }
+        }
+    }
+
+    public class RemoteAvailableExtension : IExtension
+    {
+        public string ZipUrl { get; set; }
+        public string Name { get; }
+        public string Description { get; }
+        public string Url { get; }
+        public string Version { get; }
+        public string Authors { get; }
     }
 }

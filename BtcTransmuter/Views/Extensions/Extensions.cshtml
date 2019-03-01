@@ -62,9 +62,9 @@
             <div class="card-body">
                 <h3 class="card-title">Add Extension</h3>
                 <form method="post" enctype="multipart/form-data" asp-action="UploadExtension">
-                    
+
                     <div class="form-group">
-                        <input type="file" name="files" id="files" />
+                        <input type="file" name="files" accept=".zip" id="files"/>
                         <button class="btn btn-primary" type="submit">Upload</button>
                     </div>
                 </form>
