@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Tests", "BtcTransmuter.Tests\BtcTransmuter.Tests.csproj", "{C6B38273-7152-4B05-AA99-10672CE8D1DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Exchange.Tests", "BtcTransmuter.Extension.Exchange.Tests\BtcTransmuter.Extension.Exchange.Tests.csproj", "{2F3CE30A-E0B1-483B-AF25-47387DE292BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{C6B38273-7152-4B05-AA99-10672CE8D1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6B38273-7152-4B05-AA99-10672CE8D1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6B38273-7152-4B05-AA99-10672CE8D1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F3CE30A-E0B1-483B-AF25-47387DE292BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F3CE30A-E0B1-483B-AF25-47387DE292BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F3CE30A-E0B1-483B-AF25-47387DE292BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F3CE30A-E0B1-483B-AF25-47387DE292BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

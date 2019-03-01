@@ -1,12 +1,11 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
+using Microsoft.EntityFrameworkCore.Internal;
 using Xunit;
 
-namespace BtcTransmuter.Tests
+namespace BtcTransmuter.Extension.Exchange.Tests
 {
     public class ExchangeServiceTests
     {

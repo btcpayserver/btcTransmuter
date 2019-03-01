@@ -5,7 +5,6 @@ using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
-using ExchangeSharp;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
