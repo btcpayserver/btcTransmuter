@@ -27,7 +27,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
                 return Task.FromResult(false);
             }
 
-            if (triggerData.RelativeUrl.Equals(parameters.RelativeUrl, StringComparison.InvariantCultureIgnoreCase))
+            if (!triggerData.RelativeUrl.Equals(parameters.RelativeUrl, StringComparison.InvariantCultureIgnoreCase))
             {
                 return Task.FromResult(false);
             }

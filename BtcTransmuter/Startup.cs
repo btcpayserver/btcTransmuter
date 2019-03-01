@@ -41,7 +41,7 @@ namespace BtcTransmuter
 
             
             services.AddExtCore(this.extensionsPath, true);
-            
+            services.AddHttpClient();
             services.AddTransmuterServices();
             services.AddMemoryCache();
             

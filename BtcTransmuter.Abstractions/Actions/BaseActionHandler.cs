@@ -40,7 +40,10 @@ namespace BtcTransmuter.Abstractions.Actions
             }
         }
 
-        protected abstract Task<bool> CanExecute(object triggerData, RecipeAction recipeAction);
+        protected virtual Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
+        {
+            return Task.FromResult(recipeAction.ActionId == ActionId);
+        }
 
         public async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction)
         {

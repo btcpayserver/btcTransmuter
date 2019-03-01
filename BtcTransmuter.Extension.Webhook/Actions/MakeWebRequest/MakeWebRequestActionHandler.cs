@@ -13,6 +13,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
 {
     public class MakeWebRequestActionHandler : BaseActionHandler<MakeWebRequestData>
     {
+        private readonly IHttpClientFactory _httpClientFactory;
         public override string ActionId => "MakeWebRequest";
         public override string Name => "Make web request";
 
@@ -21,6 +22,15 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
 
         public override string ViewPartial => "ViewMakeWebRequestAction";
         public override string ControllerName => "MakeWebRequest";
+
+        public MakeWebRequestActionHandler()
+        {
+        }
+
+        public MakeWebRequestActionHandler(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
 
         public Task<IActionResult> EditData(RecipeAction data)
         {
@@ -42,29 +52,27 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             }
         }
 
-        protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
-        {
-            return Task.FromResult(recipeAction.ActionId == ActionId);
-        }
-
         protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
             MakeWebRequestData actionData)
         {
             try
             {
-                var client = new HttpClient();
-                var result = await client.SendAsync(
-                    new HttpRequestMessage(new HttpMethod(actionData.Method), InterpolateString(actionData.Url, triggerData))
-                    {
-                        Content = new StringContent(InterpolateString(actionData.Body, triggerData) ?? "",
-                            Encoding.UTF8, InterpolateString(actionData.ContentType, triggerData))
-                    });
-                return new ActionHandlerResult()
+                using (var client = _httpClientFactory.CreateClient())
                 {
-                    Executed = true,
-                    Result =
-                        $"Request sent. Status Code: {result.StatusCode}"
-                };
+                    var result = await client.SendAsync(
+                        new HttpRequestMessage(new HttpMethod(actionData.Method),
+                            InterpolateString(actionData.Url, triggerData))
+                        {
+                            Content = new StringContent(InterpolateString(actionData.Body, triggerData) ?? "",
+                                Encoding.UTF8, InterpolateString(actionData.ContentType, triggerData))
+                        });
+                    return new ActionHandlerResult()
+                    {
+                        Executed = true,
+                        Result =
+                            $"Request sent. Status Code: {result.StatusCode}"
+                    };
+                }
             }
             catch (Exception e)
             {

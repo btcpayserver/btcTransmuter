@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Data.Entities;
@@ -14,25 +13,30 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
     [Authorize]
     public class SmtpController : BaseExternalServiceController<SmtpExternalServiceData>
     {
-        public SmtpController(IExternalServiceManager externalServiceManager, UserManager<User> userManager, IMemoryCache memoryCache) : base(externalServiceManager, userManager, memoryCache)
+        public SmtpController(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
+            IMemoryCache memoryCache) : base(externalServiceManager, userManager, memoryCache)
         {
         }
 
         protected override string ExternalServiceType => SmtpService.SmtpExternalServiceType;
+
         protected override Task<SmtpExternalServiceData> BuildViewModel(ExternalServiceData data)
         {
-           return Task.FromResult(new SmtpService(data).GetData());
+            return Task.FromResult(new SmtpService(data).GetData());
         }
 
-        protected override async Task<(ExternalServiceData ToSave, SmtpExternalServiceData showViewModel)> BuildModel(
+        protected override Task<(ExternalServiceData ToSave, SmtpExternalServiceData showViewModel)> BuildModel(
             SmtpExternalServiceData viewModel, ExternalServiceData mainModel)
         {
             if (!ModelState.IsValid)
             {
-                return (null, viewModel);
+                return Task.FromResult<(ExternalServiceData ToSave, SmtpExternalServiceData showViewModel)>((null,
+                    viewModel));
             }
+
             mainModel.Set(viewModel);
-            return (mainModel, null);
+            return Task.FromResult<(ExternalServiceData ToSave, SmtpExternalServiceData showViewModel)>((mainModel,
+                null));
         }
     }
 }
