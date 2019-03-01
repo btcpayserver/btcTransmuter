@@ -1,0 +1,9 @@
+@model BtcTransmuter.ViewComponents.ExtensionMenusViewComponentViewModel
+
+@foreach (var ext in Model.Extensions)
+{
+    if (!string.IsNullOrEmpty(ext.MenuPartial))
+    {
+        @await Html.PartialAsync(ext.MenuPartial); 
+    }
+}

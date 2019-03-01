@@ -22,6 +22,7 @@ namespace BtcTransmuter.Abstractions.Extensions
         int IConfigureAction.Priority => Priority;
         protected abstract int Priority { get; }
         public string HeaderPartial { get; }
+        public string MenuPartial { get; }
 
         public IEnumerable<IActionDescriptor> Actions => GetInstancesOfTypeInOurAssembly<IActionDescriptor>();
         public IEnumerable<ITriggerDescriptor> Triggers => GetInstancesOfTypeInOurAssembly<ITriggerDescriptor>();

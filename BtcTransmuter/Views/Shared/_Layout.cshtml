@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - BtcTransmuter</title>
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
-    @await Component.InvokeAsync("Extensions")
+    @await Component.InvokeAsync("ExtensionHeaders")
 
 </head>
 <body>
-
 
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -30,7 +29,7 @@
                     <li class="nav-item mr-3">
                         <a asp-area="" asp-controller="ExternalServices" asp-action="GetServices">External Services</a>
                     </li>
-
+                    @await Component.InvokeAsync("ExtensionMenus")
                     <partial name="_LoginPartial"/>
                 </ul>
 
@@ -44,7 +43,7 @@
     </main>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2019 - BtcTransmuter. Made with ❤ by 
+            &copy; 2019 - BtcTransmuter. Made with ❤ by
             <a href="https://twitter.com/mrkukks" target="_blank"> Kukks</a> & <a href="https://twitter.com/r0ckstardev" target="_blank"> RockstarDev</a>
             @@ <a href="https://btcpaysevrer.org" target="_blank">BtcPayServer</a>
         </div>

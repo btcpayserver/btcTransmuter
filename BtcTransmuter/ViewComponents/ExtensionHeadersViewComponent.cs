@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.ViewComponents
 {
-    public class ExtensionsViewComponent : ViewComponent
+    public class ExtensionHeadersViewComponent : ViewComponent
     {
         private readonly IEnumerable<BtcTransmuterExtension> _extensions;
 
-        public ExtensionsViewComponent(IEnumerable<BtcTransmuterExtension> extensions)
+        public ExtensionHeadersViewComponent(IEnumerable<BtcTransmuterExtension> extensions)
         {
             _extensions = extensions;
         }
 
         public Task<IViewComponentResult> InvokeAsync()
         {
-            return Task.FromResult<IViewComponentResult>(View(new ExtensionsViewComponentViewModel(_extensions)));
+            return Task.FromResult<IViewComponentResult>(View(new ExtensionHeadersViewComponentViewModel(_extensions)));
         }
     }
 }
