@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Exc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Webhook.Tests", "BtcTransmuter.Extension.Webhook.Tests\BtcTransmuter.Extension.Webhook.Tests.csproj", "{A2039A2D-410F-485E-9D72-28A2541041A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.NBXplorer", "BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj", "{C6E0F70A-3045-4D01-8127-1F17A3478090}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{A2039A2D-410F-485E-9D72-28A2541041A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2039A2D-410F-485E-9D72-28A2541041A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2039A2D-410F-485E-9D72-28A2541041A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E0F70A-3045-4D01-8127-1F17A3478090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E0F70A-3045-4D01-8127-1F17A3478090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E0F70A-3045-4D01-8127-1F17A3478090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E0F70A-3045-4D01-8127-1F17A3478090}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

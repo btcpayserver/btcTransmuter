@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="NBXplorer.Client" Version="2.0.0.4" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Views\NBXplorerNewBlock\EditData.cshtml" />
+      <Content Include="Views\NBXplorerStatus\GetSummaries.cshtml" />
+      <Content Include="Views\Shared\NBXplorerMenuExtension.cshtml" />
+    </ItemGroup>
+</Project>

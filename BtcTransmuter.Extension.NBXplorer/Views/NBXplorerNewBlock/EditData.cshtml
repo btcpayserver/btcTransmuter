@@ -1,0 +1,23 @@
+@model BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock.NBXplorerNewBlockController.NBXplorerNewBlockViewModel
+
+@{
+    ViewData["Title"] = "Edit New Block Trigger";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="CryptoCode" class="control-label"></label>
+        <select asp-for="CryptoCode" asp-items="Model.CryptoCodes" class="form-control"></select>
+        <span asp-validation-for="CryptoCode" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="RecipeId" />
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
+    </div>
+</form>

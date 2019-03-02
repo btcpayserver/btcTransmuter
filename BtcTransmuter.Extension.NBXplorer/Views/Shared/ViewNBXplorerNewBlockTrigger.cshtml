@@ -1,0 +1,18 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
+@model BtcTransmuter.Data.Entities.RecipeTrigger
+@{
+    var data = Model.Get<NBXplorerNewBlockTriggerParameters>();
+}
+
+<div>
+    New Block on 
+    @if (!string.IsNullOrEmpty(data.CryptoCode))
+    {
+        <span>@data.CryptoCode</span>
+    }
+    else
+    {
+        <span>any connected crypto node</span>
+    }
+</div>
