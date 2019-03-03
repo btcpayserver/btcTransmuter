@@ -33,6 +33,7 @@ namespace BtcTransmuter.Extension.NBXplorer
                         .Distinct().ToArray();
                 });
             serviceCollection.AddSingleton<NBXplorerSummaryProvider>();
+            serviceCollection.AddSingleton<NBXplorerClientProvider>();
         }
     }
 }

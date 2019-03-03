@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
-using BtcTransmuter.Extension.NBXplorer.HostedServices;
 
-namespace BtcTransmuter.Extension.NBXplorer.Controllers
+namespace BtcTransmuter.Extension.NBXplorer.Models
 {
     public class NBXplorerSummariesViewModel
     {

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,21 +16,21 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
     public class NBXplorerHostedService : IHostedService
     {
         private readonly IOptions<NBXplorerOptions> _options;
+        private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly NBXplorerSummaryProvider _nbXplorerSummaryProvider;
         private readonly ILogger<NBXplorerHostedService> _logger;
         private readonly ITriggerDispatcher _triggerDispatcher;
-        private NBXplorerNetworkProvider _nbXplorerNetworkProvider;
-        private Dictionary<string, ExplorerClient> _clients;
 
         public NBXplorerHostedService(IOptions<NBXplorerOptions> options,
+            NBXplorerClientProvider nbXplorerClientProvider,
             NBXplorerSummaryProvider nbXplorerSummaryProvider, ILogger<NBXplorerHostedService> logger,
             ITriggerDispatcher triggerDispatcher)
         {
             _options = options;
+            _nbXplorerClientProvider = nbXplorerClientProvider;
             _nbXplorerSummaryProvider = nbXplorerSummaryProvider;
             _logger = logger;
             _triggerDispatcher = triggerDispatcher;
-            _nbXplorerNetworkProvider = new NBXplorerNetworkProvider(_options.Value.NetworkType);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -41,22 +40,12 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                 return Task.CompletedTask;
             }
 
-            _clients = _options.Value.Cryptos.Select(s =>
+            foreach (var cryptoCode in _options.Value.Cryptos)
             {
-                var client = new ExplorerClient(_nbXplorerNetworkProvider.GetFromCryptoCode(s));
-
-                if (string.IsNullOrEmpty(_options.Value.CookieFile))
-                {
-                    client.SetNoAuth();
-                }
-                else
-                {
-                    client.SetCookieAuth(_options.Value.CookieFile);
-                }
-
+                var client = _nbXplorerClientProvider.GetClient(cryptoCode);
+                
                 _ = UpdateSummaryContinuously(client, cancellationToken);
-                return client;
-            }).ToDictionary(client => client.CryptoCode, client => client);
+            }
             return Task.CompletedTask;
         }
 
@@ -112,12 +101,12 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                             case NewTransactionEvent newTransactionEvent:
                                 switch (newTransactionEvent.TrackedSource)
                                 {
+                                    
                                     case AddressTrackedSource addressTrackedSource:
                                         addressTrackedSource.Address.ToString();
                                         break;
                                     case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
-                                        newTransactionEvent.TransactionData.Transaction.Outputs.First().Value 
-                                        derivationSchemeTrackedSource.DerivationStrategy
+//                                        derivationSchemeTrackedSource.ToPrettyString()
                                         break;
                                 }
                                 //TODO: dispatch a bunch of different triggers

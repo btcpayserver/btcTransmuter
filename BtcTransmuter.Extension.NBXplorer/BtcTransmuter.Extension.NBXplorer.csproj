@@ -14,6 +14,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="Views\NBXplorerNewBlock\EditData.cshtml" />
+      <Content Include="Views\NBXplorerNewTransaction\EditData.cshtml" />
       <Content Include="Views\NBXplorerStatus\GetSummaries.cshtml" />
       <Content Include="Views\Shared\NBXplorerMenuExtension.cshtml" />
     </ItemGroup>
