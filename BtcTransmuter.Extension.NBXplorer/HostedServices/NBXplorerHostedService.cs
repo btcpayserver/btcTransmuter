@@ -90,7 +90,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                         await explorerClient.CreateWebsocketNotificationSessionAsync(cancellationToken);
 
                     await notificationSession.ListenNewBlockAsync(cancellationToken);
-                    await notificationSession.ListenAllDerivationSchemesAsync(false, cancellationToken);
+                    await notificationSession.ListenAllTrackedSourceAsync(false, cancellationToken);
 
                     while (!cancellationToken.IsCancellationRequested)
                     {
@@ -110,6 +110,16 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
                                 break;
                             case NewTransactionEvent newTransactionEvent:
+                                switch (newTransactionEvent.TrackedSource)
+                                {
+                                    case AddressTrackedSource addressTrackedSource:
+                                        addressTrackedSource.Address.ToString();
+                                        break;
+                                    case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
+                                        newTransactionEvent.TransactionData.Transaction.Outputs.First().Value 
+                                        derivationSchemeTrackedSource.DerivationStrategy
+                                        break;
+                                }
                                 //TODO: dispatch a bunch of different triggers
                                 break;
                             case UnknownEvent unknownEvent:
