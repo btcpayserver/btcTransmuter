@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
@@ -5,12 +6,14 @@ using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.NBXplorer.Models;
+using BtcTransmuter.Extension.NBXplorer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using NBXplorer.DerivationStrategy;
 
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 {
@@ -21,37 +24,64 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         NBXplorerNewTransactionTriggerParameters>
     {
         private readonly IOptions<NBXplorerOptions> _options;
+        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
+        private readonly DerivationSchemeParser _derivationSchemeParser;
 
         public NBXplorerNewTransactionController(IRecipeManager recipeManager, UserManager<User> userManager,
-            IMemoryCache memoryCache, IOptions<NBXplorerOptions> options) : base(recipeManager, userManager,
+            IMemoryCache memoryCache, IOptions<NBXplorerOptions> options,
+            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,DerivationSchemeParser  derivationSchemeParser) : base(recipeManager, userManager,
             memoryCache)
         {
             _options = options;
+            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
+            _derivationSchemeParser = derivationSchemeParser;
         }
 
         protected override async Task<NBXplorerNewTransactionViewModel> BuildViewModel(RecipeTrigger data)
         {
             var innerData = data.Get<NBXplorerNewTransactionTriggerParameters>();
-            var cryptos = _options.Value.Cryptos?.ToList();
-            cryptos?.Insert(0,"Any");
+
             return new NBXplorerNewTransactionViewModel()
             {
-                CryptoCodes = new SelectList(cryptos,  innerData.CryptoCode),
+                CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(),
+                    innerData.CryptoCode),
 
                 RecipeId = data.RecipeId,
-                CryptoCode = innerData.CryptoCode
+                CryptoCode = innerData.CryptoCode,
+                Address = innerData.Address,
+                DerivationStrategy = innerData.DerivationStrategy,
             };
         }
 
-        protected override async Task<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)> BuildModel(
-            NBXplorerNewTransactionViewModel viewModel, RecipeTrigger mainModel)
+        protected override async Task<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>
+            BuildModel(
+                NBXplorerNewTransactionViewModel viewModel, RecipeTrigger mainModel)
         {
+            if (!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.Address))
+            {
+                ModelState.AddModelError(string.Empty,
+                    "Please choose to track either an address OR a derivation scheme");
+            }
+
+            if (!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.CryptoCode))
+            {
+                try
+                {
+                    var factory =
+                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
+
+                    _derivationSchemeParser.Parse(factory, viewModel.DerivationStrategy);
+                }
+                catch
+                {
+                    ModelState.AddModelError(nameof(viewModel.DerivationStrategy), "Invalid Derivation Scheme");
+                }
+            }
+
             if (!ModelState.IsValid)
             {
-                var cryptos = _options.Value.Cryptos?.ToList();
-                cryptos?.Insert(0,"Any");
-                
-                viewModel.CryptoCodes = new SelectList(cryptos, viewModel.CryptoCode);
+                viewModel.CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(),
+                    viewModel.CryptoCode);
                 return (null, viewModel);
             }
 

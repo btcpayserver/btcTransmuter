@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
@@ -32,11 +33,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
         protected override async Task<NBXplorerNewBlockViewModel> BuildViewModel(RecipeTrigger data)
         {
             var innerData = data.Get<NBXplorerNewBlockTriggerParameters>();
-            var cryptos = _options.Value.Cryptos?.ToList();
-            cryptos?.Insert(0,"Any");
             return new NBXplorerNewBlockViewModel()
             {
-                CryptoCodes = new SelectList(cryptos,  innerData.CryptoCode),
+                CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(),  innerData.CryptoCode),
 
                 RecipeId = data.RecipeId,
                 CryptoCode = innerData.CryptoCode
@@ -48,10 +47,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
         {
             if (!ModelState.IsValid)
             {
-                var cryptos = _options.Value.Cryptos?.ToList();
-                cryptos?.Insert(0,"Any");
-                
-                viewModel.CryptoCodes = new SelectList(cryptos, viewModel.CryptoCode);
+                viewModel.CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(), viewModel.CryptoCode);
                 return (null, viewModel);
             }
 

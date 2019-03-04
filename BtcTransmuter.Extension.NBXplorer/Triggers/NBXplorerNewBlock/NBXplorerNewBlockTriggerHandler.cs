@@ -21,9 +21,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
             NBXplorerNewBlockTriggerData triggerData,
             NBXplorerNewBlockTriggerParameters parameters)
         {
-            return Task.FromResult(string.IsNullOrEmpty(parameters.CryptoCode) ||
-                                   !triggerData.CryptoCode.Equals(parameters.CryptoCode,
-                                       StringComparison.InvariantCultureIgnoreCase));
+            return Task.FromResult(!triggerData.CryptoCode.Equals(parameters.CryptoCode,
+                StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

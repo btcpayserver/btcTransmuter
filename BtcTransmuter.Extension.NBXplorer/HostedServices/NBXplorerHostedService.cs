@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock;
+using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -43,9 +44,10 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             foreach (var cryptoCode in _options.Value.Cryptos)
             {
                 var client = _nbXplorerClientProvider.GetClient(cryptoCode);
-                
+
                 _ = UpdateSummaryContinuously(client, cancellationToken);
             }
+
             return Task.CompletedTask;
         }
 
@@ -87,30 +89,28 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                         switch (evt)
                         {
                             case NewBlockEvent newBlockEvent:
-                                var trigger = new NBXplorerNewBlockTrigger()
+                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewBlockTrigger()
                                 {
                                     Data = new NBXplorerNewBlockTriggerData()
                                     {
                                         CryptoCode = evt.CryptoCode,
                                         Event = newBlockEvent
                                     }
-                                };
-                                await _triggerDispatcher.DispatchTrigger(trigger);
+                                });
 
                                 break;
                             case NewTransactionEvent newTransactionEvent:
-                                switch (newTransactionEvent.TrackedSource)
+                            {
+                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewTransactionTrigger()
                                 {
-                                    
-                                    case AddressTrackedSource addressTrackedSource:
-                                        addressTrackedSource.Address.ToString();
-                                        break;
-                                    case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
-//                                        derivationSchemeTrackedSource.ToPrettyString()
-                                        break;
-                                }
-                                //TODO: dispatch a bunch of different triggers
+                                    Data = new NBXplorerNewTransactionTriggerData()
+                                    {
+                                        CryptoCode = evt.CryptoCode,
+                                        Event = newTransactionEvent
+                                    }
+                                });
                                 break;
+                            }
                             case UnknownEvent unknownEvent:
                                 _logger.LogWarning(
                                     $"Received unknown message from NBXplorer ({unknownEvent.CryptoCode}), ID: {unknownEvent.EventId}");
