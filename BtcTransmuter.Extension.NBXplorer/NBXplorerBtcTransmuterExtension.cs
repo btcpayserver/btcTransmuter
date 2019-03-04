@@ -25,18 +25,18 @@ namespace BtcTransmuter.Extension.NBXplorer
             serviceCollection.AddSingleton(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
-                var section = configuration.GetSection("NBXplorer");
                 return new NBXplorerOptions()
                 {
-                    Uri = section.GetValue<Uri>(nameof(NBXplorerOptions.Uri)),
-                    CookieFile = section.GetValue<string>(nameof(NBXplorerOptions.CookieFile)),
-                    NetworkType = section.GetValue<NetworkType>(nameof(NBXplorerOptions.NetworkType),
-                        NetworkType.Mainnet),
-                    Cryptos = section.GetValue<string>(nameof(NBXplorerOptions.Cryptos))?
+                    Uri = configuration.GetValue<Uri>($"NBXplorer_{nameof(NBXplorerOptions.Uri)}"),
+                    CookieFile = configuration.GetValue<string>($"NBXplorer_{nameof(NBXplorerOptions.CookieFile)}"),
+                    NetworkType =
+                        configuration.GetValue<NetworkType>($"NBXplorer_{nameof(NBXplorerOptions.NetworkType)}",
+                            NetworkType.Regtest),
+                    Cryptos = configuration
+                        .GetValue<string>($"NBXplorer_{nameof(NBXplorerOptions.Cryptos)}", string.Empty)?
                         .Replace(" ", "")?
                         .Split(",")?
                         .Distinct().ToArray()
-                    
                 };
             });
             serviceCollection.AddSingleton<NBXplorerSummaryProvider>();

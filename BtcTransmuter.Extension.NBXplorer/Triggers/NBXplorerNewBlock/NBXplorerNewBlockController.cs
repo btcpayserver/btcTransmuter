@@ -30,30 +30,30 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
             _options = options;
         }
 
-        protected override async Task<NBXplorerNewBlockViewModel> BuildViewModel(RecipeTrigger data)
+        protected override Task<NBXplorerNewBlockViewModel> BuildViewModel(RecipeTrigger data)
         {
             var innerData = data.Get<NBXplorerNewBlockTriggerParameters>();
-            return new NBXplorerNewBlockViewModel()
+            return Task.FromResult(new NBXplorerNewBlockViewModel()
             {
                 CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(),  innerData.CryptoCode),
 
                 RecipeId = data.RecipeId,
                 CryptoCode = innerData.CryptoCode
-            };
+            });
         }
 
-        protected override async Task<(RecipeTrigger ToSave, NBXplorerNewBlockViewModel showViewModel)> BuildModel(
+        protected override Task<(RecipeTrigger ToSave, NBXplorerNewBlockViewModel showViewModel)> BuildModel(
             NBXplorerNewBlockViewModel viewModel, RecipeTrigger mainModel)
         {
             if (!ModelState.IsValid)
             {
                 viewModel.CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(), viewModel.CryptoCode);
-                return (null, viewModel);
+                return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewBlockViewModel showViewModel)>((null, viewModel));
             }
 
             var recipeTrigger = mainModel;
             recipeTrigger.Set((NBXplorerNewBlockTriggerParameters) viewModel);
-            return (recipeTrigger, null);
+            return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewBlockViewModel showViewModel)>((recipeTrigger, null));
         }
 
         public class NBXplorerNewBlockViewModel : NBXplorerNewBlockTriggerParameters

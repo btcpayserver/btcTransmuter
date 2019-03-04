@@ -34,48 +34,22 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
 
         public async Task UpdateClientState(ExplorerClient client, CancellationToken cancellation)
         {
-            var oldState = _summaries.TryGet(client.CryptoCode);
             var state = (NBXplorerState?) null;
             string error = null;
             StatusResult status = null;
             try
             {
-                switch (oldState?.State)
+                status = await client.GetStatusAsync(cancellation);
+                if (status == null)
                 {
-                    case null:
-                        break;
-                    case NBXplorerState.NotConnected:
-                        status = await client.GetStatusAsync(cancellation);
-                        if (status != null)
-                        {
-                            state = status.IsFullySynched ? NBXplorerState.Ready : NBXplorerState.Synching;
-                        }
-
-                        break;
-                    case NBXplorerState.Synching:
-                        status = await client.GetStatusAsync(cancellation);
-                        if (status == null)
-                        {
-                            state = NBXplorerState.NotConnected;
-                        }
-                        else if (status.IsFullySynched)
-                        {
-                            state = NBXplorerState.Ready;
-                        }
-
-                        break;
-                    case NBXplorerState.Ready:
-                        status = await client.GetStatusAsync(cancellation);
-                        if (status == null)
-                        {
-                            state = NBXplorerState.NotConnected;
-                        }
-                        else if (!status.IsFullySynched)
-                        {
-                            state = NBXplorerState.Synching;
-                        }
-
-                        break;
+                    state = NBXplorerState.NotConnected;
+                }
+                else if (status.IsFullySynched)
+                {
+                    state = NBXplorerState.Ready;
+                }else if (!status.IsFullySynched)
+                {
+                    state = NBXplorerState.Synching;
                 }
             }
             catch (Exception ex) when (!cancellation.IsCancellationRequested)
@@ -83,9 +57,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 error = ex.Message;
             }
 
-            if (status != null && error == null)
+            if (status != null && error == null && status.NetworkType != _options.NetworkType)
             {
-                if (status.NetworkType != _options.NetworkType)
                     error =
                         $"{client.CryptoCode}: NBXplorer is on a different ChainType (actual: {status.NetworkType}, expected: {_options.NetworkType})";
             }
@@ -93,13 +66,11 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             if (error != null)
             {
                 state = NBXplorerState.NotConnected;
-                status = null;
             }
 
-            var result = await client.GetStatusAsync(cancellation);
             _summaries.AddOrReplace(client.CryptoCode, new NBXplorerSummary()
             {
-                Status = result,
+                Status = status,
                 State = state.GetValueOrDefault(NBXplorerState.NotConnected),
                 Error = error
             });

@@ -84,7 +84,7 @@ namespace BtcTransmuter.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("available")]
-        public async Task<IActionResult> BrowseAvailableExtensions()
+        public IActionResult BrowseAvailableExtensions()
         {
             var result = new List<RemoteAvailableExtension>();
 
@@ -97,7 +97,7 @@ namespace BtcTransmuter.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("available/{url}")]
-        public async Task<IActionResult> DownloadRemoteExtension(string url)
+        public IActionResult DownloadRemoteExtension(string url)
         {
             using (var client = new System.Net.WebClient())
             {

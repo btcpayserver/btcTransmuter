@@ -37,7 +37,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (_options.Cryptos == null || !_options.Cryptos.Any() || _options.Uri != null)
+            if (_options.Cryptos == null || !_options.Cryptos.Any() || _options.Uri == null)
             {
                 return Task.CompletedTask;
             }

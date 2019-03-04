@@ -17,7 +17,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Controllers
             _nbXplorerSummaryProvider = nbXplorerSummaryProvider;
         }
 
-        public async Task<IActionResult> GetSummaries()
+        public IActionResult GetSummaries()
         {
             return View(new NBXplorerSummariesViewModel()
             {

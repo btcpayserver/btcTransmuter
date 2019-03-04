@@ -53,7 +53,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             };
         }
 
-        protected override async Task<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>
+        protected override Task<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>
             BuildModel(
                 NBXplorerNewTransactionViewModel viewModel, RecipeTrigger mainModel)
         {
@@ -82,12 +82,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             {
                 viewModel.CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(),
                     viewModel.CryptoCode);
-                return (null, viewModel);
+                return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>((null, viewModel));
             }
 
             var recipeTrigger = mainModel;
             recipeTrigger.Set((NBXplorerNewTransactionTriggerParameters) viewModel);
-            return (recipeTrigger, null);
+            return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>((recipeTrigger, null));
         }
 
         public class NBXplorerNewTransactionViewModel : NBXplorerNewTransactionTriggerParameters
