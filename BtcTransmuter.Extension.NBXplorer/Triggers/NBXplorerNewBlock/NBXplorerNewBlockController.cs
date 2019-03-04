@@ -21,10 +21,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
         NBXplorerNewBlockController.NBXplorerNewBlockViewModel,
         NBXplorerNewBlockTriggerParameters>
     {
-        private readonly IOptions<NBXplorerOptions> _options;
+        private readonly NBXplorerOptions _options;
 
         public NBXplorerNewBlockController(IRecipeManager recipeManager, UserManager<User> userManager,
-            IMemoryCache memoryCache, IOptions<NBXplorerOptions> options) : base(recipeManager, userManager,
+            IMemoryCache memoryCache, NBXplorerOptions options) : base(recipeManager, userManager,
             memoryCache)
         {
             _options = options;
@@ -35,7 +35,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
             var innerData = data.Get<NBXplorerNewBlockTriggerParameters>();
             return new NBXplorerNewBlockViewModel()
             {
-                CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(),  innerData.CryptoCode),
+                CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(),  innerData.CryptoCode),
 
                 RecipeId = data.RecipeId,
                 CryptoCode = innerData.CryptoCode
@@ -47,7 +47,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
         {
             if (!ModelState.IsValid)
             {
-                viewModel.CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(), viewModel.CryptoCode);
+                viewModel.CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(), viewModel.CryptoCode);
                 return (null, viewModel);
             }
 

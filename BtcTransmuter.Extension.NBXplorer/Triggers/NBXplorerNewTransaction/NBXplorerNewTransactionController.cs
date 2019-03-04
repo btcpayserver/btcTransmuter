@@ -23,12 +23,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         NBXplorerNewTransactionController.NBXplorerNewTransactionViewModel,
         NBXplorerNewTransactionTriggerParameters>
     {
-        private readonly IOptions<NBXplorerOptions> _options;
+        private readonly NBXplorerOptions _options;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
 
         public NBXplorerNewTransactionController(IRecipeManager recipeManager, UserManager<User> userManager,
-            IMemoryCache memoryCache, IOptions<NBXplorerOptions> options,
+            IMemoryCache memoryCache, NBXplorerOptions options,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,DerivationSchemeParser  derivationSchemeParser) : base(recipeManager, userManager,
             memoryCache)
         {
@@ -43,7 +43,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 
             return new NBXplorerNewTransactionViewModel()
             {
-                CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(),
+                CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(),
                     innerData.CryptoCode),
 
                 RecipeId = data.RecipeId,
@@ -80,7 +80,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 
             if (!ModelState.IsValid)
             {
-                viewModel.CryptoCodes = new SelectList(_options.Value.Cryptos?.ToList() ?? new List<string>(),
+                viewModel.CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(),
                     viewModel.CryptoCode);
                 return (null, viewModel);
             }

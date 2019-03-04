@@ -6,10 +6,8 @@ using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using NBitcoin;
 using NBXplorer;
-using NBXplorer.DerivationStrategy;
 
 namespace BtcTransmuter.Extension.NBXplorer
 {
@@ -24,26 +22,31 @@ namespace BtcTransmuter.Extension.NBXplorer
         public override void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
         {
             base.Execute(serviceCollection, serviceProvider);
-            serviceCollection.AddOptions<NBXplorerOptions>("NBXplorer").Configure<IConfiguration>(
-                (options, configuration) =>
+            serviceCollection.AddSingleton(provider =>
+            {
+                var configuration = provider.GetService<IConfiguration>();
+                var section = configuration.GetSection("NBXplorer");
+                return new NBXplorerOptions()
                 {
-                    var section = configuration.GetSection("NBXplorer");
-                    options.Uri = section.GetValue<Uri>(nameof(options.Uri));
-                    options.CookieFile = section.GetValue<string>(nameof(options.CookieFile));
-                    options.NetworkType = section.GetValue<NetworkType>(nameof(options.NetworkType), NetworkType.Mainnet);
-                    options.Cryptos = section.GetValue<string>(nameof(options.Cryptos))?
+                    Uri = section.GetValue<Uri>(nameof(NBXplorerOptions.Uri)),
+                    CookieFile = section.GetValue<string>(nameof(NBXplorerOptions.CookieFile)),
+                    NetworkType = section.GetValue<NetworkType>(nameof(NBXplorerOptions.NetworkType),
+                        NetworkType.Mainnet),
+                    Cryptos = section.GetValue<string>(nameof(NBXplorerOptions.Cryptos))?
                         .Replace(" ", "")?
                         .Split(",")?
-                        .Distinct().ToArray();
-                });
+                        .Distinct().ToArray()
+                    
+                };
+            });
             serviceCollection.AddSingleton<NBXplorerSummaryProvider>();
             serviceCollection.AddSingleton<NBXplorerClientProvider>();
             serviceCollection.AddSingleton<DerivationStrategyFactoryProvider>();
             serviceCollection.AddSingleton<DerivationSchemeParser>();
             serviceCollection.AddSingleton(provider =>
             {
-                var options = provider.GetService<IOptions<NBXplorerOptions>>();
-                return new NBXplorerNetworkProvider(options.Value.NetworkType);
+                var options = provider.GetService<NBXplorerOptions>();
+                return new NBXplorerNetworkProvider(options.NetworkType);
             });
         }
     }

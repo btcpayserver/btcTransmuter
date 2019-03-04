@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.NBXplorer.Services;
-using NBitcoin;
-using NBXplorer.DerivationStrategy;
 using NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction

@@ -19,7 +19,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+		"NBXplorer_Cryptos":"BTC,LTC",
+		"NBXplorer_Uri": "http://127.0.0.1:24446/",
+		"NBXplorer_NetworkType":"Regtest"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },

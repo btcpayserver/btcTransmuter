@@ -4,21 +4,20 @@ using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using BtcTransmuter.Extension.NBXplorer.Models;
-using Microsoft.Extensions.Options;
 using NBitcoin;
 using NBXplorer;
 using NBXplorer.Models;
 
-namespace BtcTransmuter.Extension.NBXplorer.HostedServices
+namespace BtcTransmuter.Extension.NBXplorer.Services
 {
     public class NBXplorerSummaryProvider
     {
-        private readonly IOptions<NBXplorerOptions> _options;
+        private readonly NBXplorerOptions _options;
 
         private readonly ConcurrentDictionary<string, NBXplorerSummary>
             _summaries = new ConcurrentDictionary<string, NBXplorerSummary>();
 
-        public NBXplorerSummaryProvider(IOptions<NBXplorerOptions> options)
+        public NBXplorerSummaryProvider(NBXplorerOptions options)
         {
             _options = options;
         }
@@ -86,9 +85,9 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
             if (status != null && error == null)
             {
-                if (status.NetworkType != _options.Value.NetworkType)
+                if (status.NetworkType != _options.NetworkType)
                     error =
-                        $"{client.CryptoCode}: NBXplorer is on a different ChainType (actual: {status.NetworkType}, expected: {_options.Value.NetworkType})";
+                        $"{client.CryptoCode}: NBXplorer is on a different ChainType (actual: {status.NetworkType}, expected: {_options.NetworkType})";
             }
 
             if (error != null)

@@ -1,22 +1,21 @@
 using System.Collections.Generic;
 using BtcTransmuter.Extension.NBXplorer.Models;
-using Microsoft.Extensions.Options;
 using NBitcoin;
 using NBXplorer;
 
-namespace BtcTransmuter.Extension.NBXplorer.HostedServices
+namespace BtcTransmuter.Extension.NBXplorer.Services
 {
     public class NBXplorerClientProvider
     {
-        private readonly IOptions<NBXplorerOptions> _options;
+        private readonly NBXplorerOptions _options;
         private Dictionary<string, ExplorerClient> _clients = new Dictionary<string, ExplorerClient>();
         private NBXplorerNetworkProvider _nbXplorerNetworkProvider;
 
-        public NBXplorerClientProvider(IOptions<NBXplorerOptions> options)
+        public NBXplorerClientProvider(NBXplorerOptions options)
         {
             _options = options;
             
-            _nbXplorerNetworkProvider = new NBXplorerNetworkProvider(_options.Value.NetworkType);
+            _nbXplorerNetworkProvider = new NBXplorerNetworkProvider(_options.NetworkType);
         }
 
         public ExplorerClient GetClient(string cryptoCode)
@@ -27,13 +26,13 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             }
             var client = new ExplorerClient(_nbXplorerNetworkProvider.GetFromCryptoCode(cryptoCode));
 
-            if (string.IsNullOrEmpty(_options.Value.CookieFile))
+            if (string.IsNullOrEmpty(_options.CookieFile))
             {
                 client.SetNoAuth();
             }
             else
             {
-                client.SetCookieAuth(_options.Value.CookieFile);
+                client.SetCookieAuth(_options.CookieFile);
             }
             
             _clients.AddOrReplace(cryptoCode, client);

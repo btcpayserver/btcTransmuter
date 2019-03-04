@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Extension.NBXplorer.Models;
+using BtcTransmuter.Extension.NBXplorer.Services;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction;
 using Microsoft.Extensions.Hosting;
@@ -16,13 +17,13 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 {
     public class NBXplorerHostedService : IHostedService
     {
-        private readonly IOptions<NBXplorerOptions> _options;
+        private readonly NBXplorerOptions _options;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly NBXplorerSummaryProvider _nbXplorerSummaryProvider;
         private readonly ILogger<NBXplorerHostedService> _logger;
         private readonly ITriggerDispatcher _triggerDispatcher;
 
-        public NBXplorerHostedService(IOptions<NBXplorerOptions> options,
+        public NBXplorerHostedService(NBXplorerOptions options,
             NBXplorerClientProvider nbXplorerClientProvider,
             NBXplorerSummaryProvider nbXplorerSummaryProvider, ILogger<NBXplorerHostedService> logger,
             ITriggerDispatcher triggerDispatcher)
@@ -36,12 +37,12 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (_options.Value.Cryptos == null || !_options.Value.Cryptos.Any() || _options.Value.Uri != null)
+            if (_options.Cryptos == null || !_options.Cryptos.Any() || _options.Uri != null)
             {
                 return Task.CompletedTask;
             }
 
-            foreach (var cryptoCode in _options.Value.Cryptos)
+            foreach (var cryptoCode in _options.Cryptos)
             {
                 var client = _nbXplorerClientProvider.GetClient(cryptoCode);
 
