@@ -37,11 +37,11 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             _derivationSchemeParser = derivationSchemeParser;
         }
 
-        protected override async Task<NBXplorerNewTransactionViewModel> BuildViewModel(RecipeTrigger data)
+        protected override Task<NBXplorerNewTransactionViewModel> BuildViewModel(RecipeTrigger data)
         {
             var innerData = data.Get<NBXplorerNewTransactionTriggerParameters>();
 
-            return new NBXplorerNewTransactionViewModel()
+            return Task.FromResult(new NBXplorerNewTransactionViewModel()
             {
                 CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(),
                     innerData.CryptoCode),
@@ -50,7 +50,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
                 CryptoCode = innerData.CryptoCode,
                 Address = innerData.Address,
                 DerivationStrategy = innerData.DerivationStrategy,
-            };
+            });
         }
 
         protected override Task<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>

@@ -10,35 +10,41 @@
 <h2>@ViewData["Title"]</h2>
 @if (Model.Summaries.Any())
 {
-foreach (var summary in Model.Summaries)
- {
-     <div class="card">
-         <div class="card-body">
-             <h3 class="card-title">
-                 @summary.Key <span class="badge badge-secondary">@Enum.GetName(typeof(NBXplorerState), summary.Value.State)</span>
-             </h3>
-             @if (!string.IsNullOrEmpty(summary.Value.Error))
-             {
-                 <p class="card-text">@summary.Value.Error</p>
-             }
-             @if (summary.Value.Status != null)
-             {
-                 <pre class="card-text">@JObject.FromObject(summary.Value.Status).ToString()</pre>
-             }
+    foreach (var summary in Model.Summaries)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    @summary.Key <span class="badge badge-secondary">@Enum.GetName(typeof(NBXplorerState), summary.Value.State)</span>
+                </h3>
+                @if (!string.IsNullOrEmpty(summary.Value.Error))
+                {
+                    <p class="card-text">@summary.Value.Error</p>
+                }
+                @if (summary.Value.Status != null)
+                {
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Node Blocks: @summary.Value.Status.BitcoinStatus.Blocks</li>
+                        <li class="list-group-item">Synced Blocks on NBXplorer: @summary.Value.Status.SyncHeight</li>
+                    </ul>
+                }
 
 
-         </div>
-     </div>
-     <br/>
- }
+            </div>
+        </div>
+        <br/>
+    }
 }
 else
 {
     <div class="card">
         <div class="card-body">
             <h3 class="card-title">
-                NBXplorer is not configured from the looks of it. You might want to take a look at that.
+                NBXplorer is not configured from the looks of it. 
             </h3>
+            <p class="card-title">
+                You might want to take a look at that or spam <a href="https://twitter.com/r0ckstardev" target="_blank">here.</a>
+            </p>
         </div>
     </div>
 }

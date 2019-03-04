@@ -34,14 +34,14 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         }
 
 
-        protected override async Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
+        protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             NBXplorerNewTransactionTriggerData triggerData,
             NBXplorerNewTransactionTriggerParameters parameters)
         {
             if (triggerData.CryptoCode.Equals(parameters.CryptoCode,
                 StringComparison.InvariantCultureIgnoreCase))
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             switch (triggerData.Event.TrackedSource)
@@ -49,26 +49,26 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
                 case AddressTrackedSource addressTrackedSource:
                     if (string.IsNullOrEmpty(parameters.Address))
                     {
-                        return false;
+                        return Task.FromResult(false);
                     }
 
-                    return addressTrackedSource.Address.ToString()
-                        .Equals(parameters.Address, StringComparison.InvariantCultureIgnoreCase);
+                    return Task.FromResult(addressTrackedSource.Address.ToString()
+                        .Equals(parameters.Address, StringComparison.InvariantCultureIgnoreCase));
 
                 case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
                     if (string.IsNullOrEmpty(parameters.DerivationStrategy))
                     {
-                        return false;
+                        return Task.FromResult(false);
                     }
 
                     var factory =
                         _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(parameters.CryptoCode);
 
-                    return derivationSchemeTrackedSource.DerivationStrategy ==
-                           _derivationSchemeParser.Parse(factory, parameters.DerivationStrategy);
+                    return Task.FromResult(derivationSchemeTrackedSource.DerivationStrategy ==
+                                           _derivationSchemeParser.Parse(factory, parameters.DerivationStrategy));
             }
 
-            return false;
+            return Task.FromResult(false);
         }
     }
 }

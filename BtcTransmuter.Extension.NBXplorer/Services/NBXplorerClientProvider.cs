@@ -24,7 +24,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             {
                 return _clients[cryptoCode];
             }
-            var client = new ExplorerClient(_nbXplorerNetworkProvider.GetFromCryptoCode(cryptoCode));
+            var client = new ExplorerClient(_nbXplorerNetworkProvider.GetFromCryptoCode(cryptoCode), _options.Uri);
 
             if (string.IsNullOrEmpty(_options.CookieFile))
             {
