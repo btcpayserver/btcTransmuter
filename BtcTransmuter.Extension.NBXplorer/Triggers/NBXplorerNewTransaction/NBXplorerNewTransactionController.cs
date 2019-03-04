@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using NBitcoin;
 using NBXplorer.DerivationStrategy;
 
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
@@ -57,12 +59,30 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             BuildModel(
                 NBXplorerNewTransactionViewModel viewModel, RecipeTrigger mainModel)
         {
+            
             if (!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.Address))
             {
                 ModelState.AddModelError(string.Empty,
                     "Please choose to track either an address OR a derivation scheme");
             }
 
+            if (!string.IsNullOrEmpty(viewModel.Address) && !string.IsNullOrEmpty(viewModel.CryptoCode))
+            {
+                try
+                {
+
+               
+                var factory =
+                    _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
+                BitcoinAddress.Create(viewModel.Address, factory.Network);
+                }
+                catch (Exception e)
+                {
+                  
+                    ModelState.AddModelError(nameof(viewModel.Address), "Invalid Address");
+                }
+            }
+            
             if (!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.CryptoCode))
             {
                 try
