@@ -16,6 +16,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using NBitcoin;
 using NBXplorer.DerivationStrategy;
+using NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 {
@@ -27,15 +28,19 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
     {
         private readonly NBXplorerOptions _options;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
+        private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
 
         public NBXplorerNewTransactionController(IRecipeManager recipeManager, UserManager<User> userManager,
             IMemoryCache memoryCache, NBXplorerOptions options,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,DerivationSchemeParser  derivationSchemeParser) : base(recipeManager, userManager,
+            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
+            NBXplorerClientProvider nbXplorerClientProvider,
+            DerivationSchemeParser derivationSchemeParser) : base(recipeManager, userManager,
             memoryCache)
         {
             _options = options;
             _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
+            _nbXplorerClientProvider = nbXplorerClientProvider;
             _derivationSchemeParser = derivationSchemeParser;
         }
 
@@ -59,30 +64,28 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             BuildModel(
                 NBXplorerNewTransactionViewModel viewModel, RecipeTrigger mainModel)
         {
-            
             if (!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.Address))
             {
                 ModelState.AddModelError(string.Empty,
                     "Please choose to track either an address OR a derivation scheme");
             }
 
+            BitcoinAddress address = null;
+            DerivationStrategyBase derivationStrategy= null;
             if (!string.IsNullOrEmpty(viewModel.Address) && !string.IsNullOrEmpty(viewModel.CryptoCode))
             {
                 try
                 {
-
-               
-                var factory =
-                    _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
-                BitcoinAddress.Create(viewModel.Address, factory.Network);
+                    var factory =
+                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
+                    address = BitcoinAddress.Create(viewModel.Address, factory.Network);
                 }
                 catch (Exception e)
                 {
-                  
                     ModelState.AddModelError(nameof(viewModel.Address), "Invalid Address");
                 }
             }
-            
+
             if (!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.CryptoCode))
             {
                 try
@@ -90,7 +93,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
                     var factory =
                         _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
 
-                    _derivationSchemeParser.Parse(factory, viewModel.DerivationStrategy);
+                    derivationStrategy = _derivationSchemeParser.Parse(factory, viewModel.DerivationStrategy);
                 }
                 catch
                 {
@@ -102,12 +105,25 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             {
                 viewModel.CryptoCodes = new SelectList(_options.Cryptos?.ToList() ?? new List<string>(),
                     viewModel.CryptoCode);
-                return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>((null, viewModel));
+                return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>((null,
+                    viewModel));
             }
 
             var recipeTrigger = mainModel;
             recipeTrigger.Set((NBXplorerNewTransactionTriggerParameters) viewModel);
-            return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>((recipeTrigger, null));
+
+            var client = _nbXplorerClientProvider.GetClient(viewModel.CryptoCode);
+            if (derivationStrategy != null)
+            {
+                client.Track(TrackedSource.Create(derivationStrategy));
+            }
+
+            if (address != null)
+            {
+                client.Track(TrackedSource.Create(address));
+            }
+            return Task.FromResult<(RecipeTrigger ToSave, NBXplorerNewTransactionViewModel showViewModel)>((
+                recipeTrigger, null));
         }
 
         public class NBXplorerNewTransactionViewModel : NBXplorerNewTransactionTriggerParameters
