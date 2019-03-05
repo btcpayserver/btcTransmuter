@@ -6,13 +6,13 @@
 }
 
 <div>
-    New Block on 
-    @if (!string.IsNullOrEmpty(data.CryptoCode))
+    New Transaction on @data.CryptoCode to 
+    @if (!string.IsNullOrEmpty(data.Address))
     {
-        <span>@data.CryptoCode</span>
+        <span>address <kbd>@data.Address</kbd></span>
     }
-    else
+    @if (!string.IsNullOrEmpty(data.DerivationStrategy))
     {
-        <span>any connected crypto node</span>
+        <span>derivation scheme <kbd>@data.DerivationStrategy</kbd></span>
     }
 </div>

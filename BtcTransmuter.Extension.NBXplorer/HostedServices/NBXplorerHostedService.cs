@@ -2,14 +2,16 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
+using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using NBitcoin;
 using NBXplorer;
 using NBXplorer.Models;
 
@@ -19,17 +21,26 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
     {
         private readonly NBXplorerOptions _options;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
+        private readonly DerivationSchemeParser _derivationSchemeParser;
+        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
+        private readonly IRecipeManager _recipeManager;
         private readonly NBXplorerSummaryProvider _nbXplorerSummaryProvider;
         private readonly ILogger<NBXplorerHostedService> _logger;
         private readonly ITriggerDispatcher _triggerDispatcher;
 
         public NBXplorerHostedService(NBXplorerOptions options,
             NBXplorerClientProvider nbXplorerClientProvider,
+            DerivationSchemeParser derivationSchemeParser,
+            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
+            IRecipeManager recipeManager,
             NBXplorerSummaryProvider nbXplorerSummaryProvider, ILogger<NBXplorerHostedService> logger,
             ITriggerDispatcher triggerDispatcher)
         {
             _options = options;
             _nbXplorerClientProvider = nbXplorerClientProvider;
+            _derivationSchemeParser = derivationSchemeParser;
+            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
+            _recipeManager = recipeManager;
             _nbXplorerSummaryProvider = nbXplorerSummaryProvider;
             _logger = logger;
             _triggerDispatcher = triggerDispatcher;
@@ -45,7 +56,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             foreach (var cryptoCode in _options.Cryptos)
             {
                 var client = _nbXplorerClientProvider.GetClient(cryptoCode);
-
+                _ = MonitorClientForTriggers(client, cancellationToken);
                 _ = UpdateSummaryContinuously(client, cancellationToken);
             }
 
@@ -72,7 +83,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                 try
                 {
                     var summary = _nbXplorerSummaryProvider.GetSummary(explorerClient.CryptoCode);
-                    if (summary.State != NBXplorerState.Ready)
+                    if (summary?.State != NBXplorerState.Ready)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
                         continue;
@@ -98,6 +109,70 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                         Event = newBlockEvent
                                     }
                                 });
+                                //we need to trigger transaction events for previous unconfirmed txs  so that they are checked again and trigger respective actions
+                                var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+                                {
+                                    Enabled = true,
+                                    RecipeTriggerId = new NBXplorerNewTransactionTrigger().Id
+                                });
+                                foreach (var recipe in recipes)
+                                {
+                                    var triggerParameters =
+                                        recipe.RecipeTrigger.Get<NBXplorerNewTransactionTriggerParameters>();
+                                    if (triggerParameters.Transactions == null || !triggerParameters.Transactions.Any())
+                                    {
+                                        continue;
+                                    }
+
+                                    var tasks = triggerParameters.Transactions.Select(result =>
+                                        (result,
+                                            explorerClient.GetTransactionAsync(result.TransactionHash,
+                                                cancellationToken)));
+                                    await Task.WhenAll(tasks.Select(tuple => tuple.Item2));
+
+                                    var factory =
+                                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(
+                                            triggerParameters.CryptoCode);
+
+
+                                    foreach (var tx in tasks)
+                                    {
+                                        if (tx.Item1.Confirmations != tx.Item2.Result.Confirmations)
+                                        {
+                                            await _triggerDispatcher.DispatchTrigger(
+                                                new NBXplorerNewTransactionTrigger()
+                                                {
+                                                    Data = new NBXplorerNewTransactionTriggerData()
+                                                    {
+                                                        CryptoCode = evt.CryptoCode,
+                                                        Event = new NewTransactionEvent()
+                                                        {
+                                                            CryptoCode = evt.CryptoCode,
+                                                            BlockId = newBlockEvent.Hash,
+                                                            TransactionData = tx.Item2.Result,
+                                                            TrackedSource =
+                                                                string.IsNullOrEmpty(triggerParameters
+                                                                    .DerivationStrategy)
+                                                                    ? (TrackedSource) TrackedSource.Create(
+                                                                        BitcoinAddress.Create(triggerParameters.Address,
+                                                                            explorerClient.Network.NBitcoinNetwork))
+                                                                    : (TrackedSource) TrackedSource.Create(
+                                                                        _derivationSchemeParser.Parse(factory,
+                                                                            triggerParameters.DerivationStrategy)),
+                                                            DerivationStrategy =
+                                                                string.IsNullOrEmpty(triggerParameters
+                                                                    .DerivationStrategy)
+                                                                    ? null
+                                                                    : _derivationSchemeParser.Parse(factory,
+                                                                        triggerParameters.DerivationStrategy),
+
+                                                        }
+                                                    }
+                                                });
+                                        }
+
+                                    }
+                                }
 
                                 break;
                             case NewTransactionEvent newTransactionEvent:

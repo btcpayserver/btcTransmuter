@@ -56,6 +56,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
                 RecipeId = data.RecipeId,
                 CryptoCode = innerData.CryptoCode,
                 Address = innerData.Address,
+                ConfirmationsRequired = innerData.ConfirmationsRequired,
                 DerivationStrategy = innerData.DerivationStrategy,
             });
         }
@@ -80,7 +81,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
                         _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
                     address = BitcoinAddress.Create(viewModel.Address, factory.Network);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     ModelState.AddModelError(nameof(viewModel.Address), "Invalid Address");
                 }
@@ -110,6 +111,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             }
 
             var recipeTrigger = mainModel;
+            var oldData = recipeTrigger.Get<NBXplorerNewTransactionTriggerParameters>();
+            var newData = (NBXplorerNewTransactionTriggerParameters) viewModel;
+            newData.Transactions = oldData.Transactions;
             recipeTrigger.Set((NBXplorerNewTransactionTriggerParameters) viewModel);
 
             var client = _nbXplorerClientProvider.GetClient(viewModel.CryptoCode);

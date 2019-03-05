@@ -6,13 +6,5 @@
 }
 
 <div>
-    New Block on 
-    @if (!string.IsNullOrEmpty(data.CryptoCode))
-    {
-        <span>@data.CryptoCode</span>
-    }
-    else
-    {
-        <span>any connected crypto node</span>
-    }
+    New Block on @data.CryptoCode
 </div>
