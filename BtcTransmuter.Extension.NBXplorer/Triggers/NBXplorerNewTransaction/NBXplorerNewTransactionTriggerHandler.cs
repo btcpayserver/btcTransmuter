@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
@@ -46,7 +47,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             NBXplorerNewTransactionTriggerData triggerData,
             NBXplorerNewTransactionTriggerParameters parameters)
         {
-            if (triggerData.CryptoCode.Equals(parameters.CryptoCode,
+            if (!triggerData.CryptoCode.Equals(parameters.CryptoCode,
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
@@ -96,12 +97,15 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         private async Task<bool> UpdateTxToRecipeTrigger(TransactionResult transactionResult,
             RecipeTrigger recipeTrigger, NBXplorerNewTransactionTriggerParameters parameters)
         {
+            if (parameters.Transactions == null)
+            {
+                parameters.Transactions = new List<TransactionResult>();
+            }
             var matchedIndex = parameters.Transactions.FindIndex(i =>
                 i.TransactionHash == transactionResult.TransactionHash);
             var confirmations = transactionResult.Confirmations;
             if (matchedIndex != -1)
             {
-                confirmations = parameters.Transactions.ElementAt(matchedIndex).Confirmations;
                 parameters.Transactions.RemoveAt(matchedIndex);
             }
 
