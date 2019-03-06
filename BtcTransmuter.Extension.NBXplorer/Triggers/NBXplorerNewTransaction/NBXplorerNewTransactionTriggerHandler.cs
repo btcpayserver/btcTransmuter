@@ -18,7 +18,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly IActionDispatcher _actionDispatcher;
         private readonly DerivationSchemeParser _derivationSchemeParser;
-        public override string TriggerId => new NBXplorerNewTransactionTrigger().Id;
+        public override string TriggerId => NBXplorerNewTransactionTrigger.Id;
         public override string Name => "New Transaction";
 
         public override string Description =>
@@ -52,8 +52,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
                 return false;
             }
 
-
-            else if (triggerData.Event != null)
+            if (triggerData.Event != null)
             {
                 switch (triggerData.Event.TrackedSource)
                 {

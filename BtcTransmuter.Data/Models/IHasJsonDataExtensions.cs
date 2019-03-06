@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Data.Models
@@ -11,7 +12,11 @@ namespace BtcTransmuter.Data.Models
 
         public static void Set<T>(this IHasJsonData i, T data)
         {
-            i.DataJson = JObject.FromObject(data).ToString();
+            i.DataJson = JObject.FromObject(data, JsonSerializer.CreateDefault(new JsonSerializerSettings()
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            })).ToString();
         }
     }
 }

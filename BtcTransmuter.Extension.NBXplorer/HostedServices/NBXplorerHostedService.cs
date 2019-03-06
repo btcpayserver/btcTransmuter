@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using NBitcoin;
 using NBXplorer;
 using NBXplorer.Models;
+using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 {
@@ -98,6 +99,10 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         var evt = await notificationSession.NextEventAsync(cancellationToken);
+                        
+                        var factory =
+                            _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(
+                                evt.CryptoCode);
                         switch (evt)
                         {
                             case NewBlockEvent newBlockEvent:
@@ -113,7 +118,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                 var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
                                 {
                                     Enabled = true,
-                                    RecipeTriggerId = new NBXplorerNewTransactionTrigger().Id
+                                    RecipeTriggerId = NBXplorerNewTransactionTrigger.Id
                                 });
                                 foreach (var recipe in recipes)
                                 {
@@ -130,9 +135,6 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                                 cancellationToken)));
                                     await Task.WhenAll(tasks.Select(tuple => tuple.Item2));
 
-                                    var factory =
-                                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(
-                                            triggerParameters.CryptoCode);
 
 
                                     foreach (var tx in tasks)
@@ -140,7 +142,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                         if (tx.Item1.Confirmations != tx.Item2.Result.Confirmations)
                                         {
                                             await _triggerDispatcher.DispatchTrigger(
-                                                new NBXplorerNewTransactionTrigger()
+                                                new NBXplorerNewTransactionTrigger(explorerClient,factory)
                                                 {
                                                     Data = new NBXplorerNewTransactionTriggerData()
                                                     {
@@ -177,7 +179,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                 break;
                             case NewTransactionEvent newTransactionEvent:
                             {
-                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewTransactionTrigger()
+                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewTransactionTrigger(explorerClient,factory)
                                 {
                                     Data = new NBXplorerNewTransactionTriggerData()
                                     {
