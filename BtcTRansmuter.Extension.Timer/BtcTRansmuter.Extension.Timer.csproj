@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <AssemblyName>BtcTransmuter.Extension.Timer</AssemblyName>
+         <AssemblyName>BtcTransmuter.Extension.Timer</AssemblyName>
         <RootNamespace>BtcTransmuter.Extension.Timer</RootNamespace>
     </PropertyGroup>
     <ItemGroup>

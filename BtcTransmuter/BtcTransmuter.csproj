@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-BtcTransmuter-065A2226-96CE-4371-A96D-97EFFCF0B153</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +25,7 @@
     <ProjectReference Include="..\BtcTransmuter.Extension.Exchange\BtcTransmuter.Extension.Exchange.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Recipe\BtcTransmuter.Extension.Recipe.csproj" />
-    <ProjectReference Include="..\BtcTRansmuter.Extension.Timer\BtcTransmuter.Extension.Timer.csproj" />
+    <ProjectReference Include="..\BtcTransmuter.Extension.Timer\BtcTransmuter.Extension.Timer.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Webhook\BtcTransmuter.Extension.Webhook.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Services\BtcTransmuter.Services.csproj" />
   </ItemGroup>
