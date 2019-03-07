@@ -18,10 +18,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             get => base.Data;
             set
             {
-
                 var serializer = new Serializer(_explorerClient.Network.NBitcoinNetwork);
-
-
                 DataJson = serializer.ToString(value);
             }
         }
