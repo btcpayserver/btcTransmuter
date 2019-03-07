@@ -1,0 +1,20 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
+@model BtcTransmuter.Data.Entities.RecipeTrigger
+@{
+    var data = Model.Get<NBXplorerBalanceTriggerParameters>();
+}
+
+<div>
+    Balance on
+    @if (!string.IsNullOrEmpty(data.Address))
+    {
+        <span>address <kbd>@data.Address</kbd></span>
+    }
+    @if (!string.IsNullOrEmpty(data.DerivationStrategy))
+    {
+        <span>derivation scheme <kbd>@data.DerivationStrategy</kbd></span>
+    }
+    @Enum.GetName(typeof(BalanceComparer), data.BalanceComparer)
+    <kbd>@data.Balance @data.CryptoCode </kbd>
+</div>

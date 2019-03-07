@@ -10,8 +10,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
         [Required] public string CryptoCode { get; set; }
         public string Address { get; set; }
         public string DerivationStrategy { get; set; }
-        public Money Balance { get; set; }
+        
+        public decimal BalanceValue { get; set; }
+        public MoneyUnit BalanceMoneyUnit { get; set; }
         public BalanceComparer BalanceComparer { get; set; }
+
+        public Money Balance => Money.FromUnit(BalanceValue, BalanceMoneyUnit);
     }
 
     public enum BalanceComparer

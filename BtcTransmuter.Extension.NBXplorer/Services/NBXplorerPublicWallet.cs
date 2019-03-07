@@ -9,12 +9,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
     public class NBXplorerPublicWallet
     {
         private readonly ExplorerClient _explorerClient;
-        private readonly TrackedSource _trackedSource;
+        public readonly TrackedSource TrackedSource;
 
         public NBXplorerPublicWallet(ExplorerClient explorerClient, TrackedSource trackedSource)
         {
             _explorerClient = explorerClient;
-            _trackedSource = trackedSource;
+            TrackedSource = trackedSource;
         }
         public async Task<Money> GetBalance()
         {
@@ -23,7 +23,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
         
         public async Task<UTXOChanges> GetUTXOs()
         {
-            return await _explorerClient.GetUTXOsAsync(_trackedSource);
+            var x  = await _explorerClient.GetUTXOsAsync(TrackedSource);
+            return x;
         }
     }
 }

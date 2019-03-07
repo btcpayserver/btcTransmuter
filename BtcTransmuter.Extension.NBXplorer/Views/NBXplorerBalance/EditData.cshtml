@@ -1,0 +1,51 @@
+@using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
+@using NBitcoin
+@model BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance.NBXplorerBalanceController.NBXplorerBalanceViewModel
+
+@{
+    ViewData["Title"] = "Edit Balance Trigger";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="CryptoCode" class="control-label"></label>
+        <select asp-for="CryptoCode" asp-items="Model.CryptoCodes" class="form-control"></select>
+        <span asp-validation-for="CryptoCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address" class="control-label"></label>
+        <input asp-for="Address" class="form-control"/>
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DerivationStrategy" class="control-label"></label>
+        <input asp-for="DerivationStrategy" class="form-control"/>
+        <span asp-validation-for="DerivationStrategy" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Balance" class="control-label"></label>
+        <div class="input-group">
+            <input asp-for="BalanceValue"  type="number" step="any" min="0" class="form-control"/>
+            <div class="input-group-append">
+                <select asp-for="BalanceMoneyUnit" asp-items="@Html.GetEnumSelectList(typeof(MoneyUnit))" class="form-control"></select>
+            </div>
+            <div class="input-group-append">
+                <select asp-for="BalanceComparer" asp-items="@Html.GetEnumSelectList(typeof(BalanceComparer))" class="form-control"></select>
+            </div>
+        </div>
+        <span asp-validation-for="BalanceValue" class="text-danger"></span>
+        <span asp-validation-for="BalanceMoneyUnit" class="text-danger"></span>
+        <span asp-validation-for="BalanceComparer" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="RecipeId"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
+    </div>
+</form>

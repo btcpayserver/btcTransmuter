@@ -13,6 +13,7 @@
       <PackageReference Include="NBXplorer.Client" Version="2.0.0.4" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="Views\NBXplorerBalance\EditData.cshtml" />
       <Content Include="Views\NBXplorerNewBlock\EditData.cshtml" />
       <Content Include="Views\NBXplorerNewTransaction\EditData.cshtml" />
       <Content Include="Views\NBXplorerStatus\GetSummaries.cshtml" />

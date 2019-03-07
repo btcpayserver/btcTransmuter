@@ -56,7 +56,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
                 RecipeId = data.RecipeId,
                 CryptoCode = innerData.CryptoCode,
                 Address = innerData.Address,
-                ConfirmationsRequired = innerData.ConfirmationsRequired,
+                BalanceComparer = innerData.BalanceComparer,
+                BalanceValue = innerData.Balance?.ToUnit(MoneyUnit.BTC)?? 0,
+                BalanceMoneyUnit = MoneyUnit.BTC,
                 DerivationStrategy = innerData.DerivationStrategy,
             });
         }
@@ -111,9 +113,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
             }
 
             var recipeTrigger = mainModel;
-            var oldData = recipeTrigger.Get<NBXplorerBalanceTriggerParameters>();
-            var newData = (NBXplorerBalanceTriggerParameters) viewModel;
-            newData.Transactions = oldData.Transactions;
             recipeTrigger.Set((NBXplorerBalanceTriggerParameters) viewModel);
 
             var client = _nbXplorerClientProvider.GetClient(viewModel.CryptoCode);

@@ -7,6 +7,7 @@ using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
+using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +26,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
+        private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly IRecipeManager _recipeManager;
         private readonly NBXplorerSummaryProvider _nbXplorerSummaryProvider;
         private readonly ILogger<NBXplorerHostedService> _logger;
@@ -34,6 +36,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             NBXplorerClientProvider nbXplorerClientProvider,
             DerivationSchemeParser derivationSchemeParser,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
+            NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             IRecipeManager recipeManager,
             NBXplorerSummaryProvider nbXplorerSummaryProvider, ILogger<NBXplorerHostedService> logger,
             ITriggerDispatcher triggerDispatcher)
@@ -42,6 +45,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             _nbXplorerClientProvider = nbXplorerClientProvider;
             _derivationSchemeParser = derivationSchemeParser;
             _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
+            _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _recipeManager = recipeManager;
             _nbXplorerSummaryProvider = nbXplorerSummaryProvider;
             _logger = logger;
@@ -62,11 +66,14 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                 _ = UpdateSummaryContinuously(client, cancellationToken);
             }
 
+            _ = UpdateBalances_Continuously(cancellationToken);
             return Task.CompletedTask;
         }
 
         private async Task UpdateSummaryContinuously(ExplorerClient explorerClient, CancellationToken cancellationToken)
         {
+            
+            await explorerClient.WaitServerStartedAsync(cancellationToken);
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _nbXplorerSummaryProvider.UpdateClientState(explorerClient, cancellationToken);
@@ -76,9 +83,68 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             }
         }
 
+        private async Task UpdateBalances_Continuously(
+            CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+                {
+                    Enabled = true,
+                    RecipeTriggerId = NBXplorerBalanceTrigger.Id
+                });
+
+                var recipesGroupedBySameSource = recipes
+                    .Select(recipe => (recipe, recipe.RecipeTrigger.Get<NBXplorerBalanceTriggerParameters>()))
+                    .GroupBy(tuple => $"{tuple.Item2.CryptoCode}_{tuple.Item2.Address}_{tuple.Item2.DerivationStrategy}");
+
+                
+                foreach (var valueTuples in recipesGroupedBySameSource)
+                {
+                    var first = valueTuples.First();
+
+                    var explorerClient = _nbXplorerClientProvider.GetClient(first.Item2.CryptoCode);
+                    var factory =
+                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(explorerClient.CryptoCode);
+                    
+                    NBXplorerPublicWallet wallet;
+                    if (string.IsNullOrEmpty(first.Item2
+                        .DerivationStrategy))
+                    {
+                        wallet = await _nbXplorerPublicWalletProvider.Get(explorerClient.CryptoCode,
+                            BitcoinAddress.Create(
+                                first.Item2.Address,
+                                explorerClient.Network.NBitcoinNetwork));
+                    }
+                    else
+                    {
+                        wallet = await _nbXplorerPublicWalletProvider.Get(explorerClient.CryptoCode,
+                            _derivationSchemeParser.Parse(factory,
+                                first.Item2.DerivationStrategy));
+                    }
+
+                    var balance = await wallet.GetBalance();
+
+                    await _triggerDispatcher.DispatchTrigger(new NBXplorerBalanceTrigger(explorerClient)
+                    {
+                        Data = new NBXplorerBalanceTriggerData()
+                        {
+                            Balance = balance,
+                            CryptoCode = explorerClient.CryptoCode,
+                            TrackedSource = wallet.TrackedSource
+                        }
+                    });
+                }
+
+                await Task.Delay(TimeSpan.FromMinutes(5),
+                    cancellationToken);
+            }
+        }
+
 
         private async Task MonitorClientForTriggers(ExplorerClient explorerClient, CancellationToken cancellationToken)
         {
+            await explorerClient.WaitServerStartedAsync(cancellationToken);
             WebsocketNotificationSession notificationSession = null;
             while (!cancellationToken.IsCancellationRequested)
             {
