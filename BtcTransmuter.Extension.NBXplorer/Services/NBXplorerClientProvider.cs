@@ -38,7 +38,5 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             _clients.AddOrReplace(cryptoCode, client);
             return client;
         }
-        
-        
     }
 }

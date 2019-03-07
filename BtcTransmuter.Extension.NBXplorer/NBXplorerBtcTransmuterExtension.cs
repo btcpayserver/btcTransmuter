@@ -43,6 +43,7 @@ namespace BtcTransmuter.Extension.NBXplorer
             serviceCollection.AddSingleton<NBXplorerClientProvider>();
             serviceCollection.AddSingleton<DerivationStrategyFactoryProvider>();
             serviceCollection.AddSingleton<DerivationSchemeParser>();
+            serviceCollection.AddSingleton<NBXplorerPublicWalletProvider>();
             serviceCollection.AddSingleton(provider =>
             {
                 var options = provider.GetService<NBXplorerOptions>();

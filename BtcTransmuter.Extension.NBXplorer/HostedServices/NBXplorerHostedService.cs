@@ -12,7 +12,9 @@ using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NBitcoin;
+using NBitcoin.Logging;
 using NBXplorer;
+using NBXplorer.DerivationStrategy;
 using NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.HostedServices
@@ -98,10 +100,11 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         var evt = await notificationSession.NextEventAsync(cancellationToken);
-                        
+
                         var factory =
                             _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(
                                 evt.CryptoCode);
+
                         switch (evt)
                         {
                             case NewBlockEvent newBlockEvent:
@@ -135,7 +138,6 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                     await Task.WhenAll(tasks.Select(tuple => tuple.Item2));
 
 
-
                                     foreach (var tx in tasks)
                                     {
                                         if (tx.Item1.Confirmations != tx.Item2.Result.Confirmations)
@@ -166,26 +168,25 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                                                     ? null
                                                                     : _derivationSchemeParser.Parse(factory,
                                                                         triggerParameters.DerivationStrategy),
-
                                                         }
                                                     }
                                                 });
                                         }
-
                                     }
                                 }
 
                                 break;
                             case NewTransactionEvent newTransactionEvent:
                             {
-                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewTransactionTrigger(explorerClient)
-                                {
-                                    Data = new NBXplorerNewTransactionTriggerData()
+                                await _triggerDispatcher.DispatchTrigger(
+                                    new NBXplorerNewTransactionTrigger(explorerClient)
                                     {
-                                        CryptoCode = evt.CryptoCode,
-                                        Event = newTransactionEvent
-                                    }
-                                });
+                                        Data = new NBXplorerNewTransactionTriggerData()
+                                        {
+                                            CryptoCode = evt.CryptoCode,
+                                            Event = newTransactionEvent
+                                        }
+                                    });
                                 break;
                             }
                             case UnknownEvent unknownEvent:

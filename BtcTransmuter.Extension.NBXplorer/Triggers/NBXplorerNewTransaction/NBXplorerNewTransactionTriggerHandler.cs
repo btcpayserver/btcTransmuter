@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
@@ -17,7 +15,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
     {
         private readonly IRecipeManager _recipeManager;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
-        private readonly IActionDispatcher _actionDispatcher;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         public override string TriggerId => NBXplorerNewTransactionTrigger.Id;
         public override string Name => "New Transaction";
