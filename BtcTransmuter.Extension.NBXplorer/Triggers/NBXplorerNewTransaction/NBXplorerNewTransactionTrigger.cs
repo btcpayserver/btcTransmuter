@@ -1,11 +1,12 @@
 using BtcTransmuter.Abstractions.Triggers;
 using NBXplorer;
+using NBXplorer.DerivationStrategy;
 
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 {
     public class NBXplorerNewTransactionTrigger : BaseTrigger<NBXplorerNewTransactionTriggerData>
     {
-        public static string Id = typeof(NBXplorerNewTransactionTrigger).FullName;
+        public new static readonly string Id = typeof(NBXplorerNewTransactionTrigger).FullName;
         private readonly ExplorerClient _explorerClient;
 
         public NBXplorerNewTransactionTrigger(ExplorerClient explorerClient)
