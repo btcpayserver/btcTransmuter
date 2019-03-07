@@ -1,6 +1,5 @@
 using BtcTransmuter.Abstractions.Triggers;
 using NBXplorer;
-using NBXplorer.DerivationStrategy;
 
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 {
@@ -16,7 +15,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 
         public override NBXplorerNewTransactionTriggerData Data
         {
-            get => base.Data;
+            get => _explorerClient.Serializer.ToObject<NBXplorerNewTransactionTriggerData>(DataJson);
             set => DataJson = _explorerClient.Serializer.ToString(value);
         }
     }
