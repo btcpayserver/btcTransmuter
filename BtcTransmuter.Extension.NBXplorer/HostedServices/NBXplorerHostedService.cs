@@ -142,7 +142,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                         if (tx.Item1.Confirmations != tx.Item2.Result.Confirmations)
                                         {
                                             await _triggerDispatcher.DispatchTrigger(
-                                                new NBXplorerNewTransactionTrigger(explorerClient,factory)
+                                                new NBXplorerNewTransactionTrigger(explorerClient)
                                                 {
                                                     Data = new NBXplorerNewTransactionTriggerData()
                                                     {
@@ -179,7 +179,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                 break;
                             case NewTransactionEvent newTransactionEvent:
                             {
-                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewTransactionTrigger(explorerClient,factory)
+                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewTransactionTrigger(explorerClient)
                                 {
                                     Data = new NBXplorerNewTransactionTriggerData()
                                     {
