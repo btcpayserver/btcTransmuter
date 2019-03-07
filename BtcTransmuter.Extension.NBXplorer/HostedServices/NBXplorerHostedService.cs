@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using NBitcoin;
 using NBXplorer;
 using NBXplorer.Models;
-using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 {

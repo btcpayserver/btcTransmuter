@@ -16,11 +16,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         public override NBXplorerNewTransactionTriggerData Data
         {
             get => base.Data;
-            set
-            {
-                var serializer = new Serializer(_explorerClient.Network.NBitcoinNetwork);
-                DataJson = serializer.ToString(value);
-            }
+            set => DataJson = _explorerClient.Serializer.ToString(value);
         }
     }
 }
