@@ -6,6 +6,5 @@ namespace BtcTransmuter.Extension.BtcPayServer
     {
         public override string Name => "BtcPayServer Plugin";
         public override string Version  => "0.0.1";
-        protected override int Priority => 0;
     }
 }

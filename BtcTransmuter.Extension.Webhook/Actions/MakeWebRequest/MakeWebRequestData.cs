@@ -1,7 +1,5 @@
 
 using System.ComponentModel.DataAnnotations;
-using System.Net.Mime;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 
 namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
 {

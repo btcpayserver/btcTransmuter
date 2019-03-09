@@ -1,5 +1,4 @@
-using ExtCore.Infrastructure;
-
+using BtcTransmuter.Abstractions.Extensions;
 namespace BtcTransmuter.Controllers
 {
     public class RemoteAvailableExtension : IExtension

@@ -8,7 +8,6 @@ using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Triggers;
 using Microsoft.AspNetCore.Mvc;
 using BtcTransmuter.Models;
-using ExtCore.Infrastructure;
 
 namespace BtcTransmuter.Controllers
 {

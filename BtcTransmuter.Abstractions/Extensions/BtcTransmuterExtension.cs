@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Triggers;
-using ExtCore.Infrastructure;
-using ExtCore.Infrastructure.Actions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,12 +12,21 @@ using NetCore.AutoRegisterDi;
 
 namespace BtcTransmuter.Abstractions.Extensions
 {
-    public abstract class BtcTransmuterExtension : ExtensionBase, IConfigureAction, IConfigureServicesAction
+    public interface IExtension
     {
-        int IConfigureServicesAction.Priority => Priority;
+        string Name { get; }
+         string Version { get;  }
+        string Description { get; }
+        string Authors { get; }
+    }
+    
+    public abstract class BtcTransmuterExtension: IExtension
+    {
 
-        int IConfigureAction.Priority => Priority;
-        protected abstract int Priority { get; }
+        public abstract string Name { get; }
+        public abstract  string Version { get;  }
+        public virtual string Description { get; } = string.Empty;
+        public virtual string Authors { get; } = string.Empty;
         public virtual string HeaderPartial { get; }
         public virtual  string MenuPartial { get; }
 
@@ -35,7 +41,7 @@ namespace BtcTransmuter.Abstractions.Extensions
         {
         }
 
-        public virtual void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
+        public virtual void Execute(IServiceCollection serviceCollection)
         {
             RegisterInstances(serviceCollection, new Type[]
             {
@@ -69,7 +75,8 @@ namespace BtcTransmuter.Abstractions.Extensions
 
         private IEnumerable<T> GetInstancesOfTypeInOurAssembly<T>() where T : class
         {
-            return ExtensionManager.GetInstances<T>(assembly => assembly == Assembly.GetAssembly(GetType()));
+            return Assembly.GetAssembly(GetType()).GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract)
+                .Select(type => (T) Activator.CreateInstance(type, new object[0]));
         }
     }
 }

@@ -6,6 +6,5 @@ namespace BtcTransmuter.Extension.Recipe
     {
         public override string Name => "Recipe Plugin";
         public override string Version  => "0.0.1";
-        protected override int Priority => 0;
     }
 }

@@ -15,13 +15,11 @@ namespace BtcTransmuter.Extension.NBXplorer
     {
         public override string Name => "NBXplorer Plugin";
         public override string Version => "0.0.1";
-        protected override int Priority => 0;
 
         public override string MenuPartial => "NBXplorerMenuExtension";
 
-        public override void Execute(IServiceCollection serviceCollection, IServiceProvider serviceProvider)
+        public override void Execute(IServiceCollection serviceCollection)
         {
-            base.Execute(serviceCollection, serviceProvider);
             serviceCollection.AddSingleton(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
