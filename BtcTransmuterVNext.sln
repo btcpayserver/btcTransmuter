@@ -23,13 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Rec
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Webhook", "BtcTransmuter.Extension.Webhook\BtcTransmuter.Extension.Webhook.csproj", "{C213433D-E2AC-46D9-9818-F5A01D144B47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Tests", "BtcTransmuter.Tests\BtcTransmuter.Tests.csproj", "{C6B38273-7152-4B05-AA99-10672CE8D1DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Tests", "BtcTransmuter.Tests\BtcTransmuter.Tests.csproj", "{C6B38273-7152-4B05-AA99-10672CE8D1DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Exchange.Tests", "BtcTransmuter.Extension.Exchange.Tests\BtcTransmuter.Extension.Exchange.Tests.csproj", "{2F3CE30A-E0B1-483B-AF25-47387DE292BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Exchange.Tests", "BtcTransmuter.Extension.Exchange.Tests\BtcTransmuter.Extension.Exchange.Tests.csproj", "{2F3CE30A-E0B1-483B-AF25-47387DE292BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Webhook.Tests", "BtcTransmuter.Extension.Webhook.Tests\BtcTransmuter.Extension.Webhook.Tests.csproj", "{A2039A2D-410F-485E-9D72-28A2541041A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.Webhook.Tests", "BtcTransmuter.Extension.Webhook.Tests\BtcTransmuter.Extension.Webhook.Tests.csproj", "{A2039A2D-410F-485E-9D72-28A2541041A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.NBXplorer", "BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj", "{C6E0F70A-3045-4D01-8127-1F17A3478090}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.NBXplorer", "BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj", "{C6E0F70A-3045-4D01-8127-1F17A3478090}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

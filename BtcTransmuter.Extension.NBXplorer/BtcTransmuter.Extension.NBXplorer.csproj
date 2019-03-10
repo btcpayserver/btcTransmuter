@@ -1,9 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
+
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
     </ItemGroup>
     <ItemGroup>
@@ -11,12 +13,5 @@
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="NBXplorer.Client" Version="2.0.0.4" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="Views\NBXplorerBalance\EditData.cshtml" />
-      <Content Include="Views\NBXplorerNewBlock\EditData.cshtml" />
-      <Content Include="Views\NBXplorerNewTransaction\EditData.cshtml" />
-      <Content Include="Views\NBXplorerStatus\GetSummaries.cshtml" />
-      <Content Include="Views\Shared\NBXplorerMenuExtension.cshtml" />
     </ItemGroup>
 </Project>

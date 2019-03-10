@@ -59,31 +59,44 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
         {
             try
             {
-
-            var (key, service) = pair;
-            if (!await service.CheckAccess())
-            {
-                return;
-            }
-
-            var data = service.GetData();
-            data.LastCheck = DateTime.Now;
-            if (data.MonitoredInvoiceStatuses == null)
-            {
-                data.MonitoredInvoiceStatuses = new Dictionary<string, string>();
-            }
-            var client = service.ConstructClient();
-
-            var invoices = await client.GetInvoicesAsync<BtcPayInvoice>(data.PairedDate);
-
-            foreach (var invoice in invoices)
-            {
-                //do not trigger on first run
-                if (data.LastCheck.HasValue)
+                var key = pair.Key;
+                var service = pair.Value;
+                if (!await service.CheckAccess())
                 {
-                    if (data.MonitoredInvoiceStatuses.ContainsKey(invoice.Id))
+                    return;
+                }
+
+                var data = service.GetData();
+                data.LastCheck = DateTime.Now;
+                if (data.MonitoredInvoiceStatuses == null)
+                {
+                    data.MonitoredInvoiceStatuses = new Dictionary<string, string>();
+                }
+
+                var client = service.ConstructClient();
+
+                var invoices = await client.GetInvoicesAsync<BtcPayInvoice>(data.PairedDate);
+
+                foreach (var invoice in invoices)
+                {
+                    //do not trigger on first run
+                    if (data.LastCheck.HasValue)
                     {
-                        if (data.MonitoredInvoiceStatuses[invoice.Id] != invoice.Status)
+                        if (data.MonitoredInvoiceStatuses.ContainsKey(invoice.Id))
+                        {
+                            if (data.MonitoredInvoiceStatuses[invoice.Id] != invoice.Status)
+                            {
+                                await _triggerDispatcher.DispatchTrigger(new InvoiceStatusChangedTrigger()
+                                {
+                                    Data = new InvoiceStatusChangedTriggerData()
+                                    {
+                                        Invoice = invoice,
+                                        ExternalServiceId = key
+                                    }
+                                });
+                            }
+                        }
+                        else
                         {
                             await _triggerDispatcher.DispatchTrigger(new InvoiceStatusChangedTrigger()
                             {
@@ -95,26 +108,13 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
                             });
                         }
                     }
-                    else
-                    {
-                        await _triggerDispatcher.DispatchTrigger(new InvoiceStatusChangedTrigger()
-                        {
-                            Data = new InvoiceStatusChangedTriggerData()
-                            {
-                                Invoice = invoice,
-                                ExternalServiceId = key
-                            }
-                        });
-                    }
+
+                    data.MonitoredInvoiceStatuses.AddOrReplace(invoice.Id, invoice.Status);
                 }
 
-                data.MonitoredInvoiceStatuses.AddOrReplace(invoice.Id, invoice.Status);
-            }
 
-
-            service.SetData(  data);
-            await _externalServiceManager.UpdateInternalData(key, data);
-            
+                service.SetData(data);
+                await _externalServiceManager.UpdateInternalData(key, data);
             }
             catch (Exception e)
             {

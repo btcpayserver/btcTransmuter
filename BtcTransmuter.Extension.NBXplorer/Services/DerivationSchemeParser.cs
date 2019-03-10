@@ -115,7 +115,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 }
             }
 
-            str = string.Join('-', parts.Where(p => !IsLabel(p)));
+            str = string.Join("-", parts.Where(p => !IsLabel(p)));
             foreach (var label in hintedLabels)
             {
                 str = $"{str}-[{label}]";
@@ -137,12 +137,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 hintLabels.Add("keeporder");
 
             var resultNoLabels = result.ToString();
-            resultNoLabels = string.Join('-', resultNoLabels.Split('-').Where(p => !IsLabel(p)));
+            resultNoLabels = string.Join("-", resultNoLabels.Split('-').Where(p => !IsLabel(p)));
             foreach (var labels in ItemCombinations(hintLabels.ToList()))
             {
                 var hinted =
-                    derivationStrategyFactory.Parse(resultNoLabels + '-' +
-                                                    string.Join('-', labels.Select(l => $"[{l}]").ToArray()));
+                    derivationStrategyFactory.Parse(resultNoLabels + "-" +
+                                                    string.Join("-", labels.Select(l => $"[{l}]").ToArray()));
                 if (HintScriptPubKey == hinted.Derive(firstKeyPath).ScriptPubKey)
                     return hinted;
             }
@@ -152,7 +152,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
 
         private static bool IsLabel(string v)
         {
-            return v.StartsWith('[') && v.EndsWith(']');
+            return v.StartsWith("[") && v.EndsWith("]");
         }
 
         /// <summary>

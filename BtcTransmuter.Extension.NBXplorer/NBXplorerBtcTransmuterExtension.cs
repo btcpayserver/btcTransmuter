@@ -33,7 +33,7 @@ namespace BtcTransmuter.Extension.NBXplorer
                     Cryptos = configuration
                         .GetValue<string>($"NBXplorer_{nameof(NBXplorerOptions.Cryptos)}", string.Empty)?
                         .Replace(" ", "")?
-                        .Split(",")?
+                        .Split(',')?
                         .Distinct().ToArray()
                 };
             });

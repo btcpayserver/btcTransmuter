@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
       <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
     </ItemGroup>
 
@@ -15,20 +16,6 @@
     <ItemGroup>
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Scripts" />
-      <Folder Include="Styles" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="Views\Imap\EditData.cshtml" />
-      <Content Include="Views\Pop3\EditData.cshtml" />
-      <Content Include="Views\ReceivedEmail\EditData.cshtml" />
-      <Content Include="Views\SendEmail\EditData.cshtml" />
-      <Content Include="Views\Shared\ViewPop3ExternalService.cshtml" />
-      <Content Include="Views\Shared\ViewReceivedEmailTrigger.cshtml" />
-      <Content Include="Views\Shared\ViewSendEmailAction.cshtml" />
-      <Content Include="Views\Shared\ViewSmtpExternalService.cshtml" />
-      <Content Include="Views\Smtp\EditData.cshtml" />
-    </ItemGroup>
+
 
 </Project>

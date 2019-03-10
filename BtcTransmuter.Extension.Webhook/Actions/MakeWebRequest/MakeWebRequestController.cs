@@ -24,7 +24,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             HttpMethod.Put.ToString(),
             HttpMethod.Head.ToString(),
             HttpMethod.Post.ToString(),
-            HttpMethod.Patch.ToString(),
+            "Patch",//HttpMethod.Patch.ToString(),
             HttpMethod.Trace.ToString(),
             HttpMethod.Delete.ToString(),
             HttpMethod.Options.ToString()

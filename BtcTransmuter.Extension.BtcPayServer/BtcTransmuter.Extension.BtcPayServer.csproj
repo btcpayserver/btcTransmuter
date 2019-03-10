@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
       <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
     </ItemGroup>
 
@@ -14,10 +15,6 @@
         <PackageReference Include="NBitpayClient" Version="1.0.0.32" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="Views\BtcPayServer\EditData.cshtml" />
-      <Content Include="Views\InvoiceStatusChanged\EditData.cshtml" />
-    </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
     </ItemGroup>

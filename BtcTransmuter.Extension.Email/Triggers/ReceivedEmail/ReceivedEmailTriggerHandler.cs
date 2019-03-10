@@ -38,14 +38,14 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
                 case ReceivedEmailTriggerParameters.FieldComparer.None:
                     break;
                 case ReceivedEmailTriggerParameters.FieldComparer.Equals:
-                    if (!triggerData.Subject.Equals(parameters.Subject, StringComparison.CurrentCultureIgnoreCase))
+                    if (!triggerData.Subject.Equals(parameters.Subject))
                     {
                         return Task.FromResult(false);
                     }
 
                     break;
                 case ReceivedEmailTriggerParameters.FieldComparer.Contains:
-                    if (!triggerData.Subject.Contains(parameters.Subject, StringComparison.CurrentCultureIgnoreCase))
+                    if (!triggerData.Subject.Contains(parameters.Subject))
                     {
                         return Task.FromResult(false);
                     }
@@ -67,7 +67,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 
                     break;
                 case ReceivedEmailTriggerParameters.FieldComparer.Contains:
-                    if (!triggerData.Body.Contains(parameters.Body, StringComparison.CurrentCultureIgnoreCase))
+                    if (!triggerData.Body.Contains(parameters.Body))
                     {
                         return Task.FromResult(false);
                     }
