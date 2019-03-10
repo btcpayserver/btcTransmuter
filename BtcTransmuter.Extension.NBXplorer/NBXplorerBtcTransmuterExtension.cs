@@ -20,6 +20,7 @@ namespace BtcTransmuter.Extension.NBXplorer
 
         public override void Execute(IServiceCollection serviceCollection)
         {
+            base.Execute(serviceCollection);
             serviceCollection.AddSingleton(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
