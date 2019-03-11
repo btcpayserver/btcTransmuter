@@ -17,5 +17,5 @@ RUN dotnet publish "BtcTransmuter.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-VOLUME Extensions
+ENV ConnectionStrings_Database="Data Source=data/btctransmuter.db;"
 ENTRYPOINT ["dotnet", "BtcTransmuter.dll"]

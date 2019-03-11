@@ -6,22 +6,24 @@ using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Extension.Timer.Triggers.Timer;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace BtcTransmuter.Extension.Timer.HostedServices
 {
     public class TimerHostedService : IHostedService
     {
         private readonly ITriggerDispatcher _triggerDispatcher;
-        private readonly IRecipeManager _recipeManager;
+        private readonly ILogger<TimerHostedService> _logger;
 
-        public TimerHostedService(ITriggerDispatcher triggerDispatcher, IRecipeManager recipeManager)
+        public TimerHostedService(ITriggerDispatcher triggerDispatcher, ILogger<TimerHostedService> logger)
         {
             _triggerDispatcher = triggerDispatcher;
-            _recipeManager = recipeManager;
+            _logger = logger;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            _logger.LogError("Starting Timer Service");
             _ = Loop(cancellationToken);
             return Task.CompletedTask;
         }

@@ -52,10 +52,16 @@ namespace BtcTransmuter
             services.AddOptions();
             services.AddTransmuterServices();
             services.AddMemoryCache();
-
+            var dbConnString = Configuration.GetValue<string>("ConnectionStrings_Database");
+            var filePath = dbConnString.Substring(dbConnString.IndexOf("Data Source=") + "Data Source=".Length);
+            filePath = filePath.Substring(0, filePath.IndexOf(";"));
+            if (!string.IsNullOrEmpty(Path.GetDirectoryName(filePath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            }
+            Console.WriteLine($"Connecting to sqlite db with: {dbConnString}");
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(dbConnString));
 
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
@@ -115,7 +121,6 @@ namespace BtcTransmuter
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
         }
     }
 }

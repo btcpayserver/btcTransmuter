@@ -14,7 +14,6 @@ namespace BtcTransmuter.Extension.NBXplorer
     public class NBXplorerBtcTransmuterExtension : BtcTransmuterExtension
     {
         public override string Name => "NBXplorer Plugin";
-        public override string Version => "0.0.1";
 
         public override string MenuPartial => "NBXplorerMenuExtension";
 
@@ -27,6 +26,7 @@ namespace BtcTransmuter.Extension.NBXplorer
                 return new NBXplorerOptions()
                 {
                     Uri = configuration.GetValue<Uri>($"NBXplorer_{nameof(NBXplorerOptions.Uri)}"),
+                    UseDefaultCookie = configuration.GetValue($"NBXplorer_{nameof(NBXplorerOptions.UseDefaultCookie)}", 0) == 1,
                     CookieFile = configuration.GetValue<string>($"NBXplorer_{nameof(NBXplorerOptions.CookieFile)}"),
                     NetworkType =
                         configuration.GetValue<NetworkType>($"NBXplorer_{nameof(NBXplorerOptions.NetworkType)}",

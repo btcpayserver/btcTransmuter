@@ -17,6 +17,7 @@ using NBitcoin.Logging;
 using NBXplorer;
 using NBXplorer.DerivationStrategy;
 using NBXplorer.Models;
+using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 {
@@ -56,11 +57,13 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
         {
             if (_options.Cryptos == null || !_options.Cryptos.Any() || _options.Uri == null)
             {
+                _logger.LogWarning($"NBXplorer not configured but plugin is loaded: {JObject.FromObject(_options)}");
                 return Task.CompletedTask;
             }
 
             foreach (var cryptoCode in _options.Cryptos)
             {
+                _logger.LogWarning($"Starting up listening to {cryptoCode}");
                 var client = _nbXplorerClientProvider.GetClient(cryptoCode);
                 _ = MonitorClientForTriggers(client, cancellationToken);
                 _ = UpdateSummaryContinuously(client, cancellationToken);
@@ -72,7 +75,6 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
         private async Task UpdateSummaryContinuously(ExplorerClient explorerClient, CancellationToken cancellationToken)
         {
-            
             await explorerClient.WaitServerStartedAsync(cancellationToken);
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -96,9 +98,10 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
                 var recipesGroupedBySameSource = recipes
                     .Select(recipe => (recipe, recipe.RecipeTrigger.Get<NBXplorerBalanceTriggerParameters>()))
-                    .GroupBy(tuple => $"{tuple.Item2.CryptoCode}_{tuple.Item2.Address}_{tuple.Item2.DerivationStrategy}");
+                    .GroupBy(
+                        tuple => $"{tuple.Item2.CryptoCode}_{tuple.Item2.Address}_{tuple.Item2.DerivationStrategy}");
 
-                
+
                 foreach (var valueTuples in recipesGroupedBySameSource)
                 {
                     var first = valueTuples.First();
@@ -106,7 +109,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                     var explorerClient = _nbXplorerClientProvider.GetClient(first.Item2.CryptoCode);
                     var factory =
                         _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(explorerClient.CryptoCode);
-                    
+
                     NBXplorerPublicWallet wallet;
                     if (string.IsNullOrEmpty(first.Item2
                         .DerivationStrategy))

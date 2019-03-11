@@ -40,11 +40,14 @@ else
     <div class="card">
         <div class="card-body">
             <h3 class="card-title">
-                NBXplorer is not configured from the looks of it. 
+                NBXplorer is not configured from the looks of it.
             </h3>
             <p class="card-title">
                 You might want to take a look at that or spam <a href="https://twitter.com/r0ckstardev" target="_blank">here.</a>
             </p>
+            <pre>
+            @Html.Raw(JObject.FromObject(Model.Options))
+            </pre>
         </div>
     </div>
 }

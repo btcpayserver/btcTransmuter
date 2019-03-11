@@ -43,13 +43,16 @@ namespace BtcTransmuter.Abstractions.Extensions
                 typeof(IActionHandler),
                 typeof(ITriggerDescriptor),
                 typeof(ITriggerHandler),
-                typeof(IHostedService),
                 typeof(IExternalServiceDescriptor),
             });
+            RegisterInstances(serviceCollection, new Type[]
+            {
+                typeof(IHostedService)
+            }, ServiceLifetime.Singleton);
             serviceCollection.AddSingleton(this);
         }
 
-        private void RegisterInstances(IServiceCollection serviceCollection, Type[] validTypes)
+        private void RegisterInstances(IServiceCollection serviceCollection, Type[] validTypes, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
         {
             var types = serviceCollection
                 .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(GetType()))
@@ -62,9 +65,10 @@ namespace BtcTransmuter.Abstractions.Extensions
             foreach (var type in types.TypesToConsider)
             {
                 Console.WriteLine($"Registering {type.FullName}");
+               
             }
 
-            types.AsPublicImplementedInterfaces();
+            types.AsPublicImplementedInterfaces(serviceLifetime);
         }
 
         private IEnumerable<T> GetInstancesOfTypeInOurAssembly<T>() where T : class
