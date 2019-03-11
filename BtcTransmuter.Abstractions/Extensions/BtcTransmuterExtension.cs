@@ -12,19 +12,13 @@ using NetCore.AutoRegisterDi;
 
 namespace BtcTransmuter.Abstractions.Extensions
 {
-    public interface IExtension
-    {
-        string Name { get; }
-         string Version { get;  }
-        string Description { get; }
-        string Authors { get; }
-    }
-    
     public abstract class BtcTransmuterExtension: IExtension
     {
 
         public abstract string Name { get; }
-        public abstract  string Version { get;  }
+
+        public virtual string Version => GetType().Assembly.GetName().Version.ToString();
+
         public virtual string Description { get; } = string.Empty;
         public virtual string Authors { get; } = string.Empty;
         public virtual string HeaderPartial { get; }
