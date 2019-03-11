@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Dynamic;
 using System.Reflection;
 using BtcTransmuter.Abstractions.Extensions;
 using McMaster.NETCore.Plugins;
@@ -14,9 +13,9 @@ using Microsoft.Extensions.FileProviders;
 
 namespace BtcTransmuter
 {
-    public static class PluginManager
+    public static class ExtensionManager
     {
-        public static void AddPlugins(this IServiceCollection serviceCollection, string extensionsFolder,
+        public static void AddExtensions(this IServiceCollection serviceCollection, string extensionsFolder,
             IMvcBuilder mvcBuilder)
         {
             var providers = new List<IFileProvider>();
@@ -27,7 +26,7 @@ namespace BtcTransmuter
             extensions.AddRange(loadedPluginAssemblies.SelectMany(assembly =>
                 GetAllExtensionTypesFromAssembly(assembly).Select(GetExtensionInstanceFromType)));
 
-
+            Console.WriteLine($"Loading extensions from {extensionsFolder}");
             Directory.CreateDirectory(extensionsFolder);
             foreach (var dir in Directory.GetDirectories(extensionsFolder))
             {
@@ -38,7 +37,7 @@ namespace BtcTransmuter
                 extensions.AddRange(GetAllExtensionTypesFromAssembly(pluginAssembly)
                     .Select(GetExtensionInstanceFromType));
                 Console.WriteLine(
-                    $"Loading application parts from plugin {pluginName}");
+                    $"Loading application parts from extension {pluginName}");
 
                 var partFactory = ApplicationPartFactory.GetApplicationPartFactory(pluginAssembly);
                 foreach (var part in partFactory.GetApplicationParts(pluginAssembly))
@@ -75,7 +74,7 @@ namespace BtcTransmuter
             }
         }
 
-        public static void UsePlugins(this IApplicationBuilder applicationBuilder)
+        public static void UseExtensions(this IApplicationBuilder applicationBuilder)
         {
             foreach (var btcTransmuterExtension in applicationBuilder.ApplicationServices
                 .GetServices<BtcTransmuterExtension>())

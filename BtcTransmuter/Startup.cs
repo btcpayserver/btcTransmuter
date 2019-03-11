@@ -65,7 +65,7 @@ namespace BtcTransmuter
             //Add the file provider to the Razor view engine
 
             var mvcBuilder = services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddPlugins(extensionsPath, mvcBuilder);
+            services.AddExtensions(extensionsPath, mvcBuilder);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,7 +108,7 @@ namespace BtcTransmuter
 
             app.UseAuthentication();
 
-            app.UsePlugins();
+            app.UseExtensions();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
