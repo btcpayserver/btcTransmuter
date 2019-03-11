@@ -36,10 +36,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 _logger.LogWarning($"Connecting to NBXplorer @{_options.Uri} with no auth");
                 client.SetNoAuth();
             }
-            else if (!string.IsNullOrEmpty(_options.CookieFile)  && _options.UseDefaultCookie)
+            else if (string.IsNullOrEmpty(_options.CookieFile)  && _options.UseDefaultCookie)
             {
                 _logger.LogWarning(
-                    $"Connecting to NBXplorer @{_options.Uri} with auth cookie {client.Network.DefaultSettings.DefaultCookieFile}");
+                    $"Connecting to NBXplorer @{_options.Uri} with default cookie {client.Network.DefaultSettings.DefaultCookieFile}");
                 client.SetCookieAuth(client.Network.DefaultSettings.DefaultCookieFile);
             }
             else
