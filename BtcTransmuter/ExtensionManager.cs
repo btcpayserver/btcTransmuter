@@ -31,7 +31,8 @@ namespace BtcTransmuter
             foreach (var dir in Directory.GetDirectories(extensionsFolder))
             {
                 var pluginName = Path.GetFileName(dir);
-                var plugin = PluginLoader.CreateFromAssemblyFile(Path.Combine(dir, pluginName + ".dll"));
+                var plugin = PluginLoader.CreateFromAssemblyFile(Path.Combine(dir, pluginName + ".dll"),
+                    PluginLoaderOptions.PreferSharedTypes);
                 var pluginAssembly = plugin.LoadDefaultAssembly();
                 providers.Add(CreateEmbeddedFileProviderForAssembly(pluginAssembly));
                 extensions.AddRange(GetAllExtensionTypesFromAssembly(pluginAssembly)
@@ -43,6 +44,7 @@ namespace BtcTransmuter
                 foreach (var part in partFactory.GetApplicationParts(pluginAssembly))
                 {
                     Console.WriteLine($"* {part.Name}");
+                    
                     mvcBuilder.PartManager.ApplicationParts.Add(part);
                 }
 
@@ -59,7 +61,7 @@ namespace BtcTransmuter
                     }
                 }
             }
-
+        
             serviceCollection.Configure<RazorViewEngineOptions>(options =>
             {
                 foreach (var embeddedFileProvider in providers)
