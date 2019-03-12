@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
@@ -6,6 +7,7 @@ using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
+using ExchangeSharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -51,17 +53,33 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                     nameof(ExternalServiceData.Name), @from.ExternalServiceId)
             };
         }
-        
+
         protected override async Task<(RecipeAction ToSave, PlaceOrderViewModel showViewModel)> BuildModel(
             PlaceOrderViewModel viewModel, RecipeAction mainModel)
         {
-            if (ModelState.IsValid)
+            if (viewModel.OrderType == OrderType.Stop && string.IsNullOrEmpty(viewModel.StopPrice))
             {
-                mainModel.ExternalServiceId = viewModel.ExternalServiceId;
-                mainModel.Set<PlaceOrderData>(viewModel);
-                return (mainModel, null);
+                ModelState.AddModelError(nameof(PlaceOrderViewModel.StopPrice),
+                    $"Please set a stop price if you wish to place a stop order");
             }
             
+            if (ModelState.IsValid)
+            {
+                var serviceData =
+                    await _externalServiceManager.GetExternalServiceData(viewModel.ExternalServiceId, GetUserId());
+                var exchangeService = new ExchangeService(serviceData);
+                var symbols = (await exchangeService.ConstructClient().GetMarketSymbolsAsync()).ToArray();
+                if (symbols.Contains(viewModel.MarketSymbol))
+                {
+                    mainModel.ExternalServiceId = viewModel.ExternalServiceId;
+                    mainModel.Set<PlaceOrderData>(viewModel);
+                    return (mainModel, null);
+                }
+
+                ModelState.AddModelError(nameof(PlaceOrderViewModel.MarketSymbol),
+                    $"The market symbols you entered is invalid. Please choose from the following: {string.Join(",", symbols)}");
+            }
+
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 Type = new[] {ExchangeService.ExchangeServiceType},
