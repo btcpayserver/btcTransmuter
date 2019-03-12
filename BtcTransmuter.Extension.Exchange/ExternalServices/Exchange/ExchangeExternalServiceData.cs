@@ -17,7 +17,7 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
         [Display(Name = "Exchange")]
         public string ExchangeName { get; set; }
         
-        [Display(Name = "Exchange Override Url")]
+        [Display(Name = "Exchange Override Url(for sandbox/test environments)")]
         public string OverrideUrl { get; set; }
 
         public DateTime? LastCheck { get; set; }
