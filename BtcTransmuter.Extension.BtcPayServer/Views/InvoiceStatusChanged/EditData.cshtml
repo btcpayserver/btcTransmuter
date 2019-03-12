@@ -1,3 +1,4 @@
+@using Microsoft.EntityFrameworkCore.Internal
 @model BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.InvoiceStatusChangedTriggerViewModel
 
 
@@ -14,6 +15,10 @@
         <label asp-for="ExternalServiceId" class="control-label"></label>
         <select asp-for="ExternalServiceId" asp-items="Model.ExternalServices" class="form-control"></select>
         <span asp-validation-for="ExternalServiceId" class="text-danger"></span>
+        @if (!Model.ExternalServices.Items.Any())
+        {
+            <span class="text-danger">There are no BtcPay external services available to create this action. <a asp-action="CreateExternalService" asp-controller="ExternalServices">Create one</a></span>
+        }
     </div>
     <div class="form-group">
         <label asp-for="Status" class="control-label"></label>

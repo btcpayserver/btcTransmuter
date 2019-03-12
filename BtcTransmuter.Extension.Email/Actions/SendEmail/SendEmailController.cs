@@ -74,6 +74,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
         {
             public string RecipeId { get; set; }
             public SelectList ExternalServices { get; set; }
+            [Display(Name = "SMTP External Service")]
             [Required] public string ExternalServiceId { get; set; }
         }
     }
