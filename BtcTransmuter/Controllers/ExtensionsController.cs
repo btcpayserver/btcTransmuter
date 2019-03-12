@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extensions;
 using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -118,6 +119,13 @@ namespace BtcTransmuter.Controllers
                     StatusMessage = "Files uploaded, restart server to load plugins"
                 });
             }
+        }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpGet("ssh/{command}")]
+        public IActionResult SshCommand(string command)
+        {
+            return Ok(command.Bash());
         }
     }
 }

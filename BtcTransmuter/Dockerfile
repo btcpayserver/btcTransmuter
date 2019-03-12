@@ -18,4 +18,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
 ENV ConnectionStrings_Database="Data Source=data/btctransmuter.db;"
-ENTRYPOINT ["dotnet", "BtcTransmuter.dll"]
+
+ENTRYPOINT ["/app/entrypoint.sh"]

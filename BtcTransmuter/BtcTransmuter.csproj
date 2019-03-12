@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="entrypoint.sh" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
@@ -34,6 +38,12 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\site.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\site.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="entrypoint.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
