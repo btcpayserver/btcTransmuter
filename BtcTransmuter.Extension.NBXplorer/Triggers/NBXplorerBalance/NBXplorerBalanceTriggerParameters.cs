@@ -14,7 +14,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
         public string DerivationStrategy { get; set; }
         [Display(Name = "Balance")]
         public decimal BalanceValue { get; set; }
-        public MoneyUnit BalanceMoneyUnit { get; set; }
+
+        public MoneyUnit BalanceMoneyUnit { get; set; } = MoneyUnit.BTC;
         public BalanceComparer BalanceComparer { get; set; }
 
         public Money Balance => Money.FromUnit(BalanceValue, BalanceMoneyUnit);

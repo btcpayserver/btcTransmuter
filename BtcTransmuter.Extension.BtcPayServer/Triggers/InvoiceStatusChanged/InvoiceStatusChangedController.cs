@@ -90,7 +90,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
         {
             public string RecipeId { get; set; }
             public SelectList ExternalServices { get; set; }
-            [Required] public string ExternalServiceId { get; set; }
+            [Required][Display(Name = "BtcPay Service")] public string ExternalServiceId { get; set; }
             public SelectList Statuses { get; set; }
         }
     }
