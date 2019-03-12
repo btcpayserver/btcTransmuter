@@ -6,8 +6,10 @@ namespace BtcTransmuter.Extension.Timer.Triggers.Timer
     public class TimerTriggerParameters
     {
         public DateTime? LastTriggered { get; set; }    
+        
+        [Display(Name = "Start from")]
         public DateTime? StartOn { get; set; }
-        [Required]
+        [Required][Display(Name = "Trigger every")]
         public int TriggerEveryAmount { get; set; }
         [Required]
         public TimerResetEvery TriggerEvery { get; set; }

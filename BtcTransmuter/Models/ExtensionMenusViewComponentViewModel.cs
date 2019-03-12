@@ -3,11 +3,11 @@ using BtcTransmuter.Abstractions.Extensions;
 
 namespace BtcTransmuter.ViewComponents
 {
-    public class ExtensionHeadersViewComponentViewModel
+    public class ExtensionMenusViewComponentViewModel
     {
         public IEnumerable<BtcTransmuterExtension> Extensions { get; }
 
-        public ExtensionHeadersViewComponentViewModel(IEnumerable<BtcTransmuterExtension> extensions)
+        public ExtensionMenusViewComponentViewModel(IEnumerable<BtcTransmuterExtension> extensions)
         {
             Extensions = extensions;
         }

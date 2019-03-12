@@ -7,6 +7,7 @@ namespace BtcTransmuter.Models
     public class EditRecipeTriggerViewModel
     {
         public string RecipeId { get; set; }
+        [Display(Name = "Trigger Type")]
         [Required] public string TriggerId { get; set; }
         public SelectList Triggers { get; set; }
         public string StatusMessage { get; set; }

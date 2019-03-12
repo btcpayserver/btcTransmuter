@@ -95,7 +95,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
         {
             public string RecipeId { get; set; }
             public SelectList ExternalServices { get; set; }
-            [Required] public string ExternalServiceId { get; set; }
+            [Required][Display(Name = "Exchange Service")] public string ExternalServiceId { get; set; }
         }
     }
 }
