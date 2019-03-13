@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BtcTransmuter.Abstractions.Extensions;
 
-namespace BtcTransmuter.ViewComponents
+namespace BtcTransmuter.Models
 {
     public class ExtensionHeadersViewComponentViewModel
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace BtcTransmuter.ViewComponents
+namespace BtcTransmuter.Helpers
 {
     public static class ReflectionHelper
     {

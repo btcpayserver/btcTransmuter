@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
+using BtcTransmuter.Helpers;
+using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.ViewComponents

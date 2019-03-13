@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Extensions;
+using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.ViewComponents

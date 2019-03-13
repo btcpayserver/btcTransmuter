@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using BtcTransmuter.Data.Entities;
-using BtcTransmuter.Models;
 
-namespace BtcTransmuter.ViewComponents
+namespace BtcTransmuter.Models
 {
     public class RecipeActionFooterViewModel
     {

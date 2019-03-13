@@ -20,10 +20,4 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
 
         public Money Balance => Money.FromUnit(BalanceValue, BalanceMoneyUnit);
     }
-
-    public enum BalanceComparer
-    {
-        LessThanOrEqual,
-        GreaterThanOrEqual
-    }
 }

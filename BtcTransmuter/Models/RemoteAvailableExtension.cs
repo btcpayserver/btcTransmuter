@@ -1,5 +1,6 @@
 using BtcTransmuter.Abstractions.Extensions;
-namespace BtcTransmuter.Controllers
+
+namespace BtcTransmuter.Models
 {
     public class RemoteAvailableExtension : IExtension
     {
