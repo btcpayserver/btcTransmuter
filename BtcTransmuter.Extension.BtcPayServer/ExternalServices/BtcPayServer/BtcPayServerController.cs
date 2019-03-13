@@ -31,7 +31,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             {
                 Seed = clientData.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
                 Server = clientData.Server,
-                PairingUrl = await client.GetPairingUrl(),
+                PairingUrl = await client.GetPairingUrl(data.Name),
                 Paired = await client.CheckAccess()
             };
         }
@@ -69,7 +69,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
                 {
                     Seed = serviceData.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString(),
                     Server = serviceData.Server,
-                    PairingUrl = await service.GetPairingUrl(),
+                    PairingUrl = await service.GetPairingUrl(mainModel.Name),
                     Paired = await service.CheckAccess()
                 });
             }
@@ -79,7 +79,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             {
                 viewModel.Seed = viewModel.Seed ?? new Mnemonic(Wordlist.English, WordCount.Twelve).ToString();
                 service.SetData(viewModel);
-                viewModel.PairingUrl = await service.GetPairingUrl();
+                viewModel.PairingUrl = await service.GetPairingUrl(mainModel.Name);
                 viewModel.Paired = false;
                 if (!string.IsNullOrEmpty(viewModel.PairingCode))
                 {

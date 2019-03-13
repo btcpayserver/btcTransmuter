@@ -51,7 +51,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             return client != null && await client.TestAccessAsync(Facade.Merchant);
         }
 
-        public async Task<string> GetPairingUrl()
+        public async Task<string> GetPairingUrl(string label)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
                     return null;
                 }
 
-                return (await client.RequestClientAuthorizationAsync("BtcTransmuter", Facade.Merchant))
+                return (await client.RequestClientAuthorizationAsync(label, Facade.Merchant))
                     .CreateLink(client.BaseUrl)
                     .ToString();
             }
