@@ -13,10 +13,10 @@ jobs:
       - checkout
       - run:
           command: |
-            cd BTCPayServer.Tests
-            docker-compose down --v
-            docker-compose build
-            docker-compose run tests
+            # cd BTCPayServer.Tests
+            # docker-compose down --v
+            # docker-compose build
+            # docker-compose run tests
 
   # publish jobs require $DOCKERHUB_REPO, $DOCKERHUB_USER, $DOCKERHUB_PASS defined
   publish_docker_linuxamd64:
