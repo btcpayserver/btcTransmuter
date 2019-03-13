@@ -1,4 +1,6 @@
-﻿@inject SignInManager<User> SignInManager
+﻿@using BtcTransmuter.Data.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
