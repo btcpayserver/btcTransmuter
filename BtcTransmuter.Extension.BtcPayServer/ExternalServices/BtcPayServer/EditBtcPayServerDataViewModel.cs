@@ -6,8 +6,6 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
     {
         public string Action { get; set; }
 
-        [Required]
-        [Display(Name = "BtcPay Host Url")]
         public string PairingUrl { get; set; }
 
         [Display(Name =
