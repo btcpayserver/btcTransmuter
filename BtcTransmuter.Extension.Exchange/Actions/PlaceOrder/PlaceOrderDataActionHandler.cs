@@ -32,6 +32,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
 
             var orderRequest = new ExchangeOrderRequest()
             {
+                MarketSymbol = actionData.MarketSymbol,
                 OrderType = actionData.OrderType,
                 Price = Convert.ToDecimal(InterpolateString(actionData.Price, triggerData)),
                 Amount = Convert.ToDecimal(InterpolateString(actionData.Amount, triggerData)),
@@ -39,6 +40,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                 IsBuy = actionData.IsBuy,
                 IsMargin = actionData.IsMargin,
             };
+
             try
             {
                 var result = await client.PlaceOrderAsync(orderRequest);
