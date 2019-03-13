@@ -30,14 +30,6 @@
             <div class="card-body">
                 <h3 class="card-title">
                     @Html.Raw(recipe.Name)
-                    @if (recipe.Enabled)
-                    {
-                        <span class="badge badge-primary">Enabled</span>
-                    }
-                    else
-                    {
-                        <span class="badge badge-danger">Disabled</span>
-                    }
                 </h3>
                 <p class="card-text">@Html.Raw(recipe.Description)</p>
             </div>
@@ -51,7 +43,6 @@
                     else
                     {
                         @await Component.InvokeAsync("ViewRecipeTrigger", recipe.RecipeTrigger)
-                        ;
                     }
                 </li>
                 <li class="list-group-item">
@@ -59,9 +50,8 @@
                     <ul class="list-group list-group-flush" >
                         @foreach (var action in recipe.RecipeActions)
                         {
-                            <li class="list-group-item">
+                            <li class="list-group-item px-0">
                                 @await Component.InvokeAsync("ViewRecipeAction", action)
-
                             </li>
                         }
                         @if (!recipe.RecipeActions.Any())
@@ -77,6 +67,17 @@
                 <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@recipe.Id">Edit</a> -
                 <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
                 <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs (@recipe.RecipeInvocations.Count)</a>
+
+                <div class="float-right">
+                    @if (recipe.Enabled)
+                    {
+                        <span class="badge badge-info">Enabled</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">Disabled</span>
+                    }
+                </div>
             </div>
 
         </div>
