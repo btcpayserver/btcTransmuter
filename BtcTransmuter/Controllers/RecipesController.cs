@@ -85,7 +85,7 @@ namespace BtcTransmuter.Controllers
             return View(new GetRecipeLogsViewModel()
             {
                 Name = recipe.Name,
-                RecipeInvocations = recipe.RecipeInvocations
+                RecipeInvocations = recipe.RecipeInvocations.OrderByDescending(a=>a.Timestamp).ToList()
             });
         }
 
