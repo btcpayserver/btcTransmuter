@@ -110,10 +110,7 @@ namespace BtcTransmuter
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
-
             app.UseAuthentication();
-
             app.UseExtensions();
             app.UseMvc(routes =>
             {

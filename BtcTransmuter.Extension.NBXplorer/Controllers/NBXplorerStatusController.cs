@@ -1,8 +1,5 @@
-using System.Threading.Tasks;
-using BtcTransmuter.Extension.NBXplorer.HostedServices;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.Extension.NBXplorer.Controllers

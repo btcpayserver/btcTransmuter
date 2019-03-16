@@ -1,0 +1,10 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<SendTransactionData>();
+}
+
+<div>
+    Broadcast <kbd>@data.CryptoCode</kbd> transaction with <kbd>@data.Outputs.Count</kbd> outputs from <kbd>@data.Address @data.DerivationStrategy</kbd>
+</div>
