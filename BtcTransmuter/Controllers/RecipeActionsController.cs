@@ -59,7 +59,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpPost("{recipeActionId?}")]
-        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId,
+        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, string recipeActionGroupId,
             EditRecipeActionViewModel model)
         {
             var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
@@ -67,8 +67,12 @@ namespace BtcTransmuter.Controllers
             {
                 return GetNotFoundActionResult();
             }
-
-            var recipeAction = recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
+            var recipeActionGroup = string.IsNullOrEmpty(recipeActionGroupId) ?
+            null :
+            recipe.RecipeActionGroups.Single(x => x.Id == recipeActionGroupId);
+            var recipeAction = recipeActionGroup == null ?
+            recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId) :
+            recipeActionGroup.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
 
             if (!ModelState.IsValid)
             {
@@ -84,6 +88,7 @@ namespace BtcTransmuter.Controllers
                 {
                     Id = recipeActionId,
                     RecipeId = id,
+                    RecipeActionGroupId = recipeActionGroupId,
                     ActionId = model.ActionId,
                 };
             }
@@ -109,7 +114,7 @@ namespace BtcTransmuter.Controllers
             {
                 return GetNotFoundActionResult();
             }
-            
+
             if (recipeAction.RecipeInvocations.Any())
             {
                 return RedirectToAction("EditRecipe", "Recipes", new
@@ -122,7 +127,7 @@ namespace BtcTransmuter.Controllers
                     }.ToString()
                 });
             }
-            
+
             return View(new RemoveRecipeActionViewModel()
             {
                 RecipeAction = recipeAction

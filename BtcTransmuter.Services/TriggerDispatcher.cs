@@ -58,8 +58,14 @@ namespace BtcTransmuter.Services
             }
 
             _logger.LogInformation($"{trigger.Id} triggered {triggeredRecipes.Count()}/{recipes.Count()} recipes");
-            await Task.WhenAll(triggeredRecipes.SelectMany(recipe =>
-                recipe.Recipe.RecipeActions.Select(action => _actionDispatcher.Dispatch(recipe.TriggerData, action))));
+            var nonGroupedRecipeTasks = triggeredRecipes.SelectMany(recipe =>
+                recipe.Recipe.RecipeActions
+                .Where(recipeAction => string.IsNullOrEmpty(recipeAction.RecipeActionGroupId))
+                .Select(action => (Task)_actionDispatcher.Dispatch(recipe.TriggerData, action)));
+
+            var groupExecutionTasks = triggeredRecipes.SelectMany(recipe => recipe.Recipe.RecipeActionGroups.Select(actionGroup => _actionDispatcher.Dispatch(recipe.TriggerData,actionGroup)));
+
+            await Task.WhenAll(nonGroupedRecipeTasks.Concat(groupExecutionTasks));
 
             foreach (var keyValuePair in triggeredRecipes.GroupBy(tuple => tuple.triggerHandler)
                 .ToDictionary(tuples => tuples.Key, tuples => tuples.ToArray()))

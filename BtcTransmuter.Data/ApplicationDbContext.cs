@@ -17,6 +17,7 @@ namespace BtcTransmuter.Data
         
         public DbSet<ExternalServiceData> ExternalServices { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<RecipeActionGroup> RecipeActionGroups { get; set; }
         public DbSet<RecipeInvocation> RecipeInvocations { get; set; }
         public DbSet<RecipeTrigger> RecipeTriggers { get; set; }
         public DbSet<RecipeAction> RecipeActions { get; set; }
@@ -38,6 +39,16 @@ namespace BtcTransmuter.Data
             builder.Entity<Recipe>()
                 .HasMany(l => l.RecipeInvocations)
                 .WithOne(action => action.Recipe)
+                .OnDelete(DeleteBehavior.Cascade);
+                
+            builder.Entity<Recipe>()
+                .HasMany(l => l.RecipeActionGroups)
+                .WithOne(action => action.Recipe)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<RecipeActionGroup>()
+                .HasMany(l => l.RecipeActions)
+                .WithOne(action => action.RecipeActionGroup)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
