@@ -25,6 +25,7 @@ namespace BtcTransmuter
     public class Startup
     {
         private string extensionsPath;
+        private string dbFilePath;
 
         public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
         {
@@ -53,12 +54,14 @@ namespace BtcTransmuter
             services.AddTransmuterServices();
             services.AddMemoryCache();
             var dbConnString = Configuration.GetValue<string>("ConnectionStrings_Database");
-            var filePath = dbConnString.Substring(dbConnString.IndexOf("Data Source=") + "Data Source=".Length);
-            filePath = filePath.Substring(0, filePath.IndexOf(";"));
-            if (!string.IsNullOrEmpty(Path.GetDirectoryName(filePath)))
+
+            dbFilePath = dbConnString.Substring(dbConnString.IndexOf("Data Source=") + "Data Source=".Length);
+            dbFilePath = dbFilePath.Substring(0, dbFilePath.IndexOf(";"));
+            if (!string.IsNullOrEmpty(Path.GetDirectoryName(dbFilePath)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                Directory.CreateDirectory(Path.GetDirectoryName(dbFilePath));
             }
+
             Console.WriteLine($"Connecting to sqlite db with: {dbConnString}");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(dbConnString));
@@ -83,8 +86,13 @@ namespace BtcTransmuter
             {
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
+                    if (File.Exists(dbFilePath) && context.Database.IsSqlite() &&
+                        context.Database.GetPendingMigrations().Any())
+                    {
+                        context.Database.EnsureDeleted();
+                    }
+                    
                     context.Database.Migrate();
-
 
                     using (var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
                     {

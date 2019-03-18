@@ -13,7 +13,7 @@ namespace BtcTransmuter.Models
         [Required] public bool Enabled { get; set; }
 
         public IEnumerable<RecipeAction> Actions { get; set; }
+        public List<RecipeActionGroup> ActionGroups { get; set; }
         public RecipeTrigger Trigger { get; set; }
     }
-    
 }

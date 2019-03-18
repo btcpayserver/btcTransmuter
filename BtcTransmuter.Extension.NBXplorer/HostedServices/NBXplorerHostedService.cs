@@ -93,7 +93,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                 var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
                 {
                     Enabled = true,
-                    RecipeTriggerId = NBXplorerBalanceTrigger.Id
+                    TriggerId = NBXplorerBalanceTrigger.Id
                 });
 
                 var recipesGroupedBySameSource = recipes
@@ -189,7 +189,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                 var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
                                 {
                                     Enabled = true,
-                                    RecipeTriggerId = NBXplorerNewTransactionTrigger.Id
+                                    TriggerId = NBXplorerNewTransactionTrigger.Id
                                 });
                                 foreach (var recipe in recipes)
                                 {

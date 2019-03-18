@@ -1,0 +1,44 @@
+@model UpdateActionGroupOrderViewModel
+
+<li class="list-group-item px-0">
+    <form class="card" asp-action="ReorderRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.RecipeActionGroup.RecipeId" asp-route-actionGroupId="@Model.RecipeActionGroup.Id">
+        <ul class="list-group list-group-flush">
+            @for (var index = 0; index < Model.RecipeActionGroup.RecipeActions.Count; index++)
+            {
+                var action = Model.RecipeActionGroup.RecipeActions[index];
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @await Component.InvokeAsync("ViewRecipeAction", action)
+                    <div>
+                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.RecipeActionGroup.RecipeId" asp-route-recipeActionId="@action.Id">Edit</a>
+                        -
+                        <a asp-action="RemoveRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.RecipeActionGroup.RecipeId" asp-route-recipeActionId="@action.Id">Remove</a>
+
+                    </div>
+
+                    <input type="number"
+                           class="form-input"
+                           asp-for="UpdateActionGroupOrderItems[index].Order">
+                    <input
+                        type="hidden"
+                        value="@action.Id"
+                        asp-for="UpdateActionGroupOrderItems[index].RecipeActionId">
+                </li>
+            }
+            @if (!Model.RecipeActionGroup.RecipeActions.Any())
+            {
+                <li class="list-group-item border-top-0">
+                    No Actions.
+                </li>
+            }
+        </ul>
+        <div class="card-footer">
+            <a class="text-danger" asp-action="RemoveRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.RecipeActionGroup.RecipeId" asp-route-actionGroupId="@Model.RecipeActionGroup.Id">Remove Action Group</a>
+            -
+            <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.RecipeActionGroup.RecipeId" asp-route-recipeActionGroupId="@Model.RecipeActionGroup.Id">Add Action</a>
+            -
+            <button type="submit" class="btn btn-link p-0" style="vertical-align: bottom">Update Action Order</button>
+
+        </div>
+
+    </form>
+</li>

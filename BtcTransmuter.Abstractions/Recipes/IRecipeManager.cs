@@ -13,11 +13,14 @@ namespace BtcTransmuter.Abstractions.Recipes
         Task AddOrUpdateRecipeTrigger(RecipeTrigger trigger);
         Task AddOrUpdateRecipeTriggers(IEnumerable<RecipeTrigger> triggers);
         Task AddOrUpdateRecipeAction(RecipeAction action);
+        Task AddRecipeActionGroup(RecipeActionGroup recipeActionGroup);
+        Task ReorderRecipeActionGroupActions(string recipeActionGroupId, Dictionary<string, int> actionsOrder);
         Task RemoveRecipe(string id);
         Task<Recipe> GetRecipe(string id, string userId = null);
         Task AddRecipeInvocation(RecipeInvocation invocation);
         Task RemoveRecipeAction(string recipeActionId);
         Task RemoveRecipeTrigger(string recipeTriggerId);
+        Task RemoveRecipeActionGroup(string recipeActionGroupId);
         Task<string> GetRecipeName(string recipeId);
     }
 }

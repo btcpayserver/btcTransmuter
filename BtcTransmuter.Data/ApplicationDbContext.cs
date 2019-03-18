@@ -14,9 +14,10 @@ namespace BtcTransmuter.Data
             : base(options)
         {
         }
-        
+
         public DbSet<ExternalServiceData> ExternalServices { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
+        
         public DbSet<RecipeActionGroup> RecipeActionGroups { get; set; }
         public DbSet<RecipeInvocation> RecipeInvocations { get; set; }
         public DbSet<RecipeTrigger> RecipeTriggers { get; set; }
@@ -25,22 +26,22 @@ namespace BtcTransmuter.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
             builder.Entity<Recipe>()
                 .HasMany(l => l.RecipeActions)
                 .WithOne(action => action.Recipe)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             builder.Entity<Recipe>()
                 .HasOne(l => l.RecipeTrigger)
                 .WithOne(action => action.Recipe)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             builder.Entity<Recipe>()
                 .HasMany(l => l.RecipeInvocations)
                 .WithOne(action => action.Recipe)
                 .OnDelete(DeleteBehavior.Cascade);
-                
+
             builder.Entity<Recipe>()
                 .HasMany(l => l.RecipeActionGroups)
                 .WithOne(action => action.Recipe)
@@ -52,7 +53,7 @@ namespace BtcTransmuter.Data
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
-    
+
     public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
         public ApplicationDbContext CreateDbContext(string[] args)

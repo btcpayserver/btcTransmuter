@@ -10,87 +10,124 @@
 </div>
 <h2>@ViewData["Title"]</h2>
 
-<form method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Enabled" class="control-label"></label>
-        <input type="checkbox" asp-for="Enabled" class="form-check"></input>
-        <span asp-validation-for="Enabled" class="text-danger"></span>
-    </div>
-    <h4>Trigger</h4>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            @if (Model.Trigger == null)
-            {
-                <span>No trigger set yet</span>
+<form method="post" class="card mb-2">
+    <div class="card-body">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Enabled" class="control-label"></label>
+            <input type="checkbox" asp-for="Enabled" class="form-check"></input>
+            <span asp-validation-for="Enabled" class="text-danger"></span>
+        </div>
 
-                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.Id">Add</a>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="RemoveRecipe" asp-route-id="@Model.Id" class="btn btn-danger">Remove</a>
+
+    </div>
+</form>
+<h4>Trigger</h4>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        @if (Model.Trigger == null)
+        {
+            <span>No trigger set yet</span>
+
+            <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.Id">Add</a>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between align-items-center">
+                @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
+                <div>
+                    <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers"
+                       asp-route-id="@Model.Trigger.RecipeId"
+                       asp-route-recipeTriggerId="@Model.Trigger.Id">
+                        Edit
+                    </a>
+                    -
+                    <a asp-action="RemoveRecipeTrigger" asp-controller="RecipeTriggers"
+                       asp-route-id="@Model.Trigger.RecipeId"
+                       asp-route-recipeTriggerId="@Model.Trigger.Id">
+                        Remove
+                    </a>
+                </div>
+            </div>
+        }
+    </li>
+    <li class="list-group-item px-0">
+        <h4>Actions</h4>
+        <ul class="list-group list-group-flush ">
+            @foreach (var action in Model.Actions.Where(action => action.RecipeActionGroup == null))
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @await Component.InvokeAsync("ViewRecipeAction", action)
+                    <div>
+                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
+                        -
+                        <a asp-action="RemoveRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Remove</a>
+
+                    </div>
+                </li>
+            }
+
+            @if (!Model.Actions.Any())
+            {
+                <li class="list-group-item border-top-0">
+                    No Actions. <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add</a>
+                </li>
             }
             else
             {
-                <div class="d-flex justify-content-between align-items-center">
-                    @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
-                    <div>
-                        <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers"
-                           asp-route-id="@Model.Trigger.RecipeId"
-                           asp-route-recipeTriggerId="@Model.Trigger.Id">
-                            Edit
-                        </a>
-                        -
-                        <a asp-action="RemoveRecipeTrigger" asp-controller="RecipeTriggers"
-                           asp-route-id="@Model.Trigger.RecipeId"
-                           asp-route-recipeTriggerId="@Model.Trigger.Id">
-                            Remove
-                        </a>
-                    </div>
-                </div>
+                <li class="list-group-item">
+                    <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
+                </li>
             }
-        </li>
-        <li class="list-group-item px-0">
-            <h4>Actions</h4>
-            <ul class="list-group list-group-flush ">
-                @foreach (var action in Model.Actions)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @await Component.InvokeAsync("ViewRecipeAction", action)
-                        <div>
-                            <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
-                            -
-                            <a asp-action="RemoveRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Remove</a>
 
-                        </div>
-                    </li>
-                }
+        </ul>
+    </li>
 
-                @if (!Model.Actions.Any())
+    <li class="list-group-item px-0">
+        <h4>Action Groups</h4>
+        <ul class="list-group list-group-flush">
+            @for (var y = 0; y < Model.ActionGroups.Count(); y++)
+            {
+                var actionGroup = Model.ActionGroups.ElementAt(y);
+                @await Html.PartialAsync("EditRecipeActionGroup", new UpdateActionGroupOrderViewModel()
                 {
-                    <li class="list-group-item border-top-0">
-                        No Actions.   <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="list-group-item">
-                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
-                    </li>
-                }
-
-            </ul>
-        </li>
-    </ul>
-    <div class="mt-2">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-action="RemoveRecipe" asp-route-id="@Model.Id" class="btn btn-danger">Remove</a>
-        <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>
-    </div>
-</form>
+                    RecipeActionGroup = actionGroup,
+                    UpdateActionGroupOrderItems = actionGroup.RecipeActions.Select(action => new UpdateActionGroupOrderViewModel.UpdateActionGroupOrderItem()
+                    {
+                        Order = action.Order,
+                        RecipeActionId = action.Id
+                    }).ToArray()
+                })
+            }
+            @if (!Model.ActionGroups.Any())
+            {
+                <li class="list-group-item border-top-0">
+                    No Action Groups. <a asp-action="AddRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.Id">Add Action Group</a>
+                </li>
+            }
+            else
+            {
+                <li class="list-group-item">
+                    <a asp-action="AddRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.Id">Add Action Group</a>
+                </li>
+            }
+        </ul>
+    </li>
+</ul>
+<div class="mt-2">
+    <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>
+</div>

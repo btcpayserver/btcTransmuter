@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
@@ -140,7 +141,8 @@ namespace BtcTransmuter.Controllers
                 Enabled = recipe.Enabled,
                 Description = recipe.Description,
                 Actions = recipe.RecipeActions,
-                Trigger = recipe.RecipeTrigger
+                Trigger = recipe.RecipeTrigger,
+                ActionGroups = recipe.RecipeActionGroups
             });
         }
 
@@ -167,6 +169,52 @@ namespace BtcTransmuter.Controllers
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe edited"});
         }
 
+        [HttpGet("{id}/action-groups/add")]
+        public async Task<IActionResult> AddRecipeActionGroup(string id)
+        {
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
+            if (recipe == null)
+            {
+                return GetNotFoundActionResult();
+            }
+            
+            await _recipeManager.AddRecipeActionGroup(new RecipeActionGroup()
+            {
+                RecipeId = recipe.Id
+            });
+            return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe Action group added"});
+        }
+        
+        [HttpGet("{id}/action-groups/{actionGroupId}/remove")]
+        public async Task<IActionResult> RemoveRecipeActionGroup(string id, string actionGroupId)
+        {
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
+            if (recipe == null || !
+                    recipe.RecipeActionGroups.Any(group => group.Id.Equals(actionGroupId,StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return GetNotFoundActionResult();
+            }
+            
+            
+            await _recipeManager.RemoveRecipeActionGroup(actionGroupId);
+            return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe Action group removed"});
+        }
+        
+        [HttpPost("{id}/action-groups/{actionGroupId}/order")]
+        public async Task<IActionResult> ReorderRecipeActionGroup(string id, string actionGroupId,UpdateActionGroupOrderViewModel vm)
+        {
+            var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
+            if (recipe == null || !
+                    recipe.RecipeActionGroups.Any(group => group.Id.Equals(actionGroupId,StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return GetNotFoundActionResult();
+            }
+            
+            await _recipeManager.ReorderRecipeActionGroupActions(actionGroupId, vm.UpdateActionGroupOrderItems.ToDictionary(item => item.RecipeActionId, item => item.Order));
+            return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe Action group order updated"});
+        }
+
+ 
         private RedirectToActionResult GetNotFoundActionResult()
         {
             return RedirectToAction("GetRecipes", new

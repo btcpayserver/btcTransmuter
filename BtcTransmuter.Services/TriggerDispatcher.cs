@@ -33,7 +33,7 @@ namespace BtcTransmuter.Services
             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
             {
                 Enabled = true,
-                RecipeTriggerId = trigger.Id
+                TriggerId = trigger.Id
             });
             
             _logger.LogInformation($"{recipes.Count()} possible recipes to be triggered by {trigger.Id}");

@@ -26,6 +26,9 @@ namespace BtcTransmuter.Services
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
                     var queryable = context.Recipes
+                        .Include(recipe => recipe.RecipeActionGroups)
+                        .ThenInclude(group => group.RecipeActions)
+                        .ThenInclude(action => action.ExternalService)
                         .Include(recipe => recipe.RecipeActions)
                         .ThenInclude(action => action.ExternalService)
                         .Include(recipe => recipe.RecipeActions)
@@ -40,9 +43,9 @@ namespace BtcTransmuter.Services
                         queryable = queryable.Where(x => x.Enabled == query.Enabled.Value);
                     }
 
-                    if (!string.IsNullOrEmpty(query.RecipeTriggerId))
+                    if (!string.IsNullOrEmpty(query.TriggerId))
                     {
-                        queryable = queryable.Where(x => x.RecipeTrigger.TriggerId == query.RecipeTriggerId);
+                        queryable = queryable.Where(x => x.RecipeTrigger.TriggerId == query.TriggerId);
                     }
 
                     if (!string.IsNullOrEmpty(query.UserId))
@@ -128,6 +131,51 @@ namespace BtcTransmuter.Services
             }
         }
 
+        public async Task AddRecipeActionGroup(RecipeActionGroup recipeActionGroup)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    if (string.IsNullOrEmpty(recipeActionGroup.Id))
+                    {
+                        await context.RecipeActionGroups.AddAsync(recipeActionGroup);
+                    }
+                    else
+                    {
+                        context.RecipeActionGroups.Attach(recipeActionGroup).State = EntityState.Modified;
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task ReorderRecipeActionGroupActions(string recipeActionGroupId,
+            Dictionary<string, int> actionsOrder)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    var actionGroup = await context.RecipeActionGroups.Include(group => group.RecipeActions)
+                        .SingleAsync(group =>
+                            group.Id.Equals(recipeActionGroupId, StringComparison.InvariantCultureIgnoreCase));
+
+                    
+                    actionGroup.RecipeActions.ForEach(action =>
+                    {
+                        if (actionsOrder.ContainsKey(action.Id))
+                        {
+                            action.Order = actionsOrder[action.Id];
+                        }
+                    });
+
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
         public async Task RemoveRecipe(string id)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
@@ -205,6 +253,22 @@ namespace BtcTransmuter.Services
                     if (recipe != null)
                     {
                         context.RecipeTriggers.Remove(recipe);
+                        await context.SaveChangesAsync();
+                    }
+                }
+            }
+        }
+
+        public async Task RemoveRecipeActionGroup(string recipeActionGroupId)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    var recipe = await context.RecipeActionGroups.FindAsync(recipeActionGroupId);
+                    if (recipe != null)
+                    {
+                        context.RecipeActionGroups.Remove(recipe);
                         await context.SaveChangesAsync();
                     }
                 }

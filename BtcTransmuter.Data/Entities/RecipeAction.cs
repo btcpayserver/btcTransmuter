@@ -17,12 +17,4 @@ namespace BtcTransmuter.Data.Entities
         public int Order { get; set; } = 0;
 
     }
-
-    public class RecipeActionGroup : BaseEntity
-    {
-        public string RecipeId { get; set; }
-
-        public Recipe Recipe { get; set; }
-        public List<RecipeAction> RecipeActions { get; set; }
-    }
 }
