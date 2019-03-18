@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BtcTransmuter.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190218113432_Initial")]
+    [Migration("20190318105011_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,15 +69,35 @@ namespace BtcTransmuter.Data.Migrations
 
                     b.Property<string>("ExternalServiceId");
 
+                    b.Property<int>("Order");
+
+                    b.Property<string>("RecipeActionGroupId");
+
                     b.Property<string>("RecipeId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExternalServiceId");
 
+                    b.HasIndex("RecipeActionGroupId");
+
                     b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeActions");
+                });
+
+            modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeActionGroup", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("RecipeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeActionGroups");
                 });
 
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeInvocation", b =>
@@ -304,8 +324,21 @@ namespace BtcTransmuter.Data.Migrations
                         .WithMany("RecipeActions")
                         .HasForeignKey("ExternalServiceId");
 
+                    b.HasOne("BtcTransmuter.Data.Entities.RecipeActionGroup", "RecipeActionGroup")
+                        .WithMany("RecipeActions")
+                        .HasForeignKey("RecipeActionGroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
                         .WithMany("RecipeActions")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeActionGroup", b =>
+                {
+                    b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")
+                        .WithMany("RecipeActionGroups")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -313,7 +346,7 @@ namespace BtcTransmuter.Data.Migrations
             modelBuilder.Entity("BtcTransmuter.Data.Entities.RecipeInvocation", b =>
                 {
                     b.HasOne("BtcTransmuter.Data.Entities.RecipeAction", "RecipeAction")
-                        .WithMany()
+                        .WithMany("RecipeInvocations")
                         .HasForeignKey("RecipeActionId");
 
                     b.HasOne("BtcTransmuter.Data.Entities.Recipe", "Recipe")

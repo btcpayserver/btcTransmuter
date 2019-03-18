@@ -195,26 +195,17 @@ namespace BtcTransmuter.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipeActions",
+                name: "RecipeActionGroups",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    DataJson = table.Column<string>(nullable: true),
-                    RecipeId = table.Column<string>(nullable: true),
-                    ExternalServiceId = table.Column<string>(nullable: true),
-                    ActionId = table.Column<string>(nullable: true)
+                    RecipeId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecipeActions", x => x.Id);
+                    table.PrimaryKey("PK_RecipeActionGroups", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RecipeActions_ExternalServices_ExternalServiceId",
-                        column: x => x.ExternalServiceId,
-                        principalTable: "ExternalServices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RecipeActions_Recipes_RecipeId",
+                        name: "FK_RecipeActionGroups_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
@@ -242,6 +233,41 @@ namespace BtcTransmuter.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RecipeTriggers_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeActions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    DataJson = table.Column<string>(nullable: true),
+                    RecipeId = table.Column<string>(nullable: true),
+                    RecipeActionGroupId = table.Column<string>(nullable: true),
+                    ExternalServiceId = table.Column<string>(nullable: true),
+                    ActionId = table.Column<string>(nullable: true),
+                    Order = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeActions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeActions_ExternalServices_ExternalServiceId",
+                        column: x => x.ExternalServiceId,
+                        principalTable: "ExternalServices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RecipeActions_RecipeActionGroups_RecipeActionGroupId",
+                        column: x => x.RecipeActionGroupId,
+                        principalTable: "RecipeActionGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeActions_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
@@ -319,9 +345,19 @@ namespace BtcTransmuter.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RecipeActionGroups_RecipeId",
+                table: "RecipeActionGroups",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RecipeActions_ExternalServiceId",
                 table: "RecipeActions",
                 column: "ExternalServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeActions_RecipeActionGroupId",
+                table: "RecipeActions",
+                column: "RecipeActionGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeActions_RecipeId",
@@ -386,6 +422,9 @@ namespace BtcTransmuter.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExternalServices");
+
+            migrationBuilder.DropTable(
+                name: "RecipeActionGroups");
 
             migrationBuilder.DropTable(
                 name: "Recipes");
