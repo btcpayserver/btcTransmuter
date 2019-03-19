@@ -168,6 +168,10 @@ namespace BtcTransmuter.Services
                         if (actionsOrder.ContainsKey(action.Id))
                         {
                             action.Order = actionsOrder[action.Id];
+                            foreach (var entityEntry in context.ChangeTracker.Entries().Where(entry => entry.Entity is RecipeAction))
+                            {
+                                entityEntry.State = EntityState.Modified;
+                            }
                         }
                     });
 
