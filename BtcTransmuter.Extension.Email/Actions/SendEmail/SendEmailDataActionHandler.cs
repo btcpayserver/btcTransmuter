@@ -20,33 +20,30 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
         
         public override string ControllerName => "SendEmail";
 
-        protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
-        {
-            return Task.FromResult(recipeAction.ActionId == ActionId);
-        }
-
-        protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
+        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             SendEmailData actionData)
         {
             var smtpService = new SmtpService(recipeAction.ExternalService);
 
             var message = new MimeMessage(new List<InternetAddress>()
                 {
-                    InternetAddress.Parse(InterpolateString(actionData.From, triggerData))
+                    InternetAddress.Parse(InterpolateString(actionData.From, data))
                 }, new List<InternetAddress>()
                 {
-                    InternetAddress.Parse(InterpolateString(actionData.To, triggerData))
-                }, InterpolateString(actionData.Subject, triggerData),
+                    InternetAddress.Parse(InterpolateString(actionData.To, data))
+                }, InterpolateString(actionData.Subject, data),
                 new TextPart(TextFormat.Plain)
                 {
-                    Text = InterpolateString(actionData.Body, triggerData)
+                    Text = InterpolateString(actionData.Body, data)
                 });
 
             await smtpService.SendEmail(message);
             return new ActionHandlerResult()
             {
+                Executed = true,
                 Result =
-                    $"Sent email to {message.To} from {message.From} with subject {message.Subject} and body {message.Body}"
+                    $"Sent email to {message.To} from {message.From} with subject {message.Subject} and body {message.Body}",
+                Data = message
             };
         }
     }

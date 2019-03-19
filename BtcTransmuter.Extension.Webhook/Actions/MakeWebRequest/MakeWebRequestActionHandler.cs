@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             _httpClientFactory = httpClientFactory;
         }
 
-        public Task<IActionResult> EditData(RecipeAction data)
+        public override Task<IActionResult> EditData(RecipeAction data)
         {
             using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {
@@ -52,7 +53,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             }
         }
 
-        protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
+        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             MakeWebRequestData actionData)
         {
             try
@@ -61,13 +62,14 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
                 {
                     var result = await client.SendAsync(
                         new HttpRequestMessage(new HttpMethod(actionData.Method),
-                            InterpolateString(actionData.Url, triggerData))
+                            InterpolateString(actionData.Url, data))
                         {
-                            Content = new StringContent(InterpolateString(actionData.Body, triggerData) ?? "",
-                                Encoding.UTF8, InterpolateString(actionData.ContentType, triggerData))
+                            Content = new StringContent(InterpolateString(actionData.Body, data) ?? "",
+                                Encoding.UTF8, InterpolateString(actionData.ContentType, data))
                         });
                     return new ActionHandlerResult()
                     {
+                        Data = result,
                         Executed = true,
                         Result =
                             $"Request sent. Status Code: {result.StatusCode}"

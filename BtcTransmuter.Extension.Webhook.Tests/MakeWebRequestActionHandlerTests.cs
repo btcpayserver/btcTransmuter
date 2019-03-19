@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
@@ -33,7 +34,7 @@ namespace BtcTransmuter.Extension.Webhook.Tests
                 Body = "{}",
                 Method = "POST"
             });
-            var result = await actionHandler.Execute(new { }, recipeAction);
+            var result = await actionHandler.Execute(new Dictionary<string, object>(), recipeAction);
             Assert.True(result.Executed);
             
             recipeAction = new RecipeAction()
@@ -47,7 +48,7 @@ namespace BtcTransmuter.Extension.Webhook.Tests
                 Body = "{}",
                 Method = "POST"
             });
-            result = await actionHandler.Execute(new { }, recipeAction);
+            result = await actionHandler.Execute(new Dictionary<string, object>(), recipeAction);
             Assert.False(result.Executed);
         }
         
@@ -73,7 +74,7 @@ namespace BtcTransmuter.Extension.Webhook.Tests
                 Body = "{}",
                 Method = "POST"
             });
-            await actionHandler.Execute(new { }, recipeAction);
+            await actionHandler.Execute(new Dictionary<string, object>(), recipeAction);
             handler.VerifyRequest(HttpMethod.Post, "http://gozo.com", Times.Once());
         }
     }

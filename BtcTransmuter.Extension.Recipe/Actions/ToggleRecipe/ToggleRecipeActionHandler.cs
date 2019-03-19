@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Helpers;
@@ -23,12 +24,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
 
         public override string ControllerName => "ToggleRecipe";
 
-        protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
-        {
-            return Task.FromResult(recipeAction.ActionId == ActionId);
-        }
-
-        protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
+        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             ToggleRecipeData actionData)
         {
             try
@@ -66,6 +62,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
                     return new ActionHandlerResult()
                     {
                         Executed = true,
+                        Data = recipe,
                         Result =
                             $"Recipe {recipe.Name} is now {(recipe.Enabled ? "Enabled" : "Disabled")}"
                     };

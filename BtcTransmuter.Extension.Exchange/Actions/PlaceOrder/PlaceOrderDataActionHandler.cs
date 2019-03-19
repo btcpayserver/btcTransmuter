@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
@@ -19,12 +20,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
         public override string ControllerName => "PlaceOrder";
 
 
-        protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
-        {
-            return Task.FromResult(recipeAction.ActionId == ActionId);
-        }
-
-        protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
+        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             PlaceOrderData actionData)
         {
             var exchangeService = new ExchangeService(recipeAction.ExternalService);
@@ -34,9 +30,9 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
             {
                 MarketSymbol = actionData.MarketSymbol,
                 OrderType = actionData.OrderType,
-                Price = Convert.ToDecimal(InterpolateString(actionData.Price, triggerData)),
-                Amount = Convert.ToDecimal(InterpolateString(actionData.Amount, triggerData)),
-                StopPrice = Convert.ToDecimal(InterpolateString(actionData.StopPrice, triggerData)),
+                Price = Convert.ToDecimal(InterpolateString(actionData.Price, data)),
+                Amount = Convert.ToDecimal(InterpolateString(actionData.Amount, data)),
+                StopPrice = Convert.ToDecimal(InterpolateString(actionData.StopPrice, data)),
                 IsBuy = actionData.IsBuy,
                 IsMargin = actionData.IsMargin,
             };
@@ -50,7 +46,8 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                 {
                     Executed = true,
                     Result =
-                        $"Place order ({result.OrderId}) Status: {result.Result}"
+                        $"Place order ({result.OrderId}) Status: {result.Result}",
+                    Data = result
                 };
             }
             catch (Exception e)

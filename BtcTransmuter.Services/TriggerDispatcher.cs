@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
-using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -35,7 +34,7 @@ namespace BtcTransmuter.Services
                 Enabled = true,
                 TriggerId = trigger.Id
             });
-            
+
             _logger.LogInformation($"{recipes.Count()} possible recipes to be triggered by {trigger.Id}");
 
             var triggeredRecipes = new List<(Recipe Recipe, object TriggerData, ITriggerHandler triggerHandler)>();
@@ -58,22 +57,28 @@ namespace BtcTransmuter.Services
             }
 
             _logger.LogInformation($"{trigger.Id} triggered {triggeredRecipes.Count()}/{recipes.Count()} recipes");
+
             var nonGroupedRecipeTasks = triggeredRecipes.SelectMany(recipe =>
                 recipe.Recipe.RecipeActions
-                .Where(recipeAction => string.IsNullOrEmpty(recipeAction.RecipeActionGroupId))
-                .Select(action => (Task)_actionDispatcher.Dispatch(recipe.TriggerData, action)));
+                    .Where(recipeAction => string.IsNullOrEmpty(recipeAction.RecipeActionGroupId))
+                    .Select(action => (Task) _actionDispatcher.Dispatch(new Dictionary<string, object>()
+                    {
+                        {"TriggerData", recipe.TriggerData}
+                    }, action)));
 
-            var groupExecutionTasks = triggeredRecipes.SelectMany(recipe => recipe.Recipe.RecipeActionGroups.Select(actionGroup => _actionDispatcher.Dispatch(recipe.TriggerData,actionGroup)));
+            var groupExecutionTasks = triggeredRecipes.SelectMany(recipe => recipe.Recipe.RecipeActionGroups.Select(
+                actionGroup => _actionDispatcher.Dispatch(new Dictionary<string, object>()
+                {
+                    {"TriggerData", recipe.TriggerData}
+                }, actionGroup)));
 
             await Task.WhenAll(nonGroupedRecipeTasks.Concat(groupExecutionTasks));
 
             foreach (var keyValuePair in triggeredRecipes.GroupBy(tuple => tuple.triggerHandler)
                 .ToDictionary(tuples => tuples.Key, tuples => tuples.ToArray()))
             {
-               await  keyValuePair.Key.AfterExecution(keyValuePair.Value.Select(tuple => tuple.Recipe));
+                await keyValuePair.Key.AfterExecution(keyValuePair.Value.Select(tuple => tuple.Recipe));
             }
-            
-            
         }
     }
 }

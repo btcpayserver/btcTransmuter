@@ -17,7 +17,7 @@ namespace BtcTransmuter.Abstractions.Helpers
                 Validator.TryValidateObject(data, vc, result);
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new List<ValidationResult>()
                 {
@@ -25,8 +25,5 @@ namespace BtcTransmuter.Abstractions.Helpers
                 };
             }
         }
-
-    
-    
     }
 }

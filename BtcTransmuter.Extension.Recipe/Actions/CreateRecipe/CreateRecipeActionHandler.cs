@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
@@ -21,12 +22,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
 
         public override string ControllerName => "CreateRecipe";
 
-        protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
-        {
-            return Task.FromResult(recipeAction.ActionId == ActionId);
-        }
-
-        protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
+        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             CreateRecipeData actionData)
         {
             
@@ -76,8 +72,10 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
                     return new ActionHandlerResult()
                     {
                         Executed = true,
+                        Data = recipe,
                         Result =
-                            $"Created recipe (id:{recipe.Id})"
+                            $"Created recipe (id:{recipe.Id})",
+                        
                     };
                 }
             }

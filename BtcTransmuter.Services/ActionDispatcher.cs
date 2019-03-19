@@ -24,7 +24,8 @@ namespace BtcTransmuter.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<ActionHandlerResult>> Dispatch(object additionalData, RecipeAction recipeAction)
+        public async Task<IEnumerable<ActionHandlerResult>> Dispatch(Dictionary<string, object> additionalData,
+            RecipeAction recipeAction)
         {
             _logger.LogInformation($"Dispatching {recipeAction.ActionId} for recipe {recipeAction.RecipeId}");
             var result = new List<ActionHandlerResult>();
@@ -67,21 +68,31 @@ namespace BtcTransmuter.Services
                     });
                 }
             }
+
             return result;
         }
 
-        public async Task Dispatch(object triggerData, RecipeActionGroup recipeActionGroup)
+        public async Task Dispatch(Dictionary<string, object> data, RecipeActionGroup recipeActionGroup)
         {
-            _logger.LogInformation($"Dispatching action group {recipeActionGroup.Id} for recipe {recipeActionGroup.RecipeId}");
-            await RecursiveActionExecution(new Queue<RecipeAction>(recipeActionGroup.RecipeActions.OrderBy(action => action.Order)), triggerData);
+            _logger.LogInformation(
+                $"Dispatching action group {recipeActionGroup.Id} for recipe {recipeActionGroup.RecipeId}");
+            await RecursiveActionExecution(
+                new Queue<RecipeAction>(recipeActionGroup.RecipeActions.OrderBy(action => action.Order)), data);
         }
 
-        private async Task RecursiveActionExecution(Queue<RecipeAction> recipeActions, object data)
+        private async Task RecursiveActionExecution(Queue<RecipeAction> recipeActions, Dictionary<string, object> data)
         {
             var action = recipeActions.Dequeue();
             var result = await Dispatch(data, action);
             var continuablePaths = result.Where(i => i.Executed);
-            foreach(var path in continuablePaths){
+            foreach (var path in continuablePaths)
+            {
+                if (data.ContainsKey("PreviousAction"))
+                {
+                    data.Remove("PreviousAction");
+                }
+                data.Add("PreviousAction", path.Data);
+                
                 await RecursiveActionExecution(recipeActions, data);
             }
         }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
@@ -39,12 +40,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             _derivationSchemeParser = derivationSchemeParser;
         }
 
-        protected override Task<bool> CanExecute(object triggerData, RecipeAction recipeAction)
-        {
-            return Task.FromResult(recipeAction.ActionId == ActionId);
-        }
-
-        protected override async Task<ActionHandlerResult> Execute(object triggerData, RecipeAction recipeAction,
+        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             SendTransactionData actionData)
         {
             var explorerClient = _nbXplorerClientProvider.GetClient(actionData.CryptoCode);
@@ -67,8 +63,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 
             var txBuilder =
                 await wallet.BuildTransaction(actionData.Outputs.Select(output =>
-                    (Money.Parse(InterpolateString(output.Amount, triggerData)),
-                        (IDestination) BitcoinAddress.Create(InterpolateString(output.DestinationAddress, triggerData),
+                    (Money.Parse(InterpolateString(output.Amount, data)),
+                        (IDestination) BitcoinAddress.Create(InterpolateString(output.DestinationAddress, data),
                             explorerClient.Network.NBitcoinNetwork))));
 
             ExtKey key;
@@ -88,6 +84,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             var result = await wallet.BroadcastTransaction(tx);
             return new ActionHandlerResult()
             {
+                Executed = true,
+                Data = result,
                 Result = $"Tx broadcasted, {(result.Success? "Unsuccessful": "Successful")}, {result.RPCMessage}"
             };
         }

@@ -43,10 +43,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             _nbXplorerClientProvider = nbXplorerClientProvider;
         }
 
-        protected override async Task<SendTransactionViewModel> BuildViewModel(RecipeAction from)
+        protected override Task<SendTransactionViewModel> BuildViewModel(RecipeAction from)
         {
             var fromData = from.Get<SendTransactionData>();
-            return new SendTransactionViewModel
+            return Task.FromResult(new SendTransactionViewModel
             {
                 RecipeId = from.RecipeId,
                 CryptoCode = fromData.CryptoCode,
@@ -57,7 +57,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 MnemonicSeed = fromData.MnemonicSeed,
                 CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
                     fromData.CryptoCode)
-            };
+            });
         }
 
         protected override async Task<(RecipeAction ToSave, SendTransactionViewModel showViewModel)> BuildModel(
@@ -139,7 +139,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                         var key = new Mnemonic(viewModel.MnemonicSeed).DeriveExtKey(
                             string.IsNullOrEmpty(viewModel.Passphrase) ? null : viewModel.Passphrase);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         ModelState.AddModelError(nameof(SendTransactionViewModel.MnemonicSeed),
                             "Mnemonic seed could not be loaded");
@@ -151,7 +151,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                     {
                         var key = ExtKey.Parse(viewModel.WIF, client.Network.NBitcoinNetwork);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         ModelState.AddModelError(nameof(SendTransactionViewModel.MnemonicSeed),
                             "WIF could not be loaded");

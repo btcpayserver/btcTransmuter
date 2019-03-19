@@ -4,7 +4,6 @@ namespace BtcTransmuter.Abstractions.Actions
     {
         public bool Executed { get; set; }
         public string Result { get; set; }
-
-        
+        public object Data { get; set; }
     }
 }
