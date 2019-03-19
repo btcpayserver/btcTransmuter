@@ -140,7 +140,7 @@ namespace BtcTransmuter.Controllers
                 Name = recipe.Name,
                 Enabled = recipe.Enabled,
                 Description = recipe.Description,
-                Actions = recipe.RecipeActions,
+                Actions = recipe.RecipeActions.OrderBy(action => action.Order),
                 Trigger = recipe.RecipeTrigger,
                 ActionGroups = recipe.RecipeActionGroups
             });

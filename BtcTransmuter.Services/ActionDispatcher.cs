@@ -73,7 +73,7 @@ namespace BtcTransmuter.Services
         public async Task Dispatch(object triggerData, RecipeActionGroup recipeActionGroup)
         {
             _logger.LogInformation($"Dispatching action group {recipeActionGroup.Id} for recipe {recipeActionGroup.RecipeId}");
-            await RecursiveActionExecution(new Queue<RecipeAction>(recipeActionGroup.RecipeActions), triggerData);
+            await RecursiveActionExecution(new Queue<RecipeAction>(recipeActionGroup.RecipeActions.OrderBy(action => action.Order)), triggerData);
         }
 
         private async Task RecursiveActionExecution(Queue<RecipeAction> recipeActions, object data)
