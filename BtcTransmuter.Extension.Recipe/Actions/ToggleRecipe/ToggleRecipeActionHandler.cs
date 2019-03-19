@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
 {
-    public class ToggleRecipeActionHandler : BaseActionHandler<ToggleRecipeData>
+    public class ToggleRecipeActionHandler : BaseActionHandler<ToggleRecipeData, Data.Entities.Recipe>
     {
         public override string ActionId => "ToggleRecipe";
         public override string Name => "Toggle Recipe";
@@ -24,7 +24,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
 
         public override string ControllerName => "ToggleRecipe";
 
-        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override async Task<TypedActionHandlerResult<Data.Entities.Recipe>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             ToggleRecipeData actionData)
         {
             try
@@ -35,7 +35,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
                     var recipe = await recipeManager.GetRecipe(actionData.TargetRecipeId);
                     if (recipe == null)
                     {
-                        return new ActionHandlerResult()
+                        return new TypedActionHandlerResult<Data.Entities.Recipe>()
                         {
                             Executed = false,
                             Result =
@@ -59,7 +59,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
                     }
 
                     await recipeManager.AddOrUpdateRecipe(recipe);
-                    return new ActionHandlerResult()
+                    return new TypedActionHandlerResult<Data.Entities.Recipe>()
                     {
                         Executed = true,
                         Data = recipe,
@@ -70,7 +70,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
             }
             catch (Exception e)
             {
-                return new ActionHandlerResult()
+                return new TypedActionHandlerResult<Data.Entities.Recipe>()
                 {
                     Executed = false,
                     Result =

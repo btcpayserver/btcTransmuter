@@ -8,7 +8,7 @@ using MimeKit.Text;
 
 namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
-    public class SendEmailDataActionHandler : BaseActionHandler<SendEmailData>
+    public class SendEmailDataActionHandler : BaseActionHandler<SendEmailData, MimeMessage>
     {
         public override string ActionId => "SendEmail";
         public override string Name => "Send Email";
@@ -20,7 +20,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
         
         public override string ControllerName => "SendEmail";
 
-        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override async Task<TypedActionHandlerResult<MimeMessage>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             SendEmailData actionData)
         {
             var smtpService = new SmtpService(recipeAction.ExternalService);
@@ -38,7 +38,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
                 });
 
             await smtpService.SendEmail(message);
-            return new ActionHandlerResult()
+            return new TypedActionHandlerResult<MimeMessage>()
             {
                 Executed = true,
                 Result =

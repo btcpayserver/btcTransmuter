@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Helpers;
@@ -14,16 +14,19 @@ namespace BtcTransmuter.ViewComponents
     public class RecipeActionFooterViewComponent : ViewComponent
     {
         private readonly IEnumerable<ITriggerDescriptor> _triggerDescriptors;
+        private readonly IEnumerable<IActionDescriptor> _actionDescriptors;
         private readonly IRecipeManager _recipeManager;
 
         public RecipeActionFooterViewComponent(IEnumerable<ITriggerDescriptor> triggerDescriptors,
+            IEnumerable<IActionDescriptor>actionDescriptors,
             IRecipeManager recipeManager)
         {
             _triggerDescriptors = triggerDescriptors;
+            _actionDescriptors = actionDescriptors;
             _recipeManager = recipeManager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string recipeId)
+        public async Task<IViewComponentResult> InvokeAsync(string recipeId, string recipeActionIdInGroupBeforeThisOne)
         {
             var recipe = await _recipeManager.GetRecipe(recipeId);
 
@@ -37,8 +40,23 @@ namespace BtcTransmuter.ViewComponents
                 if (descriptor != null && descriptor.GetType().IsSubclassOfRawGeneric(typeof(BaseTriggerHandler<,>)))
                 {
                     var type = descriptor.GetType().BaseType.GetGenericArguments().First();
-                    properties = GetRecursiveAvailableProperties(type);
+                    properties.Add("TriggerData", GetRecursiveAvailableProperties(type));
                 }
+            }
+
+            if (!string.IsNullOrEmpty(recipeActionIdInGroupBeforeThisOne))
+            {
+                 var recipeAction = recipe.RecipeActions.FirstOrDefault(action =>
+                    action.Id.Equals(recipeActionIdInGroupBeforeThisOne, StringComparison.InvariantCultureIgnoreCase));
+
+                 if (recipeAction != null)
+                 {
+                     var type = _actionDescriptors.FirstOrDefault(handler =>
+                         handler.ActionId == recipeAction.ActionId)?.ActionResultDataType;
+
+                     properties.Add("PreviousAction", GetRecursiveAvailableProperties(type));
+                 }
+                 
             }
 
             return View(new RecipeActionFooterViewModel()

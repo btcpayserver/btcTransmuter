@@ -52,10 +52,11 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
             return (null, viewModel);
         }
 
-        public class CreateRecipeViewModel : CreateRecipeData
+        public class CreateRecipeViewModel : CreateRecipeData, IActionViewModel
         {
             public SelectList Recipes { get; set; }
             public string RecipeId { get; set; }
+            public string RecipeActionIdInGroupBeforeThisOne { get; set; }
         }
     }
 }

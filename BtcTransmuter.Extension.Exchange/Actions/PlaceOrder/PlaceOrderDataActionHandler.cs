@@ -8,7 +8,7 @@ using ExchangeSharp;
 
 namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
 {
-    public class PlaceOrderDataActionHandler : BaseActionHandler<PlaceOrderData>
+    public class PlaceOrderDataActionHandler : BaseActionHandler<PlaceOrderData, ExchangeOrderResult>
     {
         public override string ActionId => "PlaceOrder";
         public override string Name => "Place Order";
@@ -20,7 +20,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
         public override string ControllerName => "PlaceOrder";
 
 
-        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override async Task<TypedActionHandlerResult<ExchangeOrderResult>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             PlaceOrderData actionData)
         {
             var exchangeService = new ExchangeService(recipeAction.ExternalService);
@@ -42,7 +42,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                 var result = await client.PlaceOrderAsync(orderRequest);
                 System.Threading.Thread.Sleep(500);
                 result = await client.GetOrderDetailsAsync(result.OrderId);
-                return new ActionHandlerResult()
+                return new TypedActionHandlerResult<ExchangeOrderResult>()
                 {
                     Executed = true,
                     Result =
@@ -52,7 +52,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
             }
             catch (Exception e)
             {
-                return new ActionHandlerResult()
+                return new TypedActionHandlerResult<ExchangeOrderResult>()
                 {
                     Executed = false,
                     Result =

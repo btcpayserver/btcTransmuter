@@ -37,6 +37,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
             });
             return new SendEmailViewModel
             {
+                
                 RecipeId = from.RecipeId,
                 ExternalServiceId = from.ExternalServiceId,
                 Body = fromData.Body,
@@ -70,9 +71,10 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
             return (null, viewModel);
         }
 
-        public class SendEmailViewModel : SendEmailData, IUseExternalService
+        public class SendEmailViewModel : SendEmailData, IUseExternalService, IActionViewModel
         {
             public string RecipeId { get; set; }
+            public string RecipeActionIdInGroupBeforeThisOne { get; set; }
             public SelectList ExternalServices { get; set; }
             [Display(Name = "SMTP External Service")]
             [Required] public string ExternalServiceId { get; set; }

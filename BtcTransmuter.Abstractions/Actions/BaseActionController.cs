@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
@@ -8,13 +10,20 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Abstractions.Actions
 {
+    public interface IActionViewModel
+    {
+        string RecipeId { get; set; }
+        string RecipeActionIdInGroupBeforeThisOne { get; set; }
+    }
+
     [Authorize]
     public abstract class BaseActionController<TViewModel, TRecipeActionData> : Controller
-        where TViewModel : TRecipeActionData
+        where TViewModel : TRecipeActionData, IActionViewModel
     {
         private readonly IMemoryCache _memoryCache;
         protected readonly UserManager<User> _userManager;
         protected readonly IRecipeManager _recipeManager;
+        private string RecipeActionIdInGroupBeforeThisOne;
 
         protected BaseActionController(IMemoryCache memoryCache,
             UserManager<User> userManager,
@@ -34,7 +43,11 @@ namespace BtcTransmuter.Abstractions.Actions
                 return result.Error;
             }
 
-            return View(await BuildViewModel(result.Data));
+            var vm = await BuildViewModel(result.Data);
+
+            vm.RecipeId = result.Data.RecipeId;
+            vm.RecipeActionIdInGroupBeforeThisOne = RecipeActionIdInGroupBeforeThisOne;
+            return View(vm);
         }
 
         [HttpPost("{identifier}")]
@@ -50,8 +63,9 @@ namespace BtcTransmuter.Abstractions.Actions
 
             if (modelResult.showViewModel != null)
             {
+                modelResult.showViewModel.RecipeId = result.Data.RecipeId;
+                modelResult.showViewModel.RecipeActionIdInGroupBeforeThisOne = RecipeActionIdInGroupBeforeThisOne;
                 return View(modelResult.showViewModel);
-
             }
 
             await _recipeManager.AddOrUpdateRecipeAction(modelResult.ToSave);
@@ -63,6 +77,7 @@ namespace BtcTransmuter.Abstractions.Actions
         }
 
         protected abstract Task<TViewModel> BuildViewModel(RecipeAction recipeAction);
+
         protected abstract Task<(RecipeAction ToSave, TViewModel showViewModel)> BuildModel(
             TViewModel viewModel, RecipeAction mainModel);
 
@@ -84,6 +99,31 @@ namespace BtcTransmuter.Abstractions.Actions
                 {
                     statusMessage = "Error:Data could not be found or data session expired"
                 }), null);
+            }
+
+            if (!string.IsNullOrEmpty(data.RecipeActionGroupId))
+            {
+                var recipeActionGroup = recipe.RecipeActionGroups.Single(group =>
+                    group.Id.Equals(data.RecipeActionGroupId, StringComparison.InvariantCultureIgnoreCase));
+                var actions = recipeActionGroup.RecipeActions.OrderBy(action => action.Order);
+
+                var matched = actions.Select((action, i) => (action, i))
+                    .Where(tuple => tuple.Item1.ActionId == data.Id);
+
+                var index = matched.Any()
+                    ? actions.Select((action, i) => (action, i))
+                        .Where(tuple => tuple.Item1.ActionId == data.Id)
+                        .Select(tuple => tuple.Item2)
+                        .FirstOrDefault()
+                    : -1;
+                if (index == -1 && actions.Any())
+                {
+                    RecipeActionIdInGroupBeforeThisOne = actions.Last().Id;
+                }
+                else if (index > 0)
+                {
+                    RecipeActionIdInGroupBeforeThisOne = actions.ElementAt(index - 1).Id;
+                }
             }
 
             return (null, data);

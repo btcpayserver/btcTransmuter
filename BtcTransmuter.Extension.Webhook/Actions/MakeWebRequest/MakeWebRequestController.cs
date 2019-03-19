@@ -66,9 +66,10 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
         }
 
 
-        public class MakeWebRequestViewModel : MakeWebRequestData
+        public class MakeWebRequestViewModel : MakeWebRequestData, IActionViewModel
         {
             public string RecipeId { get; set; }
+            public string RecipeActionIdInGroupBeforeThisOne { get; set; }
         }
     }
 }

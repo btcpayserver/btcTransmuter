@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Abstractions.Actions
 {
-    public abstract class BaseActionHandler<TActionData> : IActionHandler, IActionDescriptor
+    public abstract class BaseActionHandler<TActionData, TActionResultData> : IActionHandler, IActionDescriptor
     {
         public abstract string ActionId { get; }
         public abstract string Name { get; }
@@ -21,6 +21,8 @@ namespace BtcTransmuter.Abstractions.Actions
         public abstract string ViewPartial { get; }
 
         public abstract string ControllerName { get; }
+        
+        public Type ActionResultDataType => typeof(TActionResultData);
 
         public virtual Task<IActionResult> EditData(RecipeAction data)
         {
@@ -54,13 +56,13 @@ namespace BtcTransmuter.Abstractions.Actions
                 return await Execute(data, recipeAction, recipeAction.Get<TActionData>());
             }
 
-            return new ActionHandlerResult()
+            return new TypedActionHandlerResult<TActionResultData>()
             {
                 Executed = false
             };
         }
 
-        protected abstract Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected abstract Task<TypedActionHandlerResult<TActionResultData>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             TActionData actionData);
 
         /// <summary>

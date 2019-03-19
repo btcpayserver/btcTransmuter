@@ -1,5 +1,5 @@
 @model Dictionary<string, object>
-<ul>@foreach (var posDataItem in Model)
+<ul style="list-style-type: none">@foreach (var posDataItem in Model)
 {<li>@if (!string.IsNullOrEmpty(posDataItem.Key))
     {<span class="badge badge-primary">@posDataItem.Key</span>if (posDataItem.Value is string)
     {<span class="badge badge-secondary">@(string.IsNullOrEmpty((string)posDataItem.Value) ? "No value" : posDataItem.Value)</span>}

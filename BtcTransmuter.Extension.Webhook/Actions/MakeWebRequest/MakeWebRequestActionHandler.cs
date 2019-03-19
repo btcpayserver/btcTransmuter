@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
 {
-    public class MakeWebRequestActionHandler : BaseActionHandler<MakeWebRequestData>
+    public class MakeWebRequestActionHandler : BaseActionHandler<MakeWebRequestData, HttpResponseMessage>
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public override string ActionId => "MakeWebRequest";
@@ -53,7 +53,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             }
         }
 
-        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override async Task<TypedActionHandlerResult<HttpResponseMessage>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             MakeWebRequestData actionData)
         {
             try
@@ -67,7 +67,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
                             Content = new StringContent(InterpolateString(actionData.Body, data) ?? "",
                                 Encoding.UTF8, InterpolateString(actionData.ContentType, data))
                         });
-                    return new ActionHandlerResult()
+                    return new TypedActionHandlerResult<HttpResponseMessage>()
                     {
                         Data = result,
                         Executed = true,
@@ -78,7 +78,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             }
             catch (Exception e)
             {
-                return new ActionHandlerResult()
+                return new TypedActionHandlerResult<HttpResponseMessage>()
                 {
                     Executed = true,
                     Result =

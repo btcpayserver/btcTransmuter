@@ -91,9 +91,10 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
             return (null, viewModel);
         }
 
-        public class PlaceOrderViewModel : PlaceOrderData, IUseExternalService
+        public class PlaceOrderViewModel : PlaceOrderData, IUseExternalService, IActionViewModel
         {
             public string RecipeId { get; set; }
+            public string RecipeActionIdInGroupBeforeThisOne { get; set; }
             public SelectList ExternalServices { get; set; }
             [Required][Display(Name = "Exchange Service")] public string ExternalServiceId { get; set; }
         }

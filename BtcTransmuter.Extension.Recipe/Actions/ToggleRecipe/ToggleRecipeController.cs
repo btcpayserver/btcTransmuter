@@ -21,10 +21,11 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
         {
         }
 
-        public class ToggleRecipeViewModel : ToggleRecipeData
+        public class ToggleRecipeViewModel : ToggleRecipeData, IActionViewModel
         {
             public SelectList Recipes { get; set; }
             public string RecipeId { get; set; }
+            public string RecipeActionIdInGroupBeforeThisOne { get; set; }
         }
 
         protected override async Task<ToggleRecipeViewModel> BuildViewModel(RecipeAction from)

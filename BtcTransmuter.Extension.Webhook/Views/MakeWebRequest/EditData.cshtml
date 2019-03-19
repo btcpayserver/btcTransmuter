@@ -1,5 +1,4 @@
 @using BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
-@using BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 @model BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest.MakeWebRequestController.MakeWebRequestViewModel
 @{
     ViewData["Title"] = "Edit Make Web Request Action";
@@ -38,4 +37,8 @@
         <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
     </div>
 </form>
-@await Component.InvokeAsync("RecipeActionFooter", new { recipeId = @Model.RecipeId})
+@await Component.InvokeAsync("RecipeActionFooter", new
+{
+    recipeId = @Model.RecipeId, 
+    recipeActionIdInGroupBeforeThisOne = @Model.RecipeActionIdInGroupBeforeThisOne
+})

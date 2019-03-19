@@ -5,10 +5,11 @@ using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using NBitcoin;
+using NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 {
-    public class SendTransactionDataActionHandler : BaseActionHandler<SendTransactionData>
+    public class SendTransactionDataActionHandler : BaseActionHandler<SendTransactionData, BroadcastResult>
     {
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
@@ -40,7 +41,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             _derivationSchemeParser = derivationSchemeParser;
         }
 
-        protected override async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override async Task<TypedActionHandlerResult<BroadcastResult>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             SendTransactionData actionData)
         {
             var explorerClient = _nbXplorerClientProvider.GetClient(actionData.CryptoCode);
@@ -82,7 +83,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             await wallet.SignTransaction(txBuilder, key);
             var tx = txBuilder.BuildTransaction(true);
             var result = await wallet.BroadcastTransaction(tx);
-            return new ActionHandlerResult()
+            return new TypedActionHandlerResult<BroadcastResult>()
             {
                 Executed = true,
                 Data = result,

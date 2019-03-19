@@ -6,16 +6,9 @@ You can use <kbd>{{TriggerData.XXX}}</kbd> in the fields where XXX  is the prope
 
 You can mix and match as many as you want. If you have a number, you may even do formulas: <br/><kbd>{{(TriggerData.NumberProperty / 2 * TriggerData.OtherNumberProperty)}}</kbd>
 
-@if (!Model.NoRecipeTrigger)
-{
-    <span>Properties available under <kbd>TriggerData.</kbd></span>
-    <div style="overflow-y: auto; max-height: 50vh">
+<div style="overflow-y: auto; max-height: 50vh">
     <partial name="PosData" model="@Model.Properties"/>
 </div>
-}
-else
-{
-    <span>No Recipe Trigger has been set yet.</span>
-}
 
 </pre>
+

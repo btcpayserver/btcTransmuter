@@ -180,10 +180,11 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             return (null, viewModel);
         }
 
-        public class SendTransactionViewModel : SendTransactionData
+        public class SendTransactionViewModel : SendTransactionData, IActionViewModel
         {
             public string Action { get; set; }
             public string RecipeId { get; set; }
+            public string RecipeActionIdInGroupBeforeThisOne { get; set; }
             public SelectList CryptoCodes { get; set; }
         }
     }
