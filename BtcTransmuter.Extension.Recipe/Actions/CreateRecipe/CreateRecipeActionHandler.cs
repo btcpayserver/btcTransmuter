@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Helpers;
@@ -53,6 +54,8 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
                     }
 
                     recipe.RecipeInvocations.Clear();
+                    recipe.RecipeActions = recipe.RecipeActions
+                        .Where(action => string.IsNullOrEmpty(action.RecipeActionGroupId)).ToList();
                     recipe.RecipeActions.ForEach(action =>
                     {
                         action.RecipeId = null;
@@ -62,6 +65,11 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
                     {
                         action.RecipeId = null;
                         action.Id = null;
+                        action.RecipeActions.ForEach(action1 =>
+                        {
+                            action1.RecipeId = null;
+                            action1.Id = null;
+                        });
                     });
                     recipe.Enabled = actionData.Enable;
                     await recipeManager.AddOrUpdateRecipe(recipe);
