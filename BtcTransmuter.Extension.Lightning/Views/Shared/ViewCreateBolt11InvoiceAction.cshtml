@@ -1,0 +1,11 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Email.Actions.CreateBolt11Invoice
+@using BTCPayServer.Lightning
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<CreateBolt11InvoiceData>();
+}
+
+<div>
+    Create Bolt11 Lightning invoice with amount <kbd>@data.Amount @Enum.GetName(typeof(LightMoneyUnit), data.AmountMoneyUnit)</kbd>, described <kbd>@data.Description</kbd> that expires in <kbd>@data.ExpiryMilliseconds</kbd> ms
+</div>

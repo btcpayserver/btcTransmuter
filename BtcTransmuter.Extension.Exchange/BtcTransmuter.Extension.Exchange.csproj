@@ -17,4 +17,8 @@
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\SendEmail\EditData.cshtml" />
+    </ItemGroup>
+
 </Project>
