@@ -1,0 +1,22 @@
+@using BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
+@model BtcTransmuter.Data.Entities.ExternalServiceData
+
+@{
+    var service = new LightningNodeService(Model, null, null, null);
+    var data = service.GetData();
+}
+
+<dl class="dl-horizontal">
+    <dt>
+        Name
+    </dt>
+    <dd>
+        @data.ConnectionString
+    </dd>
+    <dt>
+        Crypto
+    </dt>
+    <dd>
+        @data.CryptoCode
+    </dd>
+</dl>

@@ -1,0 +1,69 @@
+@model BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode.LightningNodeController.EditLightningNodeExternalServiceDataViewModel
+
+@{
+    ViewData["Title"] = "Edit Exchange External Service Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="CryptoCode" class="control-label"></label>
+        <select asp-for="CryptoCode" asp-items="Model.CryptoCodes" class="form-control"></select>
+        <span asp-validation-for="CryptoCode" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <p>This connection string encapsulates the necessary information BTCPay needs to connect to your lightning node, we currently support:</p>
+        <ul>
+            <li><code>clightning</code> via TCP or unix domain socket connection</li>
+            <li><code>lightning charge</code> via HTTPS</li>
+            <li><code>lnd</code> via the REST proxy</li>
+        </ul>
+        <table class="table table-sm table-responsive-md">
+            <thead>
+            <tr>
+                <th>Examples</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                <th class="small"><b>type=</b>clightning;<b>server=</b>unix://root/.lightning/lightning-rpc</th>
+            </tr>
+            <tr>
+                <th class="small"><b>type=</b>clightning;<b>server=</b>tcp://1.1.1.1:27743/</th>
+            </tr>
+            <tr>
+                <th class="small"><b>type=</b>lnd-rest;<b>server=</b>http://mylnd:8080/;<b>macaroonfilepath=</b>/root/.lnd/admin.macaroon;<b>allowinsecure=</b>true</th>
+            </tr>
+            <tr>
+                <th class="small"><b>type=</b>lnd-rest;<b>server=</b>https://mylnd:8080/;<b>macaroon=</b>abef263adfe...</th>
+            </tr>
+            <tr>
+                <th class="small"><b>type=</b>lnd-rest;<b>server=</b>https://mylnd:8080/;<b>macaroon=</b>abef263adfe...;<b>certthumbprint=</b>abef263adfe...</th>
+            </tr>
+            <tr>
+                <th class="small"><b>type=</b>charge;<b>server=</b>https://charge:8080/;<b>api-token=</b>myapitoken...</th>
+            </tr>
+            </tbody>
+        </table>
+        <p>Note that the <code>certthumbprint</code> to connect to your LND node can be obtained through this command line:</p>
+        <p>
+            <pre><code>openssl x509 -noout -fingerprint -sha256 -inform pem -in /root/.lnd/tls.cert</code></pre>
+        </p>
+        <p>You can omit <code>certthumprint</code> if you the certificate is trusted by your machine</p>
+        <p>You can set <code>allowinsecure</code> to <code>true</code> if your LND REST server is using HTTP or HTTPS with an untrusted certificate which you don't know the <code>certthumprint</code></p>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConnectionString"></label>
+        <input id="lightningurl" asp-for="ConnectionString" class="form-control"/>
+        <span asp-validation-for="ConnectionString" class="text-danger"></span>
+    </div>
+    <div class="mt-2">
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>

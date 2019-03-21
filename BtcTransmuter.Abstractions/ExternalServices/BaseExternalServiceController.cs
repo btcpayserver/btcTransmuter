@@ -18,7 +18,8 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         private readonly UserManager<User> _userManager;
         private readonly IMemoryCache _memoryCache;
 
-        protected BaseExternalServiceController(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
+        protected BaseExternalServiceController(IExternalServiceManager externalServiceManager,
+            UserManager<User> userManager,
             IMemoryCache memoryCache)
         {
             _externalServiceManager = externalServiceManager;
@@ -39,6 +40,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         }
 
         protected abstract Task<TViewModel> BuildViewModel(ExternalServiceData data);
+
         protected abstract Task<(ExternalServiceData ToSave, TViewModel showViewModel)> BuildModel(
             TViewModel viewModel, ExternalServiceData mainModel);
 
@@ -67,7 +69,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
                 statusMessage = "Data updated"
             });
         }
-        
+
         private async Task<(IActionResult Error, ExternalServiceData Data )> GetExternalServiceData(string identifier)
         {
             ExternalServiceData data = null;
@@ -80,6 +82,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
                         statusMessage = "Error:Data could not be found or data session expired"
                     }), null);
                 }
+
                 if (data.UserId != _userManager.GetUserId(User))
                 {
                     return (RedirectToAction("GetServices", "ExternalServices", new
@@ -109,6 +112,12 @@ namespace BtcTransmuter.Abstractions.ExternalServices
             }
 
             return (null, data);
+        }
+
+        protected async Task<bool> IsAdmin()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            return await _userManager.IsInRoleAsync(user, "Admin");
         }
     }
 }

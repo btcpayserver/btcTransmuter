@@ -27,6 +27,7 @@
     <ProjectReference Include="..\BtcTransmuter.Extension.BtcPayServer\BtcTransmuter.Extension.BtcPayServer.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Email\BtcTransmuter.Extension.Email.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Exchange\BtcTransmuter.Extension.Exchange.csproj" />
+    <ProjectReference Include="..\BtcTransmuter.Extension.Lightning\BtcTransmuter.Extension.Lightning.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Recipe\BtcTransmuter.Extension.Recipe.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Timer\BtcTransmuter.Extension.Timer.csproj" />
