@@ -12,6 +12,6 @@ namespace BtcTransmuter.Models
         public SelectList Actions { get; set; }
         public string StatusMessage { get; set; }
         public RecipeAction RecipeAction { get; set; }
-        
+        public string RecipeActionGroupId { get; set; }
     }
 }

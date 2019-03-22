@@ -29,7 +29,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("{recipeActionId?}")]
-        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, string statusMessage)
+        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, string statusMessage, string recipeActionGroupId)
         {
             var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
@@ -51,6 +51,7 @@ namespace BtcTransmuter.Controllers
             {
                 RecipeId = id,
                 ActionId = recipeAction?.ActionId,
+                RecipeActionGroupId = recipeActionGroupId,
                 RecipeAction = recipeAction,
                 StatusMessage = statusMessage,
                 Actions = new SelectList(_actionDescriptors, nameof(IActionDescriptor.ActionId),
@@ -59,7 +60,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpPost("{recipeActionId?}")]
-        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId, string recipeActionGroupId,
+        public async Task<IActionResult> EditRecipeAction(string id, string recipeActionId,
             EditRecipeActionViewModel model)
         {
             var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
@@ -67,9 +68,9 @@ namespace BtcTransmuter.Controllers
             {
                 return GetNotFoundActionResult();
             }
-            var recipeActionGroup = string.IsNullOrEmpty(recipeActionGroupId) ?
+            var recipeActionGroup = string.IsNullOrEmpty(model.RecipeActionGroupId) ?
             null :
-            recipe.RecipeActionGroups.Single(x => x.Id == recipeActionGroupId);
+            recipe.RecipeActionGroups.Single(x => x.Id == model.RecipeActionGroupId);
             var recipeAction = recipeActionGroup == null ?
             recipe.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId) :
             recipeActionGroup.RecipeActions.SingleOrDefault(action => action.Id == recipeActionId);
@@ -88,7 +89,7 @@ namespace BtcTransmuter.Controllers
                 {
                     Id = recipeActionId,
                     RecipeId = id,
-                    RecipeActionGroupId = recipeActionGroupId,
+                    RecipeActionGroupId = model.RecipeActionGroupId,
                     ActionId = model.ActionId,
                 };
             }
