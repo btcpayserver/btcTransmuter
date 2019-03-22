@@ -12,49 +12,47 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice
+namespace BtcTransmuter.Extension.Lightning.Actions.PayBolt11Invoice
 {
     [Route("lightning-plugin/actions/create-bolt11-invoice")]
     [Authorize]
-    public class CreateBolt11InvoiceController : BaseActionController<CreateBolt11InvoiceController.CreateBolt11InvoiceViewModel, CreateBolt11InvoiceData>
+    public class PayBolt11InvoiceController : BaseActionController<PayBolt11InvoiceController.PayBolt11InvoiceViewModel, PayBolt11InvoiceData>
     {
         private readonly IExternalServiceManager _externalServiceManager;
 
-        public CreateBolt11InvoiceController(IMemoryCache memoryCache, UserManager<User> userManager,
+        public PayBolt11InvoiceController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
             userManager, recipeManager)
         {
             _externalServiceManager = externalServiceManager;
         }
 
-        protected override async Task<CreateBolt11InvoiceViewModel> BuildViewModel(RecipeAction from)
+        protected override async Task<PayBolt11InvoiceViewModel> BuildViewModel(RecipeAction from)
         {
-            var fromData = from.Get<CreateBolt11InvoiceData>();
+            var fromData = from.Get<PayBolt11InvoiceData>();
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 Type = new[] {LightningNodeService.LightningNodeServiceType},
                 UserId = GetUserId()
             });
-            return new CreateBolt11InvoiceViewModel
+            return new PayBolt11InvoiceViewModel
             {
                 
                 RecipeId = from.RecipeId,
                 ExternalServiceId = from.ExternalServiceId,
-                Amount = fromData.Amount,
-                Description = fromData.Description,
-                AmountMoneyUnit= fromData.AmountMoneyUnit,
+                Bolt11 = fromData.Bolt11,
                 ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
                     nameof(ExternalServiceData.Name), from.ExternalServiceId),
             };
         }
 
-        protected override async Task<(RecipeAction ToSave, CreateBolt11InvoiceViewModel showViewModel)> BuildModel(
-            CreateBolt11InvoiceViewModel viewModel, RecipeAction mainModel)
+        protected override async Task<(RecipeAction ToSave, PayBolt11InvoiceViewModel showViewModel)> BuildModel(
+            PayBolt11InvoiceViewModel viewModel, RecipeAction mainModel)
         {
             if (ModelState.IsValid)
             {
                 mainModel.ExternalServiceId = viewModel.ExternalServiceId;
-                mainModel.Set<CreateBolt11InvoiceData>(viewModel);
+                mainModel.Set<PayBolt11InvoiceData>(viewModel);
                 return (mainModel, null);
             }
 
@@ -70,7 +68,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice
             return (null, viewModel);
         }
 
-        public class CreateBolt11InvoiceViewModel : CreateBolt11InvoiceData, IUseExternalService, IActionViewModel
+        public class PayBolt11InvoiceViewModel : PayBolt11InvoiceData, IUseExternalService, IActionViewModel
         {
             public string RecipeId { get; set; }
             public string RecipeActionIdInGroupBeforeThisOne { get; set; }

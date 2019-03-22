@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 
-namespace BTCPayServer.Tor
+namespace BtcTransmuter.Extension.Lightning.Tor
 {
     public class OnionEndpoint : DnsEndPoint
     {

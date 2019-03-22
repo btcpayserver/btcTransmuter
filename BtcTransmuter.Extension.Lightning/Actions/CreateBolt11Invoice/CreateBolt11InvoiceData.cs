@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using BTCPayServer.Lightning;
 
-namespace BtcTransmuter.Extension.Email.Actions.CreateBolt11Invoice
+namespace BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice
 {
     public class CreateBolt11InvoiceData
     {

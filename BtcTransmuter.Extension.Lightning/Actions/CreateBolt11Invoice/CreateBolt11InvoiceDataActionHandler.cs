@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
-using BtcTransmuter.Extension.Lightning;
 using BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using BTCPayServer.Lightning;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BtcTransmuter.Extension.Email.Actions.CreateBolt11Invoice
+namespace BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice
 {
     public class CreateBolt11InvoiceDataActionHandler : BaseActionHandler<CreateBolt11InvoiceData, LightningInvoice>
     {

@@ -1,0 +1,10 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Lightning.Actions.PayBolt11Invoice
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<PayBolt11InvoiceData>();
+}
+
+<div>
+    Pay Bolt11 Lightning invoice <kbd>@data.Bolt11</kbd>
+</div>

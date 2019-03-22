@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using BTCPayServer.Tor;
+using BtcTransmuter.Extension.Lightning.Tor;
 using Microsoft.Extensions.Configuration;
 using NBXplorer;
 using OnionEndpoint = BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode.OnionEndpoint;

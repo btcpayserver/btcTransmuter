@@ -1,16 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NBXplorer;
 
-namespace BTCPayServer.Tor
+namespace BtcTransmuter.Extension.Lightning.Tor
 {
     public enum SocksErrorCode
     {

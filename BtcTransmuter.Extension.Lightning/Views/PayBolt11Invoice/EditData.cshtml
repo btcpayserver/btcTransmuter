@@ -1,8 +1,8 @@
 @using BTCPayServer.Lightning
 @using Microsoft.EntityFrameworkCore.Internal
-@model BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice.CreateBolt11InvoiceController.CreateBolt11InvoiceViewModel
+@model BtcTransmuter.Extension.Lightning.Actions.PayBolt11Invoice.PayBolt11InvoiceController.PayBolt11InvoiceViewModel
 @{
-    ViewData["Title"] = "Edit Create Bolt11 Lightning Invoice Action";
+    ViewData["Title"] = "Edit Pay Bolt11 Lightning Invoice Action";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -20,27 +20,11 @@
         }
     </div>
     <div class="form-group">
-        <label asp-for="Amount" class="control-label"></label>
-        <div class="input-group">
-            <input asp-for="Amount" class="form-control"/>
-            <div class="input-group-append">
-                <select asp-for="AmountMoneyUnit" asp-items="@Html.GetEnumSelectList(typeof(LightMoneyUnit))" class="form-control"></select>
-            </div>
-        </div>
-        <span asp-validation-for="Amount" class="text-danger"></span>
-        <span asp-validation-for="AmountMoneyUnit" class="text-danger"></span>
+        <label asp-for="Bolt11" class="control-label"></label>
+        <input asp-for="Bolt11" class="form-control" />
+        <span asp-validation-for="Bolt11" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="ExpiryMilliseconds" class="control-label"></label>
-        <input asp-for="ExpiryMilliseconds" type="number" min="0" class="form-control" />
-        <span asp-validation-for="ExpiryMilliseconds" class="text-danger"></span>
-    </div>
+
 
     <input type="hidden" asp-for="RecipeId"/>
     <div class="mt-2">
