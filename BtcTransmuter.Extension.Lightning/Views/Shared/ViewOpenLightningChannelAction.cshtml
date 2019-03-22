@@ -1,0 +1,11 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Lightning.Actions.OpenLightningChannel
+@using NBitcoin
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<OpenLightningChannelData>();
+}
+
+<div>
+    Open an LN Channel with amount <kbd>@data.Amount @Enum.GetName(typeof(MoneyUnit), data.AmountMoneyUnit)</kbd> to node <kbd>@data.NodeInfo</kbd>
+</div>

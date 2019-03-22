@@ -37,7 +37,17 @@ namespace BtcTransmuter.Extension.Lightning.Actions.ConnectToLightningNode
                 );
 
                 var client = service.ConstructClient();
-                new NodeInfo(new Key().PubKey,"",0 ).TryParse(InterpolateString(actionData.NodeInfo, data), out var nodeInfo);
+                if (!new NodeInfo(new Key().PubKey, "", 0).TryParse(InterpolateString(actionData.NodeInfo, data),
+                    out var nodeInfo))
+                {
+                    return new TypedActionHandlerResult<NodeInfo>()
+                    {
+                        Executed = false,
+                        Result =
+                            $"Could not connect because node info was incorrect",
+                    };
+                }
+
                 await client.ConnectTo(nodeInfo);
                 return new TypedActionHandlerResult<NodeInfo>()
                 {
