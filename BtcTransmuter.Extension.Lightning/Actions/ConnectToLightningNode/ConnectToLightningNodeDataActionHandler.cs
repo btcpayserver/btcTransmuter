@@ -8,24 +8,25 @@ using BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using BTCPayServer.Lightning;
 using Microsoft.Extensions.DependencyInjection;
+using NBitcoin;
 
-namespace BtcTransmuter.Extension.Lightning.Actions.PayBolt11Invoice
+namespace BtcTransmuter.Extension.Lightning.Actions.ConnectToLightningNode
 {
-    public class PayBolt11InvoiceDataActionHandler : BaseActionHandler<PayBolt11InvoiceData, PayResponse>
+    public class ConnectToLightningNodeDataActionHandler : BaseActionHandler<ConnectToLightningNodeData, NodeInfo>
     {
-        public override string ActionId => "PayBolt11Invoice";
-        public override string Name => "Pay Lightning Network Invoice";
+        public override string ActionId => "ConnectToLightningNode";
+        public override string Name => "Connect to a Lightning Node";
 
         public override string Description =>
-            "Pay a Bolt11 Lightning invoice with a connected lightning node";
+            "Connect to a Lightning Node with a connected lightning network node";
 
-        public override string ViewPartial => "ViewPayBolt11InvoiceAction";
+        public override string ViewPartial => "ViewConnectToLightningNodeAction";
 
-        public override string ControllerName => "PayBolt11Invoice";
+        public override string ControllerName => "ConnectToLightningNode";
 
-        protected override async Task<TypedActionHandlerResult<PayResponse>> Execute(
+        protected override async Task<TypedActionHandlerResult<NodeInfo>> Execute(
             Dictionary<string, object> data, RecipeAction recipeAction,
-            PayBolt11InvoiceData actionData)
+            ConnectToLightningNodeData actionData)
         {
             using (var serviceScope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {
@@ -36,13 +37,14 @@ namespace BtcTransmuter.Extension.Lightning.Actions.PayBolt11Invoice
                 );
 
                 var client = service.ConstructClient();
-                var response = await client.Pay(InterpolateString(actionData.Bolt11, data));
-                return new TypedActionHandlerResult<PayResponse>()
+                new NodeInfo(new Key().PubKey,"",0 ).TryParse(InterpolateString(actionData.NodeInfo, data), out var nodeInfo);
+                await client.ConnectTo(nodeInfo);
+                return new TypedActionHandlerResult<NodeInfo>()
                 {
-                    Executed = response.Result == PayResult.Ok,
+                    Executed = true,
                     Result =
-                        $"Paying Bolt11 Invoice: {Enum.GetName(typeof(PayResult), response.Result)}",
-                    TypedData = response
+                        $"Connected to LN Node {nodeInfo}",
+                    Data = nodeInfo
                 };
             }
         }
