@@ -12,30 +12,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningNodeInfo
+namespace BtcTransmuter.Extension.Lightning.Actions.GetOnChainLightningDepositAddress
 {
-    [Route("lightning-plugin/actions/get-ln-node-info")]
+    [Route("lightning-plugin/actions/get-deposit-address")]
     [Authorize]
-    public class GetLightningNodeInfoController : BaseActionController<GetLightningNodeInfoController.GetLightningNodeInfoViewModel, GetLightningNodeInfoData>
+    public class GetOnChainLightningDepositAddressController : BaseActionController<GetOnChainLightningDepositAddressController.GetOnChainLightningDepositAddressViewModel, GetOnChainLightningDepositAddressData>
     {
         private readonly IExternalServiceManager _externalServiceManager;
 
-        public GetLightningNodeInfoController(IMemoryCache memoryCache, UserManager<User> userManager,
+        public GetOnChainLightningDepositAddressController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
             userManager, recipeManager)
         {
             _externalServiceManager = externalServiceManager;
         }
 
-        protected override async Task<GetLightningNodeInfoViewModel> BuildViewModel(RecipeAction from)
+        protected override async Task<GetOnChainLightningDepositAddressViewModel> BuildViewModel(RecipeAction from)
         {
-            var fromData = from.Get<GetLightningNodeInfoData>();
+            var fromData = from.Get<GetOnChainLightningDepositAddressData>();
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
                 Type = new[] {LightningNodeService.LightningNodeServiceType},
                 UserId = GetUserId()
             });
-            return new GetLightningNodeInfoViewModel
+            return new GetOnChainLightningDepositAddressViewModel
             {
                 
                 RecipeId = from.RecipeId,
@@ -45,13 +45,13 @@ namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningNodeInfo
             };
         }
 
-        protected override async Task<(RecipeAction ToSave, GetLightningNodeInfoViewModel showViewModel)> BuildModel(
-            GetLightningNodeInfoViewModel viewModel, RecipeAction mainModel)
+        protected override async Task<(RecipeAction ToSave, GetOnChainLightningDepositAddressViewModel showViewModel)> BuildModel(
+            GetOnChainLightningDepositAddressViewModel viewModel, RecipeAction mainModel)
         {
             if (ModelState.IsValid)
             {
                 mainModel.ExternalServiceId = viewModel.ExternalServiceId;
-                mainModel.Set<GetLightningNodeInfoData>(viewModel);
+                mainModel.Set<GetOnChainLightningDepositAddressData>(viewModel);
                 return (mainModel, null);
             }
 
@@ -67,7 +67,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningNodeInfo
             return (null, viewModel);
         }
 
-        public class GetLightningNodeInfoViewModel : GetLightningNodeInfoData, IUseExternalService, IActionViewModel
+        public class GetOnChainLightningDepositAddressViewModel : GetOnChainLightningDepositAddressData, IUseExternalService, IActionViewModel
         {
             public string RecipeId { get; set; }
             public string RecipeActionIdInGroupBeforeThisOne { get; set; }

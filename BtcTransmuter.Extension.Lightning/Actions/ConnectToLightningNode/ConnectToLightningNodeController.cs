@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Lightning.Actions.ConnectToLightningNode
 {
-    [Route("lightning-plugin/actions/create-bolt11-invoice")]
+    [Route("lightning-plugin/actions/connect-node")]
     [Authorize]
     public class ConnectToLightningNodeController : BaseActionController<ConnectToLightningNodeController.ConnectToLightningNodeViewModel, ConnectToLightningNodeData>
     {

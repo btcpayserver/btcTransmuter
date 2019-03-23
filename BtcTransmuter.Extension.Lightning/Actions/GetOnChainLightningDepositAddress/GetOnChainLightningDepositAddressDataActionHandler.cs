@@ -11,23 +11,23 @@ using BTCPayServer.Lightning;
 using Microsoft.Extensions.DependencyInjection;
 using NBitcoin;
 
-namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningNodeInfo
+namespace BtcTransmuter.Extension.Lightning.Actions.GetOnChainLightningDepositAddress
 {
-    public class GetLightningNodeInfoDataActionHandler : BaseActionHandler<GetLightningNodeInfoData, LightningNodeInformation>
+    public class GetOnChainLightningDepositAddressDataActionHandler : BaseActionHandler<GetOnChainLightningDepositAddressData, BitcoinAddress>
     {
-        public override string ActionId => "GetLightningNodeInfo";
-        public override string Name => "Get Lightning Node Info";
+        public override string ActionId => "GetOnChainLightningDepositAddress";
+        public override string Name => "Get Lightning On-chain Deposit Address";
 
         public override string Description =>
-            "get Node info of a connected lightning network node";
+            "Get Deposit Address for lightning node";
 
-        public override string ViewPartial => "ViewGetLightningNodeInfoAction";
+        public override string ViewPartial => "ViewGetOnChainLightningDepositAddressAction";
 
-        public override string ControllerName => "GetLightningNodeInfo";
+        public override string ControllerName => "GetOnChainLightningDepositAddress";
 
-        protected override async Task<TypedActionHandlerResult<LightningNodeInformation>> Execute(
+        protected override async Task<TypedActionHandlerResult<BitcoinAddress>> Execute(
             Dictionary<string, object> data, RecipeAction recipeAction,
-            GetLightningNodeInfoData actionData)
+            GetOnChainLightningDepositAddressData actionData)
         {
             using (var serviceScope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {
@@ -38,12 +38,12 @@ namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningNodeInfo
                 );
 
                 var client = service.ConstructClient();
-                var result = await client.GetInfo();
-                return new TypedActionHandlerResult<LightningNodeInformation>()
+                var result = await client.GetDepositAddress();
+                return new TypedActionHandlerResult<BitcoinAddress>()
                 {
                     Executed = true,
                     Result =
-                        $"Got lightning node info block height:{result.BlockHeight}, node: {result.NodeInfoList.First()}",
+                        $"Got deposit address {result}",
                     TypedData = result
                 };
             }
