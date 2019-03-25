@@ -19,7 +19,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
         public override string Name => "Send Transaction";
 
         public override string Description =>
-            "Send an on chain transaction using NBXplroer";
+            "Send an on chain transaction using NBXplorer";
 
         public override string ViewPartial => "ViewSendTransactionAction";
 
@@ -85,7 +85,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             var result = await wallet.BroadcastTransaction(tx);
             return new TypedActionHandlerResult<BroadcastResult>()
             {
-                Executed = true,
+                Executed = result.Success,
                 Data = result,
                 Result = $"Tx broadcasted, {(result.Success? "Unsuccessful": "Successful")}, {result.RPCMessage}"
             };
