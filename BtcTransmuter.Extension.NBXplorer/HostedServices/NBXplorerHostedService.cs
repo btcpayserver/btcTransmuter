@@ -13,9 +13,7 @@ using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NBitcoin;
-using NBitcoin.Logging;
 using NBXplorer;
-using NBXplorer.DerivationStrategy;
 using NBXplorer.Models;
 using Newtonsoft.Json.Linq;
 

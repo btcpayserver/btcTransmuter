@@ -81,13 +81,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
 
             var recommendedFee = await _explorerClient.GetFeeRateAsync(20, new FeeRate(100L, 1));
             transactionBuilder.SendEstimatedFees(recommendedFee.FeeRate);
-            
+
             return transactionBuilder;
         }
 
         public async Task SignTransaction(TransactionBuilder transactionBuilder, ExtKey extKey)
         {
-            
             var utxos = await GetUTXOs();
             transactionBuilder.AddKeys(utxos.GetKeys(extKey));
         }
@@ -95,6 +94,20 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
         public Task<BroadcastResult> BroadcastTransaction(Transaction transaction)
         {
             return _explorerClient.BroadcastAsync(transaction);
+        }
+
+        public async Task<BitcoinAddress> GetNextAddress(
+            DerivationFeature derivationFeature = DerivationFeature.Deposit)
+        {
+            switch (TrackedSource)
+            {
+                case AddressTrackedSource addressTrackedSource:
+                    return addressTrackedSource.Address;
+                case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
+                    return BitcoinAddress.Create((await _explorerClient.GetUnusedAsync(
+                        derivationSchemeTrackedSource.DerivationStrategy,
+                        derivationFeature, 0, true)).Address, _explorerClient.Network.NBitcoinNetwork);
+            }
         }
     }
 }
