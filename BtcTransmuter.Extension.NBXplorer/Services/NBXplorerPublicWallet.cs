@@ -107,7 +107,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                     return BitcoinAddress.Create((await _explorerClient.GetUnusedAsync(
                         derivationSchemeTrackedSource.DerivationStrategy,
                         derivationFeature, 0, true)).Address, _explorerClient.Network.NBitcoinNetwork);
+                
             }
+            throw new InvalidOperationException();
         }
     }
 }
