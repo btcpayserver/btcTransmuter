@@ -45,7 +45,7 @@ namespace BtcTransmuter.Abstractions.Actions
             }
         }
 
-        protected virtual Task<bool> CanExecute(Dictionary<string, object> data, RecipeAction recipeAction)
+        public virtual Task<bool> CanExecute(Dictionary<string,  (object data, string json)> data, RecipeAction recipeAction)
         {
             return Task.FromResult(recipeAction.ActionId == ActionId);
         }
@@ -56,15 +56,7 @@ namespace BtcTransmuter.Abstractions.Actions
         }
         public async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction)
         {
-            if (await CanExecute(data, recipeAction))
-            {
-                return await Execute(data, recipeAction, recipeAction.Get<TActionData>());
-            }
-
-            return new TypedActionHandlerResult<TActionResultData>()
-            {
-                Executed = false
-            };
+            return await Execute(data, recipeAction, recipeAction.Get<TActionData>());
         }
 
         protected abstract Task<TypedActionHandlerResult<TActionResultData>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
@@ -84,6 +76,7 @@ namespace BtcTransmuter.Abstractions.Actions
                             data.Select(pair => Expression.Parameter(pair.Value.GetType(), pair.Key)).ToArray();
                         var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(parameterExpressions, null,
                             match.Groups[1].Value);
+                        
                         return (e.Compile().DynamicInvoke(data.Values.ToArray()) ?? "").ToString();
                     });
             }

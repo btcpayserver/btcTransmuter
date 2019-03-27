@@ -30,27 +30,33 @@ namespace BtcTransmuter.Services
         {
             _logger.LogInformation($"Dispatching {recipeAction.ActionId} for recipe {recipeAction.RecipeId}");
             var result = new List<ActionHandlerResult>();
-            foreach (var actionHandler in _handlers)
+            var dataDict = additionalData.ToDictionary(pair => pair.Key, pair => pair.Value.json);
+            var validHandlersTasks =
+                _handlers.Select(handler => (handler, handler.CanExecute(additionalData, recipeAction))).ToList();
+            await Task.WhenAll(validHandlersTasks.Select(tuple => tuple.Item2));
+            var validHandlers = validHandlersTasks.Where(tuple => tuple.Item2.Result).Select(tuple => tuple.Item1);
+            foreach (var actionHandler in validHandlers)
             {
                 try
                 {
                     var actionHandlerResult = await actionHandler.Execute(additionalData, recipeAction);
                     result.Add(actionHandlerResult);
+                    
+                    await _recipeManager.AddRecipeInvocation(new RecipeInvocation()
+                    {
+                        RecipeId = recipeAction.RecipeId,
+                        Timestamp = DateTime.Now,
+                        RecipeActionId = recipeAction.Id,
+                        ActionResult = actionHandlerResult.Result,
+                        TriggerDataJson = JObject
+                            .FromObject(dataDict)
+                            .ToString()
+                    });
                     if (actionHandlerResult.Executed)
                     {
                         _logger.LogInformation(
                             $"{recipeAction.ActionId} for recipe {recipeAction.RecipeId} was executed");
-
-                        await _recipeManager.AddRecipeInvocation(new RecipeInvocation()
-                        {
-                            RecipeId = recipeAction.RecipeId,
-                            Timestamp = DateTime.Now,
-                            RecipeActionId = recipeAction.Id,
-                            ActionResult = actionHandlerResult.Result,
-                            TriggerDataJson = JObject
-                                .FromObject(additionalData.ToDictionary(pair => pair.Key, pair => pair.Value.json))
-                                .ToString()
-                        });
+                        
                         continue;
                     }
 
