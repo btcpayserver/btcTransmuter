@@ -84,7 +84,7 @@ namespace BtcTransmuter.Abstractions.Actions
                             data.Select(pair => Expression.Parameter(pair.Value.GetType(), pair.Key)).ToArray();
                         var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(parameterExpressions, null,
                             match.Groups[1].Value);
-                        return (e.Compile().DynamicInvoke(data.Values) ?? "").ToString();
+                        return (e.Compile().DynamicInvoke(data.Values.ToArray()) ?? "").ToString();
                     });
             }
             catch (Exception)
