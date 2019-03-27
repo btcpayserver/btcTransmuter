@@ -42,7 +42,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             _derivationSchemeParser = derivationSchemeParser;
         }
 
-        protected override async Task<TypedActionHandlerResult<BroadcastResult>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override async Task<TypedActionHandlerResult<BroadcastResult>> Execute(
+            Dictionary<string, object> data, RecipeAction recipeAction,
             SendTransactionData actionData)
         {
             var explorerClient = _nbXplorerClientProvider.GetClient(actionData.CryptoCode);
@@ -77,18 +78,18 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             }
             else
             {
-                    key = ExtKey.Parse(actionData.WIF, explorerClient.Network.NBitcoinNetwork);
-               
+                key = ExtKey.Parse(actionData.WIF, explorerClient.Network.NBitcoinNetwork);
             }
 
             await wallet.SignTransaction(txBuilder, key);
             var tx = txBuilder.BuildTransaction(true);
             var result = await wallet.BroadcastTransaction(tx);
-            return new NBXplorerActionHandlerResult<BroadcastResult>(_nbXplorerClientProvider.GetClient(actionData.CryptoCode))
+            return new NBXplorerActionHandlerResult<BroadcastResult>(
+                _nbXplorerClientProvider.GetClient(actionData.CryptoCode))
             {
                 Executed = result.Success,
                 Data = result,
-                Result = $"Tx broadcasted, {(result.Success? "Unsuccessful": "Successful")}, {result.RPCMessage}"
+                Result = $"Tx broadcasted, {(result.Success ? "Successful" : "Unsuccessful")}, {result.RPCMessage}"
             };
         }
     }
