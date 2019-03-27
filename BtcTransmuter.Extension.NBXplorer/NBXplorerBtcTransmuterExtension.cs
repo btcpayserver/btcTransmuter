@@ -4,10 +4,15 @@ using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Extension.NBXplorer.HostedServices;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NBitcoin;
 using NBXplorer;
+using NBXplorer.Models;
+using Newtonsoft.Json;
 
 namespace BtcTransmuter.Extension.NBXplorer
 {
@@ -43,11 +48,39 @@ namespace BtcTransmuter.Extension.NBXplorer
             serviceCollection.AddSingleton<DerivationStrategyFactoryProvider>();
             serviceCollection.AddSingleton<DerivationSchemeParser>();
             serviceCollection.AddSingleton<NBXplorerPublicWalletProvider>();
+            serviceCollection.AddSingleton<IConfigureOptions<MvcJsonOptions>, NBXplorerBtcTransmuterExtensionJsonOptions>();
             serviceCollection.AddSingleton(provider =>
             {
                 var options = provider.GetService<NBXplorerOptions>();
                 return new NBXplorerNetworkProvider(options.NetworkType);
             });
+        }
+        
+        public class NBXplorerBtcTransmuterExtensionJsonOptions : IConfigureOptions<MvcJsonOptions>
+        {
+
+            public virtual void Configure(MvcJsonOptions options)
+            {
+                options.SerializerSettings.Converters.Add(new TrackedSourceJsonConverter());
+            }
+        }
+
+        public class TrackedSourceJsonConverter : JsonConverter
+        {
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                writer.WriteValue(value.ToString());
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                return reader.Value;
+            }
+
+            public override bool CanConvert(Type objectType)
+            {
+                return (objectType.IsAssignableFrom(typeof(TrackedSource)));
+            }
         }
     }
 }

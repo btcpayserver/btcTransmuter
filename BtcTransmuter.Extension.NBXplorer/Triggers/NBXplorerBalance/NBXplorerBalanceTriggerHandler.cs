@@ -26,6 +26,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
         }
 
         public NBXplorerBalanceTriggerHandler(
+            NBXplorerClientProvider nbXplorerClientProvider,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             DerivationSchemeParser derivationSchemeParser)
         {
@@ -92,6 +93,15 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public override Task<NBXplorerBalanceTriggerData> GetTriggerData(ITrigger trigger)
+        {
+            if (trigger is NBXplorerBalanceTrigger nbXplorerBalanceTrigger)
+            {
+               return Task.FromResult(nbXplorerBalanceTrigger.Data);
+            }
+            return base.GetTriggerData(trigger);
         }
     }
 }

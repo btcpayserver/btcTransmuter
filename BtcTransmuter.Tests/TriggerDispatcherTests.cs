@@ -46,7 +46,9 @@ namespace BtcTransmuter.Tests
                 DataJson = "{}"
             });
 
-            actionDispatcher.Verify(dispatcher => dispatcher.Dispatch((Dictionary<string, object>) It.IsAny<object>(), It.IsAny<RecipeAction>()),
+            actionDispatcher.Verify(
+                dispatcher => dispatcher.Dispatch((Dictionary<string, (object data, string json)>) It.IsAny<object>(),
+                    It.IsAny<RecipeAction>()),
                 Times.Never);
         }
 
@@ -101,7 +103,9 @@ namespace BtcTransmuter.Tests
             });
 
 
-            actionDispatcher.Verify(dispatcher => dispatcher.Dispatch(new Dictionary<string, object>(), It.IsAny<RecipeAction>()),
+            actionDispatcher.Verify(
+                dispatcher => dispatcher.Dispatch(new Dictionary<string, (object data, string json)>(),
+                    It.IsAny<RecipeAction>()),
                 Times.Once);
             logger.Verify(
                 logger1 => logger1.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<FormattedLogValues>(),

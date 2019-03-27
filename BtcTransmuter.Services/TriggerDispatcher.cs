@@ -61,15 +61,15 @@ namespace BtcTransmuter.Services
             var nonGroupedRecipeTasks = triggeredRecipes.SelectMany(recipe =>
                 recipe.Recipe.RecipeActions
                     .Where(recipeAction => string.IsNullOrEmpty(recipeAction.RecipeActionGroupId))
-                    .Select(action => (Task) _actionDispatcher.Dispatch(new Dictionary<string, object>()
+                    .Select(action => (Task) _actionDispatcher.Dispatch(new Dictionary<string, (object data, string json)>()
                     {
-                        {"TriggerData", recipe.TriggerData}
+                        {"TriggerData", (recipe.TriggerData, trigger.DataJson)}
                     }, action)));
 
             var groupExecutionTasks = triggeredRecipes.SelectMany(recipe => recipe.Recipe.RecipeActionGroups.Select(
-                actionGroup => _actionDispatcher.Dispatch(new Dictionary<string, object>()
+                actionGroup => _actionDispatcher.Dispatch(new Dictionary<string, (object data, string json)>()
                 {
-                    {"TriggerData", recipe.TriggerData}
+                    {"TriggerData", (recipe.TriggerData, trigger.DataJson)}
                 }, actionGroup)));
 
             await Task.WhenAll(nonGroupedRecipeTasks.Concat(groupExecutionTasks));

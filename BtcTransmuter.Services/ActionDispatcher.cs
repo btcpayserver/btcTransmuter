@@ -24,7 +24,8 @@ namespace BtcTransmuter.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<ActionHandlerResult>> Dispatch(Dictionary<string, object> additionalData,
+        public async Task<IEnumerable<ActionHandlerResult>> Dispatch(
+            Dictionary<string, (object data, string json)> additionalData,
             RecipeAction recipeAction)
         {
             _logger.LogInformation($"Dispatching {recipeAction.ActionId} for recipe {recipeAction.RecipeId}");
@@ -46,7 +47,9 @@ namespace BtcTransmuter.Services
                             Timestamp = DateTime.Now,
                             RecipeActionId = recipeAction.Id,
                             ActionResult = actionHandlerResult.Result,
-                            TriggerDataJson = JObject.FromObject(additionalData).ToString()
+                            TriggerDataJson = JObject
+                                .FromObject(additionalData.ToDictionary(pair => pair.Key, pair => pair.Value.json))
+                                .ToString()
                         });
                         continue;
                     }
@@ -72,7 +75,8 @@ namespace BtcTransmuter.Services
             return result;
         }
 
-        public async Task Dispatch(Dictionary<string, object> data, RecipeActionGroup recipeActionGroup)
+        public async Task Dispatch(Dictionary<string, (object data, string json)> data,
+            RecipeActionGroup recipeActionGroup)
         {
             _logger.LogInformation(
                 $"Dispatching action group {recipeActionGroup.Id} for recipe {recipeActionGroup.RecipeId}");
@@ -80,7 +84,8 @@ namespace BtcTransmuter.Services
                 new Queue<RecipeAction>(recipeActionGroup.RecipeActions.OrderBy(action => action.Order)), data);
         }
 
-        private async Task RecursiveActionExecution(Queue<RecipeAction> recipeActions, Dictionary<string, object> data)
+        private async Task RecursiveActionExecution(Queue<RecipeAction> recipeActions,
+            Dictionary<string, (object data, string json)> data)
         {
             var action = recipeActions.Dequeue();
             var result = await Dispatch(data, action);
@@ -91,8 +96,9 @@ namespace BtcTransmuter.Services
                 {
                     data.Remove("PreviousAction");
                 }
-                data.Add("PreviousAction", path.Data);
-                
+
+                data.Add("PreviousAction", (path.Data, JObject.FromObject(path.Data).ToString()));
+
                 await RecursiveActionExecution(recipeActions, data);
             }
         }

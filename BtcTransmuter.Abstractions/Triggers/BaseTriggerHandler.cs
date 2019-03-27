@@ -46,27 +46,32 @@ namespace BtcTransmuter.Abstractions.Triggers
             TTriggerData triggerData, TTriggerParameters parameters);
 
 
-        public Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger)
+        public async Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger)
         {
             if (recipeTrigger.TriggerId != trigger.Id || trigger.Id != TriggerId)
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            var triggerData = trigger.Get<TTriggerData>();
+            var triggerData = await GetTriggerData(trigger);
 
             if (typeof(TTriggerParameters).IsAssignableFrom(typeof(IUseExternalService)) &&
                 ((IUseExternalService) triggerData).ExternalServiceId != recipeTrigger.ExternalServiceId)
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            return IsTriggered(trigger, recipeTrigger, triggerData, recipeTrigger.Get<TTriggerParameters>());
+            return await IsTriggered(trigger, recipeTrigger, triggerData, recipeTrigger.Get<TTriggerParameters>());
         }
 
-        public Task<object> GetData(ITrigger trigger)
+        public async Task<object> GetData(ITrigger trigger)
         {
-            return Task.FromResult((object) trigger.Get<TTriggerData>());
+            return await GetTriggerData(trigger);
+        }
+
+        public virtual Task<TTriggerData> GetTriggerData(ITrigger trigger)
+        {
+            return Task.FromResult(trigger.Get<TTriggerData>());
         }
 
         public virtual Task AfterExecution(IEnumerable<Recipe> tupleItem1)

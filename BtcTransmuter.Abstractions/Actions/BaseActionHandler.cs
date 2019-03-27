@@ -10,6 +10,7 @@ using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Abstractions.Actions
 {
@@ -49,6 +50,10 @@ namespace BtcTransmuter.Abstractions.Actions
             return Task.FromResult(recipeAction.ActionId == ActionId);
         }
 
+        public Task<ActionHandlerResult> Execute(Dictionary<string, (object data, string json)> data, RecipeAction recipeAction)
+        {
+            return Execute(data.ToDictionary(pair => pair.Key, pair => pair.Value.data), recipeAction);
+        }
         public async Task<ActionHandlerResult> Execute(Dictionary<string, object> data, RecipeAction recipeAction)
         {
             if (await CanExecute(data, recipeAction))

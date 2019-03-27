@@ -24,13 +24,13 @@ namespace BtcTransmuter.Tests
             //no handlers available
             var actionDispatcher =
                 new ActionDispatcher(new List<IActionHandler>(), recipeManager.Object, logger.Object);
-            await actionDispatcher.Dispatch(new Dictionary<string, object>(), new RecipeAction());
+            await actionDispatcher.Dispatch(new Dictionary<string,(object data, string json)>(), new RecipeAction());
             recipeManager.Verify(manager => manager.AddRecipeInvocation(It.IsAny<RecipeInvocation>()), Times.Never);
 
 
             //handler available but it does not handle the recipe action's request
             var handler = new Mock<IActionHandler>(MockBehavior.Strict);
-            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, object>>(), It.IsAny<RecipeAction>()))
+            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, (object data, string json)>>(), It.IsAny<RecipeAction>()))
                 .ReturnsAsync(
                     () => new ActionHandlerResult()
                     {
@@ -38,7 +38,7 @@ namespace BtcTransmuter.Tests
                     });
             actionDispatcher = new ActionDispatcher(new List<IActionHandler>() {handler.Object}, recipeManager.Object,
                 logger.Object);
-            await actionDispatcher.Dispatch( new Dictionary<string, object>(), new RecipeAction());
+            await actionDispatcher.Dispatch( new Dictionary<string,(object data, string json)>(), new RecipeAction());
 
             recipeManager.Verify(manager => manager.AddRecipeInvocation(It.IsAny<RecipeInvocation>()), Times.Never);
         }
@@ -54,7 +54,7 @@ namespace BtcTransmuter.Tests
 
             //handler available and executes correctly
             var handler = new Mock<IActionHandler>(MockBehavior.Strict);
-            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, object>>(), It.IsAny<RecipeAction>()))
+            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, (object data, string json)>>(), It.IsAny<RecipeAction>()))
                 .ReturnsAsync(
                     () => new ActionHandlerResult()
                     { 
@@ -64,7 +64,7 @@ namespace BtcTransmuter.Tests
             var actionDispatcher = new ActionDispatcher(new List<IActionHandler>() {handler.Object},
                 recipeManager.Object,
                 logger.Object);
-            await actionDispatcher.Dispatch(new Dictionary<string, object>(), new RecipeAction());
+            await actionDispatcher.Dispatch(new Dictionary<string,(object data, string json)>(), new RecipeAction());
 
             recipeManager.Verify(
                 manager => manager.AddRecipeInvocation(It.Is<RecipeInvocation>(invocation =>
@@ -82,12 +82,12 @@ namespace BtcTransmuter.Tests
 
             //handler available but it throws an uncaight exception
             var handler = new Mock<IActionHandler>(MockBehavior.Strict);
-            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, object>>(), It.IsAny<RecipeAction>()))
+            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, (object data, string json)>>(), It.IsAny<RecipeAction>()))
                 .Throws(new Exception("Something happened"));
             var actionDispatcher = new ActionDispatcher(new List<IActionHandler>() {handler.Object},
                 recipeManager.Object,
                 logger.Object);
-            await actionDispatcher.Dispatch( new Dictionary<string, object>(), new RecipeAction());
+            await actionDispatcher.Dispatch( new Dictionary<string,(object data, string json)>(), new RecipeAction());
 
             recipeManager.Verify(
                 manager => manager.AddRecipeInvocation(It.Is<RecipeInvocation>(invocation =>
@@ -105,10 +105,10 @@ namespace BtcTransmuter.Tests
 
             //multiple handlers can handle the same action, interesting times ahead!
             var handler = new Mock<IActionHandler>(MockBehavior.Strict);
-            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, object>>(), It.IsAny<RecipeAction>()))
+            handler.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, (object data, string json)>>(), It.IsAny<RecipeAction>()))
                 .Throws(new Exception("Something happened"));
             var handler2 = new Mock<IActionHandler>(MockBehavior.Strict);
-            handler2.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, object>>(), It.IsAny<RecipeAction>()))
+            handler2.Setup(actionHandler => actionHandler.Execute(It.IsAny<Dictionary<string, (object data, string json)>>(), It.IsAny<RecipeAction>()))
                 .ReturnsAsync(
                     () => new ActionHandlerResult()
                     { 
@@ -118,7 +118,7 @@ namespace BtcTransmuter.Tests
             var actionDispatcher = new ActionDispatcher(new List<IActionHandler>() {handler.Object, handler2.Object},
                 recipeManager.Object,
                 logger.Object);
-            await actionDispatcher.Dispatch( new Dictionary<string, object>(), new RecipeAction());
+            await actionDispatcher.Dispatch( new Dictionary<string,(object data, string json)>(), new RecipeAction());
 
             recipeManager.Verify(
                 manager => manager.AddRecipeInvocation(It.Is<RecipeInvocation>(invocation =>

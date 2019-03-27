@@ -6,7 +6,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
     public class NBXplorerBalanceTrigger : BaseTrigger<NBXplorerBalanceTriggerData>
     {
         public new static readonly string Id = typeof(NBXplorerBalanceTrigger).FullName;
-        private readonly ExplorerClient _explorerClient;
+        public readonly ExplorerClient _explorerClient;
 
         public NBXplorerBalanceTrigger(ExplorerClient explorerClient)
         {
