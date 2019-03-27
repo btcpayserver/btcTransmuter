@@ -49,7 +49,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
         {
             var utxos = await GetUTXOs();
             var balance = GetBalance(utxos);
-            var key = new ExtKey();
             var outgoingSum = outgoing.Sum(tuple => tuple.amount);
             if (outgoingSum > balance)
             {
@@ -58,8 +57,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
 
             var transactionBuilder = _explorerClient.Network.NBitcoinNetwork
                 .CreateTransactionBuilder()
-                .AddCoins(utxos.GetUnspentCoins())
-                .AddKeys(utxos.GetKeys(key));
+                .AddCoins(utxos.GetUnspentCoins());
 
 
             foreach (var tuple in outgoing)
