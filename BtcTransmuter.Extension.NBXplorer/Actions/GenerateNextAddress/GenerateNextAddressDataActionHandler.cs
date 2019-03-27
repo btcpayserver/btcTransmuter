@@ -9,6 +9,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
 {
     public class GenerateNextAddressDataActionHandler : BaseActionHandler<GenerateNextAddressData, BitcoinAddress>
     {
+        private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
@@ -27,10 +28,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
         }
 
         public GenerateNextAddressDataActionHandler(
+            NBXplorerClientProvider nbXplorerClientProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             DerivationSchemeParser derivationSchemeParser)
         {
+            _nbXplorerClientProvider = nbXplorerClientProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _derivationSchemeParser = derivationSchemeParser;
@@ -45,7 +48,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
                     actionData.DerivationStrategy));
             var result = await
                 wallet.GetNextAddress();
-            return new TypedActionHandlerResult<BitcoinAddress>()
+            return new NBXplorerActionHandlerResult<BitcoinAddress>(_nbXplorerClientProvider.GetClient(actionData.CryptoCode))
             {
                 Executed = true,
                 TypedData = result,

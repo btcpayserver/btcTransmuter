@@ -99,7 +99,7 @@ namespace BtcTransmuter.Services
                     data.Remove("PreviousAction");
                 }
 
-                data.Add("PreviousAction", (path.Data, JObject.FromObject(path.Data).ToString()));
+                data.Add("PreviousAction", (path.Data, path.DataJson));
 
                 await RecursiveActionExecution(recipeActions, data);
             }

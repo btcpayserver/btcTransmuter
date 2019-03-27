@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using NBitcoin;
 using NBXplorer.Models;
@@ -83,7 +84,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             await wallet.SignTransaction(txBuilder, key);
             var tx = txBuilder.BuildTransaction(true);
             var result = await wallet.BroadcastTransaction(tx);
-            return new TypedActionHandlerResult<BroadcastResult>()
+            return new NBXplorerActionHandlerResult<BroadcastResult>(_nbXplorerClientProvider.GetClient(actionData.CryptoCode))
             {
                 Executed = result.Success,
                 Data = result,
