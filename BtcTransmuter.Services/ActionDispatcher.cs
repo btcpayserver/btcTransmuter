@@ -67,7 +67,9 @@ namespace BtcTransmuter.Services
                         Timestamp = DateTime.Now,
                         RecipeActionId = recipeAction.Id,
                         ActionResult = e.Message,
-                        TriggerDataJson = JObject.FromObject(additionalData).ToString()
+                        TriggerDataJson = JObject
+                            .FromObject(additionalData.ToDictionary(pair => pair.Key, pair => pair.Value.json))
+                            .ToString()
                     });
                 }
             }

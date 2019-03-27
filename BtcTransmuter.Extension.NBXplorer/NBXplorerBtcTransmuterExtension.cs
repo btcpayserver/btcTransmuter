@@ -48,39 +48,12 @@ namespace BtcTransmuter.Extension.NBXplorer
             serviceCollection.AddSingleton<DerivationStrategyFactoryProvider>();
             serviceCollection.AddSingleton<DerivationSchemeParser>();
             serviceCollection.AddSingleton<NBXplorerPublicWalletProvider>();
-            serviceCollection.AddSingleton<IConfigureOptions<MvcJsonOptions>, NBXplorerBtcTransmuterExtensionJsonOptions>();
             serviceCollection.AddSingleton(provider =>
             {
                 var options = provider.GetService<NBXplorerOptions>();
                 return new NBXplorerNetworkProvider(options.NetworkType);
             });
         }
-        
-        public class NBXplorerBtcTransmuterExtensionJsonOptions : IConfigureOptions<MvcJsonOptions>
-        {
-
-            public virtual void Configure(MvcJsonOptions options)
-            {
-                options.SerializerSettings.Converters.Add(new TrackedSourceJsonConverter());
-            }
-        }
-
-        public class TrackedSourceJsonConverter : JsonConverter
-        {
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                writer.WriteValue(value.ToString());
-            }
-
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                return reader.Value;
-            }
-
-            public override bool CanConvert(Type objectType)
-            {
-                return (objectType.IsAssignableFrom(typeof(TrackedSource)));
-            }
-        }
+  
     }
 }
