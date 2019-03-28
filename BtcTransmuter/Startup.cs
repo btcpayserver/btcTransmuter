@@ -48,7 +48,7 @@ namespace BtcTransmuter
                 options.Password.RequireNonAlphanumeric = false;
             });
 
-
+            services.AddDataProtection();
             services.AddHttpClient();
             services.AddOptions();
             services.AddTransmuterServices();
@@ -91,7 +91,7 @@ namespace BtcTransmuter
                     {
                         context.Database.EnsureDeleted();
                     }
-                    
+
                     context.Database.Migrate();
 
                     using (var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>())

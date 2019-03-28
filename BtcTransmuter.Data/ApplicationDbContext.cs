@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BtcTransmuter.Data.Encryption;
 using BtcTransmuter.Data.Entities;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -10,9 +12,12 @@ namespace BtcTransmuter.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private readonly IDataProtectionProvider _dataProtectionProvider;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IDataProtectionProvider dataProtectionProvider)
             : base(options)
         {
+            _dataProtectionProvider = dataProtectionProvider;
         }
 
         public DbSet<ExternalServiceData> ExternalServices { get; set; }
@@ -51,6 +56,8 @@ namespace BtcTransmuter.Data
                 .HasMany(l => l.RecipeActions)
                 .WithOne(action => action.RecipeActionGroup)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.AddEncryptionValueConvertersToDecoratedEncryptedColumns(_dataProtectionProvider.CreateProtector("ApplicationDbContext"));
         }
     }
 
@@ -61,7 +68,7 @@ namespace BtcTransmuter.Data
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlite("Data Source=mydb.db");
 
-            return new ApplicationDbContext(optionsBuilder.Options);
+            return new ApplicationDbContext(optionsBuilder.Options, null);
         }
     }
 }
