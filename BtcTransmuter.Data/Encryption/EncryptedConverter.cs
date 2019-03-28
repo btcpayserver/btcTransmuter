@@ -8,6 +8,7 @@ namespace BtcTransmuter.Data.Encryption
     class EncryptedConverter : ValueConverter<string, string>
     {
         private static IDataProtector _dataProtector;
+        private static string encryptedMarker = "ENCRYPTED:";
 
         public EncryptedConverter(IDataProtector dataProtector, ConverterMappingHints mappingHints = default)
             : base(EncryptExpr, DecryptExpr, mappingHints)
@@ -15,7 +16,7 @@ namespace BtcTransmuter.Data.Encryption
             _dataProtector = dataProtector;
         }
 
-        static Expression<Func<string, string>> DecryptExpr = x => _dataProtector.Unprotect(x);
-        static Expression<Func<string, string>> EncryptExpr = x => _dataProtector.Protect(x);
+        static Expression<Func<string, string>> DecryptExpr = x => x.StartsWith(encryptedMarker)?  _dataProtector.Unprotect(x.Substring(encryptedMarker.Length)): x;
+        static Expression<Func<string, string>> EncryptExpr = x => $"{encryptedMarker}{_dataProtector.Protect(x)}";
     }
 }
