@@ -27,7 +27,7 @@
         <span asp-validation-for="DerivationStrategy" class="text-danger"></span>
     </div>
     
-    <div class="list-group">
+    <div class="list-group mb-2">
         <div class="list-group-item ">
             <h5 class="mb-1">Private keys to sign transaction with</h5>
         </div>
@@ -53,17 +53,17 @@
 
                 </div>
                 <div>
-                    <button type="submit" name="action" value="@($"remove-output:{index}")" class="btn btn-danger" >Remove</button>
+                    <button type="submit" name="action" value="@($"remove-private-key:{index}")" class="btn btn-danger" >Remove</button>
                 </div>
             </div>
         }
         <div class="list-group-item ">
-            <button type="submit" name="action" value="add-output" class="btn btn-secondary" >Add</button>
+            <button type="submit" name="action" value="add-private-key" class="btn btn-secondary" >Add</button>
         </div>
     </div>
     
     
-    <div class="list-group">
+    <div class="list-group mb-2">
         <div class="list-group-item ">
             <h5 class="mb-1">Transaction outputs</h5>
         </div>
