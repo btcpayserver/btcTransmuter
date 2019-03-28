@@ -15,6 +15,7 @@ using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
 using McMaster.NETCore.Plugins;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,18 +49,21 @@ namespace BtcTransmuter
                 options.Password.RequireNonAlphanumeric = false;
             });
 
-            services.AddDataProtection();
             services.AddHttpClient();
             services.AddOptions();
             services.AddTransmuterServices();
             services.AddMemoryCache();
+            var dataProtectionBuilder =services.AddDataProtection();
             var dbConnString = Configuration.GetValue<string>("ConnectionStrings_Database");
 
             dbFilePath = dbConnString.Substring(dbConnString.IndexOf("Data Source=") + "Data Source=".Length);
             dbFilePath = dbFilePath.Substring(0, dbFilePath.IndexOf(";"));
             if (!string.IsNullOrEmpty(Path.GetDirectoryName(dbFilePath)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(dbFilePath));
+                var dir = Directory.CreateDirectory(Path.GetDirectoryName(dbFilePath));
+                
+                //TODO: move this away from the same location as db!
+                dataProtectionBuilder.PersistKeysToFileSystem(dir);
             }
 
             Console.WriteLine($"Connecting to sqlite db with: {dbConnString}");
