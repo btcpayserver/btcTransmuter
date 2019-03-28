@@ -27,24 +27,49 @@
         <span asp-validation-for="DerivationStrategy" class="text-danger"></span>
     </div>
     
-    <div class="form-group">
-        <label asp-for="MnemonicSeed" class="control-label"></label>
-        <input asp-for="MnemonicSeed" class="form-control"/>
-        <span asp-validation-for="MnemonicSeed" class="text-danger"></span>
-    </div>   
-    <div class="form-group">
-        <label asp-for="Passphrase" class="control-label"></label>
-        <input asp-for="Passphrase" class="form-control"/>
-        <span asp-validation-for="Passphrase" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="WIF" class="control-label"></label>
-        <input asp-for="WIF" class="form-control"/>
-        <span asp-validation-for="WIF" class="text-danger"></span>
-    </div>
     <div class="list-group">
+        <div class="list-group-item ">
+            <h5 class="mb-1">Private keys to sign transaction with</h5>
+        </div>
+        @for (var index = 0; index < Model.PrivateKeys.Count; index++)
+        {
+            <div class="list-group-item justify-content-between align-items-center">
+                <div>
+                    <div class="form-group">
+                        <label asp-for="PrivateKeys[0].MnemonicSeed" class="control-label"></label>
+                        <input asp-for="PrivateKeys[0].MnemonicSeed" class="form-control"/>
+                        <span asp-validation-for="PrivateKeys[0].MnemonicSeed" class="text-danger"></span>
+                    </div>   
+                    <div class="form-group">
+                        <label asp-for="PrivateKeys[0].Passphrase" class="control-label"></label>
+                        <input asp-for="PrivateKeys[0].Passphrase" class="form-control"/>
+                        <span asp-validation-for="PrivateKeys[0].Passphrase" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PrivateKeys[0].WIF" class="control-label"></label>
+                        <input asp-for="PrivateKeys[0].WIF" class="form-control"/>
+                        <span asp-validation-for="PrivateKeys[0].WIF" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div>
+                    <button type="submit" name="action" value="@($"remove-output:{index}")" class="btn btn-danger" >Remove</button>
+                </div>
+            </div>
+        }
+        <div class="list-group-item ">
+            <button type="submit" name="action" value="add-output" class="btn btn-secondary" >Add</button>
+        </div>
+    </div>
+    
+    
+    <div class="list-group">
+        <div class="list-group-item ">
+            <h5 class="mb-1">Transaction outputs</h5>
+        </div>
         @for (var index = 0; index < Model.Outputs.Count; index++)
         {
+            
             <div class="list-group-item justify-content-between align-items-center">
                 <div>
                     <div class="form-group">
@@ -60,12 +85,12 @@
 
                 </div>
                 <div>
-                    <button type="submit" name="action" value="@($"remove-outgoing:{index}")" class="btn btn-danger" >Remove</button>
+                    <button type="submit" name="action" value="@($"remove-output:{index}")" class="btn btn-danger">Remove</button>
                 </div>
             </div>
         }
         <div class="list-group-item ">
-            <button type="submit" name="action" value="add-outgoing" class="btn btn-secondary" >Add</button>
+            <button type="submit" name="action" value="add-output" class="btn btn-secondary">Add</button>
         </div>
     </div>
     

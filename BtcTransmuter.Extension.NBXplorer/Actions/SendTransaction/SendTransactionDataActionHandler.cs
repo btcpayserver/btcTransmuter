@@ -70,18 +70,24 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                         (IDestination) BitcoinAddress.Create(InterpolateString(output.DestinationAddress, data),
                             explorerClient.Network.NBitcoinNetwork))));
 
-            ExtKey key;
-            if (!string.IsNullOrEmpty(actionData.MnemonicSeed))
-            {
-                key = new Mnemonic(actionData.MnemonicSeed).DeriveExtKey(
-                    string.IsNullOrEmpty(actionData.Passphrase) ? null : actionData.Passphrase);
-            }
-            else
-            {
-                key = ExtKey.Parse(actionData.WIF, explorerClient.Network.NBitcoinNetwork);
-            }
 
-            await wallet.SignTransaction(txBuilder, key);
+            foreach (var privateKey in actionData.PrivateKeys)
+            {
+                ExtKey key;
+                if (!string.IsNullOrEmpty(privateKey.MnemonicSeed))
+                {
+                    key = new Mnemonic(privateKey.MnemonicSeed).DeriveExtKey(
+                        string.IsNullOrEmpty(privateKey.Passphrase) ? null : privateKey.Passphrase);
+                }
+                else
+                {
+                    key = ExtKey.Parse(privateKey.WIF, explorerClient.Network.NBitcoinNetwork);
+                } 
+                
+                await wallet.SignTransaction(txBuilder, key);
+            }
+            
+
             var tx = txBuilder.BuildTransaction(true);
             var result = await wallet.BroadcastTransaction(tx);
             return new NBXplorerActionHandlerResult<BroadcastResult>(

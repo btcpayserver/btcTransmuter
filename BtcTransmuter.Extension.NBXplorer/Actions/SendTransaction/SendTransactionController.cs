@@ -16,6 +16,7 @@ using Microsoft.Extensions.Caching.Memory;
 using NBitcoin;
 using NBXplorer.DerivationStrategy;
 using NBXplorer.Models;
+using BtcTransmuter.Abstractions.Extensions;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 {
@@ -51,10 +52,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 RecipeId = from.RecipeId,
                 CryptoCode = fromData.CryptoCode,
                 DerivationStrategy = fromData.DerivationStrategy,
-                Passphrase = fromData.Passphrase,
-                WIF = fromData.WIF,
                 Address = fromData.Address,
-                MnemonicSeed = fromData.MnemonicSeed,
+                Outputs = fromData.Outputs,
+                PrivateKeys = fromData.PrivateKeys,
                 CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
                     fromData.CryptoCode)
             });
@@ -65,18 +65,32 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
         {
             viewModel.CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
                 viewModel.CryptoCode);
-            if (viewModel.Action.Equals("add-outgoing", StringComparison.InvariantCultureIgnoreCase))
+            if (viewModel.Action.Equals("add-output", StringComparison.InvariantCultureIgnoreCase))
             {
                 viewModel.Outputs.Add(new SendTransactionData.TransactionOutput());
                 return (null, viewModel);
             }
 
-            if (viewModel.Action.StartsWith("remove-outgoing", StringComparison.InvariantCultureIgnoreCase))
+            if (viewModel.Action.StartsWith("remove-output", StringComparison.InvariantCultureIgnoreCase))
             {
                 var index = int.Parse(viewModel.Action.Substring(viewModel.Action.IndexOf(":") + 1));
                 viewModel.Outputs.RemoveAt(index);
                 return (null, viewModel);
             }
+
+            if (viewModel.Action.Equals("add-private-key", StringComparison.InvariantCultureIgnoreCase))
+            {
+                viewModel.PrivateKeys.Add(new SendTransactionData.PrivateKeyDetails());
+                return (null, viewModel);
+            }
+
+            if (viewModel.Action.StartsWith("remove-private-key", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var index = int.Parse(viewModel.Action.Substring(viewModel.Action.IndexOf(":") + 1));
+                viewModel.PrivateKeys.RemoveAt(index);
+                return (null, viewModel);
+            }
+
 
             if (!viewModel.Outputs.Any())
             {
@@ -125,39 +139,52 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             }
 
 
-            if (string.IsNullOrEmpty(viewModel.WIF) && string.IsNullOrEmpty(viewModel.MnemonicSeed))
+            if (!viewModel.PrivateKeys.Any())
             {
                 ModelState.AddModelError(string.Empty,
-                    "Please enter a mnemonic seed(with or without passphrase) or a private key");
+                    "Please add at least one private key to sign with. If you use multisig, you will need the minimum amount needed for it.");
             }
             else
             {
-                if (!string.IsNullOrEmpty(viewModel.MnemonicSeed))
+                for (var index = 0; index < viewModel.PrivateKeys.Count; index++)
                 {
-                    try
+                    var privateKey = viewModel.PrivateKeys[index];
+                    if (string.IsNullOrEmpty(privateKey.WIF) && string.IsNullOrEmpty(privateKey.MnemonicSeed))
                     {
-                        var key = new Mnemonic(viewModel.MnemonicSeed).DeriveExtKey(
-                            string.IsNullOrEmpty(viewModel.Passphrase) ? null : viewModel.Passphrase);
+                        ModelState.AddModelError(string.Empty,
+                            "Please enter a mnemonic seed(with or without passphrase) or a private key");
                     }
-                    catch (Exception)
+                    else
                     {
-                        ModelState.AddModelError(nameof(SendTransactionViewModel.MnemonicSeed),
-                            "Mnemonic seed could not be loaded");
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        var key = ExtKey.Parse(viewModel.WIF, client.Network.NBitcoinNetwork);
-                    }
-                    catch (Exception)
-                    {
-                        ModelState.AddModelError(nameof(SendTransactionViewModel.MnemonicSeed),
-                            "WIF could not be loaded");
+                        if (!string.IsNullOrEmpty(privateKey.MnemonicSeed))
+                        {
+                            try
+                            {
+                                var key = new Mnemonic(privateKey.MnemonicSeed).DeriveExtKey(
+                                    string.IsNullOrEmpty(privateKey.Passphrase) ? null : privateKey.Passphrase);
+                            }
+                            catch (Exception)
+                            {
+                                viewModel.AddModelError(model => model.PrivateKeys[index].MnemonicSeed,
+                                    "Mnemonic seed could not be loaded", ModelState);
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                var key = ExtKey.Parse(privateKey.WIF, client.Network.NBitcoinNetwork);
+                            }
+                            catch (Exception)
+                            {
+                                viewModel.AddModelError(model => model.PrivateKeys[index].WIF,
+                                    "WIF could not be loaded", ModelState);
+                            }
+                        }
                     }
                 }
             }
+
 
             if (ModelState.IsValid)
             {

@@ -11,14 +11,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
         [Display(Name = "Derivation Strategy")]
         public string DerivationStrategy { get; set; }
 
-        [Display(Name = "Mnemonic Seed")] public string MnemonicSeed { get; set; }
-
-        [Display(Name = "Passphrase")] public string Passphrase { get; set; }
-
-        [Display(Name = "Private Key(WIF / Bitcoin Secret)")]
-        public string WIF { get; set; }
-
         public List<TransactionOutput> Outputs { get; set; } = new List<TransactionOutput>();
+
+        public List<PrivateKeyDetails> PrivateKeys { get; set; } = new List<PrivateKeyDetails>();
 
         public class TransactionOutput
         {
@@ -27,6 +22,16 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             public string DestinationAddress { get; set; }
 
             [Display(Name = "Amount")] [Required] public string Amount { get; set; }
+        }
+
+        public class PrivateKeyDetails
+        {
+            [Display(Name = "Mnemonic Seed")] public string MnemonicSeed { get; set; }
+
+            [Display(Name = "Passphrase")] public string Passphrase { get; set; }
+
+            [Display(Name = "Private Key(WIF / Bitcoin Secret)")]
+            public string WIF { get; set; }
         }
     }
 }
