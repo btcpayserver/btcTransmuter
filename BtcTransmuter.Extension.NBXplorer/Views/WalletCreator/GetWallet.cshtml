@@ -1,0 +1,58 @@
+@using BtcTransmuter.Extension.NBXplorer.Models
+@using NBitcoin
+@using Newtonsoft.Json.Linq
+@model BtcTransmuter.Extension.NBXplorer.Controllers.WalletCreatorController.GetWalletViewModel
+
+@{
+    ViewData["Title"] = $"Generate/View {Model.Network.Name} Wallet";
+    var mnemonic = new Mnemonic(Model.Mnemonic);
+    var extKey = mnemonic.DeriveExtKey();
+    var wif = extKey.GetWif(Model.Network);
+    var privateKey = extKey.PrivateKey;
+    var secret = privateKey.GetBitcoinSecret(Model.Network);
+    var address = secret.GetAddress();
+    var segwitAddress = secret.GetSegwitAddress();
+    var extPubKey = extKey.Neuter();
+}
+
+<div class="d-flex justify-content-between">
+    
+
+    <h2>@ViewData["Title"]</h2><a asp-action="GetWallet" asp-route-cryptoCode="@Model.CryptoCode" class="btn btn-secondary btn-sm">Generate new wallet</a>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="form-group">
+            <label class="control-label">Mnemonic Seed</label>
+            <input readonly class="form-control" value="@Model.Mnemonic"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">extended Public key</label>
+            <input readonly class="form-control" value="@extPubKey.ToString(Model.Network)"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Wallet Import Format(WIF)</label>
+            <input readonly class="form-control" value="@wif"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Private Key</label>
+            <input readonly class="form-control" value="@privateKey.ToString(Model.Network)"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Secret</label>
+            <input readonly class="form-control" value="@secret"/>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label">Address</label>
+            <input readonly class="form-control" value="@address"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Segwit</label>
+            <input readonly class="form-control" value="@segwitAddress"/>
+        </div>
+
+    </div>
+</div>

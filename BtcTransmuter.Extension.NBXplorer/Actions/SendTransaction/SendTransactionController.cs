@@ -160,8 +160,14 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                         {
                             try
                             {
-                                var key = new Mnemonic(privateKey.MnemonicSeed).DeriveExtKey(
+                                var mnemonic = new Mnemonic(privateKey.MnemonicSeed);
+                                
+                                var key = mnemonic.DeriveExtKey(
                                     string.IsNullOrEmpty(privateKey.Passphrase) ? null : privateKey.Passphrase);
+
+                                var wif = key.GetWif(client.Network.NBitcoinNetwork);
+                                
+                                Console.Write(wif);
                             }
                             catch (Exception)
                             {
