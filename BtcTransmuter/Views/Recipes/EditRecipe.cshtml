@@ -12,6 +12,7 @@
 
 <form method="post" class="card mb-2">
     <div class="card-body">
+        <h5 class="card-title"> Recipe Basic Details</h5>
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
@@ -36,42 +37,58 @@
 
     </div>
 </form>
-<h4>Trigger</h4>
-<ul class="list-group list-group-flush">
-    <li class="list-group-item">
-        @if (Model.Trigger == null)
-        {
-            <span>No trigger set yet</span>
 
-            <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.Id">Add</a>
-        }
-        else
-        {
-            <div class="d-flex justify-content-between align-items-center">
-                @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
-                <div>
-                    <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers"
-                       asp-route-id="@Model.Trigger.RecipeId"
-                       asp-route-recipeTriggerId="@Model.Trigger.Id">
-                        Edit
-                    </a>
-                    -
-                    <a asp-action="RemoveRecipeTrigger" asp-controller="RecipeTriggers"
-                       asp-route-id="@Model.Trigger.RecipeId"
-                       asp-route-recipeTriggerId="@Model.Trigger.Id">
-                        Remove
-                    </a>
+<div class="card mb-2">
+    <div class="card-body">
+        <h5 class="card-title">Trigger</h5>
+
+        <div >
+            @if (Model.Trigger == null)
+            {
+                <span>No trigger set yet</span>
+
+                <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers" asp-route-id="@Model.Id">Add</a>
+            }
+            else
+            {
+                <div class="d-flex justify-content-between align-items-center">
+                    <div style="max-width: 70%;">
+                        @await Component.InvokeAsync("ViewRecipeTrigger", Model.Trigger)
+                    </div>
+                    <div>
+                        <a asp-action="EditRecipeTrigger" asp-controller="RecipeTriggers"
+                           asp-route-id="@Model.Trigger.RecipeId"
+                           asp-route-recipeTriggerId="@Model.Trigger.Id">
+                            Edit
+                        </a>
+                        -
+                        <a asp-action="RemoveRecipeTrigger" asp-controller="RecipeTriggers"
+                           asp-route-id="@Model.Trigger.RecipeId"
+                           asp-route-recipeTriggerId="@Model.Trigger.Id">
+                            Remove
+                        </a>
+                    </div>
                 </div>
-            </div>
-        }
-    </li>
-    <li class="list-group-item px-0">
-        <h4>Actions</h4>
+            }
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card mb-2">
+    <div class="card-body">
+        <h5 class="card-title">Actions</h5>
         <ul class="list-group list-group-flush ">
-            @foreach (var action in Model.Actions.Where(action => action.RecipeActionGroup == null))
+            @{
+                var validActions = Model.Actions.Where(action => action.RecipeActionGroup == null);
+            }
+            @foreach (var action in validActions)
             {
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    @await Component.InvokeAsync("ViewRecipeAction", action)
+                    <div style="max-width: 70%;">
+                        @await Component.InvokeAsync("ViewRecipeAction", action)
+                    </div>
                     <div>
                         <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
                         -
@@ -81,24 +98,22 @@
                 </li>
             }
 
-            @if (!Model.Actions.Any())
+            @if (!validActions.Any())
             {
                 <li class="list-group-item border-top-0">
-                    No Actions. <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add</a>
-                </li>
-            }
-            else
-            {
-                <li class="list-group-item">
-                    <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
+                    No Actions.
                 </li>
             }
 
         </ul>
-    </li>
-
-    <li class="list-group-item px-0">
-        <h4>Action Groups</h4>
+    </div>
+    <div class="card-footer">
+        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
+    </div>
+</div>
+<div class="card mb-2">
+    <div class="card-body">
+        <h5 class="card-title">Action Groups</h5>
         <ul class="list-group list-group-flush">
             @for (var y = 0; y < Model.ActionGroups.Count(); y++)
             {
@@ -116,18 +131,16 @@
             @if (!Model.ActionGroups.Any())
             {
                 <li class="list-group-item border-top-0">
-                    No Action Groups. <a asp-action="AddRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.Id">Add Action Group</a>
-                </li>
-            }
-            else
-            {
-                <li class="list-group-item">
-                    <a asp-action="AddRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.Id">Add Action Group</a>
+                    No Action Groups.
                 </li>
             }
         </ul>
-    </li>
-</ul>
+
+    </div>
+    <div class="card-footer">
+        <a asp-action="AddRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.Id">Add Action Group</a>
+    </div>
+</div>
 <div class="mt-2">
     <a asp-action="GetRecipes" class="btn btn-secondary">Back to list</a>
 </div>

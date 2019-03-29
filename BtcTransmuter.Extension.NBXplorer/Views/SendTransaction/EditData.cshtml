@@ -13,20 +13,27 @@
         <label asp-for="CryptoCode" class="control-label"></label>
         <select asp-for="CryptoCode" asp-items="Model.CryptoCodes" class="form-control"></select>
         <span asp-validation-for="CryptoCode" class="text-danger"></span>
-    </div> 
-    
-    <div class="form-group">
-        <label asp-for="Address" class="control-label"></label>
-        <input asp-for="Address" class="form-control"/>
-        <span asp-validation-for="Address" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="DerivationStrategy" class="control-label"></label>
-        <input asp-for="DerivationStrategy" class="form-control"/>
-        <span asp-validation-for="DerivationStrategy" class="text-danger"></span>
+    <div class="card">
+        <div class="card-body">
+
+            <h5 class="card-title">Sender Details</h5>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control"/>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DerivationStrategy" class="control-label"></label>
+                <input asp-for="DerivationStrategy" class="form-control"/>
+                <span asp-validation-for="DerivationStrategy" class="text-danger"></span>
+            </div>
+
+        </div>
     </div>
-    
+
     <div class="list-group mb-2">
         <div class="list-group-item ">
             <h5 class="mb-1">Private keys to sign transaction with</h5>
@@ -39,7 +46,7 @@
                         <label asp-for="PrivateKeys[0].MnemonicSeed" class="control-label"></label>
                         <input asp-for="PrivateKeys[0].MnemonicSeed" class="form-control"/>
                         <span asp-validation-for="PrivateKeys[0].MnemonicSeed" class="text-danger"></span>
-                    </div>   
+                    </div>
                     <div class="form-group">
                         <label asp-for="PrivateKeys[0].Passphrase" class="control-label"></label>
                         <input asp-for="PrivateKeys[0].Passphrase" class="form-control"/>
@@ -53,23 +60,22 @@
 
                 </div>
                 <div>
-                    <button type="submit" name="action" value="@($"remove-private-key:{index}")" class="btn btn-danger" >Remove</button>
+                    <button type="submit" name="action" value="@($"remove-private-key:{index}")" class="btn btn-danger">Remove</button>
                 </div>
             </div>
         }
         <div class="list-group-item ">
-            <button type="submit" name="action" value="add-private-key" class="btn btn-secondary" >Add</button>
+            <button type="submit" name="action" value="add-private-key" class="btn btn-secondary">Add</button>
         </div>
     </div>
-    
-    
+
+
     <div class="list-group mb-2">
         <div class="list-group-item ">
             <h5 class="mb-1">Transaction outputs</h5>
         </div>
         @for (var index = 0; index < Model.Outputs.Count; index++)
         {
-            
             <div class="list-group-item justify-content-between align-items-center">
                 <div>
                     <div class="form-group">
@@ -93,7 +99,7 @@
             <button type="submit" name="action" value="add-output" class="btn btn-secondary">Add</button>
         </div>
     </div>
-    
+
     @await Html.PartialAsync("DerivationStrategyHelp")
     <input type="hidden" asp-for="RecipeId"/>
     <div class="mt-2">
@@ -103,6 +109,6 @@
 </form>
 @await Component.InvokeAsync("RecipeActionFooter", new
 {
-    recipeId = @Model.RecipeId, 
+    recipeId = @Model.RecipeId,
     recipeActionIdInGroupBeforeThisOne = @Model.RecipeActionIdInGroupBeforeThisOne
 })
