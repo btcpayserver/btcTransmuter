@@ -80,7 +80,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 
             if (viewModel.Action.Equals("add-private-key", StringComparison.InvariantCultureIgnoreCase))
             {
-                viewModel.PrivateKeys.Add(new SendTransactionData.PrivateKeyDetails());
+                viewModel.PrivateKeys.Add(new PrivateKeyDetails());
                 return (null, viewModel);
             }
 
@@ -99,7 +99,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             }
             else
             {
-
                 var subtractFeesOutputs = viewModel.Outputs.Select((output, i) => (output, i))
                     .Where(tuple => tuple.Item1.SubtractFeesFromOutput);
 
@@ -176,12 +175,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                             try
                             {
                                 var mnemonic = new Mnemonic(privateKey.MnemonicSeed);
-                                
+
                                 var key = mnemonic.DeriveExtKey(
                                     string.IsNullOrEmpty(privateKey.Passphrase) ? null : privateKey.Passphrase);
 
                                 var wif = key.GetWif(client.Network.NBitcoinNetwork);
-                                
+
                                 Console.Write(wif);
                             }
                             catch (Exception)

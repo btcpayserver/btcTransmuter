@@ -64,33 +64,13 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                         actionData.DerivationStrategy));
             }
 
-            var txBuilder =
-                await wallet.BuildTransaction(actionData.Outputs.Select(output =>
+            var tx = await wallet.BuildTransaction(actionData.Outputs.Select(output =>
                     (Money.Parse(InterpolateString(output.Amount, data)),
                         (IDestination) BitcoinAddress.Create(InterpolateString(output.DestinationAddress, data),
-                            explorerClient.Network.NBitcoinNetwork), output.SubtractFeesFromOutput)));
-
-
-            foreach (var privateKey in actionData.PrivateKeys)
-            {
-                ExtKey key;
-                if (!string.IsNullOrEmpty(privateKey.MnemonicSeed))
-                {
-                    key = new Mnemonic(privateKey.MnemonicSeed).DeriveExtKey(
-                        string.IsNullOrEmpty(privateKey.Passphrase) ? null : privateKey.Passphrase);
-                }
-                else
-                {
-                    key = ExtKey.Parse(privateKey.WIF, explorerClient.Network.NBitcoinNetwork);
-                } 
-                
-                await wallet.SignTransaction(txBuilder, key);
-            }
-
-            
-            
-            var tx = txBuilder.BuildTransaction(true);
+                            explorerClient.Network.NBitcoinNetwork), output.SubtractFeesFromOutput)),
+                actionData.PrivateKeys);
             var result = await wallet.BroadcastTransaction(tx);
+
             return new NBXplorerActionHandlerResult<BroadcastResult>(
                 _nbXplorerClientProvider.GetClient(actionData.CryptoCode))
             {

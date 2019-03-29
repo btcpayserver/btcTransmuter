@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using BtcTransmuter.Extension.NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 {
@@ -25,17 +26,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
         
             [Display(Name = "Subtract fees from this output")]
             public bool SubtractFeesFromOutput { get; set; }
-
         }
 
-        public class PrivateKeyDetails
-        {
-            [Display(Name = "Mnemonic Seed")] public string MnemonicSeed { get; set; }
-
-            [Display(Name = "Passphrase")] public string Passphrase { get; set; }
-
-            [Display(Name = "Private Key(WIF / Bitcoin Secret)")]
-            public string WIF { get; set; }
-        }
+        
     }
 }

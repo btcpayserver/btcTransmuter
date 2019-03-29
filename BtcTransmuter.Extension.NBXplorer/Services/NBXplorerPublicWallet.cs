@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction;
+using BtcTransmuter.Extension.NBXplorer.Models;
 using NBitcoin;
 using NBXplorer;
 using NBXplorer.DerivationStrategy;
@@ -36,30 +38,45 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             return x;
         }
 
-        public async Task<TransactionBuilder> BuildTransaction(Money amount, IDestination destination, bool subtractFee)
+        public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
+            Money amount, IDestination destination, bool subtractFee)
         {
-            return await BuildTransaction(new List<(Money amount, IDestination destination, bool subtractFee)>()
-            {
-                (amount, destination, subtractFee)
-            });
+            return await AddTxOutsToTransaction(transactionBuilder,
+                new List<(Money amount, IDestination destination, bool subtractFee)>()
+                {
+                    (amount, destination, subtractFee)
+                });
         }
 
-        public async Task<TransactionBuilder> BuildTransaction(
-            IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing)
+        public async Task<TransactionBuilder> CreateTransactionBuilder()
         {
             var utxos = await GetUTXOs();
-            var balance = GetBalance(utxos);
-            var outgoingSum = outgoing.Sum(tuple => tuple.amount);
-            if (outgoingSum > balance)
-            {
-                throw new InvalidOperationException("outgoing amount is greater than balance in source.");
-            }
 
-            var transactionBuilder = _explorerClient.Network.NBitcoinNetwork
+            return _explorerClient.Network.NBitcoinNetwork
                 .CreateTransactionBuilder()
                 .AddCoins(utxos.GetUnspentCoins());
+        }
 
+        public async Task<Transaction> BuildTransaction(
+            IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing,
+            IEnumerable<PrivateKeyDetails> privateKeyDetails = null)
+        {
+            var txBuilder = await CreateTransactionBuilder();
+            await AddTxOutsToTransaction(txBuilder, outgoing);
+            if (privateKeyDetails?.Any() ?? false)
+            {
+                foreach (var privateKeyDetail in privateKeyDetails)
+                {
+                    await SignTransaction(txBuilder, privateKeyDetail);
+                }
+            }
 
+            return txBuilder.BuildTransaction(true);
+        }
+
+        public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
+            IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing)
+        {
             var feesSubtracted = false;
             foreach (var tuple in outgoing)
             {
@@ -87,6 +104,23 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             transactionBuilder.SendEstimatedFees(recommendedFee.FeeRate);
 
             return transactionBuilder;
+        }
+
+        public static ExtKey GetKeyFromDetails(PrivateKeyDetails privateKeyDetails, Network network)
+        {
+            if (!string.IsNullOrEmpty(privateKeyDetails.MnemonicSeed))
+            {
+                return new Mnemonic(privateKeyDetails.MnemonicSeed).DeriveExtKey(
+                    string.IsNullOrEmpty(privateKeyDetails.Passphrase) ? null : privateKeyDetails.Passphrase);
+            }
+
+            return ExtKey.Parse(privateKeyDetails.WIF, network);
+        }
+
+        public async Task SignTransaction(TransactionBuilder transactionBuilder, PrivateKeyDetails privateKeyDetails)
+        {
+            await SignTransaction(transactionBuilder,
+                GetKeyFromDetails(privateKeyDetails, _explorerClient.Network.NBitcoinNetwork));
         }
 
         public async Task SignTransaction(TransactionBuilder transactionBuilder, ExtKey extKey)
