@@ -16,9 +16,15 @@
 }
 
 <div class="d-flex justify-content-between">
-    
 
-    <h2>@ViewData["Title"]</h2><a asp-action="GetWallet" asp-route-cryptoCode="@Model.CryptoCode" class="btn btn-secondary btn-sm">Generate new wallet</a>
+
+    <h2>@ViewData["Title"]</h2>
+    <div>
+        @foreach (var cryptoCode in Model.CryptoCodes)
+        {
+            <a asp-action="GetWallet" asp-route-cryptoCode="@cryptoCode" asp-route-mnemonic="" class="btn btn-secondary btn-sm mr-2">Generate new @cryptoCode wallet</a>
+        }
+    </div>
 </div>
 
 
@@ -44,7 +50,7 @@
             <label class="control-label">Secret</label>
             <input readonly class="form-control" value="@secret"/>
         </div>
-        
+
         <div class="form-group">
             <label class="control-label">Address</label>
             <input readonly class="form-control" value="@address"/>
