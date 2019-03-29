@@ -81,7 +81,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 State = state.GetValueOrDefault(NBXplorerState.NotConnected),
                 Error = error
             };
-            _logger.LogWarning($"summary updated {client.CryptoCode} {JObject.FromObject(summary)}");
+            _logger.LogInformation($"summary updated {client.CryptoCode}");
             _summaries.AddOrReplace(client.CryptoCode, summary);
         }
     }
