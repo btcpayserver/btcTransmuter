@@ -137,7 +137,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                     });
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(5),
+                await Task.Delay(TimeSpan.FromMinutes(1),
                     cancellationToken);
             }
         }
