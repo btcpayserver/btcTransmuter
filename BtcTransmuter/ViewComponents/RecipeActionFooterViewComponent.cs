@@ -57,6 +57,8 @@ namespace BtcTransmuter.ViewComponents
                      properties.Add("PreviousAction", GetRecursiveAvailableProperties(type));
                  }
                  
+                 //TODO: query recipe action id above and retrieve its previous ones
+                 
             }
 
             return View(new RecipeActionFooterViewModel()

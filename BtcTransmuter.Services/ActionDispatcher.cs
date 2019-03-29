@@ -105,7 +105,10 @@ namespace BtcTransmuter.Services
                     data.Remove("PreviousAction");
                 }
 
+                var depth =  data.Keys.Where(s => s.StartsWith("ActionData", StringComparison.InvariantCultureIgnoreCase))
+                    .Select(s => int.Parse(s.Replace("ActionData", ""))).DefaultIfEmpty(-1).Max();
                 data.Add("PreviousAction", (path.Data, path.DataJson));
+                data.Add($"ActionData{depth+1}", (path.Data, path.DataJson));
 
                 await RecursiveActionExecution(recipeActions, data);
             }
