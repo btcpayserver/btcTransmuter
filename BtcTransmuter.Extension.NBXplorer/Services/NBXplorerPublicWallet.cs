@@ -36,11 +36,11 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             return x;
         }
 
-        public async Task<TransactionBuilder> BuildTransaction(Money amount, IDestination destination)
+        public async Task<TransactionBuilder> BuildTransaction(Money amount, IDestination destination, bool subtractFee)
         {
-            return await BuildTransaction(new List<(Money amount, IDestination destination)>()
+            return await BuildTransaction(new List<(Money amount, IDestination destination, bool subtractFee)>()
             {
-                (amount, destination)
+                (amount, destination, subtractFee)
             });
         }
 
@@ -111,8 +111,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                     return BitcoinAddress.Create((await _explorerClient.GetUnusedAsync(
                         derivationSchemeTrackedSource.DerivationStrategy,
                         derivationFeature, 0, true)).Address, _explorerClient.Network.NBitcoinNetwork);
-                
             }
+
             throw new InvalidOperationException();
         }
     }
