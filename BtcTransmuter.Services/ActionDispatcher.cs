@@ -95,6 +95,10 @@ namespace BtcTransmuter.Services
         private async Task RecursiveActionExecution(Queue<RecipeAction> recipeActions,
             Dictionary<string, (object data, string json)> data)
         {
+            if (!recipeActions.Any())
+            {
+                return;
+            }
             var action = recipeActions.Dequeue();
             var result = await Dispatch(data, action);
             var continuablePaths = result.Where(i => i.Executed);
@@ -106,6 +110,7 @@ namespace BtcTransmuter.Services
                 }
 
                 var depth = data.Keys
+                        
                     .Where(s => s.StartsWith("ActionData", StringComparison.InvariantCultureIgnoreCase))
                     .Select(s => int.Parse(s.Replace("ActionData", ""))).DefaultIfEmpty(-1).Max();
                 data.Add("PreviousAction", (path.Data, path.DataJson));
