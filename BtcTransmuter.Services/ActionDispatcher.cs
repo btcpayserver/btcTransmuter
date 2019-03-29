@@ -41,7 +41,7 @@ namespace BtcTransmuter.Services
                 {
                     var actionHandlerResult = await actionHandler.Execute(additionalData, recipeAction);
                     result.Add(actionHandlerResult);
-                    
+
                     await _recipeManager.AddRecipeInvocation(new RecipeInvocation()
                     {
                         RecipeId = recipeAction.RecipeId,
@@ -56,7 +56,7 @@ namespace BtcTransmuter.Services
                     {
                         _logger.LogInformation(
                             $"{recipeAction.ActionId} for recipe {recipeAction.RecipeId} was executed");
-                        
+
                         continue;
                     }
 
@@ -105,10 +105,11 @@ namespace BtcTransmuter.Services
                     data.Remove("PreviousAction");
                 }
 
-                var depth =  data.Keys.Where(s => s.StartsWith("ActionData", StringComparison.InvariantCultureIgnoreCase))
+                var depth = data.Keys
+                    .Where(s => s.StartsWith("ActionData", StringComparison.InvariantCultureIgnoreCase))
                     .Select(s => int.Parse(s.Replace("ActionData", ""))).DefaultIfEmpty(-1).Max();
                 data.Add("PreviousAction", (path.Data, path.DataJson));
-                data.Add($"ActionData{depth+1}", (path.Data, path.DataJson));
+                data.Add($"ActionData{depth + 1}", (path.Data, path.DataJson));
 
                 await RecursiveActionExecution(recipeActions, data);
             }
