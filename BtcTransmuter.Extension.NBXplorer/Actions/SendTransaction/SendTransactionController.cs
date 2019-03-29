@@ -97,6 +97,21 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 ModelState.AddModelError(string.Empty,
                     "Please add at least one transaction output");
             }
+            else
+            {
+
+                var subtractFeesOutputs = viewModel.Outputs.Select((output, i) => (output, i))
+                    .Where(tuple => tuple.Item1.SubtractFeesFromOutput);
+
+                if (subtractFeesOutputs.Count() > 1)
+                {
+                    foreach (var subtractFeesOutput in subtractFeesOutputs)
+                    {
+                        viewModel.AddModelError(model => model.Outputs[subtractFeesOutput.Item2].SubtractFeesFromOutput,
+                            "You can only subtract fees from one output", ModelState);
+                    }
+                }
+            }
 
             if ((!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.Address)) ||
                 string.IsNullOrEmpty(viewModel.DerivationStrategy) && string.IsNullOrEmpty(viewModel.Address))

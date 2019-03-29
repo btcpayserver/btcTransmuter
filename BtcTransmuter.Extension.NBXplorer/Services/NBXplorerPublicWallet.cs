@@ -45,7 +45,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
         }
 
         public async Task<TransactionBuilder> BuildTransaction(
-            IEnumerable<(Money amount, IDestination destination)> outgoing)
+            IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing)
         {
             var utxos = await GetUTXOs();
             var balance = GetBalance(utxos);
@@ -60,9 +60,15 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 .AddCoins(utxos.GetUnspentCoins());
 
 
+            var feesSubtracted = false;
             foreach (var tuple in outgoing)
             {
                 transactionBuilder.Send(tuple.destination, tuple.amount);
+                if (tuple.subtractFee)
+                {
+                    transactionBuilder.SubtractFees();
+                    feesSubtracted = true;
+                }
             }
 
             switch (TrackedSource)

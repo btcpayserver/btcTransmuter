@@ -68,7 +68,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 await wallet.BuildTransaction(actionData.Outputs.Select(output =>
                     (Money.Parse(InterpolateString(output.Amount, data)),
                         (IDestination) BitcoinAddress.Create(InterpolateString(output.DestinationAddress, data),
-                            explorerClient.Network.NBitcoinNetwork))));
+                            explorerClient.Network.NBitcoinNetwork), output.SubtractFeesFromOutput)));
 
 
             foreach (var privateKey in actionData.PrivateKeys)
@@ -86,8 +86,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 
                 await wallet.SignTransaction(txBuilder, key);
             }
-            
 
+            
+            
             var tx = txBuilder.BuildTransaction(true);
             var result = await wallet.BroadcastTransaction(tx);
             return new NBXplorerActionHandlerResult<BroadcastResult>(

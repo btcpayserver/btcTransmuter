@@ -88,7 +88,11 @@
                         <input asp-for="Outputs[index].DestinationAddress" class="form-control"/>
                         <span asp-validation-for="Outputs[index].DestinationAddress" class="text-danger"></span>
                     </div>
-
+                    <div class="form-group">
+                        <label asp-for="Outputs[index].SubtractFeesFromOutput" class="control-label"></label>
+                        <input type="check" asp-for="Outputs[index].SubtractFeesFromOutput" class="form-check" />
+                        <span asp-validation-for="Outputs[index].SubtractFeesFromOutput" class="text-danger"></span>
+                    </div>
                 </div>
                 <div>
                     <button type="submit" name="action" value="@($"remove-output:{index}")" class="btn btn-danger">Remove</button>
