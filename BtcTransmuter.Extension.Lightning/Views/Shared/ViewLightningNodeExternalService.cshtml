@@ -1,17 +1,20 @@
 @using BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
+@using BTCPayServer.Lightning
 @model BtcTransmuter.Data.Entities.ExternalServiceData
 
 @{
     var service = new LightningNodeService(Model, null, null, null);
     var data = service.GetData();
+    LightningConnectionString.TryParse(data.ConnectionString, false, out var connectionString,
+        out var error);
 }
 
 <dl class="dl-horizontal">
     <dt>
-        Name
+        Node
     </dt>
     <dd>
-        @data.ConnectionString
+        @connectionString.ConnectionType - @connectionString.BaseUri
     </dd>
     <dt>
         Crypto
