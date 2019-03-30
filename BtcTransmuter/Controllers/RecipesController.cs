@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Models;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
@@ -75,7 +76,7 @@ namespace BtcTransmuter.Controllers
 
 
         [HttpGet("{id}/logs")]
-        public async Task<IActionResult> GetRecipeLogs(string id)
+        public async Task<IActionResult> GetRecipeLogs(string id, int skip = 0, int take = 100)
         {
             var recipe = await _recipeManager.GetRecipe(id, _userManager.GetUserId(User));
             if (recipe == null)
@@ -83,10 +84,25 @@ namespace BtcTransmuter.Controllers
                 return GetNotFoundActionResult();
             }
 
+            var recipeInvocations = await _recipeManager.GetRecipeInvocations(new RecipeInvocationsQuery()
+            {
+                Skip = skip,
+                Take = take,
+                RecipeId = id,
+                OrderBy = new OrderBy<RecipeInvocationsQuery.RecipeInvocationsQueryOrderBy>()
+                {
+                    Field = RecipeInvocationsQuery.RecipeInvocationsQueryOrderBy.Timestamp,
+                    Direction = OrderDirection.Descending
+                }
+            });
+
             return View(new GetRecipeLogsViewModel()
             {
                 Name = recipe.Name,
-                RecipeInvocations = recipe.RecipeInvocations.OrderByDescending(a => a.Timestamp).ToList()
+                Id = id,
+                Skip = skip,
+                Take = take,
+                RecipeInvocations = recipeInvocations.ToList()
             });
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Models;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
@@ -25,7 +26,7 @@ namespace BtcTransmuter.Services
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
-                    var queryable = context.Recipes
+                    var includableQueryable = context.Recipes
                         .Include(recipe => recipe.RecipeActionGroups)
                         .ThenInclude(group => group.RecipeActions)
                         .ThenInclude(action => action.ExternalService)
@@ -34,9 +35,14 @@ namespace BtcTransmuter.Services
                         .Include(recipe => recipe.RecipeActions)
                         .ThenInclude(action => action.RecipeInvocations)
                         .Include(recipe => recipe.RecipeTrigger)
-                        .ThenInclude(trigger => trigger.ExternalService)
-                        .Include(recipe => recipe.RecipeInvocations)
-                        .AsQueryable();
+                        .ThenInclude(trigger => trigger.ExternalService);
+
+                    if (query.IncludeRecipeInvocations)
+                    {
+                        includableQueryable.Include(recipe => recipe.RecipeInvocations);
+                    }
+
+                    var queryable = includableQueryable.AsQueryable();
 
                     if (query.Enabled.HasValue)
                     {
@@ -59,6 +65,39 @@ namespace BtcTransmuter.Services
                     }
 
                     return await queryable.ToListAsync();
+                }
+            }
+        }
+
+        public async Task<IEnumerable<RecipeInvocation>> GetRecipeInvocations(RecipeInvocationsQuery query)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    var queryable = context.RecipeInvocations
+                        .Include(invocation => invocation.RecipeAction)
+                        .Include(invocation => invocation.Recipe)
+                        .ThenInclude(recipe => recipe.RecipeTrigger)
+                        .AsQueryable();
+                    if (query.OrderBy != null)
+                    {
+                        switch (query.OrderBy.Field)
+                        {
+                            case RecipeInvocationsQuery.RecipeInvocationsQueryOrderBy.Timestamp:
+                                queryable = query.OrderBy.Direction == OrderDirection.Ascending
+                                    ? queryable.OrderBy(invocation => invocation.Timestamp)
+                                    : queryable.OrderByDescending(invocation => invocation.Timestamp);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+
+                    return await queryable
+                        .Where(invocation =>
+                            invocation.RecipeId.Equals(query.RecipeId, StringComparison.InvariantCultureIgnoreCase))
+                        .Skip(query.Skip).Take(query.Take).ToListAsync();
                 }
             }
         }
@@ -162,13 +201,14 @@ namespace BtcTransmuter.Services
                         .SingleAsync(group =>
                             group.Id.Equals(recipeActionGroupId, StringComparison.InvariantCultureIgnoreCase));
 
-                    
+
                     actionGroup.RecipeActions.ForEach(action =>
                     {
                         if (actionsOrder.ContainsKey(action.Id))
                         {
                             action.Order = actionsOrder[action.Id];
-                            foreach (var entityEntry in context.ChangeTracker.Entries().Where(entry => entry.Entity is RecipeAction))
+                            foreach (var entityEntry in context.ChangeTracker.Entries()
+                                .Where(entry => entry.Entity is RecipeAction))
                             {
                                 entityEntry.State = EntityState.Modified;
                             }

@@ -7,5 +7,8 @@ namespace BtcTransmuter.Models
     {
         public List<RecipeInvocation> RecipeInvocations { get; set; }
         public string Name { get; set; }
+        public int  Skip { get; set; }
+        public int  Take { get; set; }
+        public object Id { get; set; }
     }
 }
