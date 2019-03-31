@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -55,20 +56,34 @@ namespace BtcTransmuter
             services.AddMemoryCache();
             var dataProtectionBuilder =services.AddDataProtection();
             var dbConnString = Configuration.GetValue<string>("ConnectionStrings_Database");
+            var databaseType = Configuration.GetValue<string>("DBTYPE", "sqlite");
 
-            dbFilePath = dbConnString.Substring(dbConnString.IndexOf("Data Source=") + "Data Source=".Length);
-            dbFilePath = dbFilePath.Substring(0, dbFilePath.IndexOf(";"));
-            if (!string.IsNullOrEmpty(Path.GetDirectoryName(dbFilePath)))
-            {
-                var dir = Directory.CreateDirectory(Path.GetDirectoryName(dbFilePath));
-                
-                //TODO: move this away from the same location as db!
-                dataProtectionBuilder.PersistKeysToFileSystem(dir);
-            }
+            var protectionKeysFileSystem = Configuration.GetValue<string>("DATAPROTECTION_DIR",null);
 
             Console.WriteLine($"Connecting to sqlite db with: {dbConnString}");
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(dbConnString));
+            {
+                switch (databaseType)
+                {
+                    case "sqlite":
+                        dbFilePath = dbConnString.Substring(dbConnString.IndexOf("Data Source=") + "Data Source=".Length);
+                        dbFilePath = dbFilePath.Substring(0, dbFilePath.IndexOf(";"));
+                        
+                        if (!string.IsNullOrEmpty(Path.GetDirectoryName(dbFilePath)))
+                        {
+                            if (protectionKeysFileSystem == null)
+                            {
+                                protectionKeysFileSystem = Path.GetDirectoryName(dbFilePath);
+                            }
+                            Directory.CreateDirectory(Path.GetDirectoryName(dbFilePath));
+                
+                        }
+                        options.UseSqlite(dbConnString);
+                        break;
+                }
+            });
+            
+            dataProtectionBuilder.PersistKeysToFileSystem(new DirectoryInfo(Path.GetDirectoryName(protectionKeysFileSystem)));
 
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
