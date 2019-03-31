@@ -57,7 +57,14 @@ namespace BtcTransmuter.Data
                 .WithOne(action => action.RecipeActionGroup)
                 .OnDelete(DeleteBehavior.Cascade);
             
-            builder.AddEncryptionValueConvertersToDecoratedEncryptedColumns(_dataProtectionProvider.CreateProtector("ApplicationDbContext"));
+            builder.Entity<RecipeAction>()
+                .HasMany(l => l.RecipeInvocations)
+                .WithOne(action => action.RecipeAction)
+                .OnDelete(DeleteBehavior.Cascade);
+            if (_dataProtectionProvider != null)
+            {
+                builder.AddEncryptionValueConvertersToDecoratedEncryptedColumns(_dataProtectionProvider.CreateProtector("ApplicationDbContext"));
+            }
         }
     }
 
