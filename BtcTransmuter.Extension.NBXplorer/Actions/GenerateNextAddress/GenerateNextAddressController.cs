@@ -1,19 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
-using BtcTransmuter.Extension.NBXplorer.Models;
-using BtcTransmuter.Extension.NBXplorer.Services;
+using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
-using NBXplorer.DerivationStrategy;
-using NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
 {
@@ -23,78 +20,63 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
         GenerateNextAddressController.GenerateNextAddressViewModel,
         GenerateNextAddressData>
     {
-        private readonly NBXplorerOptions _nbXplorerOptions;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
-        private readonly DerivationSchemeParser _derivationSchemeParser;
-        private readonly NBXplorerClientProvider _nbXplorerClientProvider;
+        private readonly IExternalServiceManager _externalServiceManager;
 
         public GenerateNextAddressController(IMemoryCache memoryCache,
             UserManager<User> userManager,
-            NBXplorerOptions nbXplorerOptions,
-            IRecipeManager recipeManager, DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
-            DerivationSchemeParser derivationSchemeParser, NBXplorerClientProvider nbXplorerClientProvider) : base(
+            IRecipeManager recipeManager,
+            IExternalServiceManager externalServiceManager) : base(
             memoryCache,
             userManager, recipeManager)
         {
-            _nbXplorerOptions = nbXplorerOptions;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
-            _derivationSchemeParser = derivationSchemeParser;
-            _nbXplorerClientProvider = nbXplorerClientProvider;
+            _externalServiceManager = externalServiceManager;
         }
 
-        protected override Task<GenerateNextAddressViewModel> BuildViewModel(RecipeAction from)
+        protected override async Task<GenerateNextAddressViewModel> BuildViewModel(RecipeAction from)
         {
-            var fromData = from.Get<GenerateNextAddressData>();
-            return Task.FromResult(new GenerateNextAddressViewModel
+            var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+            {
+                Type = new[] {NBXplorerWalletService.NBXplorerWalletServiceType},
+                UserId = GetUserId()
+            });
+            return new GenerateNextAddressViewModel
             {
                 RecipeId = from.RecipeId,
-                CryptoCode = fromData.CryptoCode,
-                DerivationStrategy = fromData.DerivationStrategy,
-                CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
-                    fromData.CryptoCode)
-            });
+                ExternalServiceId = from.ExternalServiceId,
+                ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
+                    nameof(ExternalServiceData.Name), from.ExternalServiceId)
+            };
         }
 
         protected override async Task<(RecipeAction ToSave, GenerateNextAddressViewModel showViewModel)> BuildModel(
             GenerateNextAddressViewModel viewModel, RecipeAction mainModel)
         {
-            viewModel.CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
-                viewModel.CryptoCode);
-
-
-            DerivationStrategyBase derivationStrategy = null;
-
-            if (!string.IsNullOrEmpty(viewModel.DerivationStrategy) && !string.IsNullOrEmpty(viewModel.CryptoCode))
-            {
-                try
-                {
-                    var factory =
-                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
-
-                    derivationStrategy = _derivationSchemeParser.Parse(factory, viewModel.DerivationStrategy);
-                }
-                catch
-                {
-                    ModelState.AddModelError(nameof(viewModel.DerivationStrategy), "Invalid Derivation Scheme");
-                }
-            }
-
             if (ModelState.IsValid)
             {
+                mainModel.ExternalServiceId = viewModel.ExternalServiceId;
                 mainModel.Set<GenerateNextAddressData>(viewModel);
-                var client = _nbXplorerClientProvider.GetClient(viewModel.CryptoCode);
-                client.Track(TrackedSource.Create(derivationStrategy));
                 return (mainModel, null);
             }
 
+            var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+            {
+                Type = new[] {NBXplorerWalletService.NBXplorerWalletServiceType},
+                UserId = GetUserId()
+            });
+            viewModel.ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
+                nameof(ExternalServiceData.Name), viewModel.ExternalServiceId);
             return (null, viewModel);
         }
 
-        public class GenerateNextAddressViewModel : GenerateNextAddressData, IActionViewModel
+        public class GenerateNextAddressViewModel : GenerateNextAddressData, IActionViewModel, IUseExternalService
         {
             public string RecipeId { get; set; }
             public string RecipeActionIdInGroupBeforeThisOne { get; set; }
-            public SelectList CryptoCodes { get; set; }
+            public SelectList ExternalServices { get; set; }
+
+            [Display(Name = "NBXplorer Wallet External Service")]
+            [Required]
+            public string ExternalServiceId { get; set; }
         }
     }
 }

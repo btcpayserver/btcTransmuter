@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using NBitcoin;
@@ -46,33 +47,21 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             Dictionary<string, object> data, RecipeAction recipeAction,
             SendTransactionData actionData)
         {
-            var explorerClient = _nbXplorerClientProvider.GetClient(actionData.CryptoCode);
-            var factory = _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(actionData.CryptoCode);
-            NBXplorerPublicWallet wallet;
-            if (string.IsNullOrEmpty(actionData
-                .DerivationStrategy))
-            {
-                wallet = await _nbXplorerPublicWalletProvider.Get(actionData.CryptoCode,
-                    BitcoinAddress.Create(
-                        actionData.Address,
-                        explorerClient.Network.NBitcoinNetwork));
-            }
-            else
-            {
-                wallet = await _nbXplorerPublicWalletProvider.Get(actionData.CryptoCode,
-                    _derivationSchemeParser.Parse(factory,
-                        actionData.DerivationStrategy));
-            }
+            var walletService = new NBXplorerWalletService(recipeAction.ExternalService, _nbXplorerPublicWalletProvider,
+                _derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider);
 
+            var wallet = await walletService.ConstructClient();
+            var walletData = walletService.GetData();
+            var explorerClient = _nbXplorerClientProvider.GetClient(walletData.CryptoCode);
             var tx = await wallet.BuildTransaction(actionData.Outputs.Select(output =>
                     (Money.Parse(InterpolateString(output.Amount, data)),
                         (IDestination) BitcoinAddress.Create(InterpolateString(output.DestinationAddress, data),
                             explorerClient.Network.NBitcoinNetwork), output.SubtractFeesFromOutput)),
-                actionData.PrivateKeys);
+                walletData.PrivateKeys);
             var result = await wallet.BroadcastTransaction(tx);
 
             return new NBXplorerActionHandlerResult<BroadcastResult>(
-                _nbXplorerClientProvider.GetClient(actionData.CryptoCode))
+                _nbXplorerClientProvider.GetClient(walletData.CryptoCode))
             {
                 Executed = result.Success,
                 Data = result,

@@ -77,14 +77,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
         public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
             IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing)
         {
-            var feesSubtracted = false;
             foreach (var tuple in outgoing)
             {
                 transactionBuilder.Send(tuple.destination, tuple.amount);
                 if (tuple.subtractFee)
                 {
                     transactionBuilder.SubtractFees();
-                    feesSubtracted = true;
                 }
             }
 

@@ -2,14 +2,16 @@ using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using BtcTransmuter.Extension.NBXplorer.Services;
-using NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
 {
     public class NBXplorerBalanceTriggerHandler : BaseTriggerHandler<NBXplorerBalanceTriggerData,
         NBXplorerBalanceTriggerParameters>
     {
+        private readonly NBXplorerClientProvider _nbXplorerClientProvider;
+        private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         public override string TriggerId => NBXplorerBalanceTrigger.Id;
@@ -27,58 +29,36 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
 
         public NBXplorerBalanceTriggerHandler(
             NBXplorerClientProvider nbXplorerClientProvider,
+            NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             DerivationSchemeParser derivationSchemeParser)
         {
+            _nbXplorerClientProvider = nbXplorerClientProvider;
+            _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _derivationSchemeParser = derivationSchemeParser;
         }
 
 
-        protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
+        protected override async Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             NBXplorerBalanceTriggerData triggerData,
             NBXplorerBalanceTriggerParameters parameters)
         {
-            if (!triggerData.CryptoCode.Equals(parameters.CryptoCode,
+
+            var walletService = new NBXplorerWalletService(recipeTrigger.ExternalService,
+                _nbXplorerPublicWalletProvider,
+                _derivationSchemeParser,
+                _derivationStrategyFactoryProvider,
+                _nbXplorerClientProvider);
+
+            var walletData = walletService.GetData();
+            if (!triggerData.CryptoCode.Equals(walletData.CryptoCode,
                 StringComparison.InvariantCultureIgnoreCase))
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            switch (triggerData.TrackedSource)
-            {
-                case AddressTrackedSource addressTrackedSource:
-                    if (string.IsNullOrEmpty(parameters.Address))
-                    {
-                        return Task.FromResult(false);
-                    }
-
-                    if (addressTrackedSource.Address.ToString()
-                        .Equals(parameters.Address, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        return Task.FromResult(IsBalanceWithinCriteria(triggerData, parameters));
-                    }
-
-                    break;
-                case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
-                    if (string.IsNullOrEmpty(parameters.DerivationStrategy))
-                    {
-                        return Task.FromResult(false);
-                    }
-
-                    var factory =
-                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(parameters.CryptoCode);
-
-                    if (derivationSchemeTrackedSource.DerivationStrategy ==
-                        _derivationSchemeParser.Parse(factory, parameters.DerivationStrategy))
-                    {
-                        return Task.FromResult(IsBalanceWithinCriteria(triggerData, parameters));
-                    }
-
-                    break;
-            }
-
-            return Task.FromResult(false);
+            return await walletService.ConstructTrackedSource() == triggerData.TrackedSource && IsBalanceWithinCriteria(triggerData, parameters);
         }
 
         private static bool IsBalanceWithinCriteria(NBXplorerBalanceTriggerData triggerData,

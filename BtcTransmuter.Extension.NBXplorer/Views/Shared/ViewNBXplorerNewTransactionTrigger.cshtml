@@ -6,14 +6,5 @@
 }
 
 <div>
-    New Transaction on @data.CryptoCode to 
-    @if (!string.IsNullOrEmpty(data.Address))
-    {
-        <span>address <kbd>@data.Address</kbd></span>
-    }
-    @if (!string.IsNullOrEmpty(data.DerivationStrategy))
-    {
-        <span>derivation scheme <kbd>@data.DerivationStrategy</kbd></span>
-    }
-    at <kbd>@data.ConfirmationsRequired</kbd> confirmations
+    New Transaction at <kbd>@data.ConfirmationsRequired</kbd> confirmations
 </div>

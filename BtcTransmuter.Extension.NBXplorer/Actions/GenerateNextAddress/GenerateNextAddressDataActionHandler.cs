@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using NBitcoin;
 
@@ -42,13 +43,14 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
         protected override async Task<TypedActionHandlerResult<BitcoinAddress>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             GenerateNextAddressData actionData)
         {
-            var factory = _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(actionData.CryptoCode);
-            var wallet = await _nbXplorerPublicWalletProvider.Get(actionData.CryptoCode,
-                _derivationSchemeParser.Parse(factory,
-                    actionData.DerivationStrategy));
+
+            var walletService = new NBXplorerWalletService(recipeAction.ExternalService, _nbXplorerPublicWalletProvider,
+                _derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider);
+            var walletData = walletService.GetData();
+            var wallet = await walletService.ConstructClient();
             var result = await
                 wallet.GetNextAddress();
-            return new NBXplorerActionHandlerResult<BitcoinAddress>(_nbXplorerClientProvider.GetClient(actionData.CryptoCode))
+            return new NBXplorerActionHandlerResult<BitcoinAddress>(_nbXplorerClientProvider.GetClient(walletData.CryptoCode))
             {
                 Executed = true,
                 TypedData = result,

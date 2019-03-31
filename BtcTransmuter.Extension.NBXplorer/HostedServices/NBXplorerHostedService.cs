@@ -2,9 +2,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Models;
+using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance;
@@ -27,6 +29,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly IRecipeManager _recipeManager;
+        private readonly IExternalServiceManager _externalServiceManager;
         private readonly NBXplorerSummaryProvider _nbXplorerSummaryProvider;
         private readonly ILogger<NBXplorerHostedService> _logger;
         private readonly ITriggerDispatcher _triggerDispatcher;
@@ -37,6 +40,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             IRecipeManager recipeManager,
+            IExternalServiceManager externalServiceManager,
             NBXplorerSummaryProvider nbXplorerSummaryProvider, ILogger<NBXplorerHostedService> logger,
             ITriggerDispatcher triggerDispatcher)
         {
@@ -46,6 +50,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _recipeManager = recipeManager;
+            _externalServiceManager = externalServiceManager;
             _nbXplorerSummaryProvider = nbXplorerSummaryProvider;
             _logger = logger;
             _triggerDispatcher = triggerDispatcher;
@@ -88,41 +93,32 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
-                {
-                    Enabled = true,
-                    TriggerId = NBXplorerBalanceTrigger.Id
-                });
+                var walletExternalServices = await
+                    _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
+                    {
+                        Type = new string[]
+                        {
+                            NBXplorerWalletService.NBXplorerWalletServiceType
+                        }
+                    });
 
-                var recipesGroupedBySameSource = recipes
-                    .Select(recipe => (recipe, recipe.RecipeTrigger.Get<NBXplorerBalanceTriggerParameters>()))
+                var groupedWalletEService = walletExternalServices
+                    .Select(data => new NBXplorerWalletService(data, _nbXplorerPublicWalletProvider,
+                        _derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider))
+                    .Select(data => (data, data.GetData()))
                     .GroupBy(
-                        tuple => $"{tuple.Item2.CryptoCode}_{tuple.Item2.Address}_{tuple.Item2.DerivationStrategy}");
+                        tuple => $"{tuple.Item2.CryptoCode}_{tuple.Item2.Address}_{tuple.Item2.DerivationStrategy}")
+                    .ToList();
 
 
-                foreach (var valueTuples in recipesGroupedBySameSource)
+                foreach (var valueTuples in groupedWalletEService)
                 {
                     var first = valueTuples.First();
 
-                    var explorerClient = _nbXplorerClientProvider.GetClient(first.Item2.CryptoCode);
-                    var factory =
-                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(explorerClient.CryptoCode);
+                    var wallet = await first.Item1.ConstructClient();
 
-                    NBXplorerPublicWallet wallet;
-                    if (string.IsNullOrEmpty(first.Item2
-                        .DerivationStrategy))
-                    {
-                        wallet = await _nbXplorerPublicWalletProvider.Get(explorerClient.CryptoCode,
-                            BitcoinAddress.Create(
-                                first.Item2.Address,
-                                explorerClient.Network.NBitcoinNetwork));
-                    }
-                    else
-                    {
-                        wallet = await _nbXplorerPublicWalletProvider.Get(explorerClient.CryptoCode,
-                            _derivationSchemeParser.Parse(factory,
-                                first.Item2.DerivationStrategy));
-                    }
+                    var explorerClient = _nbXplorerClientProvider.GetClient(first.Item2.CryptoCode);
+
 
                     var balance = await wallet.GetBalance();
 
@@ -209,6 +205,13 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                     {
                                         if (tx.Item1.Confirmations != tx.Item2.Result.Confirmations)
                                         {
+                                            var walletService = new NBXplorerWalletService(
+                                                recipe.RecipeTrigger.ExternalService, _nbXplorerPublicWalletProvider,
+                                                _derivationSchemeParser, _derivationStrategyFactoryProvider,
+                                                _nbXplorerClientProvider);
+                                            
+                                            
+                                            
                                             await _triggerDispatcher.DispatchTrigger(
                                                 new NBXplorerNewTransactionTrigger(explorerClient)
                                                 {
@@ -220,21 +223,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                                             CryptoCode = evt.CryptoCode,
                                                             BlockId = newBlockEvent.Hash,
                                                             TransactionData = tx.Item2.Result,
-                                                            TrackedSource =
-                                                                string.IsNullOrEmpty(triggerParameters
-                                                                    .DerivationStrategy)
-                                                                    ? (TrackedSource) TrackedSource.Create(
-                                                                        BitcoinAddress.Create(triggerParameters.Address,
-                                                                            explorerClient.Network.NBitcoinNetwork))
-                                                                    : (TrackedSource) TrackedSource.Create(
-                                                                        _derivationSchemeParser.Parse(factory,
-                                                                            triggerParameters.DerivationStrategy)),
-                                                            DerivationStrategy =
-                                                                string.IsNullOrEmpty(triggerParameters
-                                                                    .DerivationStrategy)
-                                                                    ? null
-                                                                    : _derivationSchemeParser.Parse(factory,
-                                                                        triggerParameters.DerivationStrategy),
+                                                            TrackedSource = await walletService.ConstructTrackedSource()
                                                         }
                                                     }
                                                 });

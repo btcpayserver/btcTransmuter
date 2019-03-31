@@ -5,6 +5,7 @@ using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
+using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using NBXplorer.Models;
 
@@ -15,6 +16,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
     {
         private readonly IRecipeManager _recipeManager;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
+        private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
+        private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         public override string TriggerId => NBXplorerNewTransactionTrigger.Id;
         public override string Name => "New Transaction";
@@ -32,10 +35,14 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         public NBXplorerNewTransactionTriggerHandler(
             IRecipeManager recipeManager,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
+            NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
+            NBXplorerClientProvider nbXplorerClientProvider,
             DerivationSchemeParser derivationSchemeParser)
         {
             _recipeManager = recipeManager;
             _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
+            _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
+            _nbXplorerClientProvider = nbXplorerClientProvider;
             _derivationSchemeParser = derivationSchemeParser;
         }
 
@@ -44,48 +51,23 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             NBXplorerNewTransactionTriggerData triggerData,
             NBXplorerNewTransactionTriggerParameters parameters)
         {
-            if (!triggerData.CryptoCode.Equals(parameters.CryptoCode,
+            var walletService = new NBXplorerWalletService(recipeTrigger.ExternalService,
+                _nbXplorerPublicWalletProvider, _derivationSchemeParser, _derivationStrategyFactoryProvider,
+                _nbXplorerClientProvider);
+            var trackedSource = await walletService.ConstructTrackedSource();
+
+            var walletData = walletService.GetData();
+            
+            if (!triggerData.CryptoCode.Equals(walletData.CryptoCode,
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }
 
-            if (triggerData.Event != null)
+            if (triggerData.Event != null && triggerData.Event.TrackedSource == trackedSource)
             {
-                switch (triggerData.Event.TrackedSource)
-                {
-                    case AddressTrackedSource addressTrackedSource:
-                        if (string.IsNullOrEmpty(parameters.Address))
-                        {
-                            return false;
-                        }
-
-                        if (addressTrackedSource.Address.ToString()
-                            .Equals(parameters.Address, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            return await UpdateTxToRecipeTrigger(triggerData.Event.TransactionData, recipeTrigger,
-                                parameters);
-                        }
-
-                        break;
-                    case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
-                        if (string.IsNullOrEmpty(parameters.DerivationStrategy))
-                        {
-                            return false;
-                        }
-
-                        var factory =
-                            _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(parameters.CryptoCode);
-
-                        if (derivationSchemeTrackedSource.DerivationStrategy ==
-                            _derivationSchemeParser.Parse(factory, parameters.DerivationStrategy))
-                        {
-                            return await UpdateTxToRecipeTrigger(triggerData.Event.TransactionData, recipeTrigger,
-                                parameters);
-                        }
-
-                        break;
-                }
+                return await UpdateTxToRecipeTrigger(triggerData.Event.TransactionData, recipeTrigger,
+                    parameters);
             }
 
             return false;
