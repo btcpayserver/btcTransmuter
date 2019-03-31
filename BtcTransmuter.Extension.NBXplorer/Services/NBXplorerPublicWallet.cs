@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using NBitcoin;
+using NBitcoin.BIP174;
 using NBXplorer;
 using NBXplorer.DerivationStrategy;
 using NBXplorer.Models;

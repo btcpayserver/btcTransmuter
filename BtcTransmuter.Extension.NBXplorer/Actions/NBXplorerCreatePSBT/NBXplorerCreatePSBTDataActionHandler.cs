@@ -7,31 +7,32 @@ using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using NBitcoin;
+using NBitcoin.BIP174;
 using NBXplorer.Models;
 
-namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
+namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerCreatePSBT
 {
-    public class SendTransactionDataActionHandler : BaseActionHandler<SendTransactionData, BroadcastResult>
+    public class NBXplorerCreatePSBTDataActionHandler : BaseActionHandler<NBXplorerCreatePSBTData, PSBT>
     {
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
-        public override string ActionId => "SendTransaction";
-        public override string Name => "Send Transaction";
+        public override string ActionId => "NBXplorerCreatePSBT";
+        public override string Name => "Create PSBT";
 
         public override string Description =>
-            "Send an on chain transaction using NBXplorer";
+            "Create a partially signed built transaction";
 
-        public override string ViewPartial => "ViewSendTransactionAction";
+        public override string ViewPartial => "ViewNBXplorerCreatePSBTAction";
 
-        public override string ControllerName => "SendTransaction";
+        public override string ControllerName => "NBXplorerCreatePSBT";
 
-        public SendTransactionDataActionHandler()
+        public NBXplorerCreatePSBTDataActionHandler()
         {
         }
 
-        public SendTransactionDataActionHandler(
+        public NBXplorerCreatePSBTDataActionHandler(
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             NBXplorerClientProvider nbXplorerClientProvider,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
@@ -43,9 +44,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             _derivationSchemeParser = derivationSchemeParser;
         }
 
-        protected override async Task<TypedActionHandlerResult<BroadcastResult>> Execute(
+        protected override async Task<TypedActionHandlerResult<PSBT>> Execute(
             Dictionary<string, object> data, RecipeAction recipeAction,
-            SendTransactionData actionData)
+            NBXplorerCreatePSBTData actionData)
         {
             var walletService = new NBXplorerWalletService(recipeAction.ExternalService, _nbXplorerPublicWalletProvider,
                 _derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider);
@@ -58,14 +59,15 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                         (IDestination) BitcoinAddress.Create(InterpolateString(output.DestinationAddress, data),
                             explorerClient.Network.NBitcoinNetwork), output.SubtractFeesFromOutput)),
                 walletData.PrivateKeys);
-            var result = await wallet.BroadcastTransaction(tx);
 
-            return new NBXplorerActionHandlerResult<BroadcastResult>(
+            var psbt = PSBT.FromTransaction(tx);
+            
+            return new NBXplorerActionHandlerResult<PSBT>(
                 _nbXplorerClientProvider.GetClient(walletData.CryptoCode))
             {
-                Executed = result.Success,
-                Data = result,
-                Result = $"Tx broadcasted, {(result.Success ? "Successful" : "Unsuccessful")}, {result.RPCMessage}, {tx}"
+                Executed = true,
+                TypedData = psbt,
+                Result = $"PSBT created {psbt}"
             };
         }
     }
