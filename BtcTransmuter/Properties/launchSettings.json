@@ -19,7 +19,9 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ConnectionStrings_Database": "Data Source=mydb.db;",
+        "TRANSMUTER_Database": "Data Source=mydb.db;",
+        "TRANSMUTER_DatabaseType": "sqlite",
+        "TRANSMUTER_DataProtectionDir": "C:/transmuterkey",
         "ASPNETCORE_ENVIRONMENT": "Development",
 		"NBXplorer_Cryptos":"BTC,LTC",
 		"NBXplorer_Uri": "http://127.0.0.1:32838/",

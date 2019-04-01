@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -15,25 +10,20 @@ using Microsoft.EntityFrameworkCore;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
-using McMaster.NETCore.Plugins;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 
 namespace BtcTransmuter
 {
     public class Startup
     {
-        private string extensionsPath;
-        private string dbFilePath;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
         {
+            _hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
-
-            extensionsPath = Path.Combine(hostingEnvironment.ContentRootPath, "Extensions");
         }
 
         public IConfiguration Configuration { get; }
@@ -41,49 +31,44 @@ namespace BtcTransmuter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<IdentityOptions>(options =>
+            services.Configure<IdentityOptions>(identityOptions =>
             {
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredUniqueChars = 0;
-                options.Password.RequireNonAlphanumeric = false;
+                identityOptions.Password.RequireDigit = false;
+                identityOptions.Password.RequireLowercase = false;
+                identityOptions.Password.RequireUppercase = false;
+                identityOptions.Password.RequiredUniqueChars = 0;
+                identityOptions.Password.RequireNonAlphanumeric = false;
             });
 
             services.AddHttpClient();
             services.AddOptions();
             services.AddTransmuterServices();
             services.AddMemoryCache();
-            var dataProtectionBuilder =services.AddDataProtection();
-            var dbConnString = Configuration.GetValue<string>("ConnectionStrings_Database");
-            var databaseType = Configuration.GetValue<string>("DBTYPE", "sqlite");
 
-            var protectionKeysFileSystem = Configuration.GetValue<string>("DATAPROTECTION_DIR",null);
 
-            Console.WriteLine($"Connecting to sqlite db with: {dbConnString}");
-            services.AddDbContext<ApplicationDbContext>(options =>
+            var options = new BtcTransmuterOptions(Configuration, _hostingEnvironment);
+            services.AddSingleton(options);
+            Console.WriteLine($"Connecting to {options.DatabaseType} db with: {options.DatabaseConnectionString}");
+            services.AddDbContext<ApplicationDbContext>(builder =>
             {
-                switch (databaseType)
+                switch (options.DatabaseType)
                 {
-                    case "sqlite":
-                        dbFilePath = dbConnString.Substring(dbConnString.IndexOf("Data Source=") + "Data Source=".Length);
-                        dbFilePath = dbFilePath.Substring(0, dbFilePath.IndexOf(";"));
-                        
-                        if (!string.IsNullOrEmpty(Path.GetDirectoryName(dbFilePath)))
-                        {
-                            if (protectionKeysFileSystem == null)
-                            {
-                                protectionKeysFileSystem = Path.GetDirectoryName(dbFilePath);
-                            }
-                            Directory.CreateDirectory(Path.GetDirectoryName(dbFilePath));
-                
-                        }
-                        options.UseSqlite(dbConnString);
+                    case DatabaseType.Sqlite:
+                        builder.UseSqlite(options.DatabaseConnectionString);
                         break;
+                    case DatabaseType.Postgres:
+                        builder.UseNpgsql(options.DatabaseConnectionString);
+                        break;
+                    case DatabaseType.SqlServer:
+                        builder.UseSqlServer(options.DatabaseConnectionString);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             });
-            
-            dataProtectionBuilder.PersistKeysToFileSystem(new DirectoryInfo(Path.GetDirectoryName(protectionKeysFileSystem)));
+
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(Path.GetDirectoryName(options.DataProtectionDir)));
 
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
@@ -93,11 +78,11 @@ namespace BtcTransmuter
             //Add the file provider to the Razor view engine
 
             var mvcBuilder = services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddExtensions(extensionsPath, mvcBuilder);
+            services.AddExtensions(options.ExtensionsDir, mvcBuilder);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BtcTransmuterOptions options,
             IServiceScopeFactory serviceScopeFactory)
         {
             DependencyHelper.ServiceScopeFactory = serviceScopeFactory;
@@ -105,7 +90,7 @@ namespace BtcTransmuter
             {
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
-                    if (File.Exists(dbFilePath) && context.Database.IsSqlite() &&
+                    if (context.Database.IsSqlite() &&
                         context.Database.GetPendingMigrations().Any())
                     {
                         context.Database.EnsureDeleted();

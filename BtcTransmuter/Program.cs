@@ -20,6 +20,10 @@ namespace BtcTransmuter
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost
                 .CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, builder) =>
+                    {
+                        builder.AddEnvironmentVariables(prefix: BtcTransmuterOptions.configPrefix);
+                    })
                 .UseStartup<Startup>();
     }
 }

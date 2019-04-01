@@ -19,6 +19,9 @@ RUN dotnet publish "BtcTransmuter.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENV ConnectionStrings_Database="Data Source=data/btctransmuter.db;"
+
+ENV TRANSMUTER_Database="Data Source=data/btctransmuter.db;"
+ENV TRANSMUTER_DatabaseType="sqlite"
+ENV TRANSMUTER_DataProtectionDir="data"
 
 ENTRYPOINT ["entrypoint.sh"]
