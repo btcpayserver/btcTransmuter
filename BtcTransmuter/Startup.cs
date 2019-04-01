@@ -67,15 +67,15 @@ namespace BtcTransmuter
                 }
             });
 
+            ;
             services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(Path.GetDirectoryName(options.DataProtectionDir)));
+                .PersistKeysToFileSystem(Directory.CreateDirectory(options.DataProtectionDir));
 
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            //Add the file provider to the Razor view engine
 
             var mvcBuilder = services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
@@ -90,13 +90,20 @@ namespace BtcTransmuter
             {
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
-                    if (context.Database.IsSqlite() &&
-                        context.Database.GetPendingMigrations().Any())
+                    if (context.Database.IsSqlite())
                     {
-                        context.Database.EnsureDeleted();
-                    }
 
-                    context.Database.Migrate();
+                        if (context.Database.GetPendingMigrations().Any())
+                        {
+                            context.Database.EnsureDeleted();
+                        }
+                        
+                        context.Database.EnsureCreated();
+                    }
+                    else
+                    {
+                        context.Database.Migrate();
+                    }
 
                     using (var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
                     {

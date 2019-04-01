@@ -7,7 +7,7 @@ namespace BtcTransmuter
 {
     public class BtcTransmuterOptions
     {
-        public const string configPrefix = "TRANSMUTER";
+        public const string configPrefix = "TRANSMUTER_";
         public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
 
