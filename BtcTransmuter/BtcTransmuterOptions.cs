@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.Web.CodeGeneration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace BtcTransmuter
@@ -8,13 +9,14 @@ namespace BtcTransmuter
     public class BtcTransmuterOptions
     {
         public const string configPrefix = "TRANSMUTER_";
-        public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger logger)
         {
 
             DatabaseConnectionString = configuration.GetValue<string>("Database");
             DataProtectionDir = configuration.GetValue<string>("DataProtectionDir");
             DatabaseType = configuration.GetValue<DatabaseType>("DatabaseType", DatabaseType.Sqlite);
-            ExtensionsDir = Path.Combine(hostingEnvironment.ContentRootPath, "Extensions");
+            ExtensionsDir = configuration.GetValue<string>("ExtensionsDir",
+                Path.Combine(hostingEnvironment.ContentRootPath, "Extensions"));
 
             if (DatabaseType == DatabaseType.Sqlite)
             {
@@ -31,6 +33,9 @@ namespace BtcTransmuter
                 
                 }
             }
+            
+            logger.LogMessage($"Connecting to {DatabaseType} db with: {DatabaseConnectionString}", LogMessageLevel.Warning);
+            logger.LogMessage($"Extensions Dir: {ExtensionsDir}, Data Protection Dir: {DataProtectionDir}", LogMessageLevel.Warning);
         }
 
         public string ExtensionsDir { get; set; }

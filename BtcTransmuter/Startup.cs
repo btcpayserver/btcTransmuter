@@ -13,16 +13,20 @@ using BtcTransmuter.Services;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using ILogger = Microsoft.VisualStudio.Web.CodeGeneration.ILogger;
 
 namespace BtcTransmuter
 {
     public class Startup
     {
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ILogger _logger;
 
-        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration, ILogger logger)
         {
             _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
             Configuration = configuration;
         }
 
@@ -46,9 +50,8 @@ namespace BtcTransmuter
             services.AddMemoryCache();
 
 
-            var options = new BtcTransmuterOptions(Configuration, _hostingEnvironment);
+            var options = new BtcTransmuterOptions(Configuration, _hostingEnvironment, _logger);
             services.AddSingleton(options);
-            Console.WriteLine($"Connecting to {options.DatabaseType} db with: {options.DatabaseConnectionString}");
             services.AddDbContext<ApplicationDbContext>(builder =>
             {
                 switch (options.DatabaseType)
