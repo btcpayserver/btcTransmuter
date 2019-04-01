@@ -1,8 +1,10 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.Web.CodeGeneration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace BtcTransmuter
 {
@@ -34,8 +36,8 @@ namespace BtcTransmuter
                 }
             }
             
-            logger.LogMessage($"Connecting to {DatabaseType} db with: {DatabaseConnectionString}", LogMessageLevel.Warning);
-            logger.LogMessage($"Extensions Dir: {ExtensionsDir}, Data Protection Dir: {DataProtectionDir}", LogMessageLevel.Warning);
+            logger.LogWarning($"Connecting to {DatabaseType} db with: {DatabaseConnectionString}");
+            logger.LogWarning($"Extensions Dir: {ExtensionsDir}, Data Protection Dir: {DataProtectionDir}");
         }
 
         public string ExtensionsDir { get; set; }
