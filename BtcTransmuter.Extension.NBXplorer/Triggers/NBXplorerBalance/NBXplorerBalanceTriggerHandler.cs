@@ -70,6 +70,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
                     return triggerData.Balance <= parameters.Balance;
                 case BalanceComparer.GreaterThanOrEqual:
                     return triggerData.Balance >= parameters.Balance;
+                case BalanceComparer.LessThan:
+                    return triggerData.Balance < parameters.Balance;
+                case BalanceComparer.GreaterThan:
+                    return triggerData.Balance > parameters.Balance;
+                case BalanceComparer.Equal:
+                    return triggerData.Balance == parameters.Balance;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
