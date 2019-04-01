@@ -21,12 +21,12 @@ namespace BtcTransmuter
     public class Startup
     {
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly ILogger _logger;
+        private readonly Microsoft.Extensions.Logging.ILogger _logger;
 
-        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration, ILogger logger)
+        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration,  ILoggerFactory logFactory)
         {
             _hostingEnvironment = hostingEnvironment;
-            _logger = logger;
+            _logger = logFactory.CreateLogger(nameof(Startup));
             Configuration = configuration;
         }
 
