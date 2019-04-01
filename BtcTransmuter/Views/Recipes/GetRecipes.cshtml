@@ -100,7 +100,7 @@
             <div class="card-footer">
                 <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@recipe.Id">Edit</a> -
                 <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
-                <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs (@recipe.RecipeInvocations.Count)</a>
+                <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs</a>
 
                 <div class="float-right">
                     @if (recipe.Enabled)
