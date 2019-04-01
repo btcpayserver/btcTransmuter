@@ -1,11 +1,13 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime-stretch-slim-arm32v7 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2.3-stretch-slim-arm32v7 as base
 WORKDIR /app
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 EXPOSE 80
 EXPOSE 443
 
-FROM microsoft/dotnet:2.2-sdk AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2.505 AS build
+RUN apt-get update \
+	&& apt-get install -qq --no-install-recommends qemu qemu-user-static qemu-user binfmt-support
 WORKDIR /src
 COPY ["BtcTransmuter/BtcTransmuter.csproj", "BtcTransmuter/"]
 RUN dotnet restore "BtcTransmuter/BtcTransmuter.csproj"
