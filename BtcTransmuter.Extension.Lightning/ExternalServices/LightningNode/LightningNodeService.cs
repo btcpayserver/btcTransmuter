@@ -93,7 +93,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
                     if (!EndPointParser.TryParse(nodeInfo.Host, nodeInfo.Port, out var endpoint))
                         throw new Exception($"Could not parse the endpoint {nodeInfo.Host}");
 
-                    using (await _socketFactory.ConnectAsync(endpoint, SocketType.Stream, ProtocolType.Tcp, cts.Token))
+                    using (await _socketFactory.ConnectAsync(endpoint,  cts.Token))
                     {
                     }
                 }

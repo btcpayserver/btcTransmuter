@@ -66,8 +66,7 @@ namespace BtcTransmuter
                         throw new ArgumentOutOfRangeException();
                 }
             });
-
-            ;
+            
             services.AddDataProtection()
                 .PersistKeysToFileSystem(Directory.CreateDirectory(options.DataProtectionDir));
 
