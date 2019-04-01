@@ -1,3 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/sh
 pkill -9 -e -f dotnet 
 dotnet BtcTransmuter.dll
