@@ -1,0 +1,10 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<GetExchangeBalanceData>();
+}
+
+<div>
+   Get Balance of @data.Asset on exchange
+</div>

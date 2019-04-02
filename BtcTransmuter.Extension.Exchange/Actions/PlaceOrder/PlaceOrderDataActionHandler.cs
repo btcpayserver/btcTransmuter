@@ -25,7 +25,6 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
         {
             var exchangeService = new ExchangeService(recipeAction.ExternalService);
             var client = exchangeService.ConstructClient();
-
             var orderRequest = new ExchangeOrderRequest()
             {
                 MarketSymbol = actionData.MarketSymbol,
