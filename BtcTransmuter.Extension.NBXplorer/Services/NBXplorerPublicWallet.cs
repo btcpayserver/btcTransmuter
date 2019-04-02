@@ -49,13 +49,17 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 });
         }
 
-        public async Task<TransactionBuilder> CreateTransactionBuilder()
+        public async Task<TransactionBuilder> CreateTransactionBuilder(bool addUtxos = true)
         {
-            var utxos = await GetUTXOs();
+            var builder = _explorerClient.Network.NBitcoinNetwork
+                .CreateTransactionBuilder();
 
-            return _explorerClient.Network.NBitcoinNetwork
-                .CreateTransactionBuilder()
-                .AddCoins(utxos.GetUnspentCoins());
+            if (addUtxos)
+            {
+                var utxos = await GetUTXOs();
+                builder.AddCoins(utxos.GetUnspentCoins());
+            }
+            return builder;
         }
 
         public async Task<Transaction> BuildTransaction(
