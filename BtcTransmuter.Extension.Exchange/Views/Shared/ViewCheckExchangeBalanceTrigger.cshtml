@@ -1,0 +1,11 @@
+@using BtcTransmuter.Data.Models
+@model BtcTransmuter.Data.Entities.RecipeTrigger
+@{
+    var data = Model.Get<CheckExchangeBalanceTriggerParameters>();
+}
+
+<div>
+    Balance 
+    @Enum.GetName(typeof(BalanceComparer), data.BalanceComparer)
+    <kbd>@data.Balance</kbd>
+</div>

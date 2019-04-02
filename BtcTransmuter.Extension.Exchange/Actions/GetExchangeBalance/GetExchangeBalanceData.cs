@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using ExchangeSharp;
 
 namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
 {
@@ -7,7 +6,5 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
     {   
         [Required]
         public string Asset { get; set; }
-
-
     }
 }
