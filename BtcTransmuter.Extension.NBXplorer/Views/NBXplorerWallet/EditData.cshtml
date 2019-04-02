@@ -1,11 +1,12 @@
 @model BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet.NBXplorerWalletController.EditNBXplorerWalletExternalServiceDataViewModel
 
 @{
-    ViewData["Title"] = "Edit Exchange External Service Data";
+    ViewData["Title"] = "Edit NBXplorer Wallet External Service Data";
 }
 
 <h2>@ViewData["Title"]</h2>
 
+<a asp-controller="WalletCreator" asp-action="GetWallet"  target="_blank">Wallet generator helper</a>
 
 <form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -66,6 +67,7 @@
         }
         <div class="list-group-item ">
             <button type="submit" name="action" value="add-private-key" class="btn btn-secondary">Add</button>
+            
         </div>
     </div>
 
