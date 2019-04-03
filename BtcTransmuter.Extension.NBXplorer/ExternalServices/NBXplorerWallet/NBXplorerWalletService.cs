@@ -59,7 +59,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             }
         }
 
-        public async Task<TrackedSource> ConstructTrackedSource()
+        public Task<TrackedSource> ConstructTrackedSource()
         {
             var data = GetData();
             
@@ -68,14 +68,14 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             if (string.IsNullOrEmpty(data
                 .DerivationStrategy))
             {
-                return TrackedSource.Create(BitcoinAddress.Create(
+                return Task.FromResult<TrackedSource>(TrackedSource.Create(BitcoinAddress.Create(
                     data.Address,
-                    explorerClient.Network.NBitcoinNetwork));
+                    explorerClient.Network.NBitcoinNetwork)));
             }
             else
             {
-                return TrackedSource.Create( _derivationSchemeParser.Parse(factory,
-                    data.DerivationStrategy));
+                return Task.FromResult<TrackedSource>(TrackedSource.Create( _derivationSchemeParser.Parse(factory,
+                    data.DerivationStrategy)));
             }
         }
     }

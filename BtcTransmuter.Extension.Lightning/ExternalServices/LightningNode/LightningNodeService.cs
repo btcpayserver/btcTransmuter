@@ -107,7 +107,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
         }
 
 
-        public async Task TestConnection(NodeInfo nodeInfo, CancellationToken cancellation)
+        public Task TestConnection(NodeInfo nodeInfo, CancellationToken cancellation)
         {
             try
             {
@@ -121,6 +121,8 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
                 throw new Exception(
                     $"Error while connecting to the lightning node via {nodeInfo.Host}:{nodeInfo.Port} ({ex.Message})");
             }
+            
+            return Task.CompletedTask;
         }
     }
 
