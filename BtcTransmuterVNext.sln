@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtcTransmuter.Extension.NBX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Lightning", "BtcTransmuter.Extension.Lightning\BtcTransmuter.Extension.Lightning.csproj", "{19C9B628-8972-463D-9EFA-12E4CAA49680}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Operators", "BtcTransmuter.Extension.Operators\BtcTransmuter.Extension.Operators.csproj", "{1E82DF21-3DDB-4920-B6BE-5418AFC8B15F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{19C9B628-8972-463D-9EFA-12E4CAA49680}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19C9B628-8972-463D-9EFA-12E4CAA49680}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19C9B628-8972-463D-9EFA-12E4CAA49680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E82DF21-3DDB-4920-B6BE-5418AFC8B15F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E82DF21-3DDB-4920-B6BE-5418AFC8B15F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E82DF21-3DDB-4920-B6BE-5418AFC8B15F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E82DF21-3DDB-4920-B6BE-5418AFC8B15F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

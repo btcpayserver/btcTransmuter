@@ -1,0 +1,57 @@
+@using System.Reflection
+@using BtcTransmuter.Extension.Operators.Actions.ChooseNumericValue
+@model BtcTransmuter.Extension.Operators.Actions.ChooseNumericValue.ChooseNumericValueController.ChooseNumericValueViewModel
+@{
+    ViewData["Title"] = "Edit Place order Action";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Comparison" class="control-label"></label>
+        <select asp-items="@Html.GetEnumSelectList(typeof(ChooseNumericValueData.NumericComparison))" asp-for="Comparison" class="form-control"></select>
+        <span asp-validation-for="Comparison" class="text-danger"></span>
+    </div>
+    <div class="list-group mb-2">
+        <div class="list-group-item ">
+            <h5 class="mb-1">Items to choose from</h5>
+        </div>
+        @for (var index = 0; index < Model.Items.Count; index++)
+        {
+            <div class="list-group-item justify-content-between align-items-center">
+                <div>
+                    <div class="form-group">
+                        <label asp-for="Items[index].ValueToCompare" class="control-label"></label>
+                        <input asp-for="Items[index].ValueToCompare" class="form-control"/>
+                        <span asp-validation-for="Items[index].ValueToCompare" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Items[index].ValueToChoose" class="control-label"></label>
+                        <input asp-for="Items[index].ValueToChoose" class="form-control"/>
+                        <span asp-validation-for="Items[index].ValueToChoose" class="text-danger"></span>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" name="action" value="@($"remove-item:{index}")" class="btn btn-danger">Remove</button>
+                </div>
+            </div>
+        }
+        <div class="list-group-item ">
+            <button type="submit" name="action" value="add-item" class="btn btn-secondary">Add</button>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="RecipeId"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
+    </div>
+</form>
+@await Component.InvokeAsync("RecipeActionFooter", new
+{
+    recipeId = @Model.RecipeId,
+    recipeActionIdInGroupBeforeThisOne = @Model.RecipeActionIdInGroupBeforeThisOne
+})
