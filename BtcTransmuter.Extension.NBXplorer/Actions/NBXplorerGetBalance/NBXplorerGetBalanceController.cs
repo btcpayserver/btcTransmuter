@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerGetBalance
 {
-    [Route("nbxplorer-plugin/actions/get-balance")]
+    [Route("nbxplorer-plugin/actions/[controller]")]
     [Authorize]
     public class NBXplorerGetBalanceController : BaseActionController<
         NBXplorerGetBalanceController.NBXplorerGetBalanceViewModel,
@@ -27,7 +27,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerGetBalance
             IRecipeManager recipeManager,
             IExternalServiceManager externalServiceManager) : base(
             memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

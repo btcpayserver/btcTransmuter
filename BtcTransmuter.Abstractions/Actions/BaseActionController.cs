@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -23,15 +24,18 @@ namespace BtcTransmuter.Abstractions.Actions
         private readonly IMemoryCache _memoryCache;
         protected readonly UserManager<User> _userManager;
         protected readonly IRecipeManager _recipeManager;
+        private readonly IExternalServiceManager _externalServiceManager;
         private string RecipeActionIdInGroupBeforeThisOne;
 
         protected BaseActionController(IMemoryCache memoryCache,
             UserManager<User> userManager,
-            IRecipeManager recipeManager)
+            IRecipeManager recipeManager, 
+            IExternalServiceManager externalServiceManager)
         {
             _memoryCache = memoryCache;
             _userManager = userManager;
             _recipeManager = recipeManager;
+            _externalServiceManager = externalServiceManager;
         }
 
         [HttpGet("{identifier}")]
@@ -66,6 +70,17 @@ namespace BtcTransmuter.Abstractions.Actions
                 modelResult.showViewModel.RecipeId = result.Data.RecipeId;
                 modelResult.showViewModel.RecipeActionIdInGroupBeforeThisOne = RecipeActionIdInGroupBeforeThisOne;
                 return View(modelResult.showViewModel);
+            }
+
+            if (!string.IsNullOrEmpty(modelResult.ToSave.ExternalServiceId))
+            {
+                var valid = null == await _externalServiceManager.GetExternalServiceData(
+                                modelResult.ToSave.ExternalServiceId,
+                                GetUserId());
+                if (!valid)
+                {
+                    return BadRequest("what you tryin to pull bro");
+                }
             }
 
             await _recipeManager.AddOrUpdateRecipeAction(modelResult.ToSave);

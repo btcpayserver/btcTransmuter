@@ -18,13 +18,13 @@ namespace BtcTransmuter.Extension.Exchange.Triggers.CheckExchangeBalance
         protected override string ControllerName => "CheckExchangeBalance";
 
 
-        protected override async Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
+        protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             CheckExchangeBalanceTriggerData triggerData,
             CheckExchangeBalanceTriggerParameters parameters)
         {
-            return recipeTrigger.ExternalServiceId.Equals(triggerData.ExternalServiceId) &&
-                   triggerData.Asset.Equals(parameters.Asset, StringComparison.InvariantCultureIgnoreCase) &&
-                   IsBalanceWithinCriteria(triggerData, parameters);
+            return Task.FromResult(recipeTrigger.ExternalServiceId.Equals(triggerData.ExternalServiceId) &&
+                                   triggerData.Asset.Equals(parameters.Asset, StringComparison.InvariantCultureIgnoreCase) &&
+                                   IsBalanceWithinCriteria(triggerData, parameters));
         }
 
         private static bool IsBalanceWithinCriteria(CheckExchangeBalanceTriggerData triggerData,

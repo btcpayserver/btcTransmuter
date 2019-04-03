@@ -16,7 +16,7 @@ using NBitpayClient;
 namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 {
     [Authorize]
-    [Route("btcpayserver-plugin/triggers/invoice-status-changed")]
+    [Route("btcpayserver-plugin/triggers/[controller]")]
     public class InvoiceStatusChangedController : BaseTriggerController<
         InvoiceStatusChangedController.InvoiceStatusChangedTriggerViewModel, InvoiceStatusChangedTriggerParameters>
     {
@@ -35,7 +35,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 
         public InvoiceStatusChangedController(IRecipeManager recipeManager, UserManager<User> userManager,
             IMemoryCache memoryCache, IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
-            memoryCache)
+            memoryCache, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

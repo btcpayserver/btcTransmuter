@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
 {
-    [Route("webhook-plugin/actions/make-web-request")]
+    [Route("webhook-plugin/actions/[controller]")]
     [Authorize]
     public class MakeWebRequestController : BaseActionController<MakeWebRequestController.MakeWebRequestViewModel,
         MakeWebRequestData>
@@ -24,7 +25,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             HttpMethod.Put.ToString(),
             HttpMethod.Head.ToString(),
             HttpMethod.Post.ToString(),
-            "Patch",//HttpMethod.Patch.ToString(),
+            "Patch", //HttpMethod.Patch.ToString(),
             HttpMethod.Trace.ToString(),
             HttpMethod.Delete.ToString(),
             HttpMethod.Options.ToString()
@@ -37,7 +38,8 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
         };
 
         public MakeWebRequestController(IMemoryCache memoryCache, UserManager<User> userManager,
-            IRecipeManager recipeManager) : base(memoryCache, userManager, recipeManager)
+            IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
+            userManager, recipeManager, externalServiceManager)
         {
         }
 
@@ -54,7 +56,8 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
             });
         }
 
-        protected override Task<(RecipeAction ToSave, MakeWebRequestViewModel showViewModel)> BuildModel(MakeWebRequestViewModel viewModel, RecipeAction mainModel)
+        protected override Task<(RecipeAction ToSave, MakeWebRequestViewModel showViewModel)> BuildModel(
+            MakeWebRequestViewModel viewModel, RecipeAction mainModel)
         {
             if (ModelState.IsValid)
             {

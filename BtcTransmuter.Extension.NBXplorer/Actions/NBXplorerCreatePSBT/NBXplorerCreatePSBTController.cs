@@ -17,7 +17,7 @@ using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerCreatePSBT
 {
-    [Route("nbxplorer-plugin/actions/create-psbt")]
+    [Route("nbxplorer-plugin/actions/[controller]")]
     [Authorize]
     public class NBXplorerCreatePSBTController : BaseActionController<NBXplorerCreatePSBTController.NBXplorerCreatePSBTViewModel,
         NBXplorerCreatePSBTData>
@@ -29,7 +29,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerCreatePSBT
             IExternalServiceManager externalServiceManager,
             IRecipeManager recipeManager) : base(
             memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

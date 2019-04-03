@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
@@ -11,13 +12,13 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
 {
-    [Route("recipe-plugin/actions/create-recipe")]
+    [Route("recipe-plugin/actions/[controller]")]
     [Authorize]
     public class
         CreateRecipeController : BaseActionController<CreateRecipeController.CreateRecipeViewModel, CreateRecipeData>
     {
         public CreateRecipeController(IMemoryCache memoryCache, UserManager<User> userManager,
-            IRecipeManager recipeManager) : base(memoryCache, userManager, recipeManager)
+            IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache, userManager, recipeManager, externalServiceManager)
         {
         }
 

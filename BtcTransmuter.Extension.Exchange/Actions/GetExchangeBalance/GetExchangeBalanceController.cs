@@ -25,7 +25,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
         public GetExchangeBalanceController(IMemoryCache memoryCache,
             UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

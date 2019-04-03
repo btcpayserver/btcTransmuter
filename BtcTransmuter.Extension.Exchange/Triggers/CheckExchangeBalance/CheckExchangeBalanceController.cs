@@ -25,7 +25,7 @@ namespace BtcTransmuter.Extension.Exchange.Triggers.CheckExchangeBalance
         public CheckExchangeBalanceController(IRecipeManager recipeManager, UserManager<User> userManager,
             IMemoryCache memoryCache,
             IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
-            memoryCache)
+            memoryCache, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

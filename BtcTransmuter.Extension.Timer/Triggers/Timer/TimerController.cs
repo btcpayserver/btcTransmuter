@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
@@ -11,11 +12,12 @@ using Microsoft.Extensions.Caching.Memory;
 namespace BtcTransmuter.Extension.Timer.Triggers.Timer
 {
     [Authorize]
-    [Route("timer-plugin/triggers/timer")]
+    [Route("timer-plugin/triggers/[controller]")]
     public class TimerController : BaseTriggerController<TimerController.TimerTriggerViewModel, TimerTriggerParameters>
     {
-        public TimerController(IRecipeManager recipeManager, UserManager<User> userManager, IMemoryCache memoryCache) :
-            base(recipeManager, userManager, memoryCache)
+        public TimerController(IRecipeManager recipeManager, UserManager<User> userManager, IMemoryCache memoryCache,
+            IExternalServiceManager externalServiceManager) :
+            base(recipeManager, userManager, memoryCache, externalServiceManager)
         {
         }
 

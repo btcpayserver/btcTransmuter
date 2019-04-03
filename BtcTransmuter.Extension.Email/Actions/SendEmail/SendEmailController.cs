@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
-    [Route("email-plugin/actions/send-email")]
+    [Route("email-plugin/actions/[controller]")]
     [Authorize]
     public class SendEmailController : BaseActionController<SendEmailController.SendEmailViewModel, SendEmailData>
     {
@@ -22,7 +22,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 
         public SendEmailController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningChannels
 {
-    [Route("lightning-plugin/actions/get-ln-channels")]
+    [Route("lightning-plugin/actions/[controller]")]
     [Authorize]
     public class GetLightningChannelsController : BaseActionController<GetLightningChannelsController.GetLightningChannelsViewModel, GetLightningChannelsData>
     {
@@ -22,7 +22,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningChannels
 
         public GetLightningChannelsController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager,externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

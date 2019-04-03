@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice
 {
-    [Route("lightning-plugin/actions/create-bolt11-invoice")]
+    [Route("lightning-plugin/actions/[controller]")]
     [Authorize]
     public class CreateBolt11InvoiceController : BaseActionController<CreateBolt11InvoiceController.CreateBolt11InvoiceViewModel, CreateBolt11InvoiceData>
     {
@@ -22,7 +22,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice
 
         public CreateBolt11InvoiceController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

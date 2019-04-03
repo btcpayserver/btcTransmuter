@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
 {
-    [Route("nbxplorer-plugin/actions/generate-next-address")]
+    [Route("nbxplorer-plugin/actions/[controller]")]
     [Authorize]
     public class GenerateNextAddressController : BaseActionController<
         GenerateNextAddressController.GenerateNextAddressViewModel,
@@ -27,7 +27,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress
             IRecipeManager recipeManager,
             IExternalServiceManager externalServiceManager) : base(
             memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

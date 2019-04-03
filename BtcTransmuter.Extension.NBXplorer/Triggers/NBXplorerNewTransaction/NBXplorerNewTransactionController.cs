@@ -24,7 +24,7 @@ using NBXplorer.Models;
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 {
     [Authorize]
-    [Route("nbxplorer-plugin/triggers/new-transaction")]
+    [Route("nbxplorer-plugin/triggers/[controller]")]
     public class NBXplorerNewTransactionController : BaseTriggerController<
         NBXplorerNewTransactionController.NBXplorerNewTransactionViewModel,
         NBXplorerNewTransactionTriggerParameters>
@@ -35,7 +35,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             UserManager<User> userManager,
             IMemoryCache memoryCache,
             IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
-            memoryCache)
+            memoryCache, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

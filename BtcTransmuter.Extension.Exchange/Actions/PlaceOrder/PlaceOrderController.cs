@@ -16,7 +16,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
 {
-    [Route("exchange-plugin/actions/place-order")]
+    [Route("exchange-plugin/actions/[controller]")]
     [Authorize]
     public class PlaceOrderController : BaseActionController<PlaceOrderController.PlaceOrderViewModel, PlaceOrderData>
     {
@@ -25,7 +25,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
         public PlaceOrderController(IMemoryCache memoryCache,
             UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

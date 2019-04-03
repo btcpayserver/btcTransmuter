@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -14,15 +15,18 @@ namespace BtcTransmuter.Abstractions.Triggers
     {
         private readonly IRecipeManager _recipeManager;
         private readonly UserManager<User> _userManager;
+        private readonly IExternalServiceManager _externalServiceManager;
         private readonly IMemoryCache _memoryCache;
 
         protected BaseTriggerController(
             IRecipeManager recipeManager,
             UserManager<User> userManager,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache, 
+            IExternalServiceManager externalServiceManager)
         {
             _recipeManager = recipeManager;
             _userManager = userManager;
+            _externalServiceManager = externalServiceManager;
             _memoryCache = memoryCache;
         }
 
@@ -57,7 +61,16 @@ namespace BtcTransmuter.Abstractions.Triggers
             {
                 return View(modelResult.showViewModel);
             }
-            
+            if (!string.IsNullOrEmpty(modelResult.ToSave.ExternalServiceId))
+            {
+                var valid = null == await _externalServiceManager.GetExternalServiceData(
+                                modelResult.ToSave.ExternalServiceId,
+                                GetUserId());
+                if (!valid)
+                {
+                    return BadRequest("what you tryin to pull bro");
+                }
+            }
             await _recipeManager.AddOrUpdateRecipeTrigger(modelResult.ToSave);
             return RedirectToAction("EditRecipe", "Recipes", new
             {

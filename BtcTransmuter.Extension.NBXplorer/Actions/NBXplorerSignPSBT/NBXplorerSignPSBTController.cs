@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerSignPSBT
 {
-    [Route("nbxplorer-plugin/actions/sign-psbt")]
+    [Route("nbxplorer-plugin/actions/[controller]")]
     [Authorize]
     public class NBXplorerSignPSBTController : BaseActionController<
         NBXplorerSignPSBTController.NBXplorerSignPSBTViewModel,
@@ -27,7 +27,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerSignPSBT
             IRecipeManager recipeManager,
             IExternalServiceManager externalServiceManager) : base(
             memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

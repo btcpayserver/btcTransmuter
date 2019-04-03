@@ -17,7 +17,7 @@ using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 
 namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 {
-    [Route("nbxplorer-plugin/actions/send-transaction")]
+    [Route("nbxplorer-plugin/actions/[controller]")]
     [Authorize]
     public class SendTransactionController : BaseActionController<SendTransactionController.SendTransactionViewModel,
         SendTransactionData>
@@ -29,7 +29,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             IExternalServiceManager externalServiceManager,
             IRecipeManager recipeManager) : base(
             memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

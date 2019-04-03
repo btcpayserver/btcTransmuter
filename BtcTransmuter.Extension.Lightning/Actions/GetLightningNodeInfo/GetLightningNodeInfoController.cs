@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningNodeInfo
 {
-    [Route("lightning-plugin/actions/get-ln-node-info")]
+    [Route("lightning-plugin/actions/[controller]")]
     [Authorize]
     public class GetLightningNodeInfoController : BaseActionController<GetLightningNodeInfoController.GetLightningNodeInfoViewModel, GetLightningNodeInfoData>
     {
@@ -22,7 +22,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningNodeInfo
 
         public GetLightningNodeInfoController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager,externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

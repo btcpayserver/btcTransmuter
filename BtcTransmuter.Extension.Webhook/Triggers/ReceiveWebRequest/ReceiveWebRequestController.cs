@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
@@ -16,7 +17,7 @@ using Newtonsoft.Json.Linq;
 namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 {
     [Authorize]
-    [Route("webhook-plugin/triggers/receive-web-request")]
+    [Route("webhook-plugin/triggers/[controller]")]
     public class ReceiveWebRequestController : BaseTriggerController<
         ReceiveWebRequestController.ReceiveWebRequestTriggerViewModel, ReceiveWebRequestTriggerParameters>
     {
@@ -28,7 +29,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
             HttpMethod.Put.ToString(),
             HttpMethod.Head.ToString(),
             HttpMethod.Post.ToString(),
-            "Patch",//HttpMethod.Patch.ToString(),
+            "Patch", //HttpMethod.Patch.ToString(),
             HttpMethod.Trace.ToString(),
             HttpMethod.Delete.ToString(),
             HttpMethod.Options.ToString()
@@ -36,14 +37,16 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 
 
         public ReceiveWebRequestController(IRecipeManager recipeManager, UserManager<User> userManager,
-            IMemoryCache memoryCache, ITriggerDispatcher triggerDispatcher) : base(recipeManager, userManager, memoryCache)
+            IMemoryCache memoryCache, ITriggerDispatcher triggerDispatcher,
+            IExternalServiceManager externalServiceManager) : base(recipeManager, userManager, memoryCache,
+            externalServiceManager)
         {
             _triggerDispatcher = triggerDispatcher;
         }
 
         protected override Task<ReceiveWebRequestTriggerViewModel> BuildViewModel(RecipeTrigger data)
         {
-            return  Task.FromResult(new ReceiveWebRequestTriggerViewModel(data.Get<ReceiveWebRequestTriggerParameters>(),
+            return Task.FromResult(new ReceiveWebRequestTriggerViewModel(data.Get<ReceiveWebRequestTriggerParameters>(),
                 data.RecipeId));
         }
 
@@ -59,12 +62,14 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 
             if (!ModelState.IsValid)
             {
-                return Task.FromResult<(RecipeTrigger ToSave, ReceiveWebRequestTriggerViewModel showViewModel)>((null, viewModel));
+                return Task.FromResult<(RecipeTrigger ToSave, ReceiveWebRequestTriggerViewModel showViewModel)>((null,
+                    viewModel));
             }
 
             mainModel.Set((ReceiveWebRequestTriggerParameters) viewModel);
-            
-            return Task.FromResult<(RecipeTrigger ToSave, ReceiveWebRequestTriggerViewModel showViewModel)>((mainModel, null));
+
+            return Task.FromResult<(RecipeTrigger ToSave, ReceiveWebRequestTriggerViewModel showViewModel)>((mainModel,
+                null));
         }
 
         [Route("trigger/{relativeUrl?}")]

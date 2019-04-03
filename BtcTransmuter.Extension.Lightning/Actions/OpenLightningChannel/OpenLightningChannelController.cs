@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Lightning.Actions.OpenLightningChannel
 {
-    [Route("lightning-plugin/actions/create-bolt11-invoice")]
+    [Route("lightning-plugin/actions/[controller]")]
     [Authorize]
     public class OpenLightningChannelController : BaseActionController<OpenLightningChannelController.OpenLightningChannelViewModel, OpenLightningChannelData>
     {
@@ -22,7 +22,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.OpenLightningChannel
 
         public OpenLightningChannelController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

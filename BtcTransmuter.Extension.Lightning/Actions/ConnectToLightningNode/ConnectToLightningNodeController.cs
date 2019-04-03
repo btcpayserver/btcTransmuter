@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BtcTransmuter.Extension.Lightning.Actions.ConnectToLightningNode
 {
-    [Route("lightning-plugin/actions/connect-node")]
+    [Route("lightning-plugin/actions/[controller]")]
     [Authorize]
     public class ConnectToLightningNodeController : BaseActionController<ConnectToLightningNodeController.ConnectToLightningNodeViewModel, ConnectToLightningNodeData>
     {
@@ -22,7 +22,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.ConnectToLightningNode
 
         public ConnectToLightningNodeController(IMemoryCache memoryCache, UserManager<User> userManager,
             IRecipeManager recipeManager, IExternalServiceManager externalServiceManager) : base(memoryCache,
-            userManager, recipeManager)
+            userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

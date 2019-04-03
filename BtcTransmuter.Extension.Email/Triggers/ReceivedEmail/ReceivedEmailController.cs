@@ -16,14 +16,15 @@ using Microsoft.Extensions.Caching.Memory;
 namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
 {
     [Authorize]
-    [Route("email-plugin/triggers/received-email")]
+    [Route("email-plugin/triggers/[controller]")]
     public class ReceivedEmailController : BaseTriggerController<ReceivedEmailController.ReceivedEmailViewModel,
         ReceivedEmailTriggerParameters>
     {
         private readonly IExternalServiceManager _externalServiceManager;
 
         public ReceivedEmailController(IRecipeManager recipeManager, UserManager<User> userManager,
-            IMemoryCache memoryCache, IExternalServiceManager externalServiceManager) : base(recipeManager, userManager, memoryCache)
+            IMemoryCache memoryCache, IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
+            memoryCache, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }
@@ -32,7 +33,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
         {
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
             {
-                Type = new[] {Pop3Service.Pop3ExternalServiceType , ImapService.ImapExternalServiceType},
+                Type = new[] {Pop3Service.Pop3ExternalServiceType, ImapService.ImapExternalServiceType},
                 UserId = GetUserId()
             });
             var innerData = data.Get<ReceivedEmailTriggerParameters>();
@@ -55,20 +56,25 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
         protected override async Task<(RecipeTrigger ToSave, ReceivedEmailViewModel showViewModel)> BuildModel(
             ReceivedEmailViewModel viewModel, RecipeTrigger mainModel)
         {
-            if (!string.IsNullOrEmpty(viewModel.Body) && viewModel.BodyComparer == ReceivedEmailTriggerParameters.FieldComparer.None)
+            if (!string.IsNullOrEmpty(viewModel.Body) &&
+                viewModel.BodyComparer == ReceivedEmailTriggerParameters.FieldComparer.None)
             {
-                ModelState.AddModelError(nameof(ReceivedEmailViewModel.BodyComparer), "Please choose a Body filter type");
-            } 
-            if (!string.IsNullOrEmpty(viewModel.Subject) && viewModel.SubjectComparer == ReceivedEmailTriggerParameters.FieldComparer.None)
+                ModelState.AddModelError(nameof(ReceivedEmailViewModel.BodyComparer),
+                    "Please choose a Body filter type");
+            }
+
+            if (!string.IsNullOrEmpty(viewModel.Subject) &&
+                viewModel.SubjectComparer == ReceivedEmailTriggerParameters.FieldComparer.None)
             {
-                ModelState.AddModelError(nameof(ReceivedEmailViewModel.SubjectComparer), "Please choose a Subject filter type");
+                ModelState.AddModelError(nameof(ReceivedEmailViewModel.SubjectComparer),
+                    "Please choose a Subject filter type");
             }
 
             if (!ModelState.IsValid)
             {
                 var pop3Services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()
                 {
-                    Type = new[] {Pop3Service.Pop3ExternalServiceType , ImapService.ImapExternalServiceType},
+                    Type = new[] {Pop3Service.Pop3ExternalServiceType, ImapService.ImapExternalServiceType},
                     UserId = GetUserId()
                 });
 

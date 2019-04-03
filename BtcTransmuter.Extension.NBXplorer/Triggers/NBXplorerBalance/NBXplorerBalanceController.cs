@@ -16,7 +16,7 @@ using NBitcoin;
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
 {
     [Authorize]
-    [Route("nbxplorer-plugin/triggers/balance")]
+    [Route("nbxplorer-plugin/triggers/[controller]")]
     public class NBXplorerBalanceController : BaseTriggerController<
         NBXplorerBalanceController.NBXplorerBalanceViewModel,
         NBXplorerBalanceTriggerParameters>
@@ -26,7 +26,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
         public NBXplorerBalanceController(IRecipeManager recipeManager, UserManager<User> userManager,
             IMemoryCache memoryCache,
             IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
-            memoryCache)
+            memoryCache, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
         }

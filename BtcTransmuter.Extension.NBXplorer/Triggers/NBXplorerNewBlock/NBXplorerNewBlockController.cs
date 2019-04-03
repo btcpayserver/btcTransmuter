@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
@@ -16,7 +17,7 @@ using Microsoft.Extensions.Options;
 namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
 {
     [Authorize]
-    [Route("nbxplorer-plugin/triggers/new-block")]
+    [Route("nbxplorer-plugin/triggers/[controller]")]
     public class NBXplorerNewBlockController : BaseTriggerController<
         NBXplorerNewBlockController.NBXplorerNewBlockViewModel,
         NBXplorerNewBlockTriggerParameters>
@@ -24,8 +25,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
         private readonly NBXplorerOptions _options;
 
         public NBXplorerNewBlockController(IRecipeManager recipeManager, UserManager<User> userManager,
-            IMemoryCache memoryCache, NBXplorerOptions options) : base(recipeManager, userManager,
-            memoryCache)
+            IMemoryCache memoryCache, NBXplorerOptions options, IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
+            memoryCache, externalServiceManager)
         {
             _options = options;
         }

@@ -19,7 +19,6 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
         private readonly ITriggerDispatcher _triggerDispatcher;
 
         public ExchangeHostedService(
-            IRecipeManager recipeManager,
             IExternalServiceManager externalServiceManager,
             ILogger<ExchangeHostedService> logger,
             ITriggerDispatcher triggerDispatcher)
