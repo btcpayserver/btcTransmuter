@@ -1,0 +1,40 @@
+@using System.Reflection
+@using ExchangeSharp
+@using Microsoft.EntityFrameworkCore.Internal
+@model BtcTransmuter.Extension.Exchange.Actions.GetExchangeRate.GetExchangeRateController.GetExchangeRateViewModel
+@{
+    ViewData["Title"] = "Edit get Exchange balance Action";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ExternalServiceId" class="control-label"></label>
+        <select asp-for="ExternalServiceId" asp-items="Model.ExternalServices" class="form-control"></select>
+        <span asp-validation-for="ExternalServiceId" class="text-danger"></span>
+        @if (!Model.ExternalServices.Items.Any())
+        {
+            <span class="text-danger">There are no exchange external services available to create this action. <a asp-action="CreateExternalService" asp-controller="ExternalServices">Create one</a></span>
+        }
+    </div>
+    <div class="form-group">
+        <label asp-for="MarketSymbol" class="control-label"></label>
+        <input asp-for="MarketSymbol" class="form-control"/>
+        <span asp-validation-for="MarketSymbol" class="text-danger"></span>
+    </div>
+
+
+    <input type="hidden" asp-for="RecipeId"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
+    </div>
+</form>
+@await Component.InvokeAsync("RecipeActionFooter", new
+{
+    recipeId = @Model.RecipeId, 
+    recipeActionIdInGroupBeforeThisOne = @Model.RecipeActionIdInGroupBeforeThisOne
+})
