@@ -1,0 +1,35 @@
+@using BtcTransmuter.Extension.DynamicService.ExternalServices.DynamicService
+@model BtcTransmuter.Data.Entities.ExternalServiceData
+
+@{
+    var service = new DynamicServiceService(Model, null,null,null);
+    var data = service.GetData();
+}
+
+<dl class="dl-horizontal">
+    <dt>
+        Name
+    </dt>
+    <dd>
+        @service.Name
+    </dd>
+    <dt>
+        Recipe
+    </dt>
+    <dd>
+        @data.RecipeId
+
+    </dd>
+    <dt>
+        Action/ Action Group
+    </dt>
+    <dd>
+        @data.RecipeActionId @data.RecipeActionGroupId
+    </dd>
+    <dt>
+       Value to use 
+    </dt>
+    <dd>
+        @data.Value
+    </dd>
+</dl>

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.DynamicServices;
 using BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet;
 using BtcTransmuter.Extension.NBXplorer.Actions.GenerateNextAddress;
 using BtcTransmuter.Extension.NBXplorer.Services;
@@ -46,7 +47,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerSignPSBT
             NBXplorerSignPSBTData actionData)
         {
 
-            var walletService = new NBXplorerWalletService(recipeAction.ExternalService, _nbXplorerPublicWalletProvider,
+            var externalService = await recipeAction.GetExternalService();
+            var walletService = new NBXplorerWalletService(externalService, _nbXplorerPublicWalletProvider,
                 _derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider);
             var walletData = walletService.GetData();
             var wallet = await walletService.ConstructClient();

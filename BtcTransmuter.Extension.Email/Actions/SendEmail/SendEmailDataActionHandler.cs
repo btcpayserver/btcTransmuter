@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.DynamicServices;
 using BtcTransmuter.Extension.Email.ExternalServices.Smtp;
 using MimeKit;
 using MimeKit.Text;
@@ -23,7 +24,8 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
         protected override async Task<TypedActionHandlerResult<MimeMessage>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             SendEmailData actionData)
         {
-            var smtpService = new SmtpService(recipeAction.ExternalService);
+            var externalService = await recipeAction.GetExternalService();
+            var smtpService = new SmtpService(externalService);
 
             var message = new MimeMessage(new List<InternetAddress>()
                 {

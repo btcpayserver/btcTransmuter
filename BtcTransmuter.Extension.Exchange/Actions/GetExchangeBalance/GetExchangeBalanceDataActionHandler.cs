@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.DynamicServices;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
 using ExchangeSharp;
 
@@ -24,7 +25,9 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
             RecipeAction recipeAction,
             GetExchangeBalanceData actionData)
         {
-            var exchangeService = new ExchangeService(recipeAction.ExternalService);
+            
+            var externalService = await recipeAction.GetExternalService();
+            var exchangeService = new ExchangeService(externalService);
             var client = exchangeService.ConstructClient();
 
             var result = await client.GetAmountsAsync();

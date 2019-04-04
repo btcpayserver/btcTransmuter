@@ -10,6 +10,7 @@
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
         <PackageReference Include="NBitcoin" Version="4.1.1.96" />
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+        <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />
     </ItemGroup>
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.DynamicServices;
 using BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using BTCPayServer.Lightning;
@@ -31,7 +32,8 @@ namespace BtcTransmuter.Extension.Lightning.Actions.GetLightningChannels
         {
             using (var serviceScope = DependencyHelper.ServiceScopeFactory.CreateScope())
             {
-                var service = new LightningNodeService(recipeAction.ExternalService,
+                var externalService = await recipeAction.GetExternalService();
+                var service = new LightningNodeService(externalService, 
                     serviceScope.ServiceProvider.GetService<NBXplorerClientProvider>(),
                     serviceScope.ServiceProvider.GetService<NBXplorerSummaryProvider>(),
                     serviceScope.ServiceProvider.GetService<SocketFactory>()

@@ -1,0 +1,37 @@
+@model BtcTransmuter.Extension.DynamicService.ExternalServices.DynamicService.EditDynamicServiceDataViewModel
+
+@{
+    ViewData["Title"] = "Edit DynamicService External Service Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="RecipeId" class="control-label"></label>
+        <select asp-items="Model.Recipes" asp-for="RecipeId" class="form-control"></select>
+        <span asp-validation-for="RecipeId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RecipeActionId" class="control-label"></label>
+        <select asp-items="Model.RecipeActions" asp-for="RecipeActionId" class="form-control"></select>
+        <span asp-validation-for="RecipeActionId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RecipeActionGroupId" class="control-label"></label>
+        <select asp-items="Model.RecipeActionGroups" asp-for="RecipeActionGroupId" class="form-control"></select>
+        <span asp-validation-for="RecipeActionGroupId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Value" class="control-label"></label>
+        <input asp-for="Value" class="form-control"/>
+        <span asp-validation-for="Value" class="text-danger"></span>
+    </div>
+    <div class="mt-2">
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>
