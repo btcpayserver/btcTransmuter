@@ -1,0 +1,18 @@
+@model BtcTransmuter.Extension.Webhook.Triggers.DynamicServiceMarker.DynamicServiceMarkerTriggerParametersViewModel
+
+
+@{
+    ViewData["Title"] = "Dynamic Service marker trigger, nothing tom edit";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="RecipeId" />
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to Recipe</a>
+    </div>
+</form>
