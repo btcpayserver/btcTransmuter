@@ -232,12 +232,12 @@ namespace BtcTransmuter.Services
                         throw new ArgumentException();
                     }
 
-                    var invocations = await GetRecipeInvocations(new RecipeInvocationsQuery()
+                    var invocations = (await GetRecipeInvocations(new RecipeInvocationsQuery()
                     {
                         Skip = 0,
                         Take = int.MaxValue,
                         RecipeId = id
-                    });
+                    })).ToList();
 
                     context.Attach(recipe);
                     context.AttachRange(recipe.RecipeActions);
