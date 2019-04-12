@@ -93,13 +93,7 @@ namespace BtcTransmuter
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     if (context.Database.IsSqlite())
-                    {
-
-                        if (context.Database.GetPendingMigrations().Any())
-                        {
-                            context.Database.EnsureDeleted();
-                        }
-                        
+                    {                       
                         context.Database.EnsureCreated();
                     }
                     else
