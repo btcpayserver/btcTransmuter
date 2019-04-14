@@ -28,57 +28,61 @@ namespace BtcTransmuter.Services
 
         public async Task DispatchTrigger(ITrigger trigger)
         {
-            _logger.LogInformation($"Trigger being dispatched: {trigger.Id}");
-            var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
+            _ = Task.Run(async () =>
             {
-                Enabled = true,
-                TriggerId = trigger.Id
-            });
-
-            _logger.LogInformation($"{recipes.Count()} possible recipes to be triggered by {trigger.Id}");
-
-            var triggeredRecipes = new List<(Recipe Recipe, object TriggerData, ITriggerHandler triggerHandler)>();
-            foreach (var recipe in recipes)
-            {
-                foreach (var triggerHandler in _handlers)
+                _logger.LogInformation($"Trigger being dispatched: {trigger.Id}");
+                var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
                 {
-                    try
+                    Enabled = true,
+                    TriggerId = trigger.Id
+                });
+
+                _logger.LogInformation($"{recipes.Count()} possible recipes to be triggered by {trigger.Id}");
+
+                var triggeredRecipes = new List<(Recipe Recipe, object TriggerData, ITriggerHandler triggerHandler)>();
+                foreach (var recipe in recipes)
+                {
+                    foreach (var triggerHandler in _handlers)
                     {
-                        if (await triggerHandler.IsTriggered(trigger, recipe.RecipeTrigger))
+                        try
                         {
-                            triggeredRecipes.Add((recipe, await triggerHandler.GetData(trigger), triggerHandler));
+                            if (await triggerHandler.IsTriggered(trigger, recipe.RecipeTrigger))
+                            {
+                                triggeredRecipes.Add((recipe, await triggerHandler.GetData(trigger), triggerHandler));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError($"Trigger Handler {triggerHandler} errored out on {e.Message}");
                         }
                     }
-                    catch (Exception e)
-                    {
-                        _logger.LogError($"Trigger Handler {triggerHandler} errored out on {e.Message}");
-                    }
                 }
-            }
 
-            _logger.LogInformation($"{trigger.Id} triggered {triggeredRecipes.Count()}/{recipes.Count()} recipes");
+                _logger.LogInformation($"{trigger.Id} triggered {triggeredRecipes.Count()}/{recipes.Count()} recipes");
 
-            var nonGroupedRecipeTasks = triggeredRecipes.SelectMany(recipe =>
-                recipe.Recipe.RecipeActions
-                    .Where(recipeAction => string.IsNullOrEmpty(recipeAction.RecipeActionGroupId))
-                    .Select(action => (Task) _actionDispatcher.Dispatch(new Dictionary<string, (object data, string json)>()
+                var nonGroupedRecipeTasks = triggeredRecipes.SelectMany(recipe =>
+                    recipe.Recipe.RecipeActions
+                        .Where(recipeAction => string.IsNullOrEmpty(recipeAction.RecipeActionGroupId))
+                        .Select(action => (Task) _actionDispatcher.Dispatch(
+                            new Dictionary<string, (object data, string json)>()
+                            {
+                                {"TriggerData", (recipe.TriggerData, trigger.DataJson)}
+                            }, action)));
+
+                var groupExecutionTasks = triggeredRecipes.SelectMany(recipe => recipe.Recipe.RecipeActionGroups.Select(
+                    actionGroup => _actionDispatcher.Dispatch(new Dictionary<string, (object data, string json)>()
                     {
                         {"TriggerData", (recipe.TriggerData, trigger.DataJson)}
-                    }, action)));
+                    }, actionGroup)));
 
-            var groupExecutionTasks = triggeredRecipes.SelectMany(recipe => recipe.Recipe.RecipeActionGroups.Select(
-                actionGroup => _actionDispatcher.Dispatch(new Dictionary<string, (object data, string json)>()
+                await Task.WhenAll(nonGroupedRecipeTasks.Concat(groupExecutionTasks));
+
+                foreach (var keyValuePair in triggeredRecipes.GroupBy(tuple => tuple.triggerHandler)
+                    .ToDictionary(tuples => tuples.Key, tuples => tuples.ToArray()))
                 {
-                    {"TriggerData", (recipe.TriggerData, trigger.DataJson)}
-                }, actionGroup)));
-
-            await Task.WhenAll(nonGroupedRecipeTasks.Concat(groupExecutionTasks));
-
-            foreach (var keyValuePair in triggeredRecipes.GroupBy(tuple => tuple.triggerHandler)
-                .ToDictionary(tuples => tuples.Key, tuples => tuples.ToArray()))
-            {
-                await keyValuePair.Key.AfterExecution(keyValuePair.Value.Select(tuple => tuple.Recipe));
-            }
+                    await keyValuePair.Key.AfterExecution(keyValuePair.Value.Select(tuple => tuple.Recipe));
+                }
+            });
         }
     }
 }

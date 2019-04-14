@@ -49,7 +49,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.CreateBolt11Invoice
                     Executed = true,
                     Result =
                         $"Created Bolt11 invoice {invoice.BOLT11}",
-                    Data = invoice
+                    TypedData = invoice
                 };
             }
             

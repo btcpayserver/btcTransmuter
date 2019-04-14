@@ -69,7 +69,7 @@ namespace BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest
                         });
                     return new TypedActionHandlerResult<HttpResponseMessage>()
                     {
-                        Data = result,
+                        TypedData = result,
                         Executed = true,
                         Result =
                             $"Request sent. Status Code: {result.StatusCode}"

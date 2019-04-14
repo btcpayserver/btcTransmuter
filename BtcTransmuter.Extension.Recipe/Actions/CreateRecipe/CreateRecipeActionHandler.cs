@@ -72,7 +72,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
                     return new TypedActionHandlerResult<Data.Entities.Recipe>()
                     {
                         Executed = true,
-                        Data = recipe,
+                        TypedData = recipe,
                         Result =
                             $"Created recipe (id:{recipe.Id})",
                         

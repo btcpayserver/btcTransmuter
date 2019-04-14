@@ -62,7 +62,7 @@ namespace BtcTransmuter.Extension.Recipe.Actions.ToggleRecipe
                     return new TypedActionHandlerResult<Data.Entities.Recipe>()
                     {
                         Executed = true,
-                        Data = recipe,
+                        TypedData = recipe,
                         Result =
                             $"Recipe {recipe.Name} is now {(recipe.Enabled ? "Enabled" : "Disabled")}"
                     };

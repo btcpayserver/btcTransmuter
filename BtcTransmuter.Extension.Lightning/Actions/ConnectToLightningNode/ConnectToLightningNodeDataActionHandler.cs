@@ -56,7 +56,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.ConnectToLightningNode
                     Executed = true,
                     Result =
                         $"Connected to LN Node {nodeInfo}",
-                    Data = nodeInfo
+                    TypedData = nodeInfo
                 };
             }
         }

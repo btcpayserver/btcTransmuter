@@ -66,7 +66,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 _nbXplorerClientProvider.GetClient(walletData.CryptoCode))
             {
                 Executed = result.Success,
-                Data = result,
+                TypedData = result,
                 Result = $"Tx broadcasted, {(result.Success ? "Successful" : "Unsuccessful")}, {result.RPCMessage}, {tx}"
             };
         }

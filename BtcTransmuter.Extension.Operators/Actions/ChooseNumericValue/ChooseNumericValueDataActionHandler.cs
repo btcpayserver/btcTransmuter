@@ -55,7 +55,7 @@ namespace BtcTransmuter.Extension.Operators.Actions.ChooseNumericValue
             });
             return new TypedActionHandlerResult<string>()
             {
-                Data = selectedItem.ValueToChoose,
+                TypedData = selectedItem.ValueToChoose,
                 Executed = true,
                 Result = $"chose {selectedItem.ValueToChoose}"
             };

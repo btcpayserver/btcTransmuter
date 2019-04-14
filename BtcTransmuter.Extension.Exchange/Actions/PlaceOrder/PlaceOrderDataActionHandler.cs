@@ -48,7 +48,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                     Executed = true,
                     Result =
                         $"Place order ({result.OrderId}) Status: {result.Result}",
-                    Data = result
+                    TypedData = result
                 };
             }
             catch (Exception e)
