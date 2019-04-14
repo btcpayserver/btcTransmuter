@@ -77,9 +77,22 @@ namespace BtcTransmuter.ViewComponents
                 properties.Add(type.Name, "Too deep, guess the rest bro");
                 return properties;
             }
-            var tProps = type.GetProperties();
+
+            var tProps = type.GetProperties().GroupBy(info => info.Name + info.PropertyType).Select(infos => infos.First());
             foreach (var prop in tProps)
             {
+                if (properties.ContainsKey(prop.Name))
+                {
+                    var currentValue = properties[prop.Name];
+                    if (currentValue is Dictionary<string, object> currentValueDict)
+                    {
+                        properties[prop.Name] = currentValueDict
+                            .Concat(GetRecursiveAvailableProperties(prop.PropertyType, currentDepth + 1))
+                            .ToDictionary(pair => pair.Key, pair => pair.Value);
+                    }
+                    continue;
+                }
+                
                 properties.Add(prop.Name,
                     prop.PropertyType.IsPrimitive
                         ? (dynamic) prop.PropertyType.ToString()
