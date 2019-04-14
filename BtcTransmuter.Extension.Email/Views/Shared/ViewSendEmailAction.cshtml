@@ -6,13 +6,13 @@
 }
 
 <div>
-    Send Email to @data.To 
+    Send Email to <kbd>@data.To</kbd>
     @if (!string.IsNullOrEmpty(data.Subject))
     {
-        <span>with subject @data.Subject</span>
+        <span>with subject <kbd>@data.Subject</kbd></span>
     }
     @if (!string.IsNullOrEmpty(data.Body))
     {
-        <span>with body @data.Body</span>
+        <span>with body <kbd>@data.Body</kbd></span>
     }
 </div>
