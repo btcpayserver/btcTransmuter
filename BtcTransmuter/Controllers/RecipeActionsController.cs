@@ -123,7 +123,7 @@ namespace BtcTransmuter.Controllers
                     id = id,
                     statusMessage = new StatusMessageModel()
                     {
-                        Message = "The action your are trying to delete has been executed in the past and thus cannot be deleted for historical auditing reasons. A workaround is to recreate the recipe and then delete this recipe.",
+                        Message = "The action you're are trying to delete has been executed in the past and thus cannot be deleted for historical auditing reasons. A workaround is to recreate the recipe and then delete this recipe.",
                         Severity = StatusMessageModel.StatusSeverity.Error
                     }.ToString()
                 });
