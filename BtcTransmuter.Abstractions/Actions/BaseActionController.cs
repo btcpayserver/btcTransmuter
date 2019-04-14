@@ -74,10 +74,10 @@ namespace BtcTransmuter.Abstractions.Actions
 
             if (!string.IsNullOrEmpty(modelResult.ToSave.ExternalServiceId))
             {
-                var valid = null != await _externalServiceManager.GetExternalServiceData(
-                                modelResult.ToSave.ExternalServiceId,
-                                GetUserId());
-                if (!valid)
+                var externalService= await _externalServiceManager.GetExternalServiceData(
+                    modelResult.ToSave.ExternalServiceId,
+                    GetUserId());
+                if (externalService == null)
                 {
                     return BadRequest("what you tryin to pull bro");
                 }
