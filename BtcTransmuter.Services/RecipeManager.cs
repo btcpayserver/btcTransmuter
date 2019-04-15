@@ -232,19 +232,20 @@ namespace BtcTransmuter.Services
                         throw new ArgumentException();
                     }
 
-                    var invocations = (await GetRecipeInvocations(new RecipeInvocationsQuery()
-                    {
-                        Skip = 0,
-                        Take = int.MaxValue,
-                        RecipeId = id
-                    })).ToList();
+                    //TODO: double check if this was needed
+//                    var invocations = (await GetRecipeInvocations(new RecipeInvocationsQuery()
+//                    {
+//                        Skip = 0,
+//                        Take = int.MaxValue,
+//                        RecipeId = id
+//                    })).ToList();
 
                     context.Attach(recipe);
                     context.AttachRange(recipe.RecipeActions);
                     if (recipe.RecipeTrigger != null)
                         context.AttachRange(recipe.RecipeTrigger);
-                    context.AttachRange(invocations);
-                    context.RecipeInvocations.RemoveRange(invocations);
+//                    context.AttachRange(invocations);
+//                    context.RecipeInvocations.RemoveRange(invocations);
                     context.Remove(recipe);
                     await context.SaveChangesAsync();
                 }
