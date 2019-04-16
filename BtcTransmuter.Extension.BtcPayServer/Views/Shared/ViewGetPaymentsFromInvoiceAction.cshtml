@@ -1,0 +1,9 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<GetPaymentsFromInvoiceData>();
+}
+<div>
+    Get <kbd>@data.CryptoCode @data.PaymentType </kbd>of BtcPay invoice <kbd>@data.InvoiceId</kbd>
+</div>

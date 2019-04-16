@@ -13,7 +13,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
         <PackageReference Include="NBitcoin" Version="4.1.1.98" />
-        <PackageReference Include="NBitpayClient" Version="1.0.0.32" />
+        <PackageReference Include="NBitpayClient" Version="1.0.0.34" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,50 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer;
+using BtcTransmuter.Extension.DynamicServices;
+using NBitpayClient;
+
+namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
+{
+    public class GetPaymentsFromInvoiceDataActionHandler : BaseActionHandler<GetPaymentsFromInvoiceData, List<InvoicePaymentInfo>>
+    {
+        public override string ActionId => "GetPaymentsFromInvoice";
+        public override string Name => "Get payments on BTCPay invoice";
+
+        public override string Description =>
+            "Get the payments made to a specific btcpay invoice";
+
+        public override string ViewPartial => "ViewGetPaymentsFromInvoiceAction";
+
+        public override string ControllerName => "GetPaymentsFromInvoice";
+
+        public GetPaymentsFromInvoiceDataActionHandler()
+        {
+        }
+        protected override async Task<TypedActionHandlerResult<List<InvoicePaymentInfo>>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+            GetPaymentsFromInvoiceData actionData)
+        {
+
+            var externalService = await recipeAction.GetExternalService();
+            var service  = new BtcPayServerService(externalService);
+            var invoiceId = InterpolateString(actionData.InvoiceId, data);
+            var invoice = await service.ConstructClient().GetInvoiceAsync(invoiceId);
+
+            var payments = invoice.CryptoInfo.SingleOrDefault(info => info.CryptoCode.Equals(actionData.CryptoCode))?
+                               .Payments.Where(x =>
+                                   string.IsNullOrEmpty(actionData.PaymentType) ||
+                                   x.PaymentType.Equals(actionData.PaymentType))
+                               .ToList() ?? new List<InvoicePaymentInfo>();
+            
+            return new BtcPayServerActionHandlerResult<List<InvoicePaymentInfo>>()
+            {
+                Executed = true,
+                TypedData = payments,
+                Result = $"found {payments.Count} {actionData.CryptoCode} payments in invoice {invoiceId}"
+            };
+        }
+    }
+}
