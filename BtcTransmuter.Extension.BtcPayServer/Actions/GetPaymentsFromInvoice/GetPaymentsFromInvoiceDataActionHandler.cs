@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer;
+using BtcTransmuter.Extension.BtcPayServer.HostedServices;
 using BtcTransmuter.Extension.DynamicServices;
 using NBitpayClient;
 
@@ -31,7 +32,8 @@ namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
             var externalService = await recipeAction.GetExternalService();
             var service  = new BtcPayServerService(externalService);
             var invoiceId = InterpolateString(actionData.InvoiceId, data);
-            var invoice = await service.ConstructClient().GetInvoiceAsync(invoiceId);
+            var client = service.ConstructClient();
+            var invoice = await client.GetInvoiceAsync<BtcPayInvoice>(invoiceId);
 
             var payments = invoice.CryptoInfo.SingleOrDefault(info => info.CryptoCode.Equals(actionData.CryptoCode))?
                                .Payments.Where(x =>

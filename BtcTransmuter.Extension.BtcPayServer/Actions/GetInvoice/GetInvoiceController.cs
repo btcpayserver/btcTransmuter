@@ -12,23 +12,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
+namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetInvoice
 {
     [Route("btcpayserver-plugin/actions/[controller]")]
     [Authorize]
-    public class GetPaymentsFromInvoiceController : BaseActionController<
-        GetPaymentsFromInvoiceController.GetPaymentsFromInvoiceViewModel,
-        GetPaymentsFromInvoiceData>
+    public class GetInvoiceController : BaseActionController<
+        GetInvoiceController.GetInvoiceViewModel,
+        GetInvoiceData>
     {
         private readonly IExternalServiceManager _externalServiceManager;
 
-        private static readonly SelectListItem[] PaymentTypes =
-        {
-            new SelectListItem("On-Chain", "BTCLike"),
-            new SelectListItem("Off-Chain", "LightningLike")
-        };
-
-        public GetPaymentsFromInvoiceController(IMemoryCache memoryCache,
+        public GetInvoiceController(IMemoryCache memoryCache,
             UserManager<User> userManager,
             IRecipeManager recipeManager,
             IExternalServiceManager externalServiceManager) : base(
@@ -38,35 +32,31 @@ namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
             _externalServiceManager = externalServiceManager;
         }
 
-        protected override async Task<GetPaymentsFromInvoiceViewModel> BuildViewModel(RecipeAction from)
+        protected override async Task<GetInvoiceViewModel> BuildViewModel(RecipeAction from)
         {
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery
             {
                 Type = new[] {BtcPayServerService.BtcPayServerServiceType},
                 UserId = GetUserId()
             });
-            var fromData = from.Get<GetPaymentsFromInvoiceData>();
-            return new GetPaymentsFromInvoiceViewModel
+            var fromData = from.Get<GetInvoiceData>();
+            return new GetInvoiceViewModel
             {
                 RecipeId = from.RecipeId,
                 ExternalServiceId = from.ExternalServiceId,
                 ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
                     nameof(ExternalServiceData.Name), from.ExternalServiceId),
-                PaymentTypes = new SelectList(PaymentTypes, nameof(SelectListItem.Value), nameof(SelectListItem.Text),
-                    fromData.PaymentType),
-                PaymentType =  fromData.PaymentType,
                 InvoiceId =  fromData.InvoiceId,
-                CryptoCode = fromData.CryptoCode
             };
         }
 
-        protected override async Task<(RecipeAction ToSave, GetPaymentsFromInvoiceViewModel showViewModel)> BuildModel(
-            GetPaymentsFromInvoiceViewModel viewModel, RecipeAction mainModel)
+        protected override async Task<(RecipeAction ToSave, GetInvoiceViewModel showViewModel)> BuildModel(
+            GetInvoiceViewModel viewModel, RecipeAction mainModel)
         {
             if (ModelState.IsValid)
             {
                 mainModel.ExternalServiceId = viewModel.ExternalServiceId;
-                mainModel.Set<GetPaymentsFromInvoiceData>(viewModel);
+                mainModel.Set<GetInvoiceData>(viewModel);
                 return (mainModel, null);
             }
 
@@ -77,12 +67,10 @@ namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
             });
             viewModel.ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
                 nameof(ExternalServiceData.Name), viewModel.ExternalServiceId);
-            viewModel.PaymentTypes = new SelectList(PaymentTypes, nameof(SelectListItem.Value),
-                nameof(SelectListItem.Text), viewModel.PaymentType);
             return (null, viewModel);
         }
 
-        public class GetPaymentsFromInvoiceViewModel : GetPaymentsFromInvoiceData, IActionViewModel, IUseExternalService
+        public class GetInvoiceViewModel : GetInvoiceData, IActionViewModel, IUseExternalService
         {
             public string RecipeId { get; set; }
             public string RecipeActionIdInGroupBeforeThisOne { get; set; }
