@@ -1,0 +1,26 @@
+@using System.Reflection
+@using BtcTransmuter.Extension.Operators.Actions.Condition
+@model BtcTransmuter.Extension.Operators.Actions.Condition.ConditionController.ConditionViewModel
+@{
+    ViewData["Title"] = "Edit Condition Action";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    
+    
+    <input type="hidden" asp-for="RecipeId"/>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
+    </div>
+</form>
+@await Component.InvokeAsync("RecipeActionFooter", new
+{
+    recipeId = @Model.RecipeId,
+    recipeActionIdInGroupBeforeThisOne = @Model.RecipeActionIdInGroupBeforeThisOne
+})

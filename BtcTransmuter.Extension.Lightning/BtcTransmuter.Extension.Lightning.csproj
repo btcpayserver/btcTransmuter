@@ -5,10 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BTCPayServer.Lightning.All" Version="1.1.0.15" />
+        <PackageReference Include="BTCPayServer.Lightning.All" Version="1.1.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
-        <PackageReference Include="NBitcoin" Version="4.1.1.98" />
+        <PackageReference Include="NBitcoin" Version="4.1.1.99" />
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />

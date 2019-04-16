@@ -1,0 +1,10 @@
+@using BtcTransmuter.Data.Models
+@using BtcTransmuter.Extension.Operators.Actions.Condition
+@model BtcTransmuter.Data.Entities.RecipeAction
+@{
+    var data = Model.Get<ConditionData>();
+}
+
+<div>
+    Choose @data.Comparison of @string.Join(", ", data.Items.Select(item => $"{item.ValueToChoose}, {item.ValueToCompare}"))
+</div>
