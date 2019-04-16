@@ -66,17 +66,19 @@ namespace BtcTransmuter.ViewComponents
                          for (var i = 0; i < actions.Count(); i++)
                          {
                              var currentAction = actions.ElementAt(i);
-                                 
-                             type = _actionDescriptors.FirstOrDefault(handler =>
-                                 handler.ActionId == currentAction.ActionId)?.ActionResultDataType;
-                             
-                             properties.Add($"Action{i}", GetRecursiveAvailableProperties(type));
-
+                          
                              if (currentAction.Id.Equals(recipeActionIdInGroupBeforeThisOne,
                                  StringComparison.InvariantCultureIgnoreCase))
                              {
                                  break;
                              }
+                             
+                             type = _actionDescriptors.FirstOrDefault(handler =>
+                                 handler.ActionId == currentAction.ActionId)?.ActionResultDataType;
+                             
+                             properties.Add($"Action{i}", GetRecursiveAvailableProperties(type));
+
+                            
                          }
                      }
                  }
