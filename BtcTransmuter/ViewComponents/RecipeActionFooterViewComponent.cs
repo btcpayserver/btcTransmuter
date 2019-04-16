@@ -76,7 +76,7 @@ namespace BtcTransmuter.ViewComponents
                              type = _actionDescriptors.FirstOrDefault(handler =>
                                  handler.ActionId == currentAction.ActionId)?.ActionResultDataType;
                              
-                             properties.Add($"Action{i}", GetRecursiveAvailableProperties(type));
+                             properties.Add($"ActionData{i}", GetRecursiveAvailableProperties(type));
 
                             
                          }
