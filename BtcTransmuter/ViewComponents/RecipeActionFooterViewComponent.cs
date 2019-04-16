@@ -46,19 +46,40 @@ namespace BtcTransmuter.ViewComponents
 
             if (!string.IsNullOrEmpty(recipeActionIdInGroupBeforeThisOne))
             {
-                 var recipeAction = recipe.RecipeActions.FirstOrDefault(action =>
+                 var previousAction = recipe.RecipeActions.FirstOrDefault(action =>
                     action.Id.Equals(recipeActionIdInGroupBeforeThisOne, StringComparison.InvariantCultureIgnoreCase));
 
-                 if (recipeAction != null)
+                 if (previousAction != null)
                  {
                      var type = _actionDescriptors.FirstOrDefault(handler =>
-                         handler.ActionId == recipeAction.ActionId)?.ActionResultDataType;
+                         handler.ActionId == previousAction.ActionId)?.ActionResultDataType;
 
                      properties.Add("PreviousAction", GetRecursiveAvailableProperties(type));
+
+
+                     var recipeActionGroupId = previousAction.RecipeActionGroupId;
+                     var recipeActionGroup = recipe.RecipeActionGroups.SingleOrDefault(group =>
+                         group.Id.Equals(recipeActionGroupId, StringComparison.InvariantCultureIgnoreCase));
+                     if (recipeActionGroup != null)
+                     {
+                         var actions = recipeActionGroup.RecipeActions.OrderBy(action => action.Order);
+                         for (var i = 0; i < actions.Count(); i++)
+                         {
+                             var currentAction = actions.ElementAt(i);
+                                 
+                             type = _actionDescriptors.FirstOrDefault(handler =>
+                                 handler.ActionId == currentAction.ActionId)?.ActionResultDataType;
+                             
+                             properties.Add($"Action{i}", GetRecursiveAvailableProperties(type));
+
+                             if (currentAction.Id.Equals(recipeActionIdInGroupBeforeThisOne,
+                                 StringComparison.InvariantCultureIgnoreCase))
+                             {
+                                 break;
+                             }
+                         }
+                     }
                  }
-                 
-                 //TODO: query recipe action id above and retrieve its previous ones
-                 
             }
 
             return View(new RecipeActionFooterViewModel()
