@@ -3,11 +3,6 @@
 
 @{
     ViewData["Title"] = $"{Model.Name} Recipe Logs";
-
-    string invoiceVal(Dictionary<string, object> dict, string key)
-    {
-        return ((Dictionary<string, object>)dict["Invoice"])[key].ToString();
-    }
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -59,23 +54,9 @@
                     var triggerData = @PosDataParser.ParsePosData(item.TriggerDataJson);
                 }
 
-                @if (trigger.TriggerId != null &&
-                     trigger.TriggerId.Contains(".InvoiceStatusChangedTrigger"))
-                {
-                    <div>Invoice Id: @invoiceVal(triggerData, "Id")</div>
-                    <div>
-                        Amount: @invoiceVal(triggerData, "price") @invoiceVal(triggerData, "currency")
-                    </div>
-                    <div>
-                        BtcPaid: @invoiceVal(triggerData, "BtcPrice")
-                    </div>
-                }
-                else
-                {
-                    <div style="width: 100%; max-width: 500px; max-height: 250px; overflow:scroll">
-                        <partial name="PosData" model="triggerData" />
-                    </div>
-                }
+                <div style="width: 100%; max-width: 500px; max-height: 250px; overflow:scroll">
+                    <partial name="PosData" model="triggerData" />
+                </div>
             </td>
         </tr>
     }
