@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Abstractions.Helpers
@@ -10,8 +11,8 @@ namespace BtcTransmuter.Abstractions.Helpers
         public static ICollection<ValidationResult> Validate<T>(string data)
         {
             try
-            {
-                var parsedData = JObject.Parse(data).ToObject<T>();
+            { 
+                var parsedData = JsonConvert.DeserializeObject<T>(data);
                 var vc = new ValidationContext(parsedData);
                 var result = new List<ValidationResult>();
                 Validator.TryValidateObject(data, vc, result);

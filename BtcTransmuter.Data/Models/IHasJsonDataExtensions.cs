@@ -7,16 +7,12 @@ namespace BtcTransmuter.Data.Models
     {
         public static T Get<T>(this IHasJsonData i)
         {
-            return JObject.Parse(i.DataJson ?? "{}").ToObject<T>();
+            return JsonConvert.DeserializeObject<T>(i.DataJson ?? "{}");
         }
 
         public static void Set<T>(this IHasJsonData i, T data)
         {
-            i.DataJson = JObject.FromObject(data, JsonSerializer.CreateDefault(new JsonSerializerSettings()
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            })).ToString();
+            i.DataJson =  JsonConvert.SerializeObject(data);
         }
     }
 }

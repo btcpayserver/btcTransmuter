@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
@@ -82,7 +83,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
                 using (var stream = new StreamReader(Request.Body))
                 {
                     body = await stream.ReadToEndAsync();
-                    bodyJson = JObject.Parse(body);
+                    bodyJson = JsonConvert.DeserializeObject(body);
                 }
             }
             catch (Exception)
