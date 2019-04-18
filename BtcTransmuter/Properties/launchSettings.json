@@ -23,7 +23,7 @@
         "TRANSMUTER_DatabaseType": "sqlite",
         "TRANSMUTER_DataProtectionDir": "C:/transmuterkey",
         "ASPNETCORE_ENVIRONMENT": "Development",
-		"NBXplorer_Cryptos":"BTC,LTC",
+		"NBXplorer_Cryptos":"BTC;LTC",
 		"NBXplorer_Uri": "http://127.0.0.1:32838/",
 		"NBXplorer_NetworkType":"Regtest",
 		"NBXplorer_UseDefaultCookie": "1"
