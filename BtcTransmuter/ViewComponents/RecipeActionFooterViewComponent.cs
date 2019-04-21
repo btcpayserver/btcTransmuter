@@ -100,7 +100,7 @@ namespace BtcTransmuter.ViewComponents
                 properties.Add(type.Name, "Too deep, guess the rest bro");
                 return properties;
             }
-
+            
             var tProps = type.GetProperties().GroupBy(info => info.Name + info.PropertyType).Select(infos => infos.First());
             foreach (var prop in tProps)
             {
@@ -120,6 +120,20 @@ namespace BtcTransmuter.ViewComponents
                     prop.PropertyType.IsPrimitive
                         ? (dynamic) prop.PropertyType.ToString()
                         : GetRecursiveAvailableProperties(prop.PropertyType, currentDepth+1));
+            }
+            
+            if (type.IsArray)
+            {
+
+                var arrayType = type.GetInterfaces()
+                    .SingleOrDefault(type1 =>
+                        type1.IsGenericType && type1.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                    ?.GetGenericArguments().FirstOrDefault();
+
+                if (arrayType != null)
+                {
+                    properties.Add("[index]", GetRecursiveAvailableProperties(arrayType, currentDepth));
+                }
             }
 
             return properties;
