@@ -1,0 +1,120 @@
+@model GetRecipesViewModel
+
+
+@{
+    ViewData["Title"] = "Recipes";
+}
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <partial name="_StatusMessage" model="@Model.StatusMessage"/>
+    </div>
+</div>
+<h2>
+    @ViewData["Title"] <a asp-action="CreateRecipe" class="badge badge-primary">Create New</a>
+</h2>
+<p>
+
+</p>
+@if (!Model.Recipes.Any())
+{
+    <div class="card">
+        <h3 class="card-header text-center">
+            No Recipes!
+        </h3>
+    </div>
+}
+<div class="card-columns">
+
+    @foreach (var recipe in Model.Recipes)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    @Html.Raw(recipe.Name)
+                </h3>
+                <p class="card-text">@Html.Raw(recipe.Description)</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <h4>Trigger</h4>
+                    @if (recipe.RecipeTrigger == null)
+                    {
+                        <span>No trigger set yet</span>
+                    }
+                    else
+                    {
+                        @await Component.InvokeAsync("ViewRecipeTrigger", recipe.RecipeTrigger)
+                    }
+                </li>
+                <li class="list-group-item">
+                    <h4>Actions</h4>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var action in recipe.RecipeActions.Where(action => action.RecipeActionGroup == null))
+                        {
+                            <li class="list-group-item px-0">
+                                @await Component.InvokeAsync("ViewRecipeAction", action)
+                            </li>
+                        }
+                        @if (!recipe.RecipeActions.Any())
+                        {
+                            <li class="list-group-item border-top-0">
+                                No Actions
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="list-group-item">
+                    <h4>Action Groups</h4>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var actionGroup in recipe.RecipeActionGroups)
+                        {
+                            <li class="list-group-item px-0">
+                                <div class="card">
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var action in actionGroup.RecipeActions.OrderBy(action => action.Order))
+                                        {
+                                            <li class="list-group-item px-0">
+                                                @await Component.InvokeAsync("ViewRecipeAction", action)
+                                            </li>
+                                        }
+                                        @if (!actionGroup.RecipeActions.Any())
+                                        {
+                                            <li class="list-group-item border-top-0">
+                                                No Actions
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+                        }
+                        @if (!recipe.RecipeActionGroups.Any())
+                        {
+                            <li class="list-group-item border-top-0">
+                                No Action Groups
+                            </li>
+                        }
+                    </ul>
+                </li>
+            </ul>
+            <div class="card-footer">
+                <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@recipe.Id">Edit</a> -
+                <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
+                <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs</a>
+
+                <div class="float-right">
+                    @if (recipe.Enabled)
+                    {
+                        <span class="badge badge-info">Enabled</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">Disabled</span>
+                    }
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>

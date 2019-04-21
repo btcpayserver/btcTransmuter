@@ -1,0 +1,37 @@
+@model UsersViewModel
+
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <partial name="_StatusMessage" model="@Model.StatusMessage"/>
+    </div>
+</div>
+
+<table class="table table-responsive-md">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+
+        <th width="120"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Users)
+    {
+        <tr>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                <a asp-action="GetRecipes" asp-controller="AdminRecipeAccess" asp-route-userId="@item.Id">Recipes</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

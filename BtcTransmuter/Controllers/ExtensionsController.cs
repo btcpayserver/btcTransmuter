@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BtcTransmuter.Controllers
 {
-    [Authorize]
     [Route("extensions")]
     public class ExtensionsController : Controller
     {

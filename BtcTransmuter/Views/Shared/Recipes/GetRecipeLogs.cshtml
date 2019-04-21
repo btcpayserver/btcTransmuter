@@ -1,0 +1,77 @@
+@using BtcTransmuter.Helpers
+@model GetRecipeLogsViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Name} Recipe Logs";
+}
+
+<h1>@ViewData["Title"]</h1>
+@{
+
+
+}
+<table class="table table-responsive-md">
+    <thead>
+        <tr>
+            <th>
+                Time and Action
+            </th>
+            <th>
+                Result
+            </th>
+            <th>
+                Trigger
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.RecipeInvocations)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Timestamp)
+
+                @await Component.InvokeAsync("ViewRecipeAction", new
+                {
+                    recipeAction = item.RecipeAction
+                })
+            </td>
+
+            <td>
+                @if (item.RecipeAction.ActionId == "PlaceOrder")
+                {
+                    <span>@item.ActionResult</span>
+                }
+                else
+                {
+                    <partial name="PosData" model="@PosDataParser.ParsePosData(item.ActionResult)" />
+                }
+            </td>
+
+            <td>
+                @{
+                    var trigger = item.Recipe.RecipeTrigger;
+                    var triggerData = @PosDataParser.ParsePosData(item.TriggerDataJson);
+                }
+
+                <div style="width: 100%; max-width: 500px; max-height: 250px; overflow:scroll">
+                    <partial name="PosData" model="triggerData" />
+                </div>
+            </td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3" class="d-flex justify-content-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" asp-action="GetRecipeLogs" asp-route-id="@Model.Id" asp-route-skip="@(Math.Max(0, Model.Skip-Model.Take))" asp-route-take="@Model.Skip+ Model.Take">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Showing @(Model.Skip +1) - @(Model.Skip+ Model.Take)  </a></li>
+                    <li class="page-item"><a class="page-link" asp-action="GetRecipeLogs" asp-route-id="@Model.Id" asp-route-skip="@(Model.Skip+Model.Take)" asp-route-take="@Model.Skip+ Model.Take">Next</a></li>
+                </ul>
+            </nav>
+        </td>
+    </tr>
+    </tfoot>
+</table>
