@@ -8,6 +8,7 @@ using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Helpers;
 using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Mvc;
+using NBitcoin;
 
 namespace BtcTransmuter.ViewComponents
 {
@@ -90,10 +91,14 @@ namespace BtcTransmuter.ViewComponents
                 NoRecipeTrigger = recipe?.RecipeTrigger == null
             });
         }
-
+        private static Dictionary<Type, Dictionary<string, object> > cached = new Dictionary<Type, Dictionary<string, object>>();
 
         private Dictionary<string, object> GetRecursiveAvailableProperties(Type type, int currentDepth = 0)
         {
+            if (cached.ContainsKey(type))
+            {
+                return cached[type];
+            }
             var properties = new Dictionary<string, dynamic>();
             if (currentDepth >= 5)
             {
@@ -122,20 +127,44 @@ namespace BtcTransmuter.ViewComponents
                         : GetRecursiveAvailableProperties(prop.PropertyType, currentDepth+1));
             }
             
-            if (type.IsArray)
+            if (type.IsArray || (type.IsGenericType && new Type[]{typeof(Dictionary<,>), typeof(List<>)}.Contains(type.GetGenericTypeDefinition() )))
             {
 
-                var arrayType = type.GetInterfaces()
-                    .SingleOrDefault(type1 =>
-                        type1.IsGenericType && type1.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-                    ?.GetGenericArguments().FirstOrDefault();
+                var genericArguments = type.GetInterfaces()
+                    .FirstOrDefault(type1 =>
+                    {
+                        if (type1.IsGenericType)
+                        {
+                            var definition = type1.GetGenericTypeDefinition();
+                            if (definition == typeof(IDictionary<,>) || definition == typeof(IEnumerable<>))
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                         )
+                    ?.GetGenericArguments();
 
-                if (arrayType != null)
+                if (genericArguments != null)
                 {
-                    properties.Add("[index]", GetRecursiveAvailableProperties(arrayType, currentDepth));
+                    var indexName = "[index]";
+                    if (genericArguments.Length > 1)
+                    {
+                        var keyType = genericArguments.First();
+                        if (keyType == typeof(string))
+                        {
+                            indexName = "[\"index\"]";
+                        }
+                        else
+                        {
+                            indexName = $"[index-{keyType.Name}]";
+                        }
+                    }
+                    properties.Add(indexName, GetRecursiveAvailableProperties(genericArguments.Last(), currentDepth));
                 }
             }
-
+            cached.AddOrReplace(type, properties);
             return properties;
         }
     }
