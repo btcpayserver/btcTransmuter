@@ -2,20 +2,20 @@
 
 ## Introduction - What is BtcTransmuter?
 
-BtcTransmuter is a free, open-source & self-hosted tool that allows you to actions that execute automatically upon specified conditions. Its primary focus is the integration of cryptocurrency services to help users manage their funds and business workflow.
+BtcTransmuter is a free, open-source & self-hosted tool that allows you to configure actions that execute automatically upon specified conditions. Its primary focus is the integration of cryptocurrency services to help users manage their funds and business workflow.
 
 ## How does it work?
 There are 3 main components in BtcTransmuter - External Services, Recipes and Extensions. 
 
 * External services integrated with third parties, such as a BTCPayServer instance or a Cryptocurrency Exchange.
-* Recipes is a set of instructions created by the user: What to execute and when. The execution part is called a Recipe Action while the condition is called a Recipe Trigger. An action could be `Send an Email using the SMTP External Service` and the trigger being `If a new invocie was created on my BtcPay External Service`
+* Recipes is a set of instructions created by the user: What to execute and when. The execution part is called a Recipe Action while the condition is called a Recipe Trigger. An action could be `Send an Email using the SMTP External Service` and the trigger being `If a new invoice was created on my BtcPay External Service`
 * Extensions provide a way to add more external service types, actions and triggers without needing to modify the original code.
 
 
 ## How do I deploy?
 You don't, this is alpha software man!
 
-##What extensions are provided?
+## What extensions are provided?
 Currently there are 3 extensions that come bundled with the main application:
 * Email - Provides you with a way to check a POP3 for incoming emails and a way to send Email via SMTP
 * BtcPayServer - Provides you a way to check for status changes on invoices with the paired store
