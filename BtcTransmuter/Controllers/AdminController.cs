@@ -42,7 +42,7 @@ namespace BtcTransmuter.Controllers
                 UserId = userId
             });
 
-            return View("../Recipes/GetRecipes",new GetRecipesViewModel()
+            return View(new GetRecipesViewModel()
             {
                 StatusMessage = statusMessage,
                 Recipes = recipes
