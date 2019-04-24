@@ -23,4 +23,4 @@ ENV TRANSMUTER_DatabaseType="sqlite"
 ENV TRANSMUTER_DataProtectionDir="data"
 
 RUN ["chmod", "+x", "/app/entrypoint.sh"]
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["dotnet", "BtcTransmuter.dll"]
