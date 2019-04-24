@@ -21,9 +21,11 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item mr-3">
-                        <a asp-area="" asp-controller="Admin" asp-action="Users">Admin</a>
-                    </li>
+                    @if(User.IsInRole("Managers")){
+                        <li class="nav-item mr-3">
+                            <a asp-area="" asp-controller="Admin" asp-action="Users">Admin</a>
+                        </li>
+                    }
                     <li class="nav-item mr-3">
                         <a asp-area="" asp-controller="Extensions" asp-action="Extensions">Extensions</a>
                     </li>

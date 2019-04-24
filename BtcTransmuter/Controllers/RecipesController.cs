@@ -25,14 +25,14 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetRecipes([FromQuery] string statusMessage = null)
+        public virtual async Task<IActionResult> GetRecipes([FromQuery] string statusMessage = null)
         {
             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
             {
                 UserId = GetUserId()
             });
 
-            return View("Recipes/GetRecipes",new GetRecipesViewModel()
+            return View("GetRecipes",new GetRecipesViewModel()
             {
                 StatusMessage = statusMessage,
                 Recipes = recipes
@@ -40,7 +40,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("{id}/remove")]
-        public async Task<IActionResult> RemoveRecipe(string id)
+        public virtual async Task<IActionResult> RemoveRecipe(string id)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());
             if (recipe == null)
@@ -55,7 +55,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpPost("{id}/remove")]
-        public async Task<IActionResult> RemoveRecipePost(string id)
+        public virtual async Task<IActionResult> RemoveRecipePost(string id)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());
             if (recipe == null)
@@ -76,7 +76,7 @@ namespace BtcTransmuter.Controllers
 
 
         [HttpGet("{id}/logs")]
-        public async Task<IActionResult> GetRecipeLogs(string id, int skip = 0, int take = 100)
+        public virtual async Task<IActionResult> GetRecipeLogs(string id, int skip = 0, int take = 100)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());
             if (recipe == null)
@@ -107,7 +107,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("create")]
-        public IActionResult CreateRecipe(string statusMessage)
+        public virtual IActionResult CreateRecipe(string statusMessage)
         {
             return View(new CreateRecipeViewModel()
             {
@@ -116,7 +116,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateRecipe(CreateRecipeViewModel viewModel)
+        public virtual async Task<IActionResult> CreateRecipe(CreateRecipeViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -141,7 +141,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> EditRecipe(string id, string statusMessage)
+        public virtual async Task<IActionResult> EditRecipe(string id, string statusMessage)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());
             if (recipe == null)
@@ -168,7 +168,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> EditRecipe(string id, EditRecipeViewModel viewModel)
+        public virtual async Task<IActionResult> EditRecipe(string id, EditRecipeViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -191,7 +191,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("{id}/action-groups/add")]
-        public async Task<IActionResult> AddRecipeActionGroup(string id)
+        public virtual async Task<IActionResult> AddRecipeActionGroup(string id)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());
             if (recipe == null)
@@ -207,7 +207,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("{id}/action-groups/{actionGroupId}/remove")]
-        public async Task<IActionResult> RemoveRecipeActionGroup(string id, string actionGroupId)
+        public virtual async Task<IActionResult> RemoveRecipeActionGroup(string id, string actionGroupId)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());
             if (recipe == null || !
@@ -239,7 +239,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpPost("{id}/action-groups/{actionGroupId}/order")]
-        public async Task<IActionResult> ReorderRecipeActionGroup(string id, string actionGroupId,
+        public virtual async Task<IActionResult> ReorderRecipeActionGroup(string id, string actionGroupId,
             UpdateActionGroupOrderViewModel vm)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());

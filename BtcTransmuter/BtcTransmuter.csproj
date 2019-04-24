@@ -43,6 +43,21 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\site.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\site.min.css" />
+    <_ContentIncludedByDefault Remove="Views\Recipes\CreateRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Recipes\EditRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Recipes\GetRecipeLogs.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Recipes\GetRecipes.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Recipes\RemoveRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Recipes\CreateRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Recipes\EditRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Recipes\GetRecipeLogs.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Recipes\GetRecipes.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Recipes\RemoveRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\CreateRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\EditRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\GetRecipeLogs.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\GetRecipes.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\RemoveRecipe.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

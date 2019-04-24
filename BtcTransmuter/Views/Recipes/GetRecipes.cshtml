@@ -1,8 +1,10 @@
+@using Microsoft.AspNetCore.Hosting.Internal
 @model GetRecipesViewModel
 
 
 @{
     ViewData["Title"] = "Recipes";
+
 }
 
 <div class="row">
@@ -98,7 +100,7 @@
                 </li>
             </ul>
             <div class="card-footer">
-                <a asp-action="EditRecipe" asp-controller="Recipes" asp-route-id="@recipe.Id">Edit</a> -
+                <a asp-action="EditRecipe" asp-route-id="@recipe.Id">Edit</a> -
                 <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
                 <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs</a>
 
