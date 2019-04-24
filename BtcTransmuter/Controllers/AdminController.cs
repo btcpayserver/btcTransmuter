@@ -35,7 +35,7 @@ namespace BtcTransmuter.Controllers
         }
         
         [HttpGet("users/{userId}/recipes")]
-        public virtual async Task<IActionResult> GetRecipes(string userId, [FromQuery] string statusMessage = null)
+        public virtual async Task<IActionResult> UserRecipes(string userId, [FromQuery] string statusMessage = null)
         {
             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
             {
