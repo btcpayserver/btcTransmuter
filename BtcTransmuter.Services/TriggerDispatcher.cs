@@ -28,6 +28,7 @@ namespace BtcTransmuter.Services
 
         public async Task DispatchTrigger(ITrigger trigger)
         {
+            //triggers should block their callers
             _ = Task.Run(async () =>
             {
                 _logger.LogInformation($"Trigger being dispatched: {trigger.Id}");
