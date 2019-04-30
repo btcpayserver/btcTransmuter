@@ -39,6 +39,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Dyn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Tests.Base", "BtcTransmuter.Tests.Base\BtcTransmuter.Tests.Base.csproj", "{F0726695-92AD-4A92-99C2-175D334442D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.BtcPayServer.Tests", "BtcTransmuter.Extension.BtcPayServer.Tests\BtcTransmuter.Extension.BtcPayServer.Tests.csproj", "{A969B952-1F78-4E85-9789-7DD23B742766}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.DynamicServices.Tests", "BtcTransmuter.Extension.DynamicServices.Tests\BtcTransmuter.Extension.DynamicServices.Tests.csproj", "{9A2A367B-4396-45A3-A6EE-165A0F0AD40C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Email.Tests", "BtcTransmuter.Extension.Email.Tests\BtcTransmuter.Extension.Email.Tests.csproj", "{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +123,18 @@ Global
 		{F0726695-92AD-4A92-99C2-175D334442D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0726695-92AD-4A92-99C2-175D334442D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0726695-92AD-4A92-99C2-175D334442D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A969B952-1F78-4E85-9789-7DD23B742766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A969B952-1F78-4E85-9789-7DD23B742766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A969B952-1F78-4E85-9789-7DD23B742766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A969B952-1F78-4E85-9789-7DD23B742766}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A2A367B-4396-45A3-A6EE-165A0F0AD40C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A2A367B-4396-45A3-A6EE-165A0F0AD40C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A2A367B-4396-45A3-A6EE-165A0F0AD40C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A2A367B-4396-45A3-A6EE-165A0F0AD40C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

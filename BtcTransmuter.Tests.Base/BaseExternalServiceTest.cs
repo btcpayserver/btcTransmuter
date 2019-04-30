@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Data.Entities;
 using Xunit;
 
 namespace BtcTransmuter.Tests.Base
@@ -22,8 +23,12 @@ namespace BtcTransmuter.Tests.Base
         [Fact]
         public async Task CanSerializeData()
         {
+            var x = GetExternalService();
             var instance = Activator.CreateInstance<TExternalServiceData>();
-            var externalService = GetExternalService();
+            var externalService = GetExternalService(new ExternalServiceData()
+            {
+                Type = x.ExternalServiceType
+            });
             externalService.SetData(instance);
             externalService.GetData();
         }
