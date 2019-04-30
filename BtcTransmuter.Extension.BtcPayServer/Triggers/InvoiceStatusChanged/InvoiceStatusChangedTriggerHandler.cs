@@ -15,7 +15,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
             "Trigger a recipe by detecting a status change of an invoice in a btcpay external service.";
 
         public override string ViewPartial => "ViewInvoiceStatusChangedTrigger";
-        protected override string ControllerName => "InvoiceStatusChanged";
+        public override string ControllerName => "InvoiceStatusChanged";
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             InvoiceStatusChangedTriggerData triggerData,

@@ -14,7 +14,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Imap
         public override string Name => "Imap External Service";
         public override string Description => "Imap External Service to be able to analyze incoming email as a trigger";
         public override string ViewPartial => "ViewImapExternalService";
-        protected override string ControllerName => "Imap";
+        public override string ControllerName => "Imap";
 
 
         public ImapService() : base()

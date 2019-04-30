@@ -15,7 +15,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewBlock
             "Trigger a recipe by detecting new blocks";
 
         public override string ViewPartial => "ViewNBXplorerNewBlockTrigger";
-        protected override string ControllerName => "NBXplorerNewBlock";
+        public override string ControllerName => "NBXplorerNewBlock";
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             NBXplorerNewBlockTriggerData triggerData,

@@ -14,7 +14,7 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
         public override string Name => "SMTP External Service";
         public override string Description => "SMTP External Service to be able to send emails as an action";
         public override string ViewPartial => "ViewSmtpExternalService";
-        protected override string ControllerName => "Smtp";
+        public override string ControllerName => "Smtp";
 
 
         public SmtpService() : base()

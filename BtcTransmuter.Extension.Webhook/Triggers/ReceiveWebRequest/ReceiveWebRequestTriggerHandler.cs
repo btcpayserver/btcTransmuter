@@ -15,7 +15,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
             "Trigger a recipe when a specific web request is received";
 
         public override string ViewPartial => "ViewReceiveWebRequestTrigger";
-        protected override string ControllerName => "ReceiveWebRequest";
+        public override string ControllerName => "ReceiveWebRequest";
 
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,

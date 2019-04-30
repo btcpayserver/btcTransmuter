@@ -14,7 +14,7 @@ namespace BtcTransmuter.Extension.Lightning.Triggers.ReceivedLightningPayment
             "Trigger a recipe by receiving a lightning payment through a connected lightning node";
 
         public override  string ViewPartial => "ViewReceivedLightningPaymentTrigger";
-        protected override string ControllerName => "ReceivedLightningPayment";
+        public override string ControllerName => "ReceivedLightningPayment";
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             ReceivedLightningPaymentTrigger triggerData,

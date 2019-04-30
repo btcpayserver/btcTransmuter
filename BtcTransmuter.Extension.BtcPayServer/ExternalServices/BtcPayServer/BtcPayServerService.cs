@@ -19,7 +19,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         public override string Name => "BtcPayServer External Service";
         public override string Description => "BtcPayServer External Service to be able to interact with its services";
         public override string ViewPartial => "ViewBtcPayServerExternalService";
-        protected override string ControllerName => "BtcPayServer";
+        public override string ControllerName => "BtcPayServer";
 
 
         public BtcPayServerService() : base()

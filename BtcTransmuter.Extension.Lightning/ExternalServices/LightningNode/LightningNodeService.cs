@@ -24,7 +24,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
         public override string Name => "LightningNode External Service";
         public override string Description => "Integrate lightning nodes";
         public override string ViewPartial => "ViewLightningNodeExternalService";
-        protected override string ControllerName => "LightningNode";
+        public override string ControllerName => "LightningNode";
         public static int LIGHTNING_TIMEOUT = 5000;
 
         public LightningNodeService() : base()

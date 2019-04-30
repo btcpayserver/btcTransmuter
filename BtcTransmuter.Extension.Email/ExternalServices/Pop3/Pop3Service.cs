@@ -14,8 +14,8 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Pop3
         public override string Name => "Pop3 External Service";
         public override string Description => "Pop3 External Service to be able to analyze incoming email as a trigger";
         public override  string ViewPartial => "ViewPop3ExternalService";
-        
-        protected override string ControllerName => "Pop3";
+
+        public override string ControllerName => "Pop3";
 
 
         public Pop3Service() : base()

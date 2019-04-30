@@ -21,7 +21,7 @@ namespace BtcTransmuter.Extension.Email.Triggers.ReceivedEmail
             "Trigger a recipe by receiving a specifically formatted email through a pop3 or imap  external service.";
 
         public override  string ViewPartial => "ViewReceivedEmailTrigger";
-        protected override string ControllerName => "ReceivedEmail";
+        public override string ControllerName => "ReceivedEmail";
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
             ReceivedEmailTriggerData triggerData,

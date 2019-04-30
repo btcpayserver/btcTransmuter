@@ -21,7 +21,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
             "Trigger a recipe by checking if the balance within an address or xpub is within a specific range";
 
         public override string ViewPartial => "ViewNBXplorerBalanceTrigger";
-        protected override string ControllerName => "NBXplorerBalance";
+        public override string ControllerName => "NBXplorerBalance";
 
         public NBXplorerBalanceTriggerHandler()
         {

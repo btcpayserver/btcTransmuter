@@ -24,7 +24,7 @@ namespace BtcTransmuter.Extension.DynamicService.ExternalServices.DynamicService
             "DynamicService External Service to be able to resolve other external services using actions";
 
         public override string ViewPartial => "ViewDynamicServiceExternalService";
-        protected override string ControllerName => "DynamicService";
+        public override string ControllerName => "DynamicService";
 
 
         public DynamicServiceService() : base()

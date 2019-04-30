@@ -19,7 +19,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         public abstract string Name { get; }
         public abstract string Description { get; }
         public abstract string ViewPartial { get; }
-        protected abstract string ControllerName { get; }
+        public abstract string ControllerName { get; }
 
 
         public T GetData()

@@ -26,7 +26,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             "Trigger a recipe by detecting new transactions made to an xpub or address";
 
         public override string ViewPartial => "ViewNBXplorerNewTransactionTrigger";
-        protected override string ControllerName => "NBXplorerNewTransaction";
+        public override string ControllerName => "NBXplorerNewTransaction";
 
         public NBXplorerNewTransactionTriggerHandler()
         {

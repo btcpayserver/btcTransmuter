@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BtcTransmuter.Extension.Exchange.Tests
 {
-    public class GetExchangeBalanceDataActionHandlerTests :
-        BaseActionTest<BaseActionHandler<GetExchangeBalanceData, decimal>, GetExchangeBalanceData, decimal>
+    public class GetExchangeBalanceDataActionHandlerTests :BaseActionTest<GetExchangeBalanceDataActionHandler, GetExchangeBalanceData, decimal>
     {
-        protected override BaseActionHandler<GetExchangeBalanceData, decimal> GetActionHandlerInstance(params object[] setupArgs)
+        protected override GetExchangeBalanceDataActionHandler GetActionHandlerInstance(params object[] setupArgs)
         {
             return new GetExchangeBalanceDataActionHandler();
         }

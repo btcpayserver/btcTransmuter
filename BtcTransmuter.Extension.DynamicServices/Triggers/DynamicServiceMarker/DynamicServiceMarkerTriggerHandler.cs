@@ -15,7 +15,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.DynamicServiceMarker
             "Used to mark a recipe to be sued for a Dynamic External Service";
 
         public override string ViewPartial => "ViewDynamicServiceMarkerTrigger";
-        protected override string ControllerName => "DynamicServiceMarker";
+        public override string ControllerName => "DynamicServiceMarker";
 
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,

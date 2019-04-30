@@ -19,7 +19,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
         public override string Name => "NBXplorerWallet External Service";
         public override string Description => "Track Addresses, HD wallets and sign txs";
         public override string ViewPartial => "ViewNBXplorerWalletExternalService";
-        protected override string ControllerName => "NBXplorerWallet";
+        public override string ControllerName => "NBXplorerWallet";
 
         public NBXplorerWalletService() : base()
         {

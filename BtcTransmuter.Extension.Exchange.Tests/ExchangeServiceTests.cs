@@ -1,14 +1,15 @@
 using System;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
+using System.Linq;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
-using Microsoft.EntityFrameworkCore.Internal;
+using BtcTransmuter.Tests.Base;
 using Xunit;
 using Assert = Xunit.Assert;
 
 namespace BtcTransmuter.Extension.Exchange.Tests
 {
-    public class ExchangeServiceTests
+    public class ExchangeServiceTests:BaseExternalServiceTest<ExchangeService,ExchangeExternalServiceData >
     {
         [Fact]
         public void ExchangeService_GetAvailableExchanges()
@@ -24,7 +25,7 @@ namespace BtcTransmuter.Extension.Exchange.Tests
             
             Assert.Throws<ArgumentException>(() =>
             {
-                _ = new ExchangeService(new ExternalServiceData()
+                _ = GetExternalService(new ExternalServiceData()
                 {
                     Type = "invalid"
                 });
@@ -50,8 +51,6 @@ namespace BtcTransmuter.Extension.Exchange.Tests
         [Fact]
         public void ExchangeService_CanConstructClient()
         {
-            
-            
             var InvalidData = new ExchangeExternalServiceData()
             {
                 PublicKey = "test",
@@ -64,7 +63,7 @@ namespace BtcTransmuter.Extension.Exchange.Tests
             };
             externalServiceData.Set(InvalidData);
            
-            var exchangeService = new ExchangeService(externalServiceData);
+            var exchangeService = GetExternalService(externalServiceData);
             Assert.ThrowsAny<Exception>(() => exchangeService.ConstructClient());
             
             
@@ -79,7 +78,15 @@ namespace BtcTransmuter.Extension.Exchange.Tests
             
             Assert.NotNull(exchangeService.ConstructClient());
         }
-        
-        
+
+
+        protected override ExchangeService GetExternalService(params object[] setupArgs)
+        {
+            if (setupArgs?.Any()?? false)
+            {
+                return new ExchangeService((ExternalServiceData) setupArgs.First());
+            }
+            return new ExchangeService();
+        }
     }
 }

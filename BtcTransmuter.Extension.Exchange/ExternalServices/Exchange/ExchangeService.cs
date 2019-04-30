@@ -14,7 +14,7 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
         public override string Name => "Exchange External Service";
         public override string Description => "Integrate from a wide variety of cryptocurrency exchanges";
         public override string ViewPartial => "ViewExchangeExternalService";
-        protected override string ControllerName => "Exchange";
+        public override string ControllerName => "Exchange";
 
 
         public ExchangeService() : base()

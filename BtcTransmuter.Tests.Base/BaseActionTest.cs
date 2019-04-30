@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
-using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -56,6 +53,7 @@ namespace BtcTransmuter.Tests.Base
         [Fact]
         public async Task EditData_GenerateActionResultToEditRecipeAction()
         {
+            ConfigureDependencyHelper();
             var actionHandler = GetActionHandlerInstance();
 
             var newRecipeAction = new RecipeAction()
@@ -78,39 +76,5 @@ namespace BtcTransmuter.Tests.Base
 
 
         protected abstract TActionHandler GetActionHandlerInstance(params object[] setupArgs);
-    }
-
-
-    public abstract class BaseTests
-    {
-        protected static IServiceScopeFactory ScopeFactory;
-        protected BaseTests()
-        {
-            if (ScopeFactory == null)
-            {
-
-
-                var ssF = Program.CreateWebHostBuilder(new string[0]).ConfigureAppConfiguration((context, builder) =>
-                {
-                    builder.AddInMemoryCollection(new List<KeyValuePair<string, string>>()
-                    {
-                        new KeyValuePair<string, string>("Database", "Data Source=mydb.db;"),
-                        new KeyValuePair<string, string>("DatabaseType", "sqlite"),
-                        new KeyValuePair<string, string>("DataProtectionDir", "C:/transmuterkey"),
-                        new KeyValuePair<string, string>("ENVIRONMENT", "Development"),
-                        new KeyValuePair<string, string>("NBXplorer_Cryptos", "btc;ltc"),
-                        new KeyValuePair<string, string>("NBXplorer_Uri", "http://127.0.0.1:32838/"),
-                        new KeyValuePair<string, string>("NBXplorer_NetworkType", "Regtest"),
-                        new KeyValuePair<string, string>("NBXplorer_UseDefaultCookie", "1"),
-                    });
-                }).Build().Services.GetRequiredService<IServiceScopeFactory>();
-
-                DependencyHelper.ServiceScopeFactory = ssF;
-            }
-            else
-            {
-                Console.Write("sss");
-            }
-        }
     }
 }

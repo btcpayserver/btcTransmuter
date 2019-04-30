@@ -21,7 +21,7 @@ namespace BtcTransmuter.Extension.Timer.Triggers.Timer
             "Trigger a recipe every X time";
 
         public override string ViewPartial => "ViewTimerTrigger";
-        protected override string ControllerName => "Timer";
+        public override string ControllerName => "Timer";
 
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,

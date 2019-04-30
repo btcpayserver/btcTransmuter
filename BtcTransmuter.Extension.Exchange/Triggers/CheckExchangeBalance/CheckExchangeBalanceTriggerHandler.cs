@@ -15,7 +15,7 @@ namespace BtcTransmuter.Extension.Exchange.Triggers.CheckExchangeBalance
             "Trigger a recipe by checking if the balance of an asset on an exchange ";
 
         public override string ViewPartial => "ViewCheckExchangeBalanceTrigger";
-        protected override string ControllerName => "CheckExchangeBalance";
+        public override string ControllerName => "CheckExchangeBalance";
 
 
         protected override Task<bool> IsTriggered(ITrigger trigger, RecipeTrigger recipeTrigger,
