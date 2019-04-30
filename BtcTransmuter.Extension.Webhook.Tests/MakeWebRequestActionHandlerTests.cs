@@ -34,8 +34,9 @@ namespace BtcTransmuter.Extension.Webhook.Tests
                 Body = "{}",
                 Method = "POST"
             });
-            var result = await actionHandler.Execute(new Dictionary<string, object>(), recipeAction);
-            Assert.True(result.Executed);
+            var result = await actionHandler.CanExecute(new Dictionary<string,  (object data, string json)>(), recipeAction);
+
+            Assert.True(result);
             
             recipeAction = new RecipeAction()
             {
@@ -48,8 +49,8 @@ namespace BtcTransmuter.Extension.Webhook.Tests
                 Body = "{}",
                 Method = "POST"
             });
-            result = await actionHandler.Execute(new Dictionary<string, object>(), recipeAction);
-            Assert.False(result.Executed);
+            result = await actionHandler.CanExecute(new Dictionary<string,  (object data, string json)>(), recipeAction);
+            Assert.False(result);
         }
         
         [Fact]

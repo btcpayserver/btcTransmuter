@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.Recipes;
@@ -75,6 +76,7 @@ namespace BtcTransmuter.Tests
 
             var logger = new Mock<ILogger<TriggerDispatcher>>();
             var actionDispatcher = new Mock<IActionDispatcher>();
+
             var triggerHandler = new Mock<ITriggerHandler>();
             triggerHandler.Setup(handler => handler.GetData(It.IsAny<ITrigger>())).ReturnsAsync("hohoho");
             triggerHandler.Setup(handler => handler.IsTriggered(It.IsAny<ITrigger>(), It.IsAny<RecipeTrigger>()))
@@ -102,14 +104,25 @@ namespace BtcTransmuter.Tests
                 DataJson = "{}"
             });
 
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            while (!cts.IsCancellationRequested)
+            {
+                try
+                {
 
-            actionDispatcher.Verify(
-                dispatcher => dispatcher.Dispatch(new Dictionary<string, (object data, string json)>(),
-                    It.IsAny<RecipeAction>()),
-                Times.Once);
-            logger.Verify(
-                logger1 => logger1.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<FormattedLogValues>(),
-                    It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()), Times.Exactly(2));
+                    actionDispatcher.Verify(
+                        dispatcher => dispatcher.Dispatch(new Dictionary<string, (object data, string json)>(),
+                            It.IsAny<RecipeAction>()),
+                        Times.Once);
+                    break;
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+
         }
 
         private class TestTrigger : ITrigger

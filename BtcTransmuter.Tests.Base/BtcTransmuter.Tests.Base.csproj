@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -15,8 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BtcTransmuter.Extension.Exchange\BtcTransmuter.Extension.Exchange.csproj" />
-      <ProjectReference Include="..\BtcTransmuter.Tests.Base\BtcTransmuter.Tests.Base.csproj" />
+      <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+      <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj" />
+      <ProjectReference Include="..\BtcTransmuter\BtcTransmuter.csproj" />
     </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@ namespace BtcTransmuter
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost
                 .CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
