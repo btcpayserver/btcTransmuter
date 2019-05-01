@@ -7,9 +7,5 @@ namespace BtcTransmuter.Extension.Exchange.Tests
         BaseTriggerTest<CheckExchangeBalanceTriggerHandler, CheckExchangeBalanceTriggerData,
             CheckExchangeBalanceTriggerParameters>
     {
-        protected override CheckExchangeBalanceTriggerHandler GetTriggerHandlerInstance(params object[] setupArgs)
-        {
-            return new CheckExchangeBalanceTriggerHandler();
-        }
     }
 }

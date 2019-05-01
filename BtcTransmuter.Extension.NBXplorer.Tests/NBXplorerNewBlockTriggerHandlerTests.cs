@@ -7,9 +7,5 @@ namespace BtcTransmuter.Extension.NBXplorer.Tests
         NBXplorerNewBlockTriggerData,
         NBXplorerNewBlockTriggerParameters>
     {
-        protected override NBXplorerNewBlockTriggerHandler GetTriggerHandlerInstance(params object[] setupArgs)
-        {
-            return new NBXplorerNewBlockTriggerHandler();
-        }
     }
 }

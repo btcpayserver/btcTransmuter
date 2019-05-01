@@ -7,9 +7,5 @@ namespace BtcTransmuter.Extension.BtcPayServer.Tests
         InvoiceStatusChangedTriggerHandlerTests : BaseTriggerTest<InvoiceStatusChangedTriggerHandler,InvoiceStatusChangedTriggerData,
             InvoiceStatusChangedTriggerParameters>
     {
-        protected override InvoiceStatusChangedTriggerHandler GetTriggerHandlerInstance(params object[] setupArgs)
-        {
-            return new InvoiceStatusChangedTriggerHandler();
-        }
     }
 }

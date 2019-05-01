@@ -7,9 +7,5 @@ namespace BtcTransmuter.Extension.Exchange.Tests
 {
     public class GetExchangeBalanceDataActionHandlerTests :BaseActionTest<GetExchangeBalanceDataActionHandler, GetExchangeBalanceData, decimal>
     {
-        protected override GetExchangeBalanceDataActionHandler GetActionHandlerInstance(params object[] setupArgs)
-        {
-            return new GetExchangeBalanceDataActionHandler();
-        }
     }
 }

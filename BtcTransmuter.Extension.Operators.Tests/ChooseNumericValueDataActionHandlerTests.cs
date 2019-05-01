@@ -7,9 +7,5 @@ namespace BtcTransmuter.Extension.Operators.Tests
 {
     public class ChooseNumericValueDataActionHandlerTests : BaseActionTest<ChooseNumericValueDataActionHandler,ChooseNumericValueData, string>
     {
-        protected override ChooseNumericValueDataActionHandler GetActionHandlerInstance(params object[] setupArgs)
-        {
-            return new ChooseNumericValueDataActionHandler();
-        }
     }
 }

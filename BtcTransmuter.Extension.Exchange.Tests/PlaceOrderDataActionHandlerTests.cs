@@ -7,9 +7,5 @@ namespace BtcTransmuter.Extension.Exchange.Tests
     public class PlaceOrderDataActionHandlerTests :
         BaseActionTest<PlaceOrderDataActionHandler,PlaceOrderData, ExchangeOrderResult>
     {
-        protected override PlaceOrderDataActionHandler GetActionHandlerInstance(params object[] setupArgs)
-        {
-            return new PlaceOrderDataActionHandler();
-        }
     }
 }
