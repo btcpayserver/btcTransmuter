@@ -48,7 +48,10 @@ namespace BtcTransmuter.Tests.Base
         }
 
 
-        protected abstract TTriggerHandler GetTriggerHandlerInstance(params object[] setupArgs);
+        protected virtual TTriggerHandler GetTriggerHandlerInstance(params object[] setupArgs)
+        {
+            return Activator.CreateInstance<TTriggerHandler>();
+        }
 
     }
 }

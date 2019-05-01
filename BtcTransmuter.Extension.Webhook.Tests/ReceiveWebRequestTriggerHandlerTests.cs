@@ -4,17 +4,20 @@ using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest;
+using BtcTransmuter.Tests.Base;
 using Microsoft.AspNetCore.Http;
 using Xunit;
+using Assert = Xunit.Assert;
 
 namespace BtcTransmuter.Extension.Webhook.Tests
 {
-    public class ReceiveWebRequestTriggerHandlerTests
+    public class ReceiveWebRequestTriggerHandlerTests:BaseTriggerTest<ReceiveWebRequestTriggerHandler,ReceiveWebRequestTriggerData,
+        ReceiveWebRequestTriggerParameters>
     {
         [Fact]
         public async Task ReceiveWebRequestTriggerHandler_IsTriggered_TriggersCorrectly()
         {
-            var triggerHandler = new ReceiveWebRequestTriggerHandler();
+            var triggerHandler = GetTriggerHandlerInstance();
 
 
             Assert.False(await triggerHandler.IsTriggered(new TestTrigger(), new RecipeTrigger()
@@ -161,6 +164,11 @@ namespace BtcTransmuter.Extension.Webhook.Tests
             }
 
             public string Id => Guid.NewGuid().ToString();
+        }
+
+        protected override ReceiveWebRequestTriggerHandler GetTriggerHandlerInstance(params object[] setupArgs)
+        {
+            return new ReceiveWebRequestTriggerHandler();
         }
     }
 }

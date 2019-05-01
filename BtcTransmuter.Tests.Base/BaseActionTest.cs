@@ -75,6 +75,9 @@ namespace BtcTransmuter.Tests.Base
         }
 
 
-        protected abstract TActionHandler GetActionHandlerInstance(params object[] setupArgs);
+        protected virtual TActionHandler GetActionHandlerInstance(params object[] setupArgs)
+        {
+            return Activator.CreateInstance<TActionHandler>();
+        }
     }
 }

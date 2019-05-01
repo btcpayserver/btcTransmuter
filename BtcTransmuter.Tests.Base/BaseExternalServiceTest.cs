@@ -10,7 +10,7 @@ namespace BtcTransmuter.Tests.Base
         where TExternalService : BaseExternalService<TExternalServiceData>
     {
         [Fact]
-        public void BasicActionPropertiesSet()
+        public virtual  void BasicActionPropertiesSet()
         {
             var externalService = GetExternalService();
             Assert.NotNullOrEmpty(externalService.Name);
@@ -21,7 +21,7 @@ namespace BtcTransmuter.Tests.Base
         }
 
         [Fact]
-        public async Task CanSerializeData()
+        public virtual async Task CanSerializeData()
         {
             var x = GetExternalService();
             var instance = Activator.CreateInstance<TExternalServiceData>();

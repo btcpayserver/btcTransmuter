@@ -8,7 +8,7 @@ namespace BtcTransmuter.Extension.Email.Tests
     {
         protected override SendEmailDataActionHandler GetActionHandlerInstance(params object[] setupArgs)
         {
-            throw new NotImplementedException();
+           return new SendEmailDataActionHandler();
         }
     }
 }

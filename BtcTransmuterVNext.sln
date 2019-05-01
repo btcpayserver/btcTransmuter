@@ -45,6 +45,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Dyn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Email.Tests", "BtcTransmuter.Extension.Email.Tests\BtcTransmuter.Extension.Email.Tests.csproj", "{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Timer.Tests", "BtcTransmuter.Extension.Timer.Tests\BtcTransmuter.Extension.Timer.Tests.csproj", "{AB1F5C4A-23C2-4D28-A9D2-F268F31DC6A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Recipe.Tests", "BtcTransmuter.Extension.Recipe.Tests\BtcTransmuter.Extension.Recipe.Tests.csproj", "{5F9CB627-1948-4E8F-BDA1-F7F2D6C06319}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Operators.Tests", "BtcTransmuter.Extension.Operators.Tests\BtcTransmuter.Extension.Operators.Tests.csproj", "{D45DE8B1-339D-4380-A4DE-779FD96C1191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.NBXplorer.Tests", "BtcTransmuter.Extension.NBXplorer.Tests\BtcTransmuter.Extension.NBXplorer.Tests.csproj", "{6A7175B9-CDEA-410A-A9E4-07DD2791C33B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcTransmuter.Extension.Lightning.Tests", "BtcTransmuter.Extension.Lightning.Tests\BtcTransmuter.Extension.Lightning.Tests.csproj", "{8B80790C-DED8-48B2-BC1B-3DF39C6AA739}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +145,26 @@ Global
 		{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD2AA3B9-A024-4152-8DC9-7F8E2424372D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB1F5C4A-23C2-4D28-A9D2-F268F31DC6A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB1F5C4A-23C2-4D28-A9D2-F268F31DC6A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB1F5C4A-23C2-4D28-A9D2-F268F31DC6A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB1F5C4A-23C2-4D28-A9D2-F268F31DC6A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9CB627-1948-4E8F-BDA1-F7F2D6C06319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9CB627-1948-4E8F-BDA1-F7F2D6C06319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9CB627-1948-4E8F-BDA1-F7F2D6C06319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9CB627-1948-4E8F-BDA1-F7F2D6C06319}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D45DE8B1-339D-4380-A4DE-779FD96C1191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45DE8B1-339D-4380-A4DE-779FD96C1191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45DE8B1-339D-4380-A4DE-779FD96C1191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45DE8B1-339D-4380-A4DE-779FD96C1191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A7175B9-CDEA-410A-A9E4-07DD2791C33B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A7175B9-CDEA-410A-A9E4-07DD2791C33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A7175B9-CDEA-410A-A9E4-07DD2791C33B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A7175B9-CDEA-410A-A9E4-07DD2791C33B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B80790C-DED8-48B2-BC1B-3DF39C6AA739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B80790C-DED8-48B2-BC1B-3DF39C6AA739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B80790C-DED8-48B2-BC1B-3DF39C6AA739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B80790C-DED8-48B2-BC1B-3DF39C6AA739}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

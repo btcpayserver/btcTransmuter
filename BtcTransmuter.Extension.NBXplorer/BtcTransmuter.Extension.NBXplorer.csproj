@@ -15,4 +15,7 @@
     <ItemGroup>
       <PackageReference Include="NBXplorer.Client" Version="2.0.0.6" />
     </ItemGroup>
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\NBXplorerCreatePSBT\EditData.cshtml" />
+    </ItemGroup>
 </Project>

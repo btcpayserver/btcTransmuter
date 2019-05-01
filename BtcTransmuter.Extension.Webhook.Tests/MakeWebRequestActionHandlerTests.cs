@@ -1,16 +1,22 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using BtcTransmuter.Extension.Webhook.Actions.MakeWebRequest;
+using BtcTransmuter.Tests.Base;
 using Moq;
 using Xunit;
 using MaxKagamine.Moq.HttpClient;
+using Assert = Xunit.Assert;
 
 namespace BtcTransmuter.Extension.Webhook.Tests
 {
-    public class MakeWebRequestActionHandlerTests
+    public class
+        MakeWebRequestActionHandlerTests : BaseActionTest<MakeWebRequestActionHandler, MakeWebRequestData,
+            HttpResponseMessage>
+
     {
         [Fact]
         public async Task MakeWebRequestActionHandler_Execute_ExecuteOnlyWhenCorrect()
@@ -22,7 +28,7 @@ namespace BtcTransmuter.Extension.Webhook.Tests
             Mock.Get(factory).Setup(x => x.CreateClient(It.IsAny<string>()))
                 .Returns(() => handler.CreateClient());
 
-            var actionHandler = new MakeWebRequestActionHandler(factory);
+            var actionHandler = GetActionHandlerInstance(factory);
             var recipeAction = new RecipeAction()
             {
                 ActionId = actionHandler.ActionId
@@ -34,10 +40,11 @@ namespace BtcTransmuter.Extension.Webhook.Tests
                 Body = "{}",
                 Method = "POST"
             });
-            var result = await actionHandler.CanExecute(new Dictionary<string,  (object data, string json)>(), recipeAction);
+            var result =
+                await actionHandler.CanExecute(new Dictionary<string, (object data, string json)>(), recipeAction);
 
             Assert.True(result);
-            
+
             recipeAction = new RecipeAction()
             {
                 ActionId = "incorrectid"
@@ -49,10 +56,10 @@ namespace BtcTransmuter.Extension.Webhook.Tests
                 Body = "{}",
                 Method = "POST"
             });
-            result = await actionHandler.CanExecute(new Dictionary<string,  (object data, string json)>(), recipeAction);
+            result = await actionHandler.CanExecute(new Dictionary<string, (object data, string json)>(), recipeAction);
             Assert.False(result);
         }
-        
+
         [Fact]
         public async Task MakeWebRequestActionHandler_Execute_SendHttpRequest()
         {
@@ -63,7 +70,7 @@ namespace BtcTransmuter.Extension.Webhook.Tests
             Mock.Get(factory).Setup(x => x.CreateClient(It.IsAny<string>()))
                 .Returns(() => handler.CreateClient());
 
-            var actionHandler = new MakeWebRequestActionHandler(factory);
+            var actionHandler = GetActionHandlerInstance(factory);
             var recipeAction = new RecipeAction()
             {
                 ActionId = actionHandler.ActionId
@@ -77,6 +84,13 @@ namespace BtcTransmuter.Extension.Webhook.Tests
             });
             await actionHandler.Execute(new Dictionary<string, object>(), recipeAction);
             handler.VerifyRequest(HttpMethod.Post, "http://gozo.com", Times.Once());
+        }
+
+        protected override MakeWebRequestActionHandler GetActionHandlerInstance(params object[] setupArgs)
+        {
+            return setupArgs.Any()
+                ? new MakeWebRequestActionHandler((IHttpClientFactory) setupArgs.First())
+                : new MakeWebRequestActionHandler();
         }
     }
 }
