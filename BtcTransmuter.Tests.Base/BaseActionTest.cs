@@ -25,6 +25,7 @@ namespace BtcTransmuter.Tests.Base
             Assert.NotNullOrEmpty(actionHandler.ViewPartial);
             Assert.NotNullOrEmpty(actionHandler.ControllerName);
             Assert.NotNullOrEmpty(actionHandler.Description);
+            Assert.NotNull(actionHandler.ActionResultDataType);
         }
 
         [Fact]
@@ -75,6 +76,8 @@ namespace BtcTransmuter.Tests.Base
         }
 
 
+        
+        
         protected virtual TActionHandler GetActionHandlerInstance(params object[] setupArgs)
         {
             return Activator.CreateInstance<TActionHandler>();
