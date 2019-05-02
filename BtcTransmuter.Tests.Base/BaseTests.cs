@@ -33,7 +33,7 @@ namespace BtcTransmuter.Tests.Base
                     });
                 }).Build().Services.GetRequiredService<IServiceScopeFactory>();
 
-                DependencyHelper.ServiceScopeFactory = ssF;
+                DependencyHelper.ServiceScopeFactory = ScopeFactory = ssF;
             }
         }
     }

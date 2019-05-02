@@ -21,7 +21,7 @@ namespace BtcTransmuter.Tests.Base
         }
 
         [Fact]
-        public virtual async Task CanSerializeData()
+        public virtual Task CanSerializeData()
         {
             var x = GetExternalService();
             var instance = Activator.CreateInstance<TExternalServiceData>();
@@ -31,11 +31,9 @@ namespace BtcTransmuter.Tests.Base
             });
             externalService.SetData(instance);
             externalService.GetData();
+            return Task.CompletedTask;
         }
         
-        
-
-
         protected abstract TExternalService GetExternalService(params object[] setupArgs);
 
         

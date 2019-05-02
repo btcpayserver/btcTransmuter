@@ -18,7 +18,7 @@ namespace BtcTransmuter.Tests.Base
         }
          
         [Fact]
-        public async Task OnlyInitWithCorrectData()
+        public void OnlyInitWithCorrectData()
         {
             Assert.Throws<ArgumentException>(() => new TestExternalService(new ExternalServiceData()
             {
