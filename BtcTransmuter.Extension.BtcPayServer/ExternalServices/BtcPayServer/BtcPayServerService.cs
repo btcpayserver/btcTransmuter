@@ -30,7 +30,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
         {
         }
 
-        public Bitpay ConstructClient()
+        public virtual Bitpay ConstructClient()
         {
             try
             {
@@ -45,7 +45,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             }
         }
 
-        public async Task<bool> CheckAccess()
+        public virtual async Task<bool> CheckAccess()
         {
             var client = ConstructClient();
             return client != null && await client.TestAccessAsync(Facade.Merchant);

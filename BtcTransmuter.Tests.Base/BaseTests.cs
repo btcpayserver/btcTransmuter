@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BtcTransmuter.Abstractions.Helpers;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +9,7 @@ namespace BtcTransmuter.Tests.Base
     public abstract class BaseTests
     {
         protected static IServiceScopeFactory ScopeFactory;
+        protected static IWebHost Webhost { get; set; }
         protected BaseTests()
         {
         }
@@ -17,8 +19,7 @@ namespace BtcTransmuter.Tests.Base
             if (ScopeFactory == null)
             {
 
-
-                var ssF = Program.CreateWebHostBuilder(new string[0]).ConfigureAppConfiguration((context, builder) =>
+                Webhost = Program.CreateWebHostBuilder(new string[0]).ConfigureAppConfiguration((context, builder) =>
                 {
                     builder.AddInMemoryCollection(new List<KeyValuePair<string, string>>()
                     {
@@ -31,10 +32,13 @@ namespace BtcTransmuter.Tests.Base
                         new KeyValuePair<string, string>("NBXplorer_NetworkType", "Regtest"),
                         new KeyValuePair<string, string>("NBXplorer_UseDefaultCookie", "1"),
                     });
-                }).Build().Services.GetRequiredService<IServiceScopeFactory>();
+                }).Build();
+
+                var ssF = Webhost.Services.GetRequiredService<IServiceScopeFactory>();
 
                 DependencyHelper.ServiceScopeFactory = ScopeFactory = ssF;
             }
         }
+
     }
 }

@@ -22,12 +22,12 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         public abstract string ControllerName { get; }
 
 
-        public T GetData()
+        public virtual T GetData()
         {
             return _data.Get<T>();
         }
 
-        public void SetData(T data)
+        public virtual  void SetData(T data)
         {
             _data.Set(data);
         }

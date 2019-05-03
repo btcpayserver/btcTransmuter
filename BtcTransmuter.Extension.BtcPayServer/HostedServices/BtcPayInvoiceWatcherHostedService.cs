@@ -19,6 +19,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
         private readonly IExternalServiceManager _externalServiceManager;
         private readonly ITriggerDispatcher _triggerDispatcher;
         private ConcurrentDictionary<string, BtcPayServerService> _externalServices;
+        protected virtual TimeSpan CheckInterval { get; } = TimeSpan.FromMinutes(1);
 
         public BtcPayInvoiceWatcherHostedService(IExternalServiceManager externalServiceManager,
             ITriggerDispatcher triggerDispatcher)
@@ -39,19 +40,24 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
             _externalServices = new ConcurrentDictionary<string, BtcPayServerService>(
                 externalServices
                     .Select(service =>
-                        new KeyValuePair<string, BtcPayServerService>(service.Id, new BtcPayServerService(service))));
+                        new KeyValuePair<string, BtcPayServerService>(service.Id, GetServiceFromData(service))));
 
             _externalServiceManager.ExternalServiceDataUpdated += ExternalServiceManagerOnExternalServiceUpdated;
             _ = Loop(cancellationToken);
         }
 
+        protected virtual BtcPayServerService GetServiceFromData(ExternalServiceData externalServiceData)
+        {
+            return new BtcPayServerService(externalServiceData);
+        }
+        
         private async Task Loop(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
                 var tasks = _externalServices.Select(CheckInvoiceChangeInService);
                 await Task.WhenAll(tasks);
-                await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+                await Task.Delay(CheckInterval, cancellationToken);
             }
         }
 
@@ -75,7 +81,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
 
                 var client = service.ConstructClient();
 
-                var invoices = await client.GetInvoicesAsync<BtcPayInvoice>(data.PairedDate);
+                var invoices = await client.GetInvoicesAsync<BtcPayInvoice>(data.PairedDate, null);
 
                 foreach (var invoice in invoices)
                 {
@@ -112,8 +118,8 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
                     data.MonitoredInvoiceStatuses.AddOrReplace(invoice.Id, invoice.Status);
                 }
 
-
                 service.SetData(data);
+
                 await _externalServiceManager.UpdateInternalData(key, data);
             }
             catch (Exception e)
@@ -137,13 +143,13 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
             switch (e.Action)
             {
                 case UpdatedItem<ExternalServiceData>.UpdateAction.Added:
-                    _externalServices.TryAdd(e.Item.Id, new BtcPayServerService(e.Item));
+                    _externalServices.TryAdd(e.Item.Id, GetServiceFromData(e.Item));
                     break;
                 case UpdatedItem<ExternalServiceData>.UpdateAction.Removed:
                     _externalServices.TryRemove(e.Item.Id, out var _);
                     break;
                 case UpdatedItem<ExternalServiceData>.UpdateAction.Updated:
-                    _externalServices.TryUpdate(e.Item.Id, new BtcPayServerService(e.Item), null);
+                    _externalServices.TryUpdate(e.Item.Id, GetServiceFromData(e.Item), null);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
