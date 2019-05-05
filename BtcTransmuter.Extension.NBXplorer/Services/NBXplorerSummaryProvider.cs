@@ -28,12 +28,12 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
 
         public ImmutableDictionary<string, NBXplorerSummary> GetSummaries()
         {
-            return _summaries.ToImmutableDictionary(pair => pair.Key, pair => pair.Value);
+            return _summaries.ToImmutableDictionary(pair => pair.Key.ToUpperInvariant(), pair => pair.Value);
         }
 
         public NBXplorerSummary GetSummary(string cryptoCode)
         {
-            return _summaries.TryGet(cryptoCode);
+            return _summaries.TryGet(cryptoCode.ToUpperInvariant());
         }
 
         public async Task UpdateClientState(ExplorerClient client, CancellationToken cancellation)
@@ -82,7 +82,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 Error = error
             };
             _logger.LogInformation($"summary updated {client.CryptoCode}");
-            _summaries.AddOrReplace(client.CryptoCode, summary);
+            _summaries.AddOrReplace(client.CryptoCode.ToUpperInvariant(), summary);
         }
     }
 }
