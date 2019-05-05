@@ -55,7 +55,7 @@ namespace BtcTransmuter.Abstractions.Triggers
 
             var triggerData = await GetTriggerData(trigger);
 
-            if (typeof(TTriggerParameters).IsAssignableFrom(typeof(IUseExternalService)) &&
+            if (typeof(IUseExternalService).IsAssignableFrom(typeof(TTriggerParameters)) &&
                 ((IUseExternalService) triggerData).ExternalServiceId != recipeTrigger.ExternalServiceId)
             {
                 return false;

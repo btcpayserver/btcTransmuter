@@ -7,10 +7,9 @@ using Xunit;
 
 namespace BtcTransmuter.Tests.Base
 {
-    public abstract class BaseTriggerTest<TTriggerHandler,TTriggerData, TTriggerParameters>: BaseTests
-        where TTriggerHandler: BaseTriggerHandler<TTriggerData, TTriggerParameters> where TTriggerParameters : class
+    public abstract class BaseTriggerTest<TTriggerHandler, TTriggerData, TTriggerParameters> : BaseTests
+        where TTriggerHandler : BaseTriggerHandler<TTriggerData, TTriggerParameters> where TTriggerParameters : class
     {
-
         [Fact]
         public void BasicActionPropertiesSet()
         {
@@ -21,8 +20,8 @@ namespace BtcTransmuter.Tests.Base
             Assert.NotNullOrEmpty(actionHandler.ViewPartial);
             Assert.NotNullOrEmpty(actionHandler.Description);
         }
-        
-        
+
+
         [Fact]
         public async Task EditData_GenerateActionResultToEditRecipeAction()
         {
@@ -52,6 +51,5 @@ namespace BtcTransmuter.Tests.Base
         {
             return Activator.CreateInstance<TTriggerHandler>();
         }
-
     }
 }
