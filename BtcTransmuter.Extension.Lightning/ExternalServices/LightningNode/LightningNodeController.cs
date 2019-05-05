@@ -152,6 +152,8 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
         {
             public EditLightningNodeExternalServiceDataViewModel(LightningNodeExternalServiceData serviceData)
             {
+                ConnectionString = serviceData.ConnectionString;
+                CryptoCode = serviceData.CryptoCode;
             }
 
             public EditLightningNodeExternalServiceDataViewModel()
