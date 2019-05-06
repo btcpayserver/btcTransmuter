@@ -25,10 +25,18 @@ namespace BtcTransmuter.Abstractions.Helpers
                     match =>
                     {
                         var processed =  JsonFunc(match.Groups[1].Value, data);
-                        var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(parameterExpressions.ToArray(), null,
-                            processed);
+                        try
+                        {
+                            var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(parameterExpressions.ToArray(), null,
+                                processed);
                       
-                        return (e.Compile().DynamicInvoke(data.Values.ToArray()) ?? "").ToString();
+                            return (e.Compile().DynamicInvoke(data.Values.ToArray()) ?? "").ToString();
+                        }
+                        catch (Exception exception)
+                        {
+                            return processed;
+                        }
+                       
                     });
             }
             catch (Exception)
@@ -42,7 +50,19 @@ namespace BtcTransmuter.Abstractions.Helpers
             try
             {
                 return Regex.Replace(value, @"ToJson\({1}(.+?)\){1}",
-                    match => JsonConvert.SerializeObject(InterpolateString("{{"+match.Groups[1].Value+"}}", data)));
+                    match =>
+                    {
+                        
+                        var parameterExpressions =
+                            data.Select(pair => Expression.Parameter(pair.Value.GetType(), pair.Key)).ToList();
+             
+                      
+                                var processed =  JsonFunc(match.Groups[1].Value, data);
+                                var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(parameterExpressions.ToArray(), null,
+                                    processed);
+                      
+                        return JsonConvert.SerializeObject(e.Compile().DynamicInvoke(data.Values.ToArray()));
+                    });
             }
             catch (Exception)
             {
