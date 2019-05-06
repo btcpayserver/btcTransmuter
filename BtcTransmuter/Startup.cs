@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +16,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ILogger = Microsoft.VisualStudio.Web.CodeGeneration.ILogger;
 
 namespace BtcTransmuter
@@ -69,7 +72,7 @@ namespace BtcTransmuter
                         throw new ArgumentOutOfRangeException();
                 }
             });
-            
+
             services.AddDataProtection()
                 .PersistKeysToFileSystem(Directory.CreateDirectory(options.DataProtectionDir));
 
@@ -127,12 +130,22 @@ namespace BtcTransmuter
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseExtensions();
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+            {
+                Converters =
+                    app.ApplicationServices.GetServices<BtcTransmuterExtension>()
+                        .Where(extension => extension.JsonConverters != null)
+                        .SelectMany(extension => extension.JsonConverters).ToList()
+            };
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            
+            
         }
     }
 }

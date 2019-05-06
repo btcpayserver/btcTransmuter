@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetCore.AutoRegisterDi;
+using Newtonsoft.Json;
 
 namespace BtcTransmuter.Abstractions.Extensions
 {
@@ -25,6 +26,7 @@ namespace BtcTransmuter.Abstractions.Extensions
         public virtual string Authors { get; } = string.Empty;
         public virtual string HeaderPartial { get; }
         public virtual  string MenuPartial { get; }
+        public virtual IEnumerable<JsonConverter> JsonConverters { get; set; }
 
         public IEnumerable<IActionDescriptor> Actions => GetInstancesOfTypeInOurAssembly<IActionDescriptor>();
         public IEnumerable<ITriggerDescriptor> Triggers => GetInstancesOfTypeInOurAssembly<ITriggerDescriptor>();
