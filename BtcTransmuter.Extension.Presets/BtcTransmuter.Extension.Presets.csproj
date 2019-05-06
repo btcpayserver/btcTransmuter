@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+        <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />
     </ItemGroup>
 
 </Project>
