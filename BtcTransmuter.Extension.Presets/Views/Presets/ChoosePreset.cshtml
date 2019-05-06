@@ -1,0 +1,8 @@
+@model BtcTransmuter.Extension.Presets.PresetsController.ChoosePresetViewModel
+
+<ul>
+    @foreach (var preset in Model.Presets)
+    {
+        <li><a href="@preset.GetLink()">@preset.Name</a> - @preset.Description</li>
+    }
+</ul>
