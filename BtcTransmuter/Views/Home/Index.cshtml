@@ -3,10 +3,9 @@
     ViewData["FullLayout"] = true;
 }
 <div class="position-relative">
-    <partial name="Test"/>
 
 
-    <div class="p-3 text-center bg-light  border-bottom">
+    <div class="p-3 text-center  border-bottom bg-dark anime text-white">
         <div class="col-md-5 p-lg-5 mx-auto">
             <h1 class="display-4 font-weight-normal text-capitalize">BTC Transmuter</h1>
             <p class="lead font-weight-normal">Automate your money</p>
@@ -16,31 +15,54 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 col-sm-12 bg-light text-center p-lg-5" style="min-height: 30vh">
-
-                <h2>Multi-exchange support</h2>
-                <p>Over a dozen exchanges are supported allowing you to place market order against a variety of currencies</p>
-                <img src="assets/bitcoin-pound-currency-exchange-rate.svg" style="height: 25vh; width: 25vh">
-
+           
+            <div class="col-md-4 col-sm-12 bg-light text-center p-2 p-lg-5" style="min-height: 30vh">
+                <h2>Free & open-source</h2>
+                <p>All source code is fully available on Github under an MIT license</p>
+                <img src="assets/github-svgrepo-com.svg" style="height: 25vh; width: 25vh">
             </div>
-            <div class="col-md-6 col-sm-12  bg-dark text-center p-lg-5 text-white" style="min-height: 30vh">
+            <div class="col-md-4 col-sm-12 bg-dark text-center p-2 p-lg-5  text-white" style="min-height: 30vh">
                 <h2>Enrich your BTCPay experience</h2>
                 <p>BTCPayServer integration allows you to trigger recipes based on your invoice statuses</p>
                 <img src="~/assets/btcpay.svg" style="height: 25vh; width: 25vh">
             </div>
-
-            <div class="col-md-6 col-sm-12  bg-dark text-center p-lg-5 text-white" style="min-height: 30vh">
-                <h2>Lightning-enabled</h2>
-                <p>Open lightning channels, detect payments and even pay BOLT invoices through automation on your own lightning nodes</p>
-                <img src="~/assets/lightning.svg" style="height: 25vh; width: 25vh">
-            </div>
-
-            <div class="col-md-6 col-sm-12 bg-light text-center p-lg-5" style="min-height: 30vh">
+            <div class="col-md-4 col-sm-12 bg-light text-center p-2  p-lg-5" style="min-height: 30vh">
                 <h2>Webhooks</h2>
                 <p>Communicate through Webhooks with other services such as IFTTT or even your own software to enable limitless possibilities</p>
                 <img src="~/assets/icons8-webhook.svg" style="height: 25vh; width: 25vh">
             </div>
+            <div class="col-md-4 col-sm-12  bg-dark text-center p-2  p-lg-5 text-white" style="min-height: 30vh">
+                <h2>Lightning-enabled</h2>
+                <p>Open lightning channels, detect payments and even pay BOLT invoices through automation on your own lightning nodes</p>
+                <img src="~/assets/lightning.svg" style="height: 25vh; width: 25vh">
+            </div>
+            <div class="col-md-4 col-sm-12 bg-light text-center p-2   p-lg-5" style="min-height: 30vh">
+                <h2>Presets Wizard</h2>
+                <p>Easy to setup wizards available for the most common use-cases such as BTCPay fiat integration and payment forwarding</p>
+                <img src="assets/settings-svgrepo-com.svg" style="height: 25vh; width: 25vh">
+            </div>
+            <div class="col-md-4 col-sm-12 bg-dark text-center p-2 p-lg-5 text-white" style="min-height: 30vh">
+                <h2>Multi-exchange support</h2>
+                <p>Over a dozen exchanges are supported allowing you to place market order against a variety of currencies</p>
+                <img src="assets/bitcoin-pound-currency-exchange-rate.svg" style="height: 25vh; width: 25vh">
+            </div>
+           
         </div>
     </div>
 
 </div>
+@section Scripts{
+    <script src="~/vendors/vanta/three.r92.min.js"></script>
+    <script src="~/vendors/vanta/vanta.waves.min.js"></script>
+    <script>
+   window.onload = function() {
+       VANTA.WAVES({
+           el: ".anime",
+           color: 0x8847,
+           shininess: 34.00,
+           waveHeight: 8.00,
+           zoom: 1.75
+       })
+   }
+    </script>
+}
