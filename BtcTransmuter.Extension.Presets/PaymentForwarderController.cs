@@ -57,9 +57,9 @@ namespace BtcTransmuter.Extension.Presets
             _recipeManager = recipeManager;
         }
 
-        public string GetLink()
+        public (string ControllerName, string ActionName) GetLink()
         {
-            return Url.Action(nameof(Create));
+            return (Id, nameof(Create));
         }
 
         [HttpGet("create")]
@@ -70,10 +70,21 @@ namespace BtcTransmuter.Extension.Presets
                 UserId = _userManager.GetUserId(User),
                 Type = new[] {NBXplorerWalletService.NBXplorerWalletServiceType}
             });
+            if (services.Any())
+            {
+                var newServices = services.ToList();
+                newServices.Insert(0, new ExternalServiceData()
+                {
+                    Id = null,
+                    Name = "None"
+                });
+                services = newServices;
+            }
             return View(new CreatePaymentForwarderViewModel()
             {
                 Services = new SelectList(services, nameof(ExternalServiceData.Id),nameof(ExternalServiceData.Name)),
-                CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>())
+                CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>()),
+                PaymentDestinations = new List<CreatePaymentForwarderViewModel.PaymentDestination>()
             });
         }
 
@@ -85,9 +96,20 @@ namespace BtcTransmuter.Extension.Presets
                 UserId = _userManager.GetUserId(User),
                 Type = new[] {NBXplorerWalletService.NBXplorerWalletServiceType}
             });
+            if (services.Any())
+            {
+                var newServices = services.ToList();
+                newServices.Insert(0, new ExternalServiceData()
+                {
+                    Id = null,
+                    Name = "None"
+                });
+                services = newServices;
+            }
             viewModel.Services = new SelectList(services, nameof(ExternalServiceData.Id),nameof(ExternalServiceData.Name));
             viewModel.CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
                 viewModel.CryptoCode);
+            viewModel.PaymentDestinations = viewModel.PaymentDestinations?? new List<CreatePaymentForwarderViewModel.PaymentDestination>();
             
             if (!string.IsNullOrEmpty(viewModel.Action))
             {
@@ -105,13 +127,15 @@ namespace BtcTransmuter.Extension.Presets
                 }
             }
 
-            if (string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId) &&
-                !viewModel.GenerateSourceWallet)
+            if ((string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId) &&
+                 !viewModel.GenerateSourceWallet) ||
+                !string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId) &&
+                viewModel.GenerateSourceWallet)
             {
                 ModelState.AddModelError(nameof(viewModel.SelectedSourceWalletExternalServiceId),
-                    "Please select a source nbxplorer wallet or check the generate wallet checkbox");
+                    "Please select a source nbxplorer wallet OR check the generate wallet checkbox");
                 ModelState.AddModelError(nameof(viewModel.GenerateSourceWallet),
-                    "Please select a source nbxplorer wallet or check the generate wallet checkbox");
+                    "Please select a source nbxplorer wallet OR check the generate wallet checkbox");
             }
             else if(!string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId))
             {
@@ -419,12 +443,16 @@ namespace BtcTransmuter.Extension.Presets
         
         [Display(Name = "Crypto")] [Required] 
         public string CryptoCode { get; set; }
+        [Display(Name = "Existing NBXplorer Wallet")] 
         public string SelectedSourceWalletExternalServiceId { get; set; }
+        
+        [Display(Name = "Generate new NBXplorer Wallet for receiving funds (P2SH-Segwit)")] 
         public bool GenerateSourceWallet { get; set; }
 
+        [Display(Name = "Send whenever there is any balance")]
         public bool SendEntireBalance { get; set; }
 
-        [Display(Name = "Balance")] public decimal SendBalanceValue { get; set; }
+        [Display(Name = "When balance is at least")] public decimal SendBalanceValue { get; set; }
 
         public MoneyUnit SendBalanceMoneyUnit { get; set; } = MoneyUnit.BTC;
 
@@ -433,7 +461,7 @@ namespace BtcTransmuter.Extension.Presets
 
         public class PaymentDestination
         {
-            [Display(Name = "Destination Wallet")]
+            [Display(Name = "Existing NBXplorer Wallet")]
             public string SelectedDestinationWalletExternalServiceId { get; set; }
 
             [Display(Name = "Destination Address")]
@@ -442,11 +470,11 @@ namespace BtcTransmuter.Extension.Presets
             [Display(Name = "Derivation Strategy")]
             public string DerivationStrategy { get; set; }
 
-            [Display(Name = "Amount/Percentage")]
+            [Display(Name = "Percentage amount to forward")]
             [Required][Range(0,100)]
             public decimal AmountPercentage { get; set; }
 
-            [Display(Name = "Subtract fees from this output")]
+            [Display(Name = "Subtract fees from this destination")]
             public bool SubtractFeesFromOutput { get; set; }
         }
     }

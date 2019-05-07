@@ -8,7 +8,6 @@ namespace BtcTransmuter.Extension.Presets
         string Name { get; }
         string Description { get; }
 
-        string GetLink();
-
+        (string ControllerName, string ActionName) GetLink();
     }
 }

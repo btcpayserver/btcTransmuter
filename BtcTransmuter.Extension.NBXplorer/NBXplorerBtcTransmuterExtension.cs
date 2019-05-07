@@ -38,7 +38,8 @@ namespace BtcTransmuter.Extension.NBXplorer
                             NetworkType.Regtest),
                     Cryptos = configuration
                         .GetValue<string>($"NBXplorer_{nameof(NBXplorerOptions.Cryptos)}", string.Empty)?
-                        .Replace(" ", "")?
+                        .Replace(" ", "")
+                        .ToUpperInvariant()?
                         .Split(';')?
                         .Distinct().ToArray()
                 };

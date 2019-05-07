@@ -1,10 +1,129 @@
+@using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
+@using NBitcoin
 @model BtcTransmuter.Extension.Presets.CreatePaymentForwarderViewModel
 
+@{
+    ViewData["Title"] = "Create Payment Forwarder";
+}
 
-From wallet
+<h2>@ViewData["Title"]</h2>
 
-To Wallet:
 
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="CryptoCode" class="control-label"></label>
+        <select asp-for="CryptoCode" asp-items="Model.CryptoCodes" class="form-control"></select>
+        <span asp-validation-for="CryptoCode" class="text-danger"></span>
+    </div>
+
+    <div class="card  mb-2">
+        <div class="card-body">
+
+            <h5 class="card-title">Source wallet configuration</h5>
+            
+            @if (Model.Services.Any())
+            {
+                <div class="form-group">
+                    <label asp-for="SelectedSourceWalletExternalServiceId" class="control-label"></label>
+                    <select asp-for="SelectedSourceWalletExternalServiceId" asp-items="Model.Services" class="form-control"></select>
+                    <span asp-validation-for="SelectedSourceWalletExternalServiceId" class="text-danger"></span>
+                </div> 
+            }
+            
+
+            <div class="form-group">
+                <label asp-for="GenerateSourceWallet" class="control-label"></label>
+                <input type="checkbox" asp-for="GenerateSourceWallet" class="form-check"/>
+                <span asp-validation-for="GenerateSourceWallet" class="text-danger"></span>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="card  mb-2">
+        <div class="card-body">
+
+            <h5 class="card-title">Forwarding Criteria</h5>
+            
+            <div class="form-group">
+                <label asp-for="SendEntireBalance" class="control-label"></label>
+                <input type="checkbox" asp-for="SendEntireBalance" class="form-check"/>
+                <span asp-validation-for="SendEntireBalance" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SendBalanceValue" class="control-label"></label>
+                <div class="input-group">
+                    <input asp-for="SendBalanceValue"  type="number" step="any" min="0" class="form-control"/>
+                    <div class="input-group-append">
+                        <select asp-for="SendBalanceMoneyUnit" asp-items="@Html.GetEnumSelectList(typeof(MoneyUnit))" class="form-control"></select>
+                    </div>
+                </div>
+                <span asp-validation-for="SendBalanceValue" class="text-danger"></span>
+                <span asp-validation-for="SendBalanceMoneyUnit" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group mb-2">
+        <div class="list-group-item ">
+            <h5 class="mb-1">Forwarding Destination</h5>
+        </div>
+        @for (var index = 0; index < Model.PaymentDestinations.Count; index++)
+        {
+            <div class="list-group-item justify-content-between align-items-center">
+                <div>
+                    
+                        
+                    @if (Model.Services.Any())
+                    {
+                        <div class="form-group">
+                            <label asp-for="PaymentDestinations[index].SelectedDestinationWalletExternalServiceId" class="control-label"></label>
+                            <select asp-for="PaymentDestinations[index].SelectedDestinationWalletExternalServiceId" asp-items="Model.Services" class="form-control"></select>
+                            <span asp-validation-for="PaymentDestinations[index].SelectedDestinationWalletExternalServiceId" class="text-danger"></span>
+                        </div> 
+                    }
+                    
+                    <div class="form-group">
+                        <label asp-for="PaymentDestinations[index].DestinationAddress" class="control-label"></label>
+                        <input asp-for="PaymentDestinations[index].DestinationAddress" class="form-control"/>
+                        <span asp-validation-for="PaymentDestinations[index].DestinationAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PaymentDestinations[index].DerivationStrategy" class="control-label"></label>
+                        <input asp-for="PaymentDestinations[index].DerivationStrategy" class="form-control"/>
+                        <span asp-validation-for="PaymentDestinations[index].DerivationStrategy" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="PaymentDestinations[index].AmountPercentage" class="control-label"></label>
+                        <input asp-for="PaymentDestinations[index].AmountPercentage" step="any" class="form-control"/>
+                        <span asp-validation-for="PaymentDestinations[index].AmountPercentage" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="PaymentDestinations[index].SubtractFeesFromOutput" class="control-label"></label>
+                        <input type="checkbox" asp-for="PaymentDestinations[index].SubtractFeesFromOutput" class="form-check"/>
+                        <span asp-validation-for="PaymentDestinations[index].SubtractFeesFromOutput" class="text-danger"></span>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" name="action" value="@($"remove-destination:{index}")" class="btn btn-danger">Remove</button>
+                </div>
+            </div>
+        }
+        <div class="list-group-item ">
+            <button type="submit" name="action" value="add-destination" class="btn btn-secondary">Add</button>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("DerivationStrategyHelp")
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>
 
 
 
