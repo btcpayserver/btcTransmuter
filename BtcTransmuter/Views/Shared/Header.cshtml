@@ -1,0 +1,36 @@
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow @(ViewData.ContainsKey("FullLayout")? "" :"mb-3" )">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BTC Transmuter</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav ml-auto">
+                    @if (User.Claims.Any())
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item mr-3">
+                                <a asp-area="" asp-controller="Admin" asp-action="Users">Admin</a>
+                            </li>
+                        }
+                        <li class="nav-item mr-3">
+                            <a asp-area="" asp-controller="Extensions" asp-action="Extensions">Extensions</a>
+                        </li>
+                        <li class="nav-item mr-3">
+                            <a asp-area="" asp-controller="Recipes" asp-action="GetRecipes">Recipes</a>
+                        </li>
+                        <li class="nav-item mr-3">
+                            <a asp-area="" asp-controller="ExternalServices" asp-action="GetServices">External Services</a>
+                        </li>
+                    }
+                    @await Component.InvokeAsync("ExtensionMenus")
+                    <partial name="_LoginPartial"/>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,4 +1,9 @@
-<li class="nav-item mr-3">
-    <a asp-controller="NBXplorerStatus" asp-action="GetSummaries">NBXplorer Status</a>
-</li>
-
+@if (User.Claims.Any())
+{
+    if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item mr-3">
+            <a asp-controller="NBXplorerStatus" asp-action="GetSummaries">NBXplorer Status</a>
+        </li>
+    }
+}

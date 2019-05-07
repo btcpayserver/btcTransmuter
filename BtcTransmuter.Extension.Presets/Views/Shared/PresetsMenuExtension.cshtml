@@ -1,4 +1,6 @@
-<li class="nav-item mr-3">
-    <a asp-controller="Presets" asp-action="ChoosePreset">Presets</a>
-</li>
-
+@if (User.Claims.Any())
+{
+    <li class="nav-item mr-3">
+        <a asp-controller="Presets" asp-action="ChoosePreset">Presets</a>
+    </li>
+}

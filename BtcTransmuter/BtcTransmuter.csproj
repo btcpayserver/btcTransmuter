@@ -69,4 +69,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\vendors\bootstrap" />
+  </ItemGroup>
+
 </Project>

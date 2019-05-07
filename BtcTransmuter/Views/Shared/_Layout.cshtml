@@ -4,57 +4,33 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - BtcTransmuter</title>
-    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="~/vendors/bootstrap/dist/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" href="~/styles/global.css"/>
     @await Component.InvokeAsync("ExtensionHeaders")
 
+    @RenderSection("Scripts", required: false)
 </head>
 <body>
+<partial name="Header"/>
 
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BtcTransmuter</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <ul class="navbar-nav ml-auto">
-                    @if(User.IsInRole("Admin")){
-                        <li class="nav-item mr-3">
-                            <a asp-area="" asp-controller="Admin" asp-action="Users">Admin</a>
-                        </li>
-                    }
-                    <li class="nav-item mr-3">
-                        <a asp-area="" asp-controller="Extensions" asp-action="Extensions">Extensions</a>
-                    </li>
-                    <li class="nav-item mr-3">
-                        <a asp-area="" asp-controller="Recipes" asp-action="GetRecipes">Recipes</a>
-                    </li>
-                    <li class="nav-item mr-3">
-                        <a asp-area="" asp-controller="ExternalServices" asp-action="GetServices">External Services</a>
-                    </li>
-                    @await Component.InvokeAsync("ExtensionMenus")
-                    <partial name="_LoginPartial"/>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
+@if (ViewData.ContainsKey("FullLayout"))
+{
+    <main role="main" >
         @RenderBody()
     </main>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2019 - BtcTransmuter. Made with ❤ by
-            <a href="https://twitter.com/mrkukks" target="_blank"> Kukks</a> & <a href="https://twitter.com/r0ckstardev" target="_blank"> RockstarDev</a>
-            @@ <a href="https://btcpayserver.org" target="_blank">BtcPayServer</a>
-        </div>
-    </footer>
-</div>
-@RenderSection("Scripts", required: false)
+
+    <partial name="Footer"/>
+}
+else
+{
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+        <partial name="Footer"/>
+    </div>
+}
+
 </body>
 </html>
