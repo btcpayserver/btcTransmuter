@@ -13,6 +13,7 @@ using BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
 using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,6 +24,7 @@ using Newtonsoft.Json;
 namespace BtcTransmuter.Extension.Presets
 {
     [Route("presets-plugin/presets/PaymentForwarder")]
+    [Authorize]
     public class PaymentForwarderController : Controller, ITransmuterPreset
     {
         private readonly IExternalServiceManager _externalServiceManager;
