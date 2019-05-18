@@ -70,7 +70,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             }
 
             if (viewModel.Action.StartsWith("remove-output", StringComparison.InvariantCultureIgnoreCase))
-            {AddModelError
+            {
                 var index = int.Parse(viewModel.Action.Substring(viewModel.Action.IndexOf(":") + 1));
                 viewModel.Outputs.RemoveAt(index);
                 return (null, viewModel);
