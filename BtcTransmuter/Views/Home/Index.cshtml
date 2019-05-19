@@ -5,7 +5,8 @@
 <div class="position-relative">
 
 
-    <div class="p-3 text-center  border-bottom bg-dark anime text-white">
+    <div class="p-3 text-center bg-dark  text-white">
+        <div id="anime" class="overflow-hidden w-100 h-100 position-absolute"></div>
         <div class="col-md-5 p-lg-5 mx-auto">
             <h1 class="display-4 font-weight-normal text-capitalize">BTC Transmuter</h1>
             <p class="lead font-weight-normal">Automate your money</p>
@@ -15,7 +16,7 @@
 
     <div class="container-fluid">
         <div class="row">
-           
+
             <div class="col-md-4 col-sm-12 bg-light text-center p-2 p-lg-5" style="min-height: 30vh">
                 <h2>Free & open-source</h2>
                 <p>All source code is fully available on Github under an MIT license</p>
@@ -46,23 +47,57 @@
                 <p>Over a dozen exchanges are supported allowing you to place market order against a variety of currencies</p>
                 <img src="assets/bitcoin-pound-currency-exchange-rate.svg" style="height: 25vh; width: 25vh">
             </div>
-           
+
         </div>
     </div>
-
 </div>
+
 @section Scripts{
-    <script src="~/vendors/vanta/three.r92.min.js"></script>
-    <script src="~/vendors/vanta/vanta.waves.min.js"></script>
     <script>
    window.onload = function() {
-       VANTA.WAVES({
-           el: ".anime",
-           color: 0x8847,
-           shininess: 34.00,
-           waveHeight: 8.00,
-           zoom: 1.75
-       })
+var particles = [ ];
+var particleSize = 32;//Math.round((document.body.offsetWidth * document.body.offsetHeight) / 8000);
+var particleCount = Math.round((document.body.offsetWidth * document.body.offsetHeight) / 8000);
+var nextParticle = 0;
+var container = document.getElementById("anime");
+$(document).ready(function() {
+  for (var p = 0; p < particleCount; p++) {
+    var particle = document.createElement("div");
+    particle.className = "particle";
+    container.appendChild(particle);
+    particles[particles.length] = particle;
+  }
+  updateParticles();
+});
+var updateParticles = function() {
+  var p = Math.round(Math.random() * (particles.length - 1));
+  nextParticle++;
+  nextParticle = nextParticle < particles.length ? nextParticle : 0;
+  var top = (Math.round((Math.random() * container.offsetHeight - particleSize) / particleSize) * particleSize);
+  var left = (Math.round((Math.random() * container.offsetWidth - particleSize) / particleSize) * particleSize);
+  particles[p].style.opacity = (1.0 + Math.sin(left + top)) / 2.0;
+  particles[p].style.width = particles[p].style.height = (particles[p].style.opacity > 0 ? particleSize : 0) + "px";
+  particles[p].style.transform = particles[p].style.opacity > 0 ? particles[p].style.opacity > 0.5 ? "rotate(360deg)" : "rotate(0deg)" : "rotate(180deg)";
+  particles[p].style.left = left + "px";
+  particles[p].style.top = top + "px";
+  setTimeout(function() {
+    updateParticles();
+  }, 100);
+};
    }
     </script>
+
+    <style>
+        .particle {
+          background-color: #337700;
+          height: 0;
+          left: 0;
+          opacity: 0;
+          position: absolute;
+          transform: rotate(360deg);
+          transition: transform 1s, left 1s, top 1s, height 0.5s cubic-bezier(0.625, 5.650, 0.495, 1.00), width 0.5s cubic-bezier(0.625, 5.650, 0.495, 1.00), opacity 1s;
+          top: 0;
+          width: 0;
+        }
+    </style>
 }
