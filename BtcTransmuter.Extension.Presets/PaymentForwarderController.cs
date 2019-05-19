@@ -40,7 +40,7 @@ namespace BtcTransmuter.Extension.Presets
         public string Description { get; } = "Forward funds from a wallet elsewhere";
 
         public PaymentForwarderController(
-            IExternalServiceManager externalServiceManager, 
+            IExternalServiceManager externalServiceManager,
             UserManager<User> userManager,
             NBXplorerOptions nbXplorerOptions,
             DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
@@ -82,9 +82,10 @@ namespace BtcTransmuter.Extension.Presets
                 });
                 services = newServices;
             }
+
             return View(new CreatePaymentForwarderViewModel()
             {
-                Services = new SelectList(services, nameof(ExternalServiceData.Id),nameof(ExternalServiceData.Name)),
+                Services = new SelectList(services, nameof(ExternalServiceData.Id), nameof(ExternalServiceData.Name)),
                 CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>()),
                 PaymentDestinations = new List<CreatePaymentForwarderViewModel.PaymentDestination>()
             });
@@ -108,11 +109,14 @@ namespace BtcTransmuter.Extension.Presets
                 });
                 services = newServices;
             }
-            viewModel.Services = new SelectList(services, nameof(ExternalServiceData.Id),nameof(ExternalServiceData.Name));
+
+            viewModel.Services =
+                new SelectList(services, nameof(ExternalServiceData.Id), nameof(ExternalServiceData.Name));
             viewModel.CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
                 viewModel.CryptoCode);
-            viewModel.PaymentDestinations = viewModel.PaymentDestinations?? new List<CreatePaymentForwarderViewModel.PaymentDestination>();
-            
+            viewModel.PaymentDestinations = viewModel.PaymentDestinations ??
+                                            new List<CreatePaymentForwarderViewModel.PaymentDestination>();
+
             if (!string.IsNullOrEmpty(viewModel.Action))
             {
                 if (viewModel.Action == "add-destination")
@@ -136,10 +140,8 @@ namespace BtcTransmuter.Extension.Presets
             {
                 ModelState.AddModelError(nameof(viewModel.SelectedSourceWalletExternalServiceId),
                     "Please select a source nbxplorer wallet OR check the generate wallet checkbox");
-                ModelState.AddModelError(nameof(viewModel.GenerateSourceWallet),
-                    "Please select a source nbxplorer wallet OR check the generate wallet checkbox");
             }
-            else if(!string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId))
+            else if (!string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId))
             {
                 var service = services.SingleOrDefault(data =>
                     data.Id == viewModel.SelectedSourceWalletExternalServiceId);
@@ -154,20 +156,21 @@ namespace BtcTransmuter.Extension.Presets
                     var data = new NBXplorerWalletService(service, _nbXplorerPublicWalletProvider,
                         _derivationSchemeParser,
                         _derivationStrategyFactoryProvider, _nbXplorerClientProvider).GetData();
-                     if (data.CryptoCode != viewModel.CryptoCode)
+                    if (data.CryptoCode != viewModel.CryptoCode)
                     {
                         viewModel.AddModelError(
                             model => model.SelectedSourceWalletExternalServiceId,
                             "Wallet chosen not the same crypto", ModelState);
-                    }else if (!data.PrivateKeys.Any())
-                     {
-                         viewModel.AddModelError(
-                             model => model.SelectedSourceWalletExternalServiceId,
-                             "Wallet chosen has so signing keys which would make forwarding txs impossible", ModelState);
-                     }
+                    }
+                    else if (!data.PrivateKeys.Any())
+                    {
+                        viewModel.AddModelError(
+                            model => model.SelectedSourceWalletExternalServiceId,
+                            "Wallet chosen has so signing keys which would make forwarding txs impossible", ModelState);
+                    }
                 }
             }
-            
+
             if (!viewModel.PaymentDestinations.Any())
             {
                 ModelState.AddModelError(string.Empty,
@@ -176,8 +179,8 @@ namespace BtcTransmuter.Extension.Presets
             else
             {
                 var totalSumIssue = viewModel.PaymentDestinations.Sum(output => output.AmountPercentage) > 100;
-    
-                
+
+
                 var subtractFeesOutputs = viewModel.PaymentDestinations.Select((output, i) => (output, i))
                     .Where(tuple => tuple.Item1.SubtractFeesFromOutput);
 
@@ -200,11 +203,10 @@ namespace BtcTransmuter.Extension.Presets
                             "Your total amounts across all outputs exceeds 100% We're not a central bank and can't print more money than you own, sorry.",
                             ModelState);
                     }
-                    
+
                     var viewModelPaymentDestination = viewModel.PaymentDestinations[index];
 
                     var check =
-
                         (string.IsNullOrEmpty(viewModelPaymentDestination.DerivationStrategy) ? 0 : 1) +
                         (string.IsNullOrEmpty(viewModelPaymentDestination.DestinationAddress) ? 0 : 1) +
                         (string.IsNullOrEmpty(viewModelPaymentDestination.SelectedDestinationWalletExternalServiceId)
@@ -239,7 +241,8 @@ namespace BtcTransmuter.Extension.Presets
                         }
                         else if (
                             new NBXplorerWalletService(service, _nbXplorerPublicWalletProvider, _derivationSchemeParser,
-                                _derivationStrategyFactoryProvider, _nbXplorerClientProvider).GetData().CryptoCode != viewModel.CryptoCode)
+                                _derivationStrategyFactoryProvider, _nbXplorerClientProvider).GetData().CryptoCode !=
+                            viewModel.CryptoCode)
                         {
                             viewModel.AddModelError(
                                 model => model.PaymentDestinations[index].SelectedDestinationWalletExternalServiceId,
@@ -261,7 +264,6 @@ namespace BtcTransmuter.Extension.Presets
                         }
                         catch (Exception)
                         {
-                            
                             viewModel.AddModelError(
                                 model => model.PaymentDestinations[index].DestinationAddress,
                                 "Invalid Address", ModelState);
@@ -303,7 +305,7 @@ namespace BtcTransmuter.Extension.Presets
             var client = _nbXplorerClientProvider.GetClient(vm.CryptoCode);
             var presetName = $"Generated_PaymentForwarder_{vm.CryptoCode}";
             var sourceExternalServiceId = vm.SelectedSourceWalletExternalServiceId;
-            
+
             if (vm.GenerateSourceWallet)
             {
                 var newSeed = new Mnemonic(Wordlist.English, WordCount.Twelve);
@@ -319,12 +321,12 @@ namespace BtcTransmuter.Extension.Presets
                         }
                     }
                 };
-                
+
                 var sourceWallet = new ExternalServiceData()
                 {
                     Name = presetName + "_Source_Wallet",
                     UserId = _userManager.GetUserId(User),
-                    Type =  NBXplorerWalletService.NBXplorerWalletServiceType,
+                    Type = NBXplorerWalletService.NBXplorerWalletServiceType,
                     DataJson = client.Serializer.ToString(data)
                 };
                 await _externalServiceManager.AddOrUpdateExternalServiceData(sourceWallet);
@@ -339,22 +341,24 @@ namespace BtcTransmuter.Extension.Presets
                 Enabled = false
             };
             await _recipeManager.AddOrUpdateRecipe(recipe);
-            
+
             var recipeTrigger = new RecipeTrigger()
             {
                 ExternalServiceId = sourceExternalServiceId,
-                TriggerId =  NBXplorerBalanceTrigger.Id,
+                TriggerId = NBXplorerBalanceTrigger.Id,
                 RecipeId = recipe.Id,
                 DataJson = client.Serializer.ToString(new NBXplorerBalanceTriggerParameters()
                 {
-                    BalanceValue = vm.SendEntireBalance? 0: vm.SendBalanceValue,
-                    BalanceComparer =vm.SendEntireBalance? BalanceComparer.GreaterThan : BalanceComparer.GreaterThanOrEqual,
+                    BalanceValue = vm.SendEntireBalance ? 0 : vm.SendBalanceValue,
+                    BalanceComparer = vm.SendEntireBalance
+                        ? BalanceComparer.GreaterThan
+                        : BalanceComparer.GreaterThanOrEqual,
                     BalanceMoneyUnit = vm.SendBalanceMoneyUnit
                 })
             };
-            
+
             await _recipeManager.AddOrUpdateRecipeTrigger(recipeTrigger);
-            
+
             var recipeActionGroup = new RecipeActionGroup()
             {
                 RecipeId = recipe.Id
@@ -362,11 +366,11 @@ namespace BtcTransmuter.Extension.Presets
             await _recipeManager.AddRecipeActionGroup(recipeActionGroup);
             var recipeActionGroupIndex = 0;
             var ouputs = new List<SendTransactionData.TransactionOutput>();
-            foreach (var paymentDestination in vm.PaymentDestinations )
+            foreach (var paymentDestination in vm.PaymentDestinations)
             {
                 var destinationExternalServiceId = paymentDestination.SelectedDestinationWalletExternalServiceId;
                 NBXplorerWalletExternalServiceData data = null;
-                
+
                 if (string.IsNullOrEmpty(destinationExternalServiceId))
                 {
                     data = new NBXplorerWalletExternalServiceData()
@@ -375,12 +379,12 @@ namespace BtcTransmuter.Extension.Presets
                         Address = paymentDestination.DestinationAddress,
                         DerivationStrategy = paymentDestination.DerivationStrategy,
                     };
-                    
+
                     var wallet = new ExternalServiceData()
                     {
                         Name = presetName + $"_Dest_Wallet_{data.DerivationStrategy}",
                         UserId = _userManager.GetUserId(User),
-                        Type =  NBXplorerWalletService.NBXplorerWalletServiceType,
+                        Type = NBXplorerWalletService.NBXplorerWalletServiceType,
                         DataJson = client.Serializer.ToString(data)
                     };
                     await _externalServiceManager.AddOrUpdateExternalServiceData(wallet);
@@ -404,17 +408,18 @@ namespace BtcTransmuter.Extension.Presets
                     DataJson = JsonConvert.SerializeObject(new GenerateNextAddressData())
                 };
                 await _recipeManager.AddOrUpdateRecipeAction(recipeAction);
-                
+
                 ouputs.Add(new SendTransactionData.TransactionOutput()
                 {
-                    DestinationAddress = "{{Action"+recipeActionGroupIndex+"}}",
-                    Amount = "{{TriggerData.Balance * ("+paymentDestination.AmountPercentage+"/100)}}" ,
+                    DestinationAddress = "{{Action" + recipeActionGroupIndex + "}}",
+                    Amount = "{{TriggerData.Balance * (" + paymentDestination.AmountPercentage + "/100)}}",
                     SubtractFeesFromOutput = paymentDestination.SubtractFeesFromOutput
                 });
-                
+
                 recipeActionGroupIndex++;
             }
-            var sweepRecipeAction =  new RecipeAction()
+
+            var sweepRecipeAction = new RecipeAction()
             {
                 RecipeId = recipe.Id,
                 RecipeActionGroupId = recipeActionGroup.Id,
@@ -442,19 +447,20 @@ namespace BtcTransmuter.Extension.Presets
     {
         public SelectList CryptoCodes { get; set; }
         public SelectList Services { get; set; }
-        
-        [Display(Name = "Crypto")] [Required] 
-        public string CryptoCode { get; set; }
-        [Display(Name = "Existing NBXplorer Wallet")] 
+
+        [Display(Name = "Crypto")] [Required] public string CryptoCode { get; set; }
+
+        [Display(Name = "Existing NBXplorer Wallet")]
         public string SelectedSourceWalletExternalServiceId { get; set; }
-        
-        [Display(Name = "Generate new NBXplorer Wallet for receiving funds (P2SH-Segwit)")] 
+
+        [Display(Name = "Generate new NBXplorer Wallet for receiving funds (P2SH-Segwit)")]
         public bool GenerateSourceWallet { get; set; }
 
         [Display(Name = "Send whenever there is any balance")]
         public bool SendEntireBalance { get; set; }
 
-        [Display(Name = "When balance is at least")] public decimal SendBalanceValue { get; set; }
+        [Display(Name = "When balance is at least")]
+        public decimal SendBalanceValue { get; set; }
 
         public MoneyUnit SendBalanceMoneyUnit { get; set; } = MoneyUnit.BTC;
 
@@ -473,7 +479,8 @@ namespace BtcTransmuter.Extension.Presets
             public string DerivationStrategy { get; set; }
 
             [Display(Name = "Percentage amount to forward")]
-            [Required][Range(0,100)]
+            [Required]
+            [Range(0, 100)]
             public decimal AmountPercentage { get; set; }
 
             [Display(Name = "Subtract fees from this destination")]
