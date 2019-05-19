@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Internal;
 using NBitcoin;
 using NBXplorer.DerivationStrategy;
 using Newtonsoft.Json;
@@ -88,6 +89,10 @@ namespace BtcTransmuter.Extension.Presets
                 Services = new SelectList(services, nameof(ExternalServiceData.Id), nameof(ExternalServiceData.Name)),
                 CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>()),
                 PaymentDestinations = new List<CreatePaymentForwarderViewModel.PaymentDestination>()
+                {
+                    new CreatePaymentForwarderViewModel.PaymentDestination()
+                },
+                GenerateSourceWallet = !services.Any()
             });
         }
 
@@ -138,7 +143,13 @@ namespace BtcTransmuter.Extension.Presets
                 !string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId) &&
                 viewModel.GenerateSourceWallet)
             {
-                ModelState.AddModelError(nameof(viewModel.SelectedSourceWalletExternalServiceId),
+                if (viewModel.Services.Items.Any())
+                {
+                    ModelState.AddModelError(nameof(viewModel.SelectedSourceWalletExternalServiceId),
+                        "Please select a source nbxplorer wallet OR check the generate wallet checkbox");
+                }
+
+                ModelState.AddModelError(nameof(viewModel.GenerateSourceWallet),
                     "Please select a source nbxplorer wallet OR check the generate wallet checkbox");
             }
             else if (!string.IsNullOrEmpty(viewModel.SelectedSourceWalletExternalServiceId))

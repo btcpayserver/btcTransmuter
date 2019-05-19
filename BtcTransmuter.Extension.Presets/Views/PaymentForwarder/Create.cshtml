@@ -1,4 +1,3 @@
-@using BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
 @using NBitcoin
 @model BtcTransmuter.Extension.Presets.CreatePaymentForwarderViewModel
 
@@ -29,7 +28,7 @@
                     <select asp-for="SelectedSourceWalletExternalServiceId" asp-items="Model.Services" class="form-control"></select>
                     <span asp-validation-for="SelectedSourceWalletExternalServiceId" class="text-danger"></span>
                 </div> 
-            }
+            }e;
             
 
             <div class="form-group">
@@ -43,15 +42,12 @@
     
     <div class="card  mb-2">
         <div class="card-body">
-
             <h5 class="card-title">Forwarding Criteria</h5>
-            
             <div class="form-group">
                 <label asp-for="SendEntireBalance" class="control-label"></label>
                 <input type="checkbox" asp-for="SendEntireBalance" class="form-check"/>
                 <span asp-validation-for="SendEntireBalance" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="SendBalanceValue" class="control-label"></label>
                 <div class="input-group">
