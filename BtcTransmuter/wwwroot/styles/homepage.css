@@ -1,0 +1,11 @@
+.particle {
+    background-color: #337700;
+    height: 0;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    transform: rotate(360deg);
+    transition: transform 1s, left 1s, top 1s, height 0.5s cubic-bezier(0.625, 5.650, 0.495, 1.00), width 0.5s cubic-bezier(0.625, 5.650, 0.495, 1.00), opacity 1s;
+    top: 0;
+    width: 0;
+}
