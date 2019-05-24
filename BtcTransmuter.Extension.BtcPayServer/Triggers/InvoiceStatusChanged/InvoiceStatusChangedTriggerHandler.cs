@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
+using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 {
@@ -26,7 +27,10 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                 return Task.FromResult(true);
             }
 
-            return Task.FromResult(triggerData.Invoice.Status.Equals(parameters.Status,
+            var exceptionStatus = triggerData.Invoice.ExceptionStatus.Type == JTokenType.Null
+                ? string.Empty: triggerData.Invoice.ExceptionStatus.Value<string>();
+            var status = triggerData.Invoice.Status + (string.IsNullOrEmpty(exceptionStatus)? $"_{exceptionStatus}": "");
+            return Task.FromResult(status.Equals(parameters.Status,
                 StringComparison.InvariantCultureIgnoreCase));
         }
     }

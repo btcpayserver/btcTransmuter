@@ -26,10 +26,23 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
         {
             new SelectListItem() {Text = "Any Status", Value = null},
             new SelectListItem() {Text = "New", Value = Invoice.STATUS_NEW},
+            
+            new SelectListItem() {Text = "New(Paid Partially)", Value = $"{Invoice.STATUS_NEW}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
             new SelectListItem() {Text = "Paid", Value = Invoice.STATUS_PAID},
+            new SelectListItem() {Text = "Paid(Paid Partially)", Value = $"{Invoice.STATUS_PAID}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
+            new SelectListItem() {Text = "Paid(Paid Over)", Value = $"{Invoice.STATUS_PAID}_{Invoice.EXSTATUS_PAID_OVER}"},
             new SelectListItem() {Text = "Invalid", Value = Invoice.STATUS_INVALID},
+            
+            new SelectListItem() {Text = "Invalid(Marked)", Value = $"{Invoice.STATUS_INVALID}_marked"},
+            new SelectListItem() {Text = "Invalid(Paid Partially)", Value = $"{Invoice.STATUS_INVALID}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
+            new SelectListItem() {Text = "Invalid(Paid Over)", Value = $"{Invoice.STATUS_INVALID}_{Invoice.EXSTATUS_PAID_OVER}"},
             new SelectListItem() {Text = "Confirmed", Value = Invoice.STATUS_CONFIRMED},
-            new SelectListItem() {Text = "Complete", Value = Invoice.STATUS_COMPLETE}
+            new SelectListItem() {Text = "Confirmed(Paid Partially)", Value = $"{Invoice.STATUS_CONFIRMED}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
+            new SelectListItem() {Text = "Confirmed(Paid Over)", Value = $"{Invoice.STATUS_CONFIRMED}_{Invoice.EXSTATUS_PAID_OVER}"},
+            new SelectListItem() {Text = "Complete", Value = Invoice.STATUS_COMPLETE},
+            new SelectListItem() {Text = "Complete(Marked)", Value = $"{Invoice.STATUS_COMPLETE}_marked"},
+            new SelectListItem() {Text = "Expired", Value = "expired"},
+            new SelectListItem() {Text = "Complete(Marked)", Value = $"expired_paidLate"},
         };
 
 
