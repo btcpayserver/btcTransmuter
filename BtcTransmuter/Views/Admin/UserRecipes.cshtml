@@ -12,6 +12,9 @@
         <partial name="_StatusMessage" model="@Model.StatusMessage"/>
     </div>
 </div>
+<h2>@ViewData["Title"]</h2>
+
+<partial name="AdminNav"/>
 @if (!Model.Recipes.Any())
 {
     <div class="card">

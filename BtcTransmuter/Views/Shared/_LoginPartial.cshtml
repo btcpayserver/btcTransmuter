@@ -1,8 +1,14 @@
+@using BtcTransmuter.Abstractions.Settings
+@using BtcTransmuter.Controllers
 @using BtcTransmuter.Data.Entities
 @using Microsoft.AspNetCore.Identity
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject ISettingsManager SettingsManager
+@{
+    var settings = await SettingsManager.GetSettings<SystemSettings>(nameof(SystemSettings));
+}
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -19,9 +25,12 @@
 }
 else
 {
-    <li class="nav-item mr-3">
-        <a asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
+    @if (!settings.DisableRegistration)
+     {
+         <li class="nav-item mr-3">
+             <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+         </li>
+     }
     <li class="nav-item">
         <a asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>

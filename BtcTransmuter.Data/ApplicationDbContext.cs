@@ -27,6 +27,7 @@ namespace BtcTransmuter.Data
         public DbSet<RecipeInvocation> RecipeInvocations { get; set; }
         public DbSet<RecipeTrigger> RecipeTriggers { get; set; }
         public DbSet<RecipeAction> RecipeActions { get; set; }
+        public DbSet<Settings> Settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -61,6 +62,11 @@ namespace BtcTransmuter.Data
                 .HasMany(l => l.RecipeInvocations)
                 .WithOne(action => action.RecipeAction)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Settings>()
+                .HasIndex(settings => settings.Key)
+                .IsUnique();
+                
             if (_dataProtectionProvider != null)
             {
                 builder.AddEncryptionValueConvertersToDecoratedEncryptedColumns(_dataProtectionProvider.CreateProtector("ApplicationDbContext"));

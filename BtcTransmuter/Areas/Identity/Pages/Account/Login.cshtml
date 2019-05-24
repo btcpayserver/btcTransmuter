@@ -1,8 +1,15 @@
 ﻿@page
+@using BtcTransmuter.Abstractions.Settings
+@using BtcTransmuter.Controllers
 @model LoginModel
 
 @{
     ViewData["Title"] = "Log in";
+}
+
+@inject ISettingsManager SettingsManager
+@{
+    var settings = await SettingsManager.GetSettings<SystemSettings>(nameof(SystemSettings));
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -33,14 +40,19 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
-                <div class="form-group">
-                    @* <p> *@
-                    @*     <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a> *@
-                    @* </p> *@
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                </div>
+                @if (!settings.DisableRegistration)
+                {
+                
+                    <div class="form-group">
+                        @* <p> *@
+                        @*     <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a> *@
+                        @* </p> *@
+                    
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                    </div>
+                }
             </form>
         </section>
     </div>

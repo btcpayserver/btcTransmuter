@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Settings;
+using BtcTransmuter.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using BtcTransmuter.Data.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace BtcTransmuter.Areas.Identity.Pages.Account
@@ -22,17 +25,20 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ISettingsManager _settingsManager;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ISettingsManager settingsManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _settingsManager = settingsManager;
         }
 
         [BindProperty]
@@ -59,9 +65,16 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
+        public async Task<IActionResult> OnGet(string returnUrl = null)
         {
+            var settings = await _settingsManager.GetSettings<SystemSettings>(nameof(SystemSettings));
+            if (settings.DisableRegistration)
+            {
+                return RedirectToAction(nameof(Index), "Home");
+            }
+            
             ReturnUrl = returnUrl;
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

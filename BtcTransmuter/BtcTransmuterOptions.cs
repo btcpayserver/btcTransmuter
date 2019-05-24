@@ -13,7 +13,7 @@ namespace BtcTransmuter
         public const string configPrefix = "TRANSMUTER_";
         public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger logger)
         {
-
+            
             DatabaseConnectionString = configuration.GetValue<string>("Database");
             DataProtectionDir = configuration.GetValue<string>("DataProtectionDir");
             DatabaseType = configuration.GetValue<DatabaseType>("DatabaseType", DatabaseType.Sqlite);

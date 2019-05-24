@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
+using BtcTransmuter.Abstractions.Settings;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -15,20 +16,23 @@ namespace BtcTransmuter.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IRecipeManager _recipeManager;
+        private readonly ISettingsManager _settingsManager;
 
-        public AdminController(UserManager<User> userManager, IRecipeManager recipeManager)
+        public AdminController(UserManager<User> userManager, IRecipeManager recipeManager, ISettingsManager settingsManager)
         {
             _userManager = userManager;
             _recipeManager = recipeManager;
+            _settingsManager = settingsManager;
         }
 
         [HttpGet("users")]
         public async Task<IActionResult> Users(string statusMessage)
         {
+            var users = await _userManager.Users.ToListAsync();
             return View(
                 new UsersViewModel()
                 {
-                    Users =  await _userManager.Users.ToListAsync(),
+                    Users = users,
                     StatusMessage = statusMessage
                 }
             );
@@ -46,6 +50,36 @@ namespace BtcTransmuter.Controllers
             {
                 StatusMessage = statusMessage,
                 Recipes = recipes
+            });
+        }
+        
+        
+        [HttpGet("SystemSettings")]
+        public async Task<IActionResult> EditSettings(string statusMessage)
+        {
+            var currentSettings = await  _settingsManager.GetSettings<SystemSettings>(nameof(SystemSettings));
+            return View(
+                new EditSystemSettingsViewModel()
+                {
+                    StatusMessage = statusMessage,
+                    DisableRegistration = currentSettings.DisableRegistration
+                }
+            );
+        }
+        
+        [HttpPost("SystemSettings")]
+        public async Task<IActionResult> EditSettings(EditSystemSettingsViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            await _settingsManager.SaveSettings<SystemSettings>(nameof(SystemSettings), vm);
+            
+            return RedirectToAction(nameof(EditSettings), new
+            {
+                StatusMessage = "Settings have been updated."
             });
         }
 
