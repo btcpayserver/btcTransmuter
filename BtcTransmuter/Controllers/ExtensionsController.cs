@@ -43,7 +43,7 @@ namespace BtcTransmuter.Controllers
             {
                 StatusMessage = statusMessage,
                 Extensions = _btcTransmuterExtensions,
-                IsAdmin = await _userManager.IsInRoleAsync(user, "Admin")
+                IsAdmin = user != null &&  await _userManager.IsInRoleAsync(user, "Admin")
             });
         }
 

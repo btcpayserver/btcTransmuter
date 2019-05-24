@@ -117,7 +117,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
         protected async Task<bool> IsAdmin()
         {
             var user = await _userManager.GetUserAsync(User);
-            return await _userManager.IsInRoleAsync(user, "Admin");
+            return user!= null &&  await _userManager.IsInRoleAsync(user, "Admin");
         }
     }
 }
