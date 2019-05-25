@@ -22,8 +22,13 @@
     </div>
     <div class="form-group">
         <label asp-for="Status" class="control-label"></label>
-        <select asp-for="Status" asp-items="Model.Statuses" class="form-control"></select>
+        <select asp-for="Status" asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedStatuses,"Value", "Text",  Model.Status))" class="form-control"></select>
         <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExceptionStatus" class="control-label"></label>
+        <select asp-for="ExceptionStatus" asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedExceptionStatus, "Value", "Text", Model.ExceptionStatus))" class="form-control"></select>
+        <span asp-validation-for="ExceptionStatus" class="text-danger"></span>
     </div>
     <input type="hidden" asp-for="RecipeId" />
     <div class="mt-2">

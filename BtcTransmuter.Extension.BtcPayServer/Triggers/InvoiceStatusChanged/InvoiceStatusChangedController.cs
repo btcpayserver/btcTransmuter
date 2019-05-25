@@ -22,29 +22,26 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
     {
         private readonly IExternalServiceManager _externalServiceManager;
 
-        private readonly SelectListItem[] AllowedStatuses = new SelectListItem[]
+        public static readonly SelectListItem[] AllowedStatuses = new SelectListItem[]
         {
             new SelectListItem() {Text = "Any Status", Value = null},
             new SelectListItem() {Text = "New", Value = Invoice.STATUS_NEW},
-            
-            new SelectListItem() {Text = "New(Paid Partially)", Value = $"{Invoice.STATUS_NEW}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
             new SelectListItem() {Text = "Paid", Value = Invoice.STATUS_PAID},
-            new SelectListItem() {Text = "Paid(Paid Partially)", Value = $"{Invoice.STATUS_PAID}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
-            new SelectListItem() {Text = "Paid(Paid Over)", Value = $"{Invoice.STATUS_PAID}_{Invoice.EXSTATUS_PAID_OVER}"},
             new SelectListItem() {Text = "Invalid", Value = Invoice.STATUS_INVALID},
-            
-            new SelectListItem() {Text = "Invalid(Marked)", Value = $"{Invoice.STATUS_INVALID}_marked"},
-            new SelectListItem() {Text = "Invalid(Paid Partially)", Value = $"{Invoice.STATUS_INVALID}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
-            new SelectListItem() {Text = "Invalid(Paid Over)", Value = $"{Invoice.STATUS_INVALID}_{Invoice.EXSTATUS_PAID_OVER}"},
             new SelectListItem() {Text = "Confirmed", Value = Invoice.STATUS_CONFIRMED},
-            new SelectListItem() {Text = "Confirmed(Paid Partially)", Value = $"{Invoice.STATUS_CONFIRMED}_{Invoice.EXSTATUS_PAID_PARTIAL}"},
-            new SelectListItem() {Text = "Confirmed(Paid Over)", Value = $"{Invoice.STATUS_CONFIRMED}_{Invoice.EXSTATUS_PAID_OVER}"},
             new SelectListItem() {Text = "Complete", Value = Invoice.STATUS_COMPLETE},
-            new SelectListItem() {Text = "Complete(Marked)", Value = $"{Invoice.STATUS_COMPLETE}_marked"},
             new SelectListItem() {Text = "Expired", Value = "expired"},
-            new SelectListItem() {Text = "Complete(Marked)", Value = $"expired_paidLate"},
         };
 
+        public static SelectListItem[] AllowedExceptionStatus = new SelectListItem[]
+        {
+            new SelectListItem() {Text = "Any", Value = null},
+            new SelectListItem() {Text = "Paid partially", Value = Invoice.EXSTATUS_PAID_PARTIAL},
+            new SelectListItem() {Text = "Paid over", Value = Invoice.EXSTATUS_PAID_OVER},
+            new SelectListItem() {Text = "Paid late", Value = "paidLate"},
+            new SelectListItem() {Text = "Marked", Value = "marked"},
+        };
+        
 
         public InvoiceStatusChangedController(IRecipeManager recipeManager, UserManager<User> userManager,
             IMemoryCache memoryCache, IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
@@ -70,7 +67,6 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                 RecipeId = data.RecipeId,
                 ExternalServiceId = data.ExternalServiceId,
                 Status = fromData.Status,
-                Statuses = new SelectList(AllowedStatuses, "Value", "Text", fromData.Status),
             };
         }
 
@@ -86,9 +82,6 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                         Type = new[] {BtcPayServerService.BtcPayServerServiceType},
                         UserId = GetUserId()
                     });
-
-
-                viewModel.Statuses = new SelectList(AllowedStatuses, "Value", "Text", viewModel.Status);
                 viewModel.ExternalServices = new SelectList(btcPayServices, nameof(ExternalServiceData.Id),
                     nameof(ExternalServiceData.Name), viewModel.ExternalServiceId);
                 return (null, viewModel);
@@ -104,7 +97,6 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
             public string RecipeId { get; set; }
             public SelectList ExternalServices { get; set; }
             [Required][Display(Name = "BtcPay Service")] public string ExternalServiceId { get; set; }
-            public SelectList Statuses { get; set; }
         }
     }
 }

@@ -22,11 +22,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
             InvoiceStatusChangedTriggerData triggerData,
             InvoiceStatusChangedTriggerParameters parameters)
         {
-            if (string.IsNullOrEmpty(parameters.Status))
-            {
-                return Task.FromResult(true);
-            }
-
+      
             var exceptionStatus = string.Empty;
             if (triggerData.Invoice.ExceptionStatus.Type == JTokenType.String)
             {
@@ -37,9 +33,29 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                 }
             }
 
-            var status = triggerData.Invoice.Status + (string.IsNullOrEmpty(exceptionStatus)? $"_{exceptionStatus}": "");
-            return Task.FromResult(status.Equals(parameters.Status,
-                StringComparison.InvariantCultureIgnoreCase));
+            var status = triggerData.Invoice.Status;
+
+            if (string.IsNullOrEmpty(parameters.Status) && string.IsNullOrEmpty(parameters.ExceptionStatus))
+            {
+                return Task.FromResult(true);
+            }
+            if (string.IsNullOrEmpty(parameters.Status) && !string.IsNullOrEmpty(parameters.ExceptionStatus))
+            {
+                return Task.FromResult(parameters.ExceptionStatus.Equals(exceptionStatus)); 
+            }
+            if (!string.IsNullOrEmpty(parameters.Status) && string.IsNullOrEmpty(parameters.ExceptionStatus))
+            {
+                return Task.FromResult(status.Equals(parameters.Status,
+                    StringComparison.InvariantCultureIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(parameters.Status) && !string.IsNullOrEmpty(parameters.ExceptionStatus))
+            {
+                return Task.FromResult(status.Equals(parameters.Status,
+                                           StringComparison.InvariantCultureIgnoreCase) && exceptionStatus.Equals(parameters.ExceptionStatus,
+                                           StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            return Task.FromResult(false);
         }
     }
 }
