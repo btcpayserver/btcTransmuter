@@ -27,8 +27,16 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                 return Task.FromResult(true);
             }
 
-            var exceptionStatus = triggerData.Invoice.ExceptionStatus.Type == JTokenType.Null
-                ? string.Empty: triggerData.Invoice.ExceptionStatus.Value<string>();
+            var exceptionStatus = string.Empty;
+            if (triggerData.Invoice.ExceptionStatus.Type == JTokenType.String)
+            {
+                var value = triggerData.Invoice.ExceptionStatus.Value<string>();
+                if (!value.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    exceptionStatus = value;
+                }
+            }
+
             var status = triggerData.Invoice.Status + (string.IsNullOrEmpty(exceptionStatus)? $"_{exceptionStatus}": "");
             return Task.FromResult(status.Equals(parameters.Status,
                 StringComparison.InvariantCultureIgnoreCase));
