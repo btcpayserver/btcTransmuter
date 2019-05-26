@@ -77,7 +77,7 @@ $(document).ready(function(){
     function populateAvailableMarketSymbols(){
         var value =  $("#ExternalServiceId").val();
         if(!value){
-            marketSymbolsHintElement.text("");
+            availableMarketSymbols = [];
         }else{
             $.ajax({
                 url: actionUrlMapping[value],
