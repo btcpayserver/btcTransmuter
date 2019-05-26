@@ -30,6 +30,17 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
             _externalServiceManager = externalServiceManager;
         }
 
+        [HttpGet("symbols/{externalServiceId}")]
+        public async Task<string[]> GetAvailableMarketSymbols(string externalServiceId)
+        {
+            var serviceData =
+                await _externalServiceManager.GetExternalServiceData(externalServiceId, GetUserId());
+            var exchangeService = new ExchangeService(serviceData);
+            var symbols = await exchangeService.ConstructClient().GetCurrenciesAsync();
+
+            return symbols.Keys.ToArray();
+        }
+
         protected override async Task<GetExchangeBalanceViewModel> BuildViewModel(RecipeAction from)
         {
             var services = await _externalServiceManager.GetExternalServicesData(new ExternalServicesDataQuery()

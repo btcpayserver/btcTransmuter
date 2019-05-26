@@ -22,12 +22,12 @@
     </div>
     <div class="form-group">
         <label asp-for="Asset" class="control-label"></label>
-        <input asp-for="Asset" class="form-control"/>
+        <input asp-for="Asset" class="form-control autocomplete" data-datasrc="availableMarketSymbols" />
         <span asp-validation-for="Asset" class="text-danger"></span>
     </div>
 
 
-    <input type="hidden" asp-for="RecipeId"/>
+    <input type="hidden" asp-for="RecipeId" />
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
         <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to recipe</a>
@@ -35,6 +35,33 @@
 </form>
 @await Component.InvokeAsync("RecipeActionFooter", new
 {
-    recipeId = @Model.RecipeId, 
+    recipeId = @Model.RecipeId,
     recipeActionIdInGroupBeforeThisOne = @Model.RecipeActionIdInGroupBeforeThisOne
 })
+
+
+<script>
+
+    var actionUrlMapping = @Json.Serialize(Model.ExternalServices.ToDictionary(item => item.Value, item => @Url.Action("GetAvailableMarketSymbols", new { ExternalServiceId = item.Value })));;
+    var availableMarketSymbols = [];
+    $(document).ready(function(){
+        $("#ExternalServiceId").on("input", populateAvailableMarketSymbols);
+        function populateAvailableMarketSymbols(){
+            var value =  $("#ExternalServiceId").val();
+            if(!value){
+                availableMarketSymbols = [];
+            }else{
+                $.ajax({
+                    url: actionUrlMapping[value],
+                    success: function(response){
+                        availableMarketSymbols = response;
+                    },
+                    error: function(){
+                        availableMarketSymbols = [];
+                    }
+                });
+            }
+        }
+        populateAvailableMarketSymbols();
+    })
+</script>

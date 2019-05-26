@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.DynamicServices;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
-using ExchangeSharp;
 
 namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
 {
@@ -31,7 +31,10 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
             var client = exchangeService.ConstructClient();
 
             var result = await client.GetAmountsAsync();
-            var amount = result.ContainsKey(actionData.Asset) ? result[actionData.Asset] : 0;
+
+            var matched = result
+                .FirstOrDefault(pair => pair.Key.Equals(actionData.Asset, StringComparison.InvariantCultureIgnoreCase));
+            var amount = matched.Value;
 
             return new TypedActionHandlerResult<decimal>()
             {
