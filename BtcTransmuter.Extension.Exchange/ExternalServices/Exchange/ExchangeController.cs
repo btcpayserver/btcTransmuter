@@ -50,8 +50,8 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
 
             if (!await exchangeService.TestAccess())
             {
-                ModelState.AddModelError(String.Empty, "Could not connect with current settings");
-
+                ModelState.AddModelError(String.Empty,
+                    "Could not connect with current settings. Transmuter tests against fetching your balance amount from the exchange so you would need to enable that option if available");
 
                 return (null,
                     new EditExchangeExternalServiceDataViewModel(viewModel, ExchangeService.GetAvailableExchanges()));

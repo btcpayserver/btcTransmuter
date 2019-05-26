@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +30,15 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
             userManager, recipeManager, externalServiceManager)
         {
             _externalServiceManager = externalServiceManager;
+        }
+
+        [HttpGet("symbols/{externalServiceId}")]
+        public async Task<string[]> GetAvailableMarketSymbols(string externalServiceId)
+        {
+            var serviceData =
+                await _externalServiceManager.GetExternalServiceData(externalServiceId, GetUserId());
+            var exchangeService = new ExchangeService(serviceData);
+            return (await exchangeService.ConstructClient().GetMarketSymbolsAsync()).ToArray();
         }
 
         protected override async Task<PlaceOrderViewModel> BuildViewModel(RecipeAction from)

@@ -12,7 +12,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
     public class PlaceOrderDataActionHandler : BaseActionHandler<PlaceOrderData, ExchangeOrderResult>
     {
         public override string ActionId => "PlaceOrder";
-        public override string Name => "Place Order";
+        public override string Name => "Place order on an Exchange";
 
         public override string Description =>
             "Place an order on an exchange";
