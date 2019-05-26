@@ -320,10 +320,11 @@ namespace BtcTransmuter.Extension.Presets
             if (vm.GenerateSourceWallet)
             {
                 var newSeed = new Mnemonic(Wordlist.English, WordCount.Twelve);
+                
                 var data = new NBXplorerWalletExternalServiceData()
                 {
                     CryptoCode = vm.CryptoCode,
-                    DerivationStrategy = newSeed.DeriveExtKey().ToString(client.Network.NBitcoinNetwork) + "-[p2sh]",
+                    DerivationStrategy = newSeed.DeriveExtKey().ToString(client.Network.NBitcoinNetwork) + (client.Network.NBitcoinNetwork.Consensus.SupportSegwit? "-[p2sh]": "-[legacy]"),
                     PrivateKeys = new List<PrivateKeyDetails>()
                     {
                         new PrivateKeyDetails()
@@ -464,7 +465,7 @@ namespace BtcTransmuter.Extension.Presets
         [Display(Name = "Existing NBXplorer Wallet")]
         public string SelectedSourceWalletExternalServiceId { get; set; }
 
-        [Display(Name = "Generate new NBXplorer Wallet for receiving funds (P2SH-Segwit)")]
+        [Display(Name = "Generate new NBXplorer Wallet for receiving funds (P2SH-Segwit, if available)")]
         public bool GenerateSourceWallet { get; set; }
 
         [Display(Name = "Send whenever there is any balance")]
