@@ -1,11 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 {
     public class InvoiceStatusChangedTriggerParameters
     {
-        public string Status { get; set; }
-        [Display(Name = "Additional Status")]
-        public string ExceptionStatus { get; set; }
+        public IEnumerable<string> Status { get; set; }
+        [Display(Name = "Additional Statuses")]
+        public IEnumerable<string> ExceptionStatus { get; set; }
     }
 }

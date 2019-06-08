@@ -24,7 +24,6 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 
         public static readonly SelectListItem[] AllowedStatuses = new SelectListItem[]
         {
-            new SelectListItem() {Text = "Any Status", Value = null},
             new SelectListItem() {Text = "New", Value = Invoice.STATUS_NEW},
             new SelectListItem() {Text = "Paid", Value = Invoice.STATUS_PAID},
             new SelectListItem() {Text = "Invalid", Value = Invoice.STATUS_INVALID},
@@ -35,7 +34,6 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 
         public static SelectListItem[] AllowedExceptionStatus = new SelectListItem[]
         {
-            new SelectListItem() {Text = "Any", Value = null},
             new SelectListItem() {Text = "Paid partially", Value = Invoice.EXSTATUS_PAID_PARTIAL},
             new SelectListItem() {Text = "Paid over", Value = Invoice.EXSTATUS_PAID_OVER},
             new SelectListItem() {Text = "Paid late", Value = "paidLate"},

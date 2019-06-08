@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.BtcPayServer.HostedServices;
@@ -88,7 +89,10 @@ namespace BtcTransmuter.Extension.BtcPayServer.Tests
                     DataJson = JsonConvert.SerializeObject(parameters)
                 }));
 
-            parameters.Status = BtcPayInvoice.STATUS_PAID;
+            parameters.Status = new List<string>()
+            {
+	            BtcPayInvoice.STATUS_PAID
+			};
 
             Assert.True(await handler.IsTriggered(new InvoiceStatusChangedTrigger()
                 {

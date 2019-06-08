@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
@@ -35,24 +36,21 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 
             var status = triggerData.Invoice.Status;
 
-            if (string.IsNullOrEmpty(parameters.Status) && string.IsNullOrEmpty(parameters.ExceptionStatus))
+            if ((parameters.Status == null || !parameters.Status.Any()) && (parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
             {
                 return Task.FromResult(true);
             }
-            if (string.IsNullOrEmpty(parameters.Status) && !string.IsNullOrEmpty(parameters.ExceptionStatus))
+            if ((parameters.Status == null || !parameters.Status.Any()) && !(parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
             {
-                return Task.FromResult(parameters.ExceptionStatus.Equals(exceptionStatus)); 
+                return Task.FromResult(parameters.ExceptionStatus.Contains(exceptionStatus)); 
             }
-            if (!string.IsNullOrEmpty(parameters.Status) && string.IsNullOrEmpty(parameters.ExceptionStatus))
+            if (!(parameters.Status == null || !parameters.Status.Any()) && (parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
             {
-                return Task.FromResult(status.Equals(parameters.Status,
-                    StringComparison.InvariantCultureIgnoreCase));
+                return Task.FromResult(parameters.Status.Contains(status));
             }
-            if (!string.IsNullOrEmpty(parameters.Status) && !string.IsNullOrEmpty(parameters.ExceptionStatus))
+            if (!(parameters.Status == null || !parameters.Status.Any()) && !(parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
             {
-                return Task.FromResult(status.Equals(parameters.Status,
-                                           StringComparison.InvariantCultureIgnoreCase) && exceptionStatus.Equals(parameters.ExceptionStatus,
-                                           StringComparison.InvariantCultureIgnoreCase));
+                return Task.FromResult(parameters.Status.Contains(status) && parameters.ExceptionStatus.Contains(exceptionStatus));
             }
 
             return Task.FromResult(false);
