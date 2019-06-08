@@ -23,7 +23,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Tests
 
             var parameters = new InvoiceStatusChangedTriggerParameters()
             {
-                Status = null
+                Statuses = null
             };
             Assert.True(await handler.IsTriggered(new InvoiceStatusChangedTrigger()
                 {
@@ -89,7 +89,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Tests
                     DataJson = JsonConvert.SerializeObject(parameters)
                 }));
 
-            parameters.Status = new List<string>()
+            parameters.Statuses = new List<string>()
             {
 	            BtcPayInvoice.STATUS_PAID
 			};

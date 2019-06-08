@@ -7,7 +7,7 @@
 
 <div>
     Btcpayserver Invoice Status Change to
-    <kbd>@((data.Status?.Any() ?? false) ? string.Join(", ", data.Status) : "any status")</kbd>
-    and additional status to <kbd>@((data.ExceptionStatus?.Any() ?? false) ? string.Join(", ", data.ExceptionStatus) : "any status")</kbd>
+    <kbd>@((data.Statuses?.Any() ?? false) ? string.Join(", ", data.Statuses) : "any status")</kbd>
+    and additional status to <kbd>@((data.ExceptionStatuses?.Any() ?? false) ? string.Join(", ", data.ExceptionStatuses) : "any status")</kbd>
 
 </div>

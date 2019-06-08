@@ -36,21 +36,21 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 
             var status = triggerData.Invoice.Status;
 
-            if ((parameters.Status == null || !parameters.Status.Any()) && (parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
+            if ((parameters.Statuses == null || !parameters.Statuses.Any()) && (parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
             {
                 return Task.FromResult(true);
             }
-            if ((parameters.Status == null || !parameters.Status.Any()) && !(parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
+            if ((parameters.Statuses == null || !parameters.Statuses.Any()) && !(parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
             {
-                return Task.FromResult(parameters.ExceptionStatus.Contains(exceptionStatus)); 
+                return Task.FromResult(parameters.ExceptionStatuses.Contains(exceptionStatus)); 
             }
-            if (!(parameters.Status == null || !parameters.Status.Any()) && (parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
+            if (!(parameters.Statuses == null || !parameters.Statuses.Any()) && (parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
             {
-                return Task.FromResult(parameters.Status.Contains(status));
+                return Task.FromResult(parameters.Statuses.Contains(status));
             }
-            if (!(parameters.Status == null || !parameters.Status.Any()) && !(parameters.ExceptionStatus == null || !parameters.ExceptionStatus.Any()))
+            if (!(parameters.Statuses == null || !parameters.Statuses.Any()) && !(parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
             {
-                return Task.FromResult(parameters.Status.Contains(status) && parameters.ExceptionStatus.Contains(exceptionStatus));
+                return Task.FromResult(parameters.Statuses.Contains(status) && parameters.ExceptionStatuses.Contains(exceptionStatus));
             }
 
             return Task.FromResult(false);

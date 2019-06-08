@@ -21,19 +21,19 @@
         }
     </div>
     <div class="form-group">
-        <label asp-for="Status" class="control-label"></label>
-        <select asp-for="Status"
+        <label asp-for="Statuses" class="control-label"></label>
+        <select asp-for="Statuses"
                 multiple="multiple"
-                asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedStatuses,"Value", "Text",  Model.Status))" class="form-control"></select>
-        <span asp-validation-for="Status" class="text-danger"></span>
+                asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedStatuses,"Value", "Text",  Model.Statuses))" class="form-control"></select>
+        <span asp-validation-for="Statuses" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ExceptionStatus" class="control-label"></label>
-        <select asp-for="ExceptionStatus" 
-                asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedExceptionStatus, "Value", "Text", Model.ExceptionStatus))"
+        <label asp-for="ExceptionStatuses" class="control-label"></label>
+        <select asp-for="ExceptionStatuses" 
+                asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedExceptionStatus, "Value", "Text", Model.ExceptionStatuses))"
                 multiple="multiple"
                 class="form-control"></select>
-        <span asp-validation-for="ExceptionStatus" class="text-danger"></span>
+        <span asp-validation-for="ExceptionStatuses" class="text-danger"></span>
     </div>
     <input type="hidden" asp-for="RecipeId" />
     <div class="mt-2">

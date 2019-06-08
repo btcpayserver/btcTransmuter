@@ -64,7 +64,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                     nameof(ExternalServiceData.Name), data.ExternalServiceId),
                 RecipeId = data.RecipeId,
                 ExternalServiceId = data.ExternalServiceId,
-                Status = fromData.Status,
+                Statuses = fromData.Statuses,
             };
         }
 

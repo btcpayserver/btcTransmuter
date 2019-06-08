@@ -6,8 +6,8 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 {
     public class InvoiceStatusChangedTriggerParameters
     {
-        public IEnumerable<string> Status { get; set; }
+        public IEnumerable<string> Statuses { get; set; }
         [Display(Name = "Additional Statuses")]
-        public IEnumerable<string> ExceptionStatus { get; set; }
+        public IEnumerable<string> ExceptionStatuses { get; set; }
     }
 }
