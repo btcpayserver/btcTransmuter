@@ -141,7 +141,7 @@ namespace BtcTransmuter.Services
                         }
                         else
                         {
-                            context.RecipeTriggers.Attach(trigger).State = EntityState.Modified;
+                            context.Entry(trigger).State = EntityState.Modified;
                         }
                     }
 
