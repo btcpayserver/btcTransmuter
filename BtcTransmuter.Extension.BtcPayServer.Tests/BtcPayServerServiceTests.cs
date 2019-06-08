@@ -7,17 +7,17 @@ using Xunit;
 
 namespace BtcTransmuter.Extension.BtcPayServer.Tests
 {
-    public class
-        BtcPayServerServiceTests : BaseExternalServiceTest<BtcPayServerService, BtcPayServerExternalServiceData>
-    {
-        
-        protected override BtcPayServerService GetExternalService(params object[] setupArgs)
-        {
-            if (setupArgs?.Any()?? false)
-            {
-                return new BtcPayServerService((ExternalServiceData) setupArgs.First());
-            }
-            return new BtcPayServerService();
-        }
-    }
+	public class
+		BtcPayServerServiceTests : BaseExternalServiceTest<BtcPayServerService, BtcPayServerExternalServiceData>
+	{
+		protected override BtcPayServerService GetExternalService(params object[] setupArgs)
+		{
+			if (setupArgs?.Any() ?? false)
+			{
+				return new BtcPayServerService((ExternalServiceData) setupArgs.First());
+			}
+
+			return new BtcPayServerService();
+		}
+	}
 }

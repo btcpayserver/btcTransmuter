@@ -45,7 +45,29 @@ namespace BtcTransmuter.Extension.BtcPayServer.Tests
                     DataJson = JsonConvert.SerializeObject(parameters)
                 }));
 
-            Assert.True(await handler.IsTriggered(new InvoiceStatusChangedTrigger()
+			//the external service id is not the same, if it triggers you are in deep shit
+            Assert.False(await handler.IsTriggered(new InvoiceStatusChangedTrigger()
+	            {
+		            Data = new InvoiceStatusChangedTriggerData()
+		            {
+			            ExternalServiceId = "B",
+			            Invoice = new BtcPayInvoice()
+			            {
+				            Status = BtcPayInvoice.STATUS_NEW,
+				            CurrentTime = DateTimeOffset.Now,
+				            InvoiceTime = DateTimeOffset.Now,
+				            ExpirationTime = DateTimeOffset.Now
+			            }
+		            }
+	            },
+	            new RecipeTrigger()
+	            {
+		            TriggerId = handler.TriggerId,
+		            ExternalServiceId = "A",
+		            DataJson = JsonConvert.SerializeObject(parameters)
+	            }));
+
+			Assert.True(await handler.IsTriggered(new InvoiceStatusChangedTrigger()
                 {
                     Data = new InvoiceStatusChangedTriggerData()
                     {
