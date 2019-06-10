@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Triggers;
@@ -34,14 +38,22 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 
         public static SelectListItem[] AllowedExceptionStatus = new SelectListItem[]
         {
+            new SelectListItem() {Text = "None", Value = Invoice.EXSTATUS_FALSE},
             new SelectListItem() {Text = "Paid partially", Value = Invoice.EXSTATUS_PAID_PARTIAL},
             new SelectListItem() {Text = "Paid over", Value = Invoice.EXSTATUS_PAID_OVER},
             new SelectListItem() {Text = "Paid late", Value = "paidLate"},
             new SelectListItem() {Text = "Marked", Value = "marked"},
         };
-        
 
-        public InvoiceStatusChangedController(IRecipeManager recipeManager, UserManager<User> userManager,
+
+        public static SelectListItem[] GetAvailableStatuses(string[] usedKeys)
+        {
+	        return AllowedStatuses.Where(item => !usedKeys.Contains(item.Value)).ToArray();
+
+        }
+
+
+		public InvoiceStatusChangedController(IRecipeManager recipeManager, UserManager<User> userManager,
             IMemoryCache memoryCache, IExternalServiceManager externalServiceManager) : base(recipeManager, userManager,
             memoryCache, externalServiceManager)
         {
@@ -64,7 +76,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                     nameof(ExternalServiceData.Name), data.ExternalServiceId),
                 RecipeId = data.RecipeId,
                 ExternalServiceId = data.ExternalServiceId,
-                Statuses = fromData.Statuses,
+                Conditions = fromData.Conditions,
             };
         }
 
@@ -72,7 +84,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
             BuildModel(
                 InvoiceStatusChangedTriggerViewModel viewModel, RecipeTrigger mainModel)
         {
-            if (!ModelState.IsValid)
+	        if (viewModel.Action != "EditData" || !ModelState.IsValid)
             {
                 var btcPayServices = await _externalServiceManager.GetExternalServicesData(
                     new ExternalServicesDataQuery()
@@ -82,7 +94,27 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
                     });
                 viewModel.ExternalServices = new SelectList(btcPayServices, nameof(ExternalServiceData.Id),
                     nameof(ExternalServiceData.Name), viewModel.ExternalServiceId);
-                return (null, viewModel);
+
+
+				if (viewModel.Action.StartsWith("add-condition", StringComparison.InvariantCultureIgnoreCase))
+				{
+					viewModel.Conditions.Add(new InvoiceStatusChangeCondition()
+					{
+						Status = GetAvailableStatuses(viewModel.Conditions.Select(condition => condition.Status).ToArray()).FirstOrDefault()?.Value?? Invoice.STATUS_NEW,
+						ExceptionStatuses = new List<string>()
+						{
+							Invoice.EXSTATUS_FALSE
+						}
+					});
+				}
+
+				if (viewModel.Action.StartsWith("remove-condition", StringComparison.InvariantCultureIgnoreCase))
+				{
+					var index = int.Parse(viewModel.Action.Substring(viewModel.Action.IndexOf(":", StringComparison.InvariantCultureIgnoreCase) + 1));
+					viewModel.Conditions.RemoveAt(index);
+				}
+
+				return (null, viewModel);
             }
 
             mainModel.ExternalServiceId = viewModel.ExternalServiceId;
@@ -92,6 +124,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 
         public class InvoiceStatusChangedTriggerViewModel : InvoiceStatusChangedTriggerParameters
         {
+            public string Action { get; set; }
             public string RecipeId { get; set; }
             public SelectList ExternalServices { get; set; }
             [Required][Display(Name = "BtcPay Service")] public string ExternalServiceId { get; set; }

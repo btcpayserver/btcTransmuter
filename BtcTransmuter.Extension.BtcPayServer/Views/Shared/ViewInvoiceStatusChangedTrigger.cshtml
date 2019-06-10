@@ -7,7 +7,14 @@
 
 <div>
     Btcpayserver Invoice Status Change to
-    <kbd>@((data.Statuses?.Any() ?? false) ? string.Join(", ", data.Statuses) : "any status")</kbd>
-    and additional status to <kbd>@((data.ExceptionStatuses?.Any() ?? false) ? string.Join(", ", data.ExceptionStatuses) : "any status")</kbd>
-
+    <kbd>
+        @if (data.Conditions.Any())
+        {
+            @string.Join(" or ", data.Conditions.Select(condition => $"{condition.Status}({string.Join(" or ", condition.ExceptionStatuses)})"))
+        }
+        else
+        {
+            <span>Not configured</span>
+        }
+    </kbd>
 </div>

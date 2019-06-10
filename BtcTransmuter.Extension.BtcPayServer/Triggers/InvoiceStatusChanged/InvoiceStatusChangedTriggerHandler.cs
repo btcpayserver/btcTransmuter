@@ -1,14 +1,14 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Triggers;
 using BtcTransmuter.Data.Entities;
+using NBitpayClient;
 using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
 {
     public class InvoiceStatusChangedTriggerHandler : BaseTriggerHandler<InvoiceStatusChangedTriggerData,
-        InvoiceStatusChangedTriggerParameters>
+	    InvoiceStatusChangedTriggerParameters>
     {
         public override string TriggerId => new InvoiceStatusChangedTrigger().Id;
         public override string Name => "BtcPayServer Invoice Status Change";
@@ -24,33 +24,20 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
             InvoiceStatusChangedTriggerParameters parameters)
         {
       
-            var exceptionStatus = string.Empty;
+            var exceptionStatus =Invoice.EXSTATUS_FALSE;
             if (triggerData.Invoice.ExceptionStatus.Type == JTokenType.String)
             {
-                var value = triggerData.Invoice.ExceptionStatus.Value<string>();
-                if (!value.Equals("false", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    exceptionStatus = value;
-                }
+	            exceptionStatus = triggerData.Invoice.ExceptionStatus.Value<string>();
             }
-
             var status = triggerData.Invoice.Status;
 
-            if ((parameters.Statuses == null || !parameters.Statuses.Any()) && (parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
+            foreach (var condition in parameters.Conditions)
             {
-                return Task.FromResult(true);
-            }
-            if ((parameters.Statuses == null || !parameters.Statuses.Any()) && !(parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
-            {
-                return Task.FromResult(parameters.ExceptionStatuses.Contains(exceptionStatus)); 
-            }
-            if (!(parameters.Statuses == null || !parameters.Statuses.Any()) && (parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
-            {
-                return Task.FromResult(parameters.Statuses.Contains(status));
-            }
-            if (!(parameters.Statuses == null || !parameters.Statuses.Any()) && !(parameters.ExceptionStatuses == null || !parameters.ExceptionStatuses.Any()))
-            {
-                return Task.FromResult(parameters.Statuses.Contains(status) && parameters.ExceptionStatuses.Contains(exceptionStatus));
+	            if (condition.Status.Equals(status, StringComparison.InvariantCultureIgnoreCase) &&
+	                condition.ExceptionStatuses.Contains(exceptionStatus))
+	            {
+		            return Task.FromResult(true);
+	            }
             }
 
             return Task.FromResult(false);
