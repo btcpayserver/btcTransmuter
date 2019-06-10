@@ -31,8 +31,8 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
                 using (var scope = DependencyHelper.ServiceScopeFactory.CreateScope())
                 {
                     var recipeManager = scope.ServiceProvider.GetService<IRecipeManager>();
-                    var recipe = await recipeManager.GetRecipe(actionData.RecipeTemplateId);
-                    if (recipe == null)
+                    var cloneResult = await recipeManager.CloneRecipe(actionData.RecipeTemplateId, actionData.Enable);
+                    if (cloneResult == null)
                     {
                         return new TypedActionHandlerResult<Data.Entities.Recipe>()
                         {
@@ -42,39 +42,12 @@ namespace BtcTransmuter.Extension.Recipe.Actions.CreateRecipe
                         };
                     }
 
-                    recipe.Id = null;
-                    if (recipe.RecipeTrigger != null)
-                    {
-                        recipe.RecipeTrigger.RecipeId = null;
-                        recipe.RecipeTrigger.Id= null;
-                    }
-
-                    recipe.RecipeInvocations.Clear();
-                    recipe.RecipeActions = recipe.RecipeActions
-                        .Where(action => string.IsNullOrEmpty(action.RecipeActionGroupId)).ToList();
-                    recipe.RecipeActions.ForEach(action =>
-                    {
-                        action.RecipeId = null;
-                        action.Id = null;
-                    });
-                    recipe.RecipeActionGroups.ForEach(action =>
-                    {
-                        action.RecipeId = null;
-                        action.Id = null;
-                        action.RecipeActions.ForEach(action1 =>
-                        {
-                            action1.RecipeId = null;
-                            action1.Id = null;
-                        });
-                    });
-                    recipe.Enabled = actionData.Enable;
-                    await recipeManager.AddOrUpdateRecipe(recipe);
                     return new TypedActionHandlerResult<Data.Entities.Recipe>()
                     {
                         Executed = true,
-                        TypedData = recipe,
+                        TypedData = cloneResult,
                         Result =
-                            $"Created recipe (id:{recipe.Id})",
+                            $"Created recipe (id:{cloneResult.Id})",
                         
                     };
                 }

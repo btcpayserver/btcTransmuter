@@ -11,228 +11,228 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Services
 {
-    public class RecipeManager : IRecipeManager
-    {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+	public class RecipeManager : IRecipeManager
+	{
+		private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public RecipeManager(IServiceScopeFactory serviceScopeFactory)
-        {
-            _serviceScopeFactory = serviceScopeFactory;
-        }
+		public RecipeManager(IServiceScopeFactory serviceScopeFactory)
+		{
+			_serviceScopeFactory = serviceScopeFactory;
+		}
 
-        public async Task<IEnumerable<Recipe>> GetRecipes(RecipesQuery query)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var includableQueryable = context.Recipes
-                        .Include(recipe => recipe.RecipeActionGroups)
-                        .ThenInclude(group => group.RecipeActions)
-                        .ThenInclude(action => action.ExternalService)
-                        .Include(recipe => recipe.RecipeActions)
-                        .ThenInclude(action => action.ExternalService)
-                        .Include(recipe => recipe.RecipeActions)
-                        .ThenInclude(action => action.RecipeInvocations)
-                        .Include(recipe => recipe.RecipeTrigger)
-                        .ThenInclude(trigger => trigger.ExternalService);
+		public async Task<IEnumerable<Recipe>> GetRecipes(RecipesQuery query)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var includableQueryable = context.Recipes
+						.Include(recipe => recipe.RecipeActionGroups)
+						.ThenInclude(group => group.RecipeActions)
+						.ThenInclude(action => action.ExternalService)
+						.Include(recipe => recipe.RecipeActions)
+						.ThenInclude(action => action.ExternalService)
+						.Include(recipe => recipe.RecipeActions)
+						.ThenInclude(action => action.RecipeInvocations)
+						.Include(recipe => recipe.RecipeTrigger)
+						.ThenInclude(trigger => trigger.ExternalService);
 
-                    if (query.IncludeRecipeInvocations)
-                    {
-                        includableQueryable.Include(recipe => recipe.RecipeInvocations);
-                    }
+					if (query.IncludeRecipeInvocations)
+					{
+						includableQueryable.Include(recipe => recipe.RecipeInvocations);
+					}
 
-                    var queryable = includableQueryable.AsQueryable();
+					var queryable = includableQueryable.AsQueryable();
 
-                    if (query.Enabled.HasValue)
-                    {
-                        queryable = queryable.Where(x => x.Enabled == query.Enabled.Value);
-                    }
+					if (query.Enabled.HasValue)
+					{
+						queryable = queryable.Where(x => x.Enabled == query.Enabled.Value);
+					}
 
-                    if (!string.IsNullOrEmpty(query.TriggerId))
-                    {
-                        queryable = queryable.Where(x => x.RecipeTrigger.TriggerId == query.TriggerId);
-                    }
+					if (!string.IsNullOrEmpty(query.TriggerId))
+					{
+						queryable = queryable.Where(x => x.RecipeTrigger.TriggerId == query.TriggerId);
+					}
 
-                    if (!string.IsNullOrEmpty(query.UserId))
-                    {
-                        queryable = queryable.Where(x => x.UserId == query.UserId);
-                    }
+					if (!string.IsNullOrEmpty(query.UserId))
+					{
+						queryable = queryable.Where(x => x.UserId == query.UserId);
+					}
 
-                    if (!string.IsNullOrEmpty(query.RecipeId))
-                    {
-                        queryable = queryable.Where(x => x.Id == query.RecipeId);
-                    }
+					if (!string.IsNullOrEmpty(query.RecipeId))
+					{
+						queryable = queryable.Where(x => x.Id == query.RecipeId);
+					}
 
-                    return await queryable.ToListAsync();
-                }
-            }
-        }
+					return await queryable.ToListAsync();
+				}
+			}
+		}
 
-        public async Task<IEnumerable<RecipeInvocation>> GetRecipeInvocations(RecipeInvocationsQuery query)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var queryable = context.RecipeInvocations
-                        .Include(invocation => invocation.RecipeAction)
-                        .Include(invocation => invocation.Recipe)
-                        .ThenInclude(recipe => recipe.RecipeTrigger)
-                        .AsQueryable();
-                    if (query.OrderBy != null)
-                    {
-                        switch (query.OrderBy.Field)
-                        {
-                            case RecipeInvocationsQuery.RecipeInvocationsQueryOrderBy.Timestamp:
-                                queryable = query.OrderBy.Direction == OrderDirection.Ascending
-                                    ? queryable.OrderBy(invocation => invocation.Timestamp)
-                                    : queryable.OrderByDescending(invocation => invocation.Timestamp);
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                    }
+		public async Task<IEnumerable<RecipeInvocation>> GetRecipeInvocations(RecipeInvocationsQuery query)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var queryable = context.RecipeInvocations
+						.Include(invocation => invocation.RecipeAction)
+						.Include(invocation => invocation.Recipe)
+						.ThenInclude(recipe => recipe.RecipeTrigger)
+						.AsQueryable();
+					if (query.OrderBy != null)
+					{
+						switch (query.OrderBy.Field)
+						{
+							case RecipeInvocationsQuery.RecipeInvocationsQueryOrderBy.Timestamp:
+								queryable = query.OrderBy.Direction == OrderDirection.Ascending
+									? queryable.OrderBy(invocation => invocation.Timestamp)
+									: queryable.OrderByDescending(invocation => invocation.Timestamp);
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+					}
 
-                    return await queryable
-                        .Where(invocation =>
-                            invocation.RecipeId.Equals(query.RecipeId, StringComparison.InvariantCultureIgnoreCase))
-                        .Skip(query.Skip).Take(query.Take).ToListAsync();
-                }
-            }
-        }
+					return await queryable
+						.Where(invocation =>
+							invocation.RecipeId.Equals(query.RecipeId, StringComparison.InvariantCultureIgnoreCase))
+						.Skip(query.Skip).Take(query.Take).ToListAsync();
+				}
+			}
+		}
 
-        public async Task AddOrUpdateRecipe(Recipe recipe)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    if (string.IsNullOrEmpty(recipe.Id))
-                    {
-                        await context.Recipes.AddAsync(recipe);
-                    }
-                    else
-                    {
-                        context.Recipes.Attach(recipe).State = EntityState.Modified;
-                    }
+		public async Task AddOrUpdateRecipe(Recipe recipe)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					if (string.IsNullOrEmpty(recipe.Id))
+					{
+						await context.Recipes.AddAsync(recipe);
+					}
+					else
+					{
+						context.Recipes.Attach(recipe).State = EntityState.Modified;
+					}
 
-                    await context.SaveChangesAsync();
-                }
-            }
-        }
+					await context.SaveChangesAsync();
+				}
+			}
+		}
 
-        public async Task AddOrUpdateRecipeTrigger(RecipeTrigger trigger)
-        {
-            await AddOrUpdateRecipeTriggers(new[] {trigger});
-        }
+		public async Task AddOrUpdateRecipeTrigger(RecipeTrigger trigger)
+		{
+			await AddOrUpdateRecipeTriggers(new[] {trigger});
+		}
 
-        public async Task AddOrUpdateRecipeTriggers(IEnumerable<RecipeTrigger> triggers)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    foreach (var trigger in triggers)
-                    {
-                        if (string.IsNullOrEmpty(trigger.Id))
-                        {
-                            await context.RecipeTriggers.AddAsync(trigger);
-                        }
-                        else
-                        {
-                            context.Entry(trigger).State = EntityState.Modified;
-                        }
-                    }
+		public async Task AddOrUpdateRecipeTriggers(IEnumerable<RecipeTrigger> triggers)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					foreach (var trigger in triggers)
+					{
+						if (string.IsNullOrEmpty(trigger.Id))
+						{
+							await context.RecipeTriggers.AddAsync(trigger);
+						}
+						else
+						{
+							context.Entry(trigger).State = EntityState.Modified;
+						}
+					}
 
-                    await context.SaveChangesAsync();
-                }
-            }
-        }
+					await context.SaveChangesAsync();
+				}
+			}
+		}
 
-        public async Task AddOrUpdateRecipeAction(RecipeAction action)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    if (string.IsNullOrEmpty(action.Id))
-                    {
-                        await context.RecipeActions.AddAsync(action);
-                    }
-                    else
-                    {
-                        context.RecipeActions.Attach(action).State = EntityState.Modified;
-                    }
+		public async Task AddOrUpdateRecipeAction(RecipeAction action)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					if (string.IsNullOrEmpty(action.Id))
+					{
+						await context.RecipeActions.AddAsync(action);
+					}
+					else
+					{
+						context.RecipeActions.Attach(action).State = EntityState.Modified;
+					}
 
-                    await context.SaveChangesAsync();
-                }
-            }
-        }
+					await context.SaveChangesAsync();
+				}
+			}
+		}
 
-        public async Task AddRecipeActionGroup(RecipeActionGroup recipeActionGroup)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    if (string.IsNullOrEmpty(recipeActionGroup.Id))
-                    {
-                        await context.RecipeActionGroups.AddAsync(recipeActionGroup);
-                    }
-                    else
-                    {
-                        context.RecipeActionGroups.Attach(recipeActionGroup).State = EntityState.Modified;
-                    }
+		public async Task AddRecipeActionGroup(RecipeActionGroup recipeActionGroup)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					if (string.IsNullOrEmpty(recipeActionGroup.Id))
+					{
+						await context.RecipeActionGroups.AddAsync(recipeActionGroup);
+					}
+					else
+					{
+						context.RecipeActionGroups.Attach(recipeActionGroup).State = EntityState.Modified;
+					}
 
-                    await context.SaveChangesAsync();
-                }
-            }
-        }
+					await context.SaveChangesAsync();
+				}
+			}
+		}
 
-        public async Task ReorderRecipeActionGroupActions(string recipeActionGroupId,
-            Dictionary<string, int> actionsOrder)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var actionGroup = await context.RecipeActionGroups.Include(group => group.RecipeActions)
-                        .SingleAsync(group =>
-                            group.Id.Equals(recipeActionGroupId, StringComparison.InvariantCultureIgnoreCase));
+		public async Task ReorderRecipeActionGroupActions(string recipeActionGroupId,
+			Dictionary<string, int> actionsOrder)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var actionGroup = await context.RecipeActionGroups.Include(group => group.RecipeActions)
+						.SingleAsync(group =>
+							group.Id.Equals(recipeActionGroupId, StringComparison.InvariantCultureIgnoreCase));
 
 
-                    actionGroup.RecipeActions.ForEach(action =>
-                    {
-                        if (actionsOrder.ContainsKey(action.Id))
-                        {
-                            action.Order = actionsOrder[action.Id];
-                            foreach (var entityEntry in context.ChangeTracker.Entries()
-                                .Where(entry => entry.Entity is RecipeAction))
-                            {
-                                entityEntry.State = EntityState.Modified;
-                            }
-                        }
-                    });
+					actionGroup.RecipeActions.ForEach(action =>
+					{
+						if (actionsOrder.ContainsKey(action.Id))
+						{
+							action.Order = actionsOrder[action.Id];
+							foreach (var entityEntry in context.ChangeTracker.Entries()
+								.Where(entry => entry.Entity is RecipeAction))
+							{
+								entityEntry.State = EntityState.Modified;
+							}
+						}
+					});
 
-                    await context.SaveChangesAsync();
-                }
-            }
-        }
+					await context.SaveChangesAsync();
+				}
+			}
+		}
 
-        public async Task RemoveRecipe(string id)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var recipe = await GetRecipe(id);
-                    if (recipe == null)
-                    {
-                        throw new ArgumentException();
-                    }
+		public async Task RemoveRecipe(string id)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var recipe = await GetRecipe(id);
+					if (recipe == null)
+					{
+						throw new ArgumentException();
+					}
 
-                    //TODO: double check if this was needed
+					//TODO: double check if this was needed
 //                    var invocations = (await GetRecipeInvocations(new RecipeInvocationsQuery()
 //                    {
 //                        Skip = 0,
@@ -240,97 +240,136 @@ namespace BtcTransmuter.Services
 //                        RecipeId = id
 //                    })).ToList();
 
-                    context.Attach(recipe);
-                    context.AttachRange(recipe.RecipeActions);
-                    if (recipe.RecipeTrigger != null)
-                        context.AttachRange(recipe.RecipeTrigger);
+					context.Attach(recipe);
+					context.AttachRange(recipe.RecipeActions);
+					if (recipe.RecipeTrigger != null)
+						context.AttachRange(recipe.RecipeTrigger);
 //                    context.AttachRange(invocations);
 //                    context.RecipeInvocations.RemoveRange(invocations);
-                    context.Remove(recipe);
-                    await context.SaveChangesAsync();
-                }
-            }
-        }
+					context.Remove(recipe);
+					await context.SaveChangesAsync();
+				}
+			}
+		}
 
-        public async Task<Recipe> GetRecipe(string id, string userId = null)
-        {
-            var recipes = await GetRecipes(new RecipesQuery()
-            {
-                UserId = userId,
-                RecipeId = id
-            });
+		public async Task<Recipe> GetRecipe(string id, string userId = null)
+		{
+			var recipes = await GetRecipes(new RecipesQuery()
+			{
+				UserId = userId,
+				RecipeId = id
+			});
 
-            return recipes.FirstOrDefault();
-        }
+			return recipes.FirstOrDefault();
+		}
 
-        public async Task AddRecipeInvocation(RecipeInvocation invocation)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var recipe = await context.Recipes.FindAsync(invocation.RecipeId);
-                    if (recipe != null)
-                    {
-                        await context.RecipeInvocations.AddAsync(invocation);
-                        await context.SaveChangesAsync();
-                    }
-                }
-            }
-        }
+		public async Task AddRecipeInvocation(RecipeInvocation invocation)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var recipe = await context.Recipes.FindAsync(invocation.RecipeId);
+					if (recipe != null)
+					{
+						await context.RecipeInvocations.AddAsync(invocation);
+						await context.SaveChangesAsync();
+					}
+				}
+			}
+		}
 
-        public async Task RemoveRecipeAction(string recipeActionId)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var recipe = await context.RecipeActions.FindAsync(recipeActionId);
-                    if (recipe != null)
-                    {
-                        context.RecipeActions.Remove(recipe);
-                        await context.SaveChangesAsync();
-                    }
-                }
-            }
-        }
+		public async Task RemoveRecipeAction(string recipeActionId)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var recipe = await context.RecipeActions.FindAsync(recipeActionId);
+					if (recipe != null)
+					{
+						context.RecipeActions.Remove(recipe);
+						await context.SaveChangesAsync();
+					}
+				}
+			}
+		}
 
-        public async Task RemoveRecipeTrigger(string recipeTriggerId)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var recipe = await context.RecipeTriggers.FindAsync(recipeTriggerId);
-                    if (recipe != null)
-                    {
-                        context.RecipeTriggers.Remove(recipe);
-                        await context.SaveChangesAsync();
-                    }
-                }
-            }
-        }
+		public async Task RemoveRecipeTrigger(string recipeTriggerId)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var recipe = await context.RecipeTriggers.FindAsync(recipeTriggerId);
+					if (recipe != null)
+					{
+						context.RecipeTriggers.Remove(recipe);
+						await context.SaveChangesAsync();
+					}
+				}
+			}
+		}
 
-        public async Task RemoveRecipeActionGroup(string recipeActionGroupId)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
-                    var recipe = await context.RecipeActionGroups.FindAsync(recipeActionGroupId);
-                    if (recipe != null)
-                    {
-                        context.RecipeActionGroups.Remove(recipe);
-                        await context.SaveChangesAsync();
-                    }
-                }
-            }
-        }
+		public async Task RemoveRecipeActionGroup(string recipeActionGroupId)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				{
+					var recipe = await context.RecipeActionGroups.FindAsync(recipeActionGroupId);
+					if (recipe != null)
+					{
+						context.RecipeActionGroups.Remove(recipe);
+						await context.SaveChangesAsync();
+					}
+				}
+			}
+		}
 
-        public async Task<string> GetRecipeName(string recipeId)
-        {
-            var result = await GetRecipe(recipeId);
-            return result?.Name ?? string.Empty;
-        }
-    }
+		public async Task<string> GetRecipeName(string recipeId)
+		{
+			var result = await GetRecipe(recipeId);
+			return result?.Name ?? string.Empty;
+		}
+
+		public async Task<Recipe> CloneRecipe(string recipeId, bool enable, string newName = null)
+		{
+			var recipe = await GetRecipe(recipeId);
+			if (recipe == null)
+			{
+				return null;
+			}
+
+			recipe.Id = null;
+			if (recipe.RecipeTrigger != null)
+			{
+				recipe.RecipeTrigger.RecipeId = null;
+				recipe.RecipeTrigger.Id = null;
+			}
+
+			recipe.RecipeInvocations.Clear();
+			recipe.RecipeActions = recipe.RecipeActions
+				.Where(action => string.IsNullOrEmpty(action.RecipeActionGroupId)).ToList();
+			recipe.RecipeActions.ForEach(action =>
+			{
+				action.RecipeId = null;
+				action.Id = null;
+			});
+			recipe.RecipeActionGroups.ForEach(action =>
+			{
+				action.RecipeId = null;
+				action.Id = null;
+				action.RecipeActions.ForEach(action1 =>
+				{
+					action1.RecipeId = null;
+					action1.Id = null;
+				});
+			});
+			recipe.Enabled = enable;
+			recipe.Name = newName ?? $"Clone of {recipe.Name}";
+			await AddOrUpdateRecipe(recipe);
+			return recipe;
+		}
+	}
 }
