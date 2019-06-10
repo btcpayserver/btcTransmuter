@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace BtcTransmuter.Extension.Timer.HostedServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogError("Starting Timer Service");
+            _logger.LogInformation("Starting Timer Service");
             _ = Loop(cancellationToken);
             return Task.CompletedTask;
         }

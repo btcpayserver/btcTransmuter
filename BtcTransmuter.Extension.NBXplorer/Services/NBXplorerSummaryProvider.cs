@@ -38,7 +38,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
 
         public async Task UpdateClientState(ExplorerClient client, CancellationToken cancellation)
         {
-            _logger.LogWarning($"Updating summary for {client.CryptoCode}");
+            _logger.LogInformation($"Updating summary for {client.CryptoCode}");
             var state = (NBXplorerState?) null;
             string error = null;
             StatusResult status = null;

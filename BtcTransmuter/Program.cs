@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -21,9 +16,16 @@ namespace BtcTransmuter
             WebHost
                 .CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
-                    {
-                        builder.AddEnvironmentVariables(prefix: BtcTransmuterOptions.configPrefix);
-                    })
+                {
+                    builder.AddEnvironmentVariables(prefix: BtcTransmuterOptions.configPrefix);
+                })
+                .ConfigureLogging(builder => 
+                    builder
+                        .SetMinimumLevel(LogLevel.Information)
+                        .AddFilter("Microsoft", LogLevel.Warning)
+                        .AddFilter("System", LogLevel.Warning)
+                        .AddDebug()
+                        .AddConsole())
                 .UseStartup<Startup>();
     }
 }
