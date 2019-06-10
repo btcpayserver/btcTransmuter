@@ -346,15 +346,17 @@ namespace BtcTransmuter.Services
 			{
 				recipe.RecipeTrigger.RecipeId = null;
 				recipe.RecipeTrigger.Id = null;
+				recipe.RecipeTrigger.ExternalService = null;
 			}
 
-			recipe.RecipeInvocations.Clear();
+			recipe.RecipeInvocations?.Clear();
 			recipe.RecipeActions = recipe.RecipeActions
 				.Where(action => string.IsNullOrEmpty(action.RecipeActionGroupId)).ToList();
 			recipe.RecipeActions.ForEach(action =>
 			{
 				action.RecipeId = null;
 				action.Id = null;
+				action.ExternalService = null;
 			});
 			recipe.RecipeActionGroups.ForEach(action =>
 			{
@@ -364,12 +366,13 @@ namespace BtcTransmuter.Services
 				{
 					action1.RecipeId = null;
 					action1.Id = null;
+					action1.ExternalService = null;
 				});
 			});
 			recipe.Enabled = enable;
 			recipe.Name = newName ?? $"Clone of {recipe.Name}";
 			await AddOrUpdateRecipe(recipe);
 			return recipe;
-		}
 	}
+		}
 }

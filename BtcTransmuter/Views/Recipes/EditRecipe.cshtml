@@ -33,8 +33,9 @@
     </div>
     <div class="card-footer">
         <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-action="RemoveRecipe" asp-route-id="@Model.Id" class="btn btn-danger">Remove</a>
-
+        <a asp-action="RemoveRecipe" asp-route-id="@Model.Id">Remove</a> -
+        <a asp-action="CloneRecipe" asp-route-id="@Model.Id">Clone</a> -
+        <a asp-action="GetRecipeLogs" asp-route-id="@Model.Id">Logs</a> 
     </div>
 </form>
 

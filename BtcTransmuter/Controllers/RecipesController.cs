@@ -106,6 +106,33 @@ namespace BtcTransmuter.Controllers
             });
         }
 
+        [HttpGet("{id}/clone")]
+        public virtual async Task<IActionResult> CloneRecipe(string id, string name = null, bool enabled = false)
+        {
+	        var result = await _recipeManager.CloneRecipe(id, enabled, name);
+	        if (result == null)
+	        {
+		        return RedirectToAction(nameof(GetRecipes), new
+		        {
+			        statusMessage = new StatusMessageModel()
+			        {
+				        Message = "Could not clone recipe",
+				        Severity = StatusMessageModel.StatusSeverity.Error
+			        }.ToString()
+		        });
+	        }
+
+	        return RedirectToAction(nameof(EditRecipe), new
+	        {
+		        id = result.Id,
+		        statusMessage = new StatusMessageModel()
+		        {
+			        Message = "Recipe cloned",
+			        Severity = StatusMessageModel.StatusSeverity.Success
+		        }.ToString()
+	        });
+        }
+
         [HttpGet("create")]
         public virtual IActionResult CreateRecipe(string statusMessage)
         {
