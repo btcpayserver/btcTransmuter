@@ -6,12 +6,13 @@ using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Extension.DynamicServices;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
 using ExchangeSharp;
+using Newtonsoft.Json;
 
 namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
 {
     public class PlaceOrderDataActionHandler : BaseActionHandler<PlaceOrderData, ExchangeOrderResult>
     {
-        public override string ActionId => "PlaceOrder";
+	    public override string ActionId => "PlaceOrder";
         public override string Name => "Place order on an Exchange";
 
         public override string Description =>
@@ -19,7 +20,6 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
 
         public override string ViewPartial => "ViewPlaceOrderAction";
         public override string ControllerName => "PlaceOrder";
-
 
         protected override async Task<TypedActionHandlerResult<ExchangeOrderResult>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             PlaceOrderData actionData)
@@ -40,7 +40,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
 
             try
             {
-                var result = await client.PlaceOrderAsync(orderRequest);
+				var result = await client.PlaceOrderAsync(orderRequest);
                 System.Threading.Thread.Sleep(500);
                 result = await client.GetOrderDetailsAsync(result.OrderId);
                 return new TypedActionHandlerResult<ExchangeOrderResult>()
@@ -57,7 +57,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                 {
                     Executed = false,
                     Result =
-                        $"Could not place order because {e.Message}"
+                        $"Could not place order because {e.Message}. Order details: {JsonConvert.SerializeObject(orderRequest)}"
                 };
             }
         }
