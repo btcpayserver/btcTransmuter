@@ -36,6 +36,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                 StopPrice = Convert.ToDecimal(InterpolateString(actionData.StopPrice, data)),
                 IsBuy = actionData.IsBuy,
                 IsMargin = actionData.IsMargin,
+				ShouldRoundAmount = false
             };
 
             try
