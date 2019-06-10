@@ -1,7 +1,10 @@
+@using BtcTransmuter.Helpers
 <footer class="border-top footer mt-auto py-3 text-muted text-center">
     <div class="container">
-        BTC Transmuter was made with ❤ by
-        <a href="https://twitter.com/mrkukks" target="_blank"> Kukks</a> & <a href="https://twitter.com/r0ckstardev" target="_blank"> RockstarDev</a>
-        @@ <a href="https://btcpayserver.org" target="_blank">BtcPayServer</a>
+        BTC Transmuter was made with ❤ @@ <a href="https://btcpayserver.org" target="_blank">BtcPayServer</a>
+        @if (User.Claims.Any() && User.IsInRole("Admin"))
+        {
+            <span>| Version @VersionHelper.CurrentVersion</span>
+        }
     </div>
 </footer>
