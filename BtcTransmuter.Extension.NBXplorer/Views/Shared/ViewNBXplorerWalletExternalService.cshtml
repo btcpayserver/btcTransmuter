@@ -4,15 +4,16 @@
 @{
     var service = new NBXplorerWalletService(Model, null, null, null , null);
     var data = service.GetData();
-    Money balance = null;
+    string balance = null;
     try
     {
 
         var client = await service.ConstructClient();
-        balance = await client.GetBalance();
+        balance = (await client.GetBalance()).ToString();
     }
     catch (Exception e)
     {
+        balance = $"Cannot retrieve balance because: {e.Message}";
     }
 }
 <dl class="dl-horizontal">
@@ -32,6 +33,6 @@
             Balance
         </dt>
         <dd>
-            @(balance?.ToString()?? "Cannot retrieve balance")
+           @balance
         </dd>
 </dl>
