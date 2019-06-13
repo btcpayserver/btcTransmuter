@@ -13,7 +13,7 @@
     }
     catch (Exception e)
     {
-        balance = $"Cannot retrieve balance because: {e.Message}";
+        balance = $"Cannot retrieve balance because: {e.Message}\n{e.StackTrace}";
     }
 }
 <dl class="dl-horizontal">
