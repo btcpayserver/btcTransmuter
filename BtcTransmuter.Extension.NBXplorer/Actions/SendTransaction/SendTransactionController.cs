@@ -46,6 +46,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
             {
                 RecipeId = from.RecipeId,
                 Outputs = fromData.Outputs,
+				FeeSatoshiPerByte = fromData.FeeSatoshiPerByte,
+				Fee = fromData.Fee,
                 ExternalServiceId = from.ExternalServiceId,
                 ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
                     nameof(ExternalServiceData.Name), from.ExternalServiceId)
@@ -76,6 +78,13 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 return (null, viewModel);
             }
 
+			if(viewModel.Fee.HasValue && viewModel.FeeSatoshiPerByte.HasValue)
+			{
+				ModelState.AddModelError(nameof(viewModel.FeeSatoshiPerByte),
+					"Please choose either a flat fee or a fee rate or leave blank to use the node's fee estimation algorithm");
+				ModelState.AddModelError(nameof(viewModel.Fee),
+					"Please choose either a flat fee or a fee rate or leave blank to use the node's fee estimation algorithm");
+			}
 
             if (!viewModel.Outputs.Any())
             {
