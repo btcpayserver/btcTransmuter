@@ -10,155 +10,156 @@ using NBXplorer.Models;
 
 namespace BtcTransmuter.Extension.NBXplorer.Services
 {
-	public class NBXplorerPublicWallet
-	{
-		private readonly ExplorerClient _explorerClient;
-		public readonly TrackedSource TrackedSource;
+    public class NBXplorerPublicWallet
+    {
+        private readonly ExplorerClient _explorerClient;
+        public readonly TrackedSource TrackedSource;
 
-		public NBXplorerPublicWallet(ExplorerClient explorerClient, TrackedSource trackedSource)
-		{
-			_explorerClient = explorerClient;
-			TrackedSource = trackedSource;
-		}
+        public NBXplorerPublicWallet(ExplorerClient explorerClient, TrackedSource trackedSource)
+        {
+            _explorerClient = explorerClient;
+            TrackedSource = trackedSource;
+        }
 
-		public async Task<Money> GetBalance()
-		{
-			return GetBalance(await GetUTXOs());
-		}
+        public async Task<Money> GetBalance()
+        {
+            return GetBalance(await GetUTXOs());
+        }
 
-		public Money GetBalance(UTXOChanges utxoChanges)
-		{
-			return utxoChanges.GetUnspentUTXOs().Select(c => c.Value).Sum();
-		}
+        public Money GetBalance(UTXOChanges utxoChanges)
+        {
+            return utxoChanges.GetUnspentUTXOs().Select(c => c.Value).Sum();
+        }
 
-		public async Task<UTXOChanges> GetUTXOs()
-		{
-			var x = await _explorerClient.GetUTXOsAsync(TrackedSource);
-			return x;
-		}
+        public async Task<UTXOChanges> GetUTXOs()
+        {
+            var x = await _explorerClient.GetUTXOsAsync(TrackedSource);
+            return x;
+        }
 
-		public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
-			Money amount, IDestination destination, bool subtractFee)
-		{
-			return await AddTxOutsToTransaction(transactionBuilder,
-				new List<(Money amount, IDestination destination, bool subtractFee)>()
-				{
-					(amount, destination, subtractFee)
-				});
-		}
+        public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
+            Money amount, IDestination destination, bool subtractFee)
+        {
+            return await AddTxOutsToTransaction(transactionBuilder,
+                new List<(Money amount, IDestination destination, bool subtractFee)>()
+                {
+                    (amount, destination, subtractFee)
+                });
+        }
 
-		public async Task<TransactionBuilder> CreateTransactionBuilder(bool addUtxos = true)
-		{
-			var builder = _explorerClient.Network.NBitcoinNetwork
-				.CreateTransactionBuilder();
+        public async Task<TransactionBuilder> CreateTransactionBuilder(bool addUtxos = true)
+        {
+            var builder = _explorerClient.Network.NBitcoinNetwork
+                .CreateTransactionBuilder();
 
-			if (addUtxos)
-			{
-				var utxos = await GetUTXOs();
-				builder.AddCoins(utxos.GetUnspentCoins());
-			}
+            if (addUtxos)
+            {
+                var utxos = await GetUTXOs();
+                builder.AddCoins(utxos.GetUnspentCoins());
+            }
 
-			return builder;
-		}
+            return builder;
+        }
 
-		public async Task<Transaction> BuildTransaction(
-			IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing,
-			IEnumerable<PrivateKeyDetails> privateKeyDetails = null, FeeRate feeRate = null, Money fee = null)
-		{
-			var txBuilder = await CreateTransactionBuilder();
-			await AddTxOutsToTransaction(txBuilder, outgoing);
-			if (feeRate == null && fee == null)
-			{
-				feeRate = (await _explorerClient.GetFeeRateAsync(20, new FeeRate(100L, 1))).FeeRate;
-			}
-			else if (fee != null)
-			{
-				txBuilder.SendFeesSplit(fee);
-			}
+        public async Task<Transaction> BuildTransaction(
+            IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing,
+            IEnumerable<PrivateKeyDetails> privateKeyDetails = null, FeeRate feeRate = null, Money fee = null)
+        {
+            var txBuilder = await CreateTransactionBuilder();
+            if (feeRate == null && fee == null)
+            {
+                feeRate = (await _explorerClient.GetFeeRateAsync(20, new FeeRate(100L, 1))).FeeRate;
+            }
+            else if (fee != null)
+            {
+                txBuilder.SendFeesSplit(fee);
+            }
 
-			if (feeRate != null)
-			{
-				txBuilder.SendEstimatedFees(feeRate);
-			}
+            if (feeRate != null)
+            {
+                txBuilder.SendEstimatedFees(feeRate);
+            }
 
-			if (!(privateKeyDetails?.Any() ?? false)) return txBuilder.BuildTransaction(true);
-			foreach (var privateKeyDetail in privateKeyDetails)
-			{
-				await SignTransaction(txBuilder, privateKeyDetail);
-			}
+            await AddTxOutsToTransaction(txBuilder, outgoing);
 
-			return txBuilder.BuildTransaction(true);
-		}
+            if (!(privateKeyDetails?.Any() ?? false)) return txBuilder.BuildTransaction(true);
+            foreach (var privateKeyDetail in privateKeyDetails)
+            {
+                await SignTransaction(txBuilder, privateKeyDetail);
+            }
 
-		public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
-			IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing)
-		{
-			foreach (var tuple in outgoing)
-			{
-				transactionBuilder.Send(tuple.destination, tuple.amount);
-				if (tuple.subtractFee)
-				{
-					transactionBuilder.SubtractFees();
-				}
-			}
+            return txBuilder.BuildTransaction(true);
+        }
 
-			switch (TrackedSource)
-			{
-				case AddressTrackedSource addressTrackedSource:
-					transactionBuilder.SetChange(addressTrackedSource.Address);
-					break;
-				case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
-					var changeAddress = _explorerClient.GetUnused(derivationSchemeTrackedSource.DerivationStrategy,
-						DerivationFeature.Change);
-					transactionBuilder.SetChange(changeAddress.ScriptPubKey);
-					break;
-			}
+        public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
+            IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing)
+        {
+            foreach (var tuple in outgoing)
+            {
+                transactionBuilder.Send(tuple.destination, tuple.amount);
+                if (tuple.subtractFee)
+                {
+                    transactionBuilder.SubtractFees();
+                }
+            }
 
-			return transactionBuilder;
-		}
+            switch (TrackedSource)
+            {
+                case AddressTrackedSource addressTrackedSource:
+                    transactionBuilder.SetChange(addressTrackedSource.Address);
+                    break;
+                case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
+                    var changeAddress = _explorerClient.GetUnused(derivationSchemeTrackedSource.DerivationStrategy,
+                        DerivationFeature.Change);
+                    transactionBuilder.SetChange(changeAddress.ScriptPubKey);
+                    break;
+            }
 
-		public static ExtKey GetKeyFromDetails(PrivateKeyDetails privateKeyDetails, Network network)
-		{
-			if (!string.IsNullOrEmpty(privateKeyDetails.MnemonicSeed))
-			{
-				return new Mnemonic(privateKeyDetails.MnemonicSeed).DeriveExtKey(
-					string.IsNullOrEmpty(privateKeyDetails.Passphrase) ? null : privateKeyDetails.Passphrase);
-			}
+            return transactionBuilder;
+        }
 
-			return ExtKey.Parse(privateKeyDetails.WIF, network);
-		}
+        public static ExtKey GetKeyFromDetails(PrivateKeyDetails privateKeyDetails, Network network)
+        {
+            if (!string.IsNullOrEmpty(privateKeyDetails.MnemonicSeed))
+            {
+                return new Mnemonic(privateKeyDetails.MnemonicSeed).DeriveExtKey(
+                    string.IsNullOrEmpty(privateKeyDetails.Passphrase) ? null : privateKeyDetails.Passphrase);
+            }
 
-		public async Task SignTransaction(TransactionBuilder transactionBuilder, PrivateKeyDetails privateKeyDetails)
-		{
-			await SignTransaction(transactionBuilder,
-				GetKeyFromDetails(privateKeyDetails, _explorerClient.Network.NBitcoinNetwork));
-		}
+            return ExtKey.Parse(privateKeyDetails.WIF, network);
+        }
 
-		public async Task SignTransaction(TransactionBuilder transactionBuilder, ExtKey extKey)
-		{
-			var utxos = await GetUTXOs();
-			transactionBuilder.AddKeys(utxos.GetKeys(extKey));
-		}
+        public async Task SignTransaction(TransactionBuilder transactionBuilder, PrivateKeyDetails privateKeyDetails)
+        {
+            await SignTransaction(transactionBuilder,
+                GetKeyFromDetails(privateKeyDetails, _explorerClient.Network.NBitcoinNetwork));
+        }
 
-		public Task<BroadcastResult> BroadcastTransaction(Transaction transaction)
-		{
-			return _explorerClient.BroadcastAsync(transaction);
-		}
+        public async Task SignTransaction(TransactionBuilder transactionBuilder, ExtKey extKey)
+        {
+            var utxos = await GetUTXOs();
+            transactionBuilder.AddKeys(utxos.GetKeys(extKey));
+        }
 
-		public async Task<BitcoinAddress> GetNextAddress(
-			DerivationFeature derivationFeature = DerivationFeature.Deposit)
-		{
-			switch (TrackedSource)
-			{
-				case AddressTrackedSource addressTrackedSource:
-					return addressTrackedSource.Address;
-				case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
-					return BitcoinAddress.Create((await _explorerClient.GetUnusedAsync(
-						derivationSchemeTrackedSource.DerivationStrategy,
-						derivationFeature, 0, true)).Address, _explorerClient.Network.NBitcoinNetwork);
-			}
+        public Task<BroadcastResult> BroadcastTransaction(Transaction transaction)
+        {
+            return _explorerClient.BroadcastAsync(transaction);
+        }
 
-			throw new InvalidOperationException();
-		}
-	}
+        public async Task<BitcoinAddress> GetNextAddress(
+            DerivationFeature derivationFeature = DerivationFeature.Deposit)
+        {
+            switch (TrackedSource)
+            {
+                case AddressTrackedSource addressTrackedSource:
+                    return addressTrackedSource.Address;
+                case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
+                    return BitcoinAddress.Create((await _explorerClient.GetUnusedAsync(
+                        derivationSchemeTrackedSource.DerivationStrategy,
+                        derivationFeature, 0, true)).Address, _explorerClient.Network.NBitcoinNetwork);
+            }
+
+            throw new InvalidOperationException();
+        }
+    }
 }
