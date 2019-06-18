@@ -69,7 +69,7 @@ namespace BtcTransmuter.Extension.Lightning.HostedServices
                 .WaitInvoice(linkedCancellation.Token).ContinueWith(
                     task =>
                     {
-                        _triggerDispatcher.DispatchTrigger(new ReceivedLightningPaymentTrigger()
+                        _ = _triggerDispatcher.DispatchTrigger(new ReceivedLightningPaymentTrigger()
                         {
                             Data = new ReceivedLightningPaymentTriggerData()
                             {

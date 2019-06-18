@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +32,7 @@ namespace BtcTransmuter.Extension.Timer.HostedServices
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await _triggerDispatcher.DispatchTrigger(new TimerTrigger());
+                _ =  _triggerDispatcher.DispatchTrigger(new TimerTrigger());
                 await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
             }
         }

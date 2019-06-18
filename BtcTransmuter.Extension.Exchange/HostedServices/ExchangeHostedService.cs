@@ -56,7 +56,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                     var amounts = await client.GetAmountsAsync();
                     foreach (var keyValuePair in amounts)
                     {
-                        await _triggerDispatcher.DispatchTrigger(new CheckExchangeBalanceTrigger()
+                        _ = _triggerDispatcher.DispatchTrigger(new CheckExchangeBalanceTrigger()
                         {
                             Data = new CheckExchangeBalanceTriggerData()
                             {

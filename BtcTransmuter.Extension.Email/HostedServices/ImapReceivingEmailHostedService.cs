@@ -90,7 +90,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
                         ExternalServiceId = service.Key
                     }
                 };
-                await _triggerDispatcher.DispatchTrigger(trigger);
+                _ =  _triggerDispatcher.DispatchTrigger(trigger);
             }
 
             data.LastCheck = DateTime.Now;

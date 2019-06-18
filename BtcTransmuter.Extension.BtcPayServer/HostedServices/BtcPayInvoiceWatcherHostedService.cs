@@ -92,7 +92,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
                         {
                             if (data.MonitoredInvoiceStatuses[invoice.Id] != invoice.Status)
                             {
-                                await _triggerDispatcher.DispatchTrigger(new InvoiceStatusChangedTrigger()
+                                _ = _triggerDispatcher.DispatchTrigger(new InvoiceStatusChangedTrigger()
                                 {
                                     Data = new InvoiceStatusChangedTriggerData()
                                     {
@@ -104,7 +104,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.HostedServices
                         }
                         else
                         {
-                            await _triggerDispatcher.DispatchTrigger(new InvoiceStatusChangedTrigger()
+                            _ = _triggerDispatcher.DispatchTrigger(new InvoiceStatusChangedTrigger()
                             {
                                 Data = new InvoiceStatusChangedTriggerData()
                                 {

@@ -91,7 +91,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
                 // ignored
             }
 
-            await _triggerDispatcher.DispatchTrigger(new ReceiveWebRequestTrigger()
+            _ =  _triggerDispatcher.DispatchTrigger(new ReceiveWebRequestTrigger()
             {
                 Data = new ReceiveWebRequestTriggerData()
                 {

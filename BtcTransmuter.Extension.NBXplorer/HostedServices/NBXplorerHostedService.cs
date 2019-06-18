@@ -122,7 +122,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
                     var balance = await wallet.GetBalance();
 
-                    await _triggerDispatcher.DispatchTrigger(new NBXplorerBalanceTrigger(explorerClient)
+                    _ =  _triggerDispatcher.DispatchTrigger(new NBXplorerBalanceTrigger(explorerClient)
                     {
                         Data = new NBXplorerBalanceTriggerData()
                         {
@@ -171,7 +171,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                         switch (evt)
                         {
                             case NewBlockEvent newBlockEvent:
-                                await _triggerDispatcher.DispatchTrigger(new NBXplorerNewBlockTrigger()
+                                _ =  _triggerDispatcher.DispatchTrigger(new NBXplorerNewBlockTrigger()
                                 {
                                     Data = new NBXplorerNewBlockTriggerData()
                                     {
@@ -212,7 +212,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                             
                                             
                                             
-                                            await _triggerDispatcher.DispatchTrigger(
+                                            _ =  _triggerDispatcher.DispatchTrigger(
                                                 new NBXplorerNewTransactionTrigger(explorerClient)
                                                 {
                                                     Data = new NBXplorerNewTransactionTriggerData()
@@ -234,7 +234,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                 break;
                             case NewTransactionEvent newTransactionEvent:
                             {
-                                await _triggerDispatcher.DispatchTrigger(
+                                _ =  _triggerDispatcher.DispatchTrigger(
                                     new NBXplorerNewTransactionTrigger(explorerClient)
                                     {
                                         Data = new NBXplorerNewTransactionTriggerData()
