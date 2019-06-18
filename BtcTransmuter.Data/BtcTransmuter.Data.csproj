@@ -14,8 +14,4 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.4" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Migrations" />
-    </ItemGroup>
-
 </Project>

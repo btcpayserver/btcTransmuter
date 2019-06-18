@@ -57,6 +57,7 @@ namespace BtcTransmuter
 
             var options = new BtcTransmuterOptions(Configuration, _hostingEnvironment, _logger);
             services.AddSingleton(options);
+            services.AddSingleton<IBtcTransmuterOptions>(options);
             services.AddDbContext<ApplicationDbContext>(builder =>
             {
                 switch (options.DatabaseType)

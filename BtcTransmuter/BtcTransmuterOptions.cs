@@ -1,14 +1,12 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.Web.CodeGeneration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace BtcTransmuter
 {
-    public class BtcTransmuterOptions
+    public class BtcTransmuterOptions : IBtcTransmuterOptions
     {
         public const string configPrefix = "TRANSMUTER_";
         public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger logger)
@@ -17,6 +15,7 @@ namespace BtcTransmuter
             DatabaseConnectionString = configuration.GetValue<string>("Database");
             DataProtectionDir = configuration.GetValue<string>("DataProtectionDir");
             DatabaseType = configuration.GetValue<DatabaseType>("DatabaseType", DatabaseType.Sqlite);
+            UseDatabaseColumnEncryption = configuration.GetValue<bool>("UseDatabaseColumnEncryption", false);
             ExtensionsDir = configuration.GetValue<string>("ExtensionsDir",
                 Path.Combine(hostingEnvironment.ContentRootPath, "Extensions"));
 
@@ -36,8 +35,9 @@ namespace BtcTransmuter
                 }
             }
             
-            logger.LogWarning($"Connecting to {DatabaseType} db with: {DatabaseConnectionString}");
-            logger.LogWarning($"Extensions Dir: {ExtensionsDir}, Data Protection Dir: {DataProtectionDir}");
+            logger.LogInformation($"Connecting to {DatabaseType} db with: {DatabaseConnectionString}");
+            logger.LogInformation($"Extensions Dir: {ExtensionsDir}, Data Protection Dir: {DataProtectionDir}");
+            logger.LogInformation($"Database Column Encryption is {(UseDatabaseColumnEncryption?"Enabled": "Disabled")}");
         }
 
         public string ExtensionsDir { get; set; }
@@ -46,6 +46,6 @@ namespace BtcTransmuter
         public string DataProtectionDir { get; set; }
 
         public DatabaseType DatabaseType { get; set; }
-       
+        public bool UseDatabaseColumnEncryption { get; set; }
     }
 }
