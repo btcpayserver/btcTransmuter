@@ -19,6 +19,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
+        "TRANSMUTER_UseDatabaseColumnEncryption": "true",
         "TRANSMUTER_Database": "Data Source=mydb.db;",
         "TRANSMUTER_DatabaseType": "sqlite",
         "TRANSMUTER_DataProtectionDir": "C:/transmuterkey",
