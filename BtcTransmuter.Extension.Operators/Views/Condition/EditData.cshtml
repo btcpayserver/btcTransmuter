@@ -1,5 +1,4 @@
-@using System.Reflection
-@using BtcTransmuter.Extension.Operators.Actions.Condition
+
 @model BtcTransmuter.Extension.Operators.Actions.Condition.ConditionController.ConditionViewModel
 @{
     ViewData["Title"] = "Edit Condition Action";
@@ -10,11 +9,7 @@
 
 <form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Data" class="control-label"></label>
-        <input type="text" asp-for="Data" class="form-control"/>
-        <span asp-validation-for="Data" class="text-danger"></span>
-    </div>
+
     <div class="form-group">
         <label asp-for="Condition" class="control-label"></label>
         <input type="text" asp-for="Condition" class="form-control"/>

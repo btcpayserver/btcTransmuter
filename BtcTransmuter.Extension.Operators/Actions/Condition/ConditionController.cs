@@ -30,7 +30,6 @@ namespace BtcTransmuter.Extension.Operators.Actions.Condition
             return new ConditionViewModel
             {
                 RecipeId = @from.RecipeId,
-                Data =  fromData.Data,
                 Condition = fromData.Condition
             };
         }

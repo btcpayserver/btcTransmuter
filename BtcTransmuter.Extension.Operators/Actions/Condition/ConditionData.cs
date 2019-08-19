@@ -5,9 +5,6 @@ namespace BtcTransmuter.Extension.Operators.Actions.Condition
     public class ConditionData
     {
         [Required]
-        public string Data { get; set; }
-        
-        [Required]
         public string Condition { get; set; }
     }
 }
