@@ -39,6 +39,11 @@
         <textarea asp-for="Body" class="form-control"></textarea>
         <span asp-validation-for="Body" class="text-danger"></span>
     </div>
+        <div class="form-group">
+            <label asp-for="IsHTML" class="control-label"></label>
+            <input type="checkbox" asp-for="IsHTML" class="form-check"/>
+            <span asp-validation-for="IsHTML" class="text-danger"></span>
+        </div>
 
     <input type="hidden" asp-for="RecipeId"/>
     <div class="mt-2">

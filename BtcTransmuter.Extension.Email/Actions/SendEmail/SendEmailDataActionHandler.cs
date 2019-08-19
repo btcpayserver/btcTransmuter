@@ -34,7 +34,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
                 {
                     InternetAddress.Parse(InterpolateString(actionData.To, data))
                 }, InterpolateString(actionData.Subject, data),
-                new TextPart(TextFormat.Plain)
+                new TextPart(actionData.IsHTML ? TextFormat.Html : TextFormat.Plain)
                 {
                     Text = InterpolateString(actionData.Body, data)
                 });

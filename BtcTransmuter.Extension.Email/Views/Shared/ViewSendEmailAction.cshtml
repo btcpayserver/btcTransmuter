@@ -13,6 +13,6 @@
     }
     @if (!string.IsNullOrEmpty(data.Body))
     {
-        <span>with body <kbd>@data.Body</kbd></span>
+        <span>with body <kbd>@data.Body</kbd>@(data.IsHTML? "(in HTML)": "")</span>
     }
 </div>

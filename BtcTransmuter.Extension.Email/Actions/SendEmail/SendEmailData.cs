@@ -10,5 +10,6 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
         public string To { get; set; }
         public string Body { get; set; }
         public string Subject { get; set; }
+        public bool IsHTML { get; set; } = false;
     }
 }
