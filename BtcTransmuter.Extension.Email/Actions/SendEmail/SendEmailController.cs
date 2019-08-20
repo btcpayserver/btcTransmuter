@@ -44,6 +44,7 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
                 Subject = fromData.Subject,
                 To = fromData.To,
                 From = fromData.From,
+                IsHTML = fromData.IsHTML,
                 ExternalServices = new SelectList(services, nameof(ExternalServiceData.Id),
                     nameof(ExternalServiceData.Name), from.ExternalServiceId),
             };
