@@ -1,0 +1,7 @@
+@inject BTCTransmuter.Extension.Tor.Services.TorServices TorServices
+@if (TorServices.TransmuterTorService != null)
+{
+    <li class="nav-item mr-3">
+        <a href="@TorServices.TransmuterTorService.OnionHost">Onion</a>
+    </li>
+}

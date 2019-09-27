@@ -37,6 +37,7 @@
     <ProjectReference Include="..\BtcTransmuter.Extension.Presets\BtcTransmuter.Extension.Presets.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Recipe\BtcTransmuter.Extension.Recipe.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Timer\BtcTransmuter.Extension.Timer.csproj" />
+    <ProjectReference Include="..\BTCTransmuter.Extension.Tor\BTCTransmuter.Extension.Tor.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Extension.Webhook\BtcTransmuter.Extension.Webhook.csproj" />
     <ProjectReference Include="..\BtcTransmuter.Services\BtcTransmuter.Services.csproj" />
   </ItemGroup>
