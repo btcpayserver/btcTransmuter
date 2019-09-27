@@ -33,7 +33,6 @@ namespace BtcTransmuter.Services
 						.Include(recipe => recipe.RecipeActions)
 						.ThenInclude(action => action.ExternalService)
 						.Include(recipe => recipe.RecipeActions)
-						.ThenInclude(action => action.RecipeInvocations)
 						.Include(recipe => recipe.RecipeTrigger)
 						.ThenInclude(trigger => trigger.ExternalService);
 
@@ -76,7 +75,6 @@ namespace BtcTransmuter.Services
 				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
 				{
 					var queryable = context.RecipeInvocations
-						.Include(invocation => invocation.RecipeAction)
 						.Include(invocation => invocation.Recipe)
 						.ThenInclude(recipe => recipe.RecipeTrigger)
 						.AsQueryable();

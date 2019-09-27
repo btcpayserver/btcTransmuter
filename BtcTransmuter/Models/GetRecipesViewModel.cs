@@ -7,5 +7,6 @@ namespace BtcTransmuter.Models
     {
         public string StatusMessage { get; set; }
         public IEnumerable<Recipe> Recipes { get; set; }
+        
     }
 }

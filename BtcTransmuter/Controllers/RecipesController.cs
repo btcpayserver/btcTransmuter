@@ -244,23 +244,6 @@ namespace BtcTransmuter.Controllers
                 return GetNotFoundActionResult();
             }
 
-            var recipeActionGroup = recipe.RecipeActionGroups.Single(group =>
-                group.Id.Equals(actionGroupId, StringComparison.InvariantCultureIgnoreCase));
-            if (recipeActionGroup.RecipeActions.SelectMany(action => action.RecipeInvocations).Any())
-            {
-                return RedirectToAction("EditRecipe", "Recipes", new
-                {
-                    id = id,
-                    statusMessage = new StatusMessageModel()
-                    {
-                        Message = "The action group you're are trying to delete has been executed in the past and thus cannot be deleted for historical auditing reasons. A workaround is to recreate the recipe and then delete this recipe.",
-                        Severity = StatusMessageModel.StatusSeverity.Error
-                    }.ToString()
-                });
-            }
-            
-
-
             await _recipeManager.RemoveRecipeActionGroup(actionGroupId);
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe Action group removed"});
         }

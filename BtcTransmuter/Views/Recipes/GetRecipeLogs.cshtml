@@ -38,14 +38,7 @@
             </td>
 
             <td>
-                @if (item.RecipeAction.ActionId == "PlaceOrder")
-                {
-                    <span>@item.ActionResult</span>
-                }
-                else
-                {
-                    <partial name="PosData" model="@PosDataParser.ParsePosData(item.ActionResult)" />
-                }
+               <partial name="PosData" model="@PosDataParser.ParsePosData(item.ActionResult)" />
             </td>
 
             <td>

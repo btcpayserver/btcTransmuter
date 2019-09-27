@@ -46,7 +46,7 @@ namespace BtcTransmuter.Services
                     {
                         RecipeId = recipeAction.RecipeId,
                         Timestamp = DateTime.Now,
-                        RecipeActionId = recipeAction.Id,
+                        RecipeAction = recipeAction.ToString(),
                         ActionResult = actionHandlerResult.Result,
                         TriggerDataJson = JObject
                             .FromObject(dataDict)
@@ -71,7 +71,7 @@ namespace BtcTransmuter.Services
                     {
                         RecipeId = recipeAction.RecipeId,
                         Timestamp = DateTime.Now,
-                        RecipeActionId = recipeAction.Id,
+                        RecipeAction = recipeAction.ToString(),
                         ActionResult = e.Message,
                         TriggerDataJson = JObject
                             .FromObject(additionalData.ToDictionary(pair => pair.Key, pair => pair.Value.json))

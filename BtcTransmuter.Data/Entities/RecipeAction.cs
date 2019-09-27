@@ -13,8 +13,11 @@ namespace BtcTransmuter.Data.Entities
         public Recipe Recipe { get; set; }
         public ExternalServiceData ExternalService { get; set; }
         public RecipeActionGroup RecipeActionGroup { get; set; }
-        public List<RecipeInvocation> RecipeInvocations { get; set; }
         public int Order { get; set; } = 0;
 
+        public override string ToString()
+        {
+            return $"{ActionId} {(ExternalService == null ? string.Empty : $"using service {ExternalService.Name}")}";
+        }
     }
 }

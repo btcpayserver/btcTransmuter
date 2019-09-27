@@ -56,11 +56,6 @@ namespace BtcTransmuter.Data
                 .HasMany(l => l.RecipeActions)
                 .WithOne(action => action.RecipeActionGroup)
                 .OnDelete(DeleteBehavior.Cascade);
-            
-            builder.Entity<RecipeAction>()
-                .HasMany(l => l.RecipeInvocations)
-                .WithOne(action => action.RecipeAction)
-                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Settings>()
                 .HasIndex(settings => settings.Key)
