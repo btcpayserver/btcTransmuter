@@ -31,10 +31,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Timestamp)
 
-                @await Component.InvokeAsync("ViewRecipeAction", new
-                {
-                    recipeAction = item.RecipeAction
-                })
+                @item.RecipeAction
             </td>
 
             <td>
