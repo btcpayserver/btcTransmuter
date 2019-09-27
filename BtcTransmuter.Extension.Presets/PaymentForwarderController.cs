@@ -324,7 +324,7 @@ namespace BtcTransmuter.Extension.Presets
                 var data = new NBXplorerWalletExternalServiceData()
                 {
                     CryptoCode = vm.CryptoCode,
-                    DerivationStrategy = newSeed.DeriveExtKey().ToString(client.Network.NBitcoinNetwork) + (client.Network.NBitcoinNetwork.Consensus.SupportSegwit? "-[p2sh]": "-[legacy]"),
+                    DerivationStrategy = newSeed.DeriveExtKey().Neuter().ToString(client.Network.NBitcoinNetwork) + (client.Network.NBitcoinNetwork.Consensus.SupportSegwit? "-[p2sh]": "-[legacy]"),
                     PrivateKeys = new List<PrivateKeyDetails>()
                     {
                         new PrivateKeyDetails()
