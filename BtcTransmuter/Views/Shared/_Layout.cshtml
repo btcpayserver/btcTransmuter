@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using BtcTransmuter.Abstractions.Settings
+@using BtcTransmuter.Controllers
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -9,13 +11,18 @@
     @await Component.InvokeAsync("ExtensionHeaders")
     <partial name="JqueryScripts"/>
     @RenderSection("Scripts", required: false)
+    @inject ISettingsManager SettingsManager;
+    @if ((await SettingsManager.GetSettings<SystemSettings>(nameof(SystemSettings))).DiscourageSearchEngines)
+    {
+        <META NAME="robots" CONTENT="noindex">
+    }
 </head>
 <body>
 <partial name="Header"/>
 
 @if (ViewData.ContainsKey("FullLayout"))
 {
-    <main role="main" >
+    <main role="main">
         @RenderBody()
     </main>
 

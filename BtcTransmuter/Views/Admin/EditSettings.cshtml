@@ -19,6 +19,11 @@
         <input type="checkbox" asp-for="DisableRegistration" class="form-check"/>
         <span asp-validation-for="DisableRegistration" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="DiscourageSearchEngines" class="control-label"></label>
+        <input type="checkbox" asp-for="DiscourageSearchEngines" class="form-check"/>
+        <span asp-validation-for="DiscourageSearchEngines" class="text-danger"></span>
+    </div>
 
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
