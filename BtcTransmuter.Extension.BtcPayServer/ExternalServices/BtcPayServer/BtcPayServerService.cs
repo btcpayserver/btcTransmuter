@@ -47,8 +47,15 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 
         public virtual async Task<bool> CheckAccess()
         {
-            var client = ConstructClient();
-            return client != null && await client.TestAccessAsync(Facade.Merchant);
+            try
+            {
+                var client = ConstructClient();
+                return client != null && await client.TestAccessAsync(Facade.Merchant);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public async Task<string> GetPairingUrl(string label)
@@ -69,7 +76,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
             catch (Exception)
             {
                 var data = GetData();
-                return new Uri(data.Server, "api-tokens").ToString();
+                return Uri.TryCreate(data.Server, "api-tokens", out var result) ? result.ToString() : null;
             }
         }
     }

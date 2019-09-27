@@ -6,7 +6,8 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
 {
     public class BtcPayServerExternalServiceData
     {
-        [Required][Display(Name = "BtcPay Host Url")] public Uri Server { get; set; }
+        [Required][Display(Name = "BtcPay Host Url")]
+        [Validation.Uri] public Uri Server { get; set; }
 
         public string Seed { get; set; }
 
