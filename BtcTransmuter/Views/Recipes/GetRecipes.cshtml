@@ -3,7 +3,6 @@
 
 @{
     ViewData["Title"] = "Recipes";
-
 }
 
 <div class="row">
@@ -13,6 +12,17 @@
 </div>
 <h2>
     @ViewData["Title"] <a asp-action="CreateRecipe" class="badge badge-primary">Create New</a>
+        <div class="btn-group float-right" role="group" >
+          <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Display mode
+            </button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+              <a class="dropdown-item" asp-action="GetRecipes" asp-route-mode="Cards">Cards</a>
+              <a class="dropdown-item" asp-action="GetRecipes" asp-route-mode="List">List</a>
+            </div>
+          </div>
+        </div>
 </h2>
 <p>
 
@@ -25,102 +35,154 @@
         </h3>
     </div>
 }
-<div class="card-columns">
+@if (Model.ViewMode == GetRecipesViewModel.ListMode.Cards)
+{
+    <div class="card-columns">
 
-    @foreach (var recipe in Model.Recipes)
-    {
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">
-                    @Html.Raw(recipe.Name)
-                </h3>
-                <p class="card-text">@Html.Raw(recipe.Description)</p>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <h4>Trigger</h4>
-                    @if (recipe.RecipeTrigger == null)
-                    {
-                        <span>No trigger set yet</span>
-                    }
-                    else
-                    {
-                        @await Component.InvokeAsync("ViewRecipeTrigger", recipe.RecipeTrigger)
-                    }
-                </li>
-                <li class="list-group-item">
-                    <h4 data-toggle="collapse" data-target="#actions-@recipe.Id">Actions</h4>
-                    <ul class="list-group list-group-flush" id="actions-@recipe.Id" class="collapse show">
-                        @{
-                           var  ungroupedRecipeActions = recipe.RecipeActions.Where(action => action.RecipeActionGroup == null);
-                        }
-                        @foreach (var action in ungroupedRecipeActions)
-                        {
-                            <li class="list-group-item px-0">
-                                @await Component.InvokeAsync("ViewRecipeAction", action)
-                            </li>
-                        }
-                        @if (!ungroupedRecipeActions.Any())
-                        {
-                            <li class="list-group-item border-top-0">
-                                No Actions
-                            </li>
-                        }
-                    </ul>
-                </li>
-                <li class="list-group-item">
-                    <h4 data-toggle="collapse" data-target="#actiongroups-@recipe.Id">Action Groups</h4>
-                    <ul class="list-group list-group-flush"  id="actiongroups-@recipe.Id" class="collapse show">
-                        @foreach (var actionGroup in recipe.RecipeActionGroups)
-                        {
-                            <li class="list-group-item px-0">
-                                <div class="card">
-                                    <ul class="list-group list-group-flush" >
-                                        @foreach (var action in actionGroup.RecipeActions.OrderBy(action => action.Order))
-                                        {
-                                            <li class="list-group-item px-0">
-                                                @await Component.InvokeAsync("ViewRecipeAction", action)
-                                            </li>
-                                        }
-                                        @if (!actionGroup.RecipeActions.Any())
-                                        {
-                                            <li class="list-group-item border-top-0">
-                                                No Actions
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                            </li>
-                        }
-                        @if (!recipe.RecipeActionGroups.Any())
-                        {
-                            <li class="list-group-item border-top-0">
-                                No Action Groups
-                            </li>
-                        }
-                    </ul>
-                    
-                </li>
-            </ul>
-            <div class="card-footer">
-                <a asp-action="EditRecipe" asp-route-id="@recipe.Id">Edit</a> -
-                <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
-                <a asp-action="CloneRecipe" asp-route-id="@recipe.Id">Clone</a> -
-                <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs</a>
-
-                <div class="float-right">
-                    @if (recipe.Enabled)
-                    {
-                        <span class="badge badge-info">Enabled</span>
-                    }
-                    else
-                    {
-                        <span class="badge badge-danger">Disabled</span>
-                    }
+        @foreach (var recipe in Model.Recipes)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        @Html.Raw(recipe.Name)
+                    </h3>
+                    <p class="card-text">@Html.Raw(recipe.Description)</p>
                 </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <h4>Trigger</h4>
+                        @if (recipe.RecipeTrigger == null)
+                        {
+                            <span>No trigger set yet</span>
+                        }
+                        else
+                        {
+                            @await Component.InvokeAsync("ViewRecipeTrigger", recipe.RecipeTrigger)
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <h4 data-toggle="collapse" data-target="#actions-@recipe.Id">Actions</h4>
+                        <ul class="list-group list-group-flush" id="actions-@recipe.Id" class="collapse show">
+                            @{
+                                var ungroupedRecipeActions = recipe.RecipeActions.Where(action => action.RecipeActionGroup == null);
+                            }
+                            @foreach (var action in ungroupedRecipeActions)
+                            {
+                                <li class="list-group-item px-0">
+                                    @await Component.InvokeAsync("ViewRecipeAction", action)
+                                </li>
+                            }
+                            @if (!ungroupedRecipeActions.Any())
+                            {
+                                <li class="list-group-item border-top-0">
+                                    No Actions
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="list-group-item">
+                        <h4 data-toggle="collapse" data-target="#actiongroups-@recipe.Id">Action Groups</h4>
+                        <ul class="list-group list-group-flush" id="actiongroups-@recipe.Id" class="collapse show">
+                            @foreach (var actionGroup in recipe.RecipeActionGroups)
+                            {
+                                <li class="list-group-item px-0">
+                                    <div class="card">
+                                        <ul class="list-group list-group-flush">
+                                            @foreach (var action in actionGroup.RecipeActions.OrderBy(action => action.Order))
+                                            {
+                                                <li class="list-group-item px-0">
+                                                    @await Component.InvokeAsync("ViewRecipeAction", action)
+                                                </li>
+                                            }
+                                            @if (!actionGroup.RecipeActions.Any())
+                                            {
+                                                <li class="list-group-item border-top-0">
+                                                    No Actions
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+                            @if (!recipe.RecipeActionGroups.Any())
+                            {
+                                <li class="list-group-item border-top-0">
+                                    No Action Groups
+                                </li>
+                            }
+                        </ul>
+
+                    </li>
+                </ul>
+                <div class="card-footer">
+                    <a asp-action="EditRecipe" asp-route-id="@recipe.Id">Edit</a> -
+                    <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
+                    <a asp-action="CloneRecipe" asp-route-id="@recipe.Id">Clone</a> -
+                    <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs</a>
+
+                    <div class="float-right">
+                        @if (recipe.Enabled)
+                        {
+                            <span class="badge badge-info">Enabled</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">Disabled</span>
+                        }
+                    </div>
+                </div>
+
             </div>
+        }
 
-        </div>
-    }
-
-</div>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Trigger</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="text-right">Actions</th>
+            </thead>
+            <tbody>
+            @foreach (var recipe in Model.Recipes)
+            {
+                <tr>
+                    <td>@recipe.Name</td>
+                    <td>@recipe.Description</td>
+                    <td> @if (recipe.RecipeTrigger == null)
+                         {
+                             <span>No trigger set yet</span>
+                         }
+                         else
+                         {
+                             @await Component.InvokeAsync("ViewRecipeTrigger", recipe.RecipeTrigger)
+                         }</td>
+                    <td>
+                        @if (recipe.Enabled)
+                        {
+                            <span class="badge badge-info">Enabled</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">Disabled</span>
+                        }
+                    </td>
+                    <td >
+                        <div class="float-right">
+                        <a asp-action="EditRecipe" asp-route-id="@recipe.Id">Edit</a> -
+                        <a asp-action="RemoveRecipe" asp-route-id="@recipe.Id">Remove</a> -
+                        <a asp-action="CloneRecipe" asp-route-id="@recipe.Id">Clone</a> -
+                        <a asp-action="GetRecipeLogs" asp-route-id="@recipe.Id">Logs</a>
+                   
+                        </div></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

@@ -25,7 +25,7 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("")]
-        public virtual async Task<IActionResult> GetRecipes([FromQuery] string statusMessage = null)
+        public virtual async Task<IActionResult> GetRecipes([FromQuery] string statusMessage = null, GetRecipesViewModel.ListMode mode = GetRecipesViewModel.ListMode.Cards)
         {
             var recipes = await _recipeManager.GetRecipes(new RecipesQuery()
             {
@@ -35,7 +35,8 @@ namespace BtcTransmuter.Controllers
             return View("GetRecipes",new GetRecipesViewModel()
             {
                 StatusMessage = statusMessage,
-                Recipes = recipes
+                Recipes = recipes,
+                ViewMode = mode
             });
         }
 
