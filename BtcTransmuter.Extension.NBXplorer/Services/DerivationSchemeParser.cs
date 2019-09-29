@@ -130,10 +130,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             var firstKeyPath = new KeyPath("0/0");
             if (HintScriptPubKey == null)
                 return result;
-            if (HintScriptPubKey == result.Derive(firstKeyPath).ScriptPubKey)
-                return result;
+			if (HintScriptPubKey == result.GetDerivation(firstKeyPath).ScriptPubKey)
+				return result;
 
-            if (result is MultisigDerivationStrategy)
+			if (result is MultisigDerivationStrategy)
                 hintLabels.Add("keeporder");
 
             var resultNoLabels = result.ToString();
@@ -143,9 +143,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 var hinted =
                     derivationStrategyFactory.Parse(resultNoLabels + "-" +
                                                     string.Join("-", labels.Select(l => $"[{l}]").ToArray()));
-                if (HintScriptPubKey == hinted.Derive(firstKeyPath).ScriptPubKey)
-                    return hinted;
-            }
+				if (HintScriptPubKey == hinted.GetDerivation(firstKeyPath).ScriptPubKey)
+					return hinted;
+			}
 
             throw new FormatException("Could not find any match");
         }
