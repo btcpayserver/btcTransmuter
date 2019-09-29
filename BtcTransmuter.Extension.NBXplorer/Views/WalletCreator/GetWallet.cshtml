@@ -29,8 +29,7 @@
         var line = derivation.GetLineFor(deposit);
         for (int i = 0; i < 20; i++)
         {
-            result.Add(deposit.GetKeyPath((uint)i).ToString(), line.Derive((uint)i).ScriptPubKey.GetDestinationAddress(Network.Main).ToString());
-
+            result.Add(deposit.GetKeyPath((uint)i).ToString(), line.Derive((uint)i).ScriptPubKey.GetDestinationAddress(Model.Network).ToString());
         }
         return result;
     }
