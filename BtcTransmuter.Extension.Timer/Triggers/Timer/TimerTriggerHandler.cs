@@ -28,7 +28,7 @@ namespace BtcTransmuter.Extension.Timer.Triggers.Timer
             TimerTriggerData triggerData,
             TimerTriggerParameters parameters)
         {
-            if (parameters.StartOn.HasValue && parameters.StartOn < DateTime.Now)
+            if (parameters.StartOn.HasValue && parameters.StartOn > DateTime.Now)
             {
                 return Task.FromResult(false);
             }
