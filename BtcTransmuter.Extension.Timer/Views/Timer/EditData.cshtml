@@ -1,3 +1,4 @@
+@using System.Globalization
 @using BtcTransmuter.Extension.Timer.Triggers.Timer
 @model BtcTransmuter.Extension.Timer.Triggers.Timer.TimerController.TimerTriggerViewModel
 
@@ -13,20 +14,31 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="StartOn" class="control-label"></label>
-        <input type="datetime-local" asp-for="StartOn"  class="form-control datetime"/>
+        <div class="input-group">
+            <input type="datetime-local" asp-for="StartOn"
+                   value="@(Model.StartOn?.ToString("u", CultureInfo.InvariantCulture))"
+                   class="form-control flatdtpicker" placeholder="Start from"/>
+            <div class="input-group-append">
+                <button class="btn btn-secondary input-group-clear" type="button" title="Clear">
+                   &times;
+                </button>
+            </div>
+        </div>
         <span asp-validation-for="StartOn" class="text-danger"></span>
     </div>
+
+
     <div class="form-group">
         <label asp-for="TriggerEveryAmount" class="control-label"></label>
         <div class="input-group">
             <input type="number" asp-for="TriggerEveryAmount" placeholder="Amount" class="form-control">
-            <select class="custom-select" asp-for="TriggerEvery"  asp-items="@Html.GetEnumSelectList(typeof(TimerTriggerParameters.TimerResetEvery))">
+            <select class="custom-select" asp-for="TriggerEvery" asp-items="@Html.GetEnumSelectList(typeof(TimerTriggerParameters.TimerResetEvery))">
             </select>
         </div>
         <span asp-validation-for="TriggerEveryAmount" class="text-danger"></span>
         <span asp-validation-for="TriggerEvery" class="text-danger"></span>
     </div>
-    <input type="hidden" asp-for="RecipeId" />
+    <input type="hidden" asp-for="RecipeId"/>
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
         <a asp-action="EditRecipe" asp-controller="Recipes" class="btn btn-secondary" asp-route-id="@Model.RecipeId">Back to Recipe</a>
