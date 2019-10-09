@@ -100,7 +100,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
                 {
                     foreach (var subtractFeesOutput in subtractFeesOutputs)
                     {
-                        viewModel.AddModelError(model => model.Outputs[subtractFeesOutput.Item2].SubtractFeesFromOutput,
+                        viewModel.AddModelError(nameof(SendTransactionData.TransactionOutput.SubtractFeesFromOutput),
                             "You can only subtract fees from one output", ModelState);
                     }
                 }

@@ -10,7 +10,7 @@ namespace BtcTransmuter
     public class BtcTransmuterOptions : IBtcTransmuterOptions
     {
         public const string configPrefix = "TRANSMUTER_";
-        public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger logger)
+        public BtcTransmuterOptions(IConfiguration configuration, IWebHostEnvironment hostingEnvironment, ILogger logger)
         {
             
             RootPath = configuration.GetValue("RootPath", "");
