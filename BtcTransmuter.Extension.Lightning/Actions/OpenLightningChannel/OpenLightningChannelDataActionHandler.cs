@@ -39,7 +39,7 @@ namespace BtcTransmuter.Extension.Lightning.Actions.OpenLightningChannel
                     );
 
                 var client = service.ConstructClient();
-                if (!new NodeInfo(new Key().PubKey, "", 0).TryParse(InterpolateString(actionData.NodeInfo, data),
+                if (!NodeInfo.TryParse(InterpolateString(actionData.NodeInfo, data),
                     out var nodeInfo))
                 {
                     return new TypedActionHandlerResult<OpenChannelResponse>()
