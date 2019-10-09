@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        
-<TargetFramework>netcoreapp3.0</TargetFramework>
-<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
     </ItemGroup>
-
     <ItemGroup>
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.BtcPayServer\BtcTransmuter.Extension.BtcPayServer.csproj" />
@@ -18,5 +17,4 @@
         <ProjectReference Include="..\BtcTransmuter.Extension.Exchange\BtcTransmuter.Extension.Exchange.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />
     </ItemGroup>
-
 </Project>
