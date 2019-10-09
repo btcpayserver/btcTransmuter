@@ -1,11 +1,11 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2.3-stretch-slim-arm32v7 as base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-buster-slim-arm32v7 as base
 WORKDIR /app
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-buster-arm32v7 AS build
 RUN apt-get update \
 	&& apt-get install -qq --no-install-recommends qemu qemu-user-static qemu-user binfmt-support
 WORKDIR /src
