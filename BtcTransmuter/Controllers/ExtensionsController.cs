@@ -21,12 +21,12 @@ namespace BtcTransmuter.Controllers
     {
         private readonly IEnumerable<BtcTransmuterExtension> _btcTransmuterExtensions;
         private readonly UserManager<User> _userManager;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IApplicationLifetime _applicationLifetime;
 
         public ExtensionsController(IEnumerable<BtcTransmuterExtension> btcTransmuterExtensions,
             UserManager<User> userManager,
-            IHostingEnvironment hostingEnvironment, IApplicationLifetime applicationLifetime)
+            IWebHostEnvironment hostingEnvironment, IApplicationLifetime applicationLifetime)
         {
             _btcTransmuterExtensions = btcTransmuterExtensions;
             _userManager = userManager;

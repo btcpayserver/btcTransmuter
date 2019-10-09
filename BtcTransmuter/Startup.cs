@@ -15,6 +15,7 @@ using BtcTransmuter.Services;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -22,10 +23,10 @@ namespace BtcTransmuter
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly Microsoft.Extensions.Logging.ILogger _logger;
 
-        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration,  ILoggerFactory logFactory)
+        public Startup(IWebHostEnvironment hostingEnvironment, IConfiguration configuration,  ILoggerFactory logFactory)
         {
             _hostingEnvironment = hostingEnvironment;
             _logger = logFactory.CreateLogger(nameof(Startup));
