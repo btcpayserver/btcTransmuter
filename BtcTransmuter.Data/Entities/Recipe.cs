@@ -2,9 +2,8 @@ using System.Collections.Generic;
 
 namespace BtcTransmuter.Data.Entities
 {
-    public class Recipe
+    public class Recipe : BaseIdEntity
     {
-        public string Id { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
         public bool Enabled { get; set; }
@@ -13,7 +12,13 @@ namespace BtcTransmuter.Data.Entities
         public RecipeTrigger RecipeTrigger { get; set; }
         public List<RecipeAction> RecipeActions { get; set; } // executes all actions
 
-        public List<RecipeActionGroup> RecipeActionGroups { get; set; } // executes actions in groups. Action in a group are executed syncrhonously and depending if the  previous action executes
+        public List<RecipeActionGroup>
+            RecipeActionGroups
+        {
+            get;
+            set;
+        } // executes actions in groups. Action in a group are executed syncrhonously and depending if the  previous action executes
+
         public List<RecipeInvocation> RecipeInvocations { get; set; } // log
     }
 }
