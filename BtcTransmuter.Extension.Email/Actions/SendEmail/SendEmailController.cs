@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
@@ -11,6 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
+using MimeKit;
+using MimeKit.Text;
 
 namespace BtcTransmuter.Extension.Email.Actions.SendEmail
 {
@@ -50,10 +54,49 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
             };
         }
 
+        protected async Task<string> SendTestEmail(SmtpService service, string email)
+        {
+            try
+            {
+                await service.SendEmail(new MimeMessage(new List<InternetAddress>()
+                {
+                    InternetAddress.Parse(email)
+                }, new List<InternetAddress>()
+                {
+                    InternetAddress.Parse(email)
+                }, "BTCTransmuter Test Email", new TextPart(TextFormat.Plain)
+                {
+                    Text = "Just testing your email setup for BTC Transmuter (ﾉ◕ヮ◕)ﾉ*:・ﾟ✧"
+                }));
+                return null;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
         protected override async Task<(RecipeAction ToSave, SendEmailViewModel showViewModel)> BuildModel(
             SendEmailViewModel viewModel, RecipeAction mainModel)
         {
-            if (ModelState.IsValid)
+            
+            if(ModelState.IsValid && !string.IsNullOrEmpty(viewModel.TestEmail))
+            {
+                var data = new ExternalServiceData();
+                data.Set(viewModel);
+                var smtpService = new SmtpService(data);
+                var error = await SendTestEmail(smtpService,  viewModel.TestEmail);
+                if (string.IsNullOrEmpty(error))
+                {
+                    ModelState.AddModelError(nameof(viewModel.TestEmail), error
+                    );
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(viewModel.TestEmail), "Email sent successfully, confirm that you received it");
+                }
+               
+            }else if(ModelState.IsValid)
             {
                 mainModel.ExternalServiceId = viewModel.ExternalServiceId;
                 mainModel.Set<SendEmailData>(viewModel);
@@ -79,6 +122,10 @@ namespace BtcTransmuter.Extension.Email.Actions.SendEmail
             public SelectList ExternalServices { get; set; }
             [Display(Name = "SMTP External Service")]
             [Required] public string ExternalServiceId { get; set; }
+
+            [EmailAddress]
+            [Display(Name = "Send test email from and to this address")]
+            public string TestEmail { get; set; }
         }
     }
 }
