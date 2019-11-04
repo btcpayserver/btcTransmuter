@@ -1,4 +1,4 @@
-@model BtcTransmuter.Extension.Email.ExternalServices.Smtp.SmtpExternalServiceData
+@model BtcTransmuter.Extension.Email.ExternalServices.Smtp.EditSmtpExternalServiceViewModel
 @{
     ViewData["Title"] = "Edit Smtp External Service Data";
 }
@@ -32,6 +32,11 @@
         <label asp-for="SSL" class="control-label"></label>
         <input type="checkbox" asp-for="SSL" class="form-check"/>
         <span asp-validation-for="SSL" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TestEmail" class="control-label"></label>
+        <input type="text" asp-for="TestEmail" class="form-control"/>
+        <span asp-validation-for="TestEmail" class="text-danger"></span>
     </div>
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Save</button>
