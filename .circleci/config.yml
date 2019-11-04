@@ -2,13 +2,13 @@ version: 2
 jobs:
   build:
     machine: 
-      docker_layer_caching: true
+      docker_layer_caching: false
     steps: 
       - checkout
 
   test:
     machine:
-        docker_layer_caching: true
+        docker_layer_caching: false
     steps:
       - checkout
       - run:
@@ -21,7 +21,7 @@ jobs:
   # publish jobs require $DOCKERHUB_REPO, $DOCKERHUB_USER, $DOCKERHUB_PASS defined
   publish_docker_linuxamd64:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
     steps:
       - checkout  
       - run:
@@ -34,7 +34,7 @@ jobs:
 
   publish_docker_linuxarm:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
     steps:
       - checkout  
       - run:
