@@ -27,7 +27,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Tests
                     },
                     scope.ServiceProvider.GetRequiredService<NBXplorerPublicWalletProvider>(),
                     scope.ServiceProvider.GetRequiredService<DerivationSchemeParser>(),
-                    scope.ServiceProvider.GetRequiredService<DerivationStrategyFactoryProvider>(),
                     scope.ServiceProvider.GetRequiredService<NBXplorerClientProvider>()
 
                 );
@@ -47,7 +46,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Tests
                     (ExternalServiceData) setupArgs.Single(o => o is ExternalServiceData),
                     (NBXplorerPublicWalletProvider) setupArgs.Single(o => o is NBXplorerPublicWalletProvider),
                     (DerivationSchemeParser) setupArgs.Single(o => o is DerivationSchemeParser),
-                    (DerivationStrategyFactoryProvider) setupArgs.Single(o => o is DerivationStrategyFactoryProvider),
                     (NBXplorerClientProvider) setupArgs.Single(o => o is NBXplorerClientProvider));
             }
 

@@ -16,7 +16,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Tests
             {
                 return new NBXplorerNewTransactionTriggerHandler(
                     (IRecipeManager) setupArgs.Single(o => o is IRecipeManager),
-                    (DerivationStrategyFactoryProvider) setupArgs.Single(o => o is DerivationStrategyFactoryProvider),
                     (NBXplorerPublicWalletProvider) setupArgs.Single(o => o is NBXplorerPublicWalletProvider),
                     (NBXplorerClientProvider) setupArgs.Single(o => o is NBXplorerClientProvider),
                     (DerivationSchemeParser) setupArgs.Single(o => o is DerivationSchemeParser));

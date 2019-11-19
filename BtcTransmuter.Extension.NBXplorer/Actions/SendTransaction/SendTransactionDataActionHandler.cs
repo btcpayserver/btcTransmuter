@@ -16,7 +16,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 	{
 		private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
 		private readonly NBXplorerClientProvider _nbXplorerClientProvider;
-		private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
 		private readonly DerivationSchemeParser _derivationSchemeParser;
 		public override string ActionId => "SendTransaction";
 		public override string Name => "Send Transaction";
@@ -35,12 +34,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 		public SendTransactionDataActionHandler(
 			NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
 			NBXplorerClientProvider nbXplorerClientProvider,
-			DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
 			DerivationSchemeParser derivationSchemeParser)
 		{
 			_nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
 			_nbXplorerClientProvider = nbXplorerClientProvider;
-			_derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
 			_derivationSchemeParser = derivationSchemeParser;
 		}
 
@@ -50,7 +47,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.SendTransaction
 		{
 			var externalService = await recipeAction.GetExternalService();
 			var walletService = new NBXplorerWalletService(externalService, _nbXplorerPublicWalletProvider,
-				_derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider);
+				_derivationSchemeParser, _nbXplorerClientProvider);
 
 			var wallet = await walletService.ConstructClient();
 			var walletData = walletService.GetData();

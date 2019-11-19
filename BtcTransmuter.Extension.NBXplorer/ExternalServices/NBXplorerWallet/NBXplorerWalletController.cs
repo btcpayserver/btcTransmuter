@@ -25,21 +25,18 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             NBXplorerWalletController.EditNBXplorerWalletExternalServiceDataViewModel>
     {
         private readonly NBXplorerOptions _nbXplorerOptions;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
 
         public NBXplorerWalletController(IExternalServiceManager externalServiceManager, UserManager<User> userManager,
             IMemoryCache memoryCache, NBXplorerOptions nbXplorerOptions,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             DerivationSchemeParser derivationSchemeParser,
             NBXplorerClientProvider nbXplorerClientProvider) : base(
             externalServiceManager, userManager, memoryCache)
         {
             _nbXplorerOptions = nbXplorerOptions;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _derivationSchemeParser = derivationSchemeParser;
             _nbXplorerClientProvider = nbXplorerClientProvider;
@@ -51,8 +48,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             ExternalServiceData data)
         {
             var vm = new EditNBXplorerWalletExternalServiceDataViewModel(
-                new NBXplorerWalletService(data, _nbXplorerPublicWalletProvider, _derivationSchemeParser,
-                        _derivationStrategyFactoryProvider, _nbXplorerClientProvider)
+                new NBXplorerWalletService(data, _nbXplorerPublicWalletProvider, _derivationSchemeParser, _nbXplorerClientProvider)
                     .GetData());
 
             vm.CryptoCodes = new SelectList(_nbXplorerOptions.Cryptos?.ToList() ?? new List<string>(),
@@ -96,8 +92,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             {
                 try
                 {
-                    var factory =
-                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
+                    var factory = client.Network.DerivationStrategyFactory;
                     address = BitcoinAddress.Create(viewModel.Address, factory.Network);
                 }
                 catch (Exception)
@@ -110,8 +105,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             {
                 try
                 {
-                    var factory =
-                        _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
+                    var factory = client.Network.DerivationStrategyFactory;
 
                     derivationStrategy = _derivationSchemeParser.Parse(factory, viewModel.DerivationStrategy);
                 }

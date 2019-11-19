@@ -15,7 +15,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
         NBXplorerNewTransactionTriggerParameters>
     {
         private readonly IRecipeManager _recipeManager;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
@@ -34,13 +33,11 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
 
         public NBXplorerNewTransactionTriggerHandler(
             IRecipeManager recipeManager,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             NBXplorerClientProvider nbXplorerClientProvider,
             DerivationSchemeParser derivationSchemeParser)
         {
             _recipeManager = recipeManager;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _nbXplorerClientProvider = nbXplorerClientProvider;
             _derivationSchemeParser = derivationSchemeParser;
@@ -52,7 +49,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerNewTransaction
             NBXplorerNewTransactionTriggerParameters parameters)
         {
             var walletService = new NBXplorerWalletService(recipeTrigger.ExternalService,
-                _nbXplorerPublicWalletProvider, _derivationSchemeParser, _derivationStrategyFactoryProvider,
+                _nbXplorerPublicWalletProvider, _derivationSchemeParser,
                 _nbXplorerClientProvider);
             var trackedSource = await walletService.ConstructTrackedSource();
 

@@ -26,7 +26,6 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
         private readonly NBXplorerOptions _options;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly IRecipeManager _recipeManager;
         private readonly IExternalServiceManager _externalServiceManager;
@@ -37,7 +36,6 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
         public NBXplorerHostedService(NBXplorerOptions options,
             NBXplorerClientProvider nbXplorerClientProvider,
             DerivationSchemeParser derivationSchemeParser,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             IRecipeManager recipeManager,
             IExternalServiceManager externalServiceManager,
@@ -47,7 +45,6 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
             _options = options;
             _nbXplorerClientProvider = nbXplorerClientProvider;
             _derivationSchemeParser = derivationSchemeParser;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _recipeManager = recipeManager;
             _externalServiceManager = externalServiceManager;
@@ -104,7 +101,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
 
                 var groupedWalletEService = walletExternalServices
                     .Select(data => new NBXplorerWalletService(data, _nbXplorerPublicWalletProvider,
-                        _derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider))
+                        _derivationSchemeParser, _nbXplorerClientProvider))
                     .Select(data => (data, data.GetData()))
                     .GroupBy(
                         tuple => $"{tuple.Item2.CryptoCode}_{tuple.Item2.Address}_{tuple.Item2.DerivationStrategy}")
@@ -163,10 +160,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         var evt = await notificationSession.NextEventAsync(cancellationToken);
-
-                        var factory =
-                            _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(
-                                evt.CryptoCode);
+                        var factory = explorerClient.Network.DerivationStrategyFactory;
 
                         switch (evt)
                         {
@@ -207,7 +201,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                                         {
                                             var walletService = new NBXplorerWalletService(
                                                 recipe.RecipeTrigger.ExternalService, _nbXplorerPublicWalletProvider,
-                                                _derivationSchemeParser, _derivationStrategyFactoryProvider,
+                                                _derivationSchemeParser,
                                                 _nbXplorerClientProvider);
                                             
                                             

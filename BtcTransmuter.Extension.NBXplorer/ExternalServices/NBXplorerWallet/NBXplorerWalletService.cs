@@ -11,7 +11,6 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
     {
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         public const string NBXplorerWalletServiceType = "NBXplorerWalletExternalService";
         public override string ExternalServiceType => NBXplorerWalletServiceType;
@@ -28,12 +27,10 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
         public NBXplorerWalletService(ExternalServiceData data,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             DerivationSchemeParser derivationSchemeParser,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             NBXplorerClientProvider nbXplorerClientProvider) : base(data)
         {
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _derivationSchemeParser = derivationSchemeParser;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _nbXplorerClientProvider = nbXplorerClientProvider;
         }
 
@@ -42,7 +39,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             var data = GetData();
 
             var explorerClient = _nbXplorerClientProvider.GetClient(data.CryptoCode);
-            var factory = _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(data.CryptoCode);
+            var factory = explorerClient.Network.DerivationStrategyFactory;
             if (string.IsNullOrEmpty(data
                 .DerivationStrategy))
             {
@@ -64,7 +61,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.NBXplorerWallet
             var data = GetData();
             
             var explorerClient = _nbXplorerClientProvider.GetClient(data.CryptoCode);
-            var factory = _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(data.CryptoCode);
+            var factory = explorerClient.Network.DerivationStrategyFactory;
             if (string.IsNullOrEmpty(data
                 .DerivationStrategy))
             {

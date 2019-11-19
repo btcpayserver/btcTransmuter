@@ -1,38 +1,7 @@
-@using BtcTransmuter.Extension.NBXplorer.Models
 @using NBitcoin
-@using Newtonsoft.Json.Linq
 @model BtcTransmuter.Extension.NBXplorer.Controllers.WalletCreatorController.GetWalletViewModel
-@inject BtcTransmuter.Extension.NBXplorer.Services.DerivationSchemeParser derivationSchemeParser
-@inject BtcTransmuter.Extension.NBXplorer.Services.DerivationStrategyFactoryProvider derivationStrategyFactoryProvider
 @{
-
-    ViewData["Title"] = $"Generate/View {Model.Network.Name} Wallet";
-    var mnemonic = new Mnemonic(Model.Mnemonic);
-    var extKey = mnemonic.DeriveExtKey();
-    var wif = extKey.GetWif(Model.Network);
-    var privateKey = extKey.PrivateKey;
-    var secret = privateKey.GetBitcoinSecret(Model.Network);
-    var address = secret.GetAddress(ScriptPubKeyType.Legacy);
-    var segwitAddress =  secret.GetAddress(ScriptPubKeyType.Segwit);
-    var p2shAddress =  secret.GetAddress(ScriptPubKeyType.SegwitP2SH);
-    var extPubKey = extKey.Neuter().ToString(Model.Network);
-    var legacy = derivationSchemeParser.Parse(derivationStrategyFactoryProvider.GetDerivationStrategyFactory(Model.CryptoCode), $"{extPubKey}-[legacy]");
-    var segwit = derivationSchemeParser.Parse(derivationStrategyFactoryProvider.GetDerivationStrategyFactory(Model.CryptoCode), $"{extPubKey}");
-    var p2sh = derivationSchemeParser.Parse(derivationStrategyFactoryProvider.GetDerivationStrategyFactory(Model.CryptoCode), $"{extPubKey}-[p2sh]");
-
-
-    Dictionary<string, string> GenerateAddresses(NBXplorer.DerivationStrategy.DerivationStrategyBase derivation)
-    {
-        var result = new Dictionary<string, string>();
-        var deposit = new NBXplorer.KeyPathTemplates(null).GetKeyPathTemplate(NBXplorer.DerivationStrategy.DerivationFeature.Deposit);
-
-        var line = derivation.GetLineFor(deposit);
-        for (int i = 0; i < 20; i++)
-        {
-            result.Add(deposit.GetKeyPath((uint)i).ToString(), line.Derive((uint)i).ScriptPubKey.GetDestinationAddress(Model.Network).ToString());
-        }
-        return result;
-    }
+    ViewData["Title"] = $"Generate/View {Model.Network.CryptoCode} Wallet";
 }
 
 <div class="d-flex justify-content-between">
@@ -56,22 +25,27 @@
         </div>
         <div class="form-group">
             <label class="control-label">Private Key</label>
-            <input readonly class="form-control" value="@privateKey.ToString(Model.Network)"/>
+            <input readonly class="form-control" value="@Model.PrivateKey.ToString(Model.Network.NBitcoinNetwork)"/>
         </div>
            <div class="form-group">
                 <label class="control-label">Wallet Import Format(WIF)</label>
-                <input readonly class="form-control" value="@wif"/>
+                <input readonly class="form-control" value="@Model.WIF.ToString()>"/>
             </div>
             <div class="form-group">
                 <label class="control-label">Extended Public key</label>
-                <input readonly class="form-control" value="@extPubKey"/>
+                <input readonly class="form-control" value="@Model.ExtPubKey"/>
             </div>       
             <div class="card">
 	        <nav>
 		        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-			        <a class="nav-item nav-link" href="#tab-hd-legacy" id="nav-hd-legacy" data-toggle="tab" h role="tab" >Legacy</a>
+                    <a class="nav-item nav-link" href="#tab-hd-legacy" id="nav-hd-legacy" data-toggle="tab" h role="tab" >Legacy</a>
+                    @if (Model.Network.NBitcoinNetwork.Consensus.SupportSegwit)
+                    {
+                        
+                   
 				    <a class="nav-item nav-link active" href="#tab-hd-p2sh"  id="nav-hd-p2sh" data-toggle="tab" role="tab" >Segwit P2SH</a>
 				    <a class="nav-item nav-link" href="#tab-hd-segwit" id="nav-hd-segwit" data-toggle="tab"  role="tab" >Native Sewgit</a>
+                    }
 				    <a class="nav-item nav-link" href="#tab-singular"  id="nav-singular" data-toggle="tab" role="tab" >Singular Addresses</a>
 			    </div>
 		    </nav>
@@ -79,7 +53,7 @@
 		        <div class="tab-pane p-2" id="tab-hd-legacy" role="tabpanel" id="tab-hd-legacy">	
                     <div class="form-group">
                         <label class="control-label">BTCPay / BTCTransmuter compatible xpub for legacy addresses</label>
-                        <input readonly class="form-control" value="@legacy.ToString()"/>
+                        <input readonly class="form-control" value="@Model.AddressTypes[ScriptPubKeyType.Legacy].Item1"/>
                     </div>
                     <div class="form-group">
                         <table class="table table-sm table-responsive-md">
@@ -90,7 +64,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var sample in GenerateAddresses(legacy))
+                                @foreach (var sample in Model.AddressTypes[ScriptPubKeyType.Legacy].Item2)
                                 {
                                     <tr>
                                         <td>@sample.Key</td>
@@ -101,69 +75,75 @@
                         </table>
                     </div>
                 </div>  
-                <div class="tab-pane p-2 show active " id="tab-hd-p2sh" role="tabpanel">
-                    <div class="form-group">
-                        <label class="control-label">BTCPay / BTCTransmuter compatible xpub for p2sh addresses</label>
-                        <input readonly class="form-control" value="@p2sh.ToString()" />
-                    </div>
-                    <div class="form-group">
-                        <table class="table table-sm table-responsive-md">
-                            <thead>
-                                <tr>
-                                    <th>Key path</th>
-                                    <th>Address</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var sample in GenerateAddresses(p2sh))
-                                {
-                                    <tr>
-                                        <td>@sample.Key</td>
-                                        <td>@sample.Value</td>
-                                    </tr>
-                                }
-                            </tbody>
-                         </table>
-                    </div>
-                </div>
-                <div class="tab-pane p-2" id="tab-hd-segwit" role="tabpanel">
-                    <div class="form-group">
-                        <label class="control-label">BTCPay / BTCTransmuter compatible xpub for segwit addresses</label>
-                        <input readonly class="form-control" value="@segwit.ToString()" />
-                    </div>
-                    <div class="form-group">
-                        <table class="table table-sm table-responsive-md">
-                            <thead>
-                                <tr>
-                                    <th>Key path</th>
-                                    <th>Address</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var sample in GenerateAddresses(segwit))
-                                {
-                                    <tr>
-                                        <td>@sample.Key</td>
-                                        <td>@sample.Value</td>
-                                    </tr>
-                                }
-                            </tbody>
-                         </table>
-                    </div>
-                </div>
+                 @if (Model.Network.NBitcoinNetwork.Consensus.SupportSegwit)
+                 {
+                     <div class="tab-pane p-2 show active " id="tab-hd-p2sh" role="tabpanel">
+                         <div class="form-group">
+                             <label class="control-label">BTCPay / BTCTransmuter compatible xpub for p2sh addresses</label>
+                             <input readonly class="form-control" value="@Model.AddressTypes[ScriptPubKeyType.SegwitP2SH].Item1"/>
+                         </div>
+                         <div class="form-group">
+                             <table class="table table-sm table-responsive-md">
+                                 <thead>
+                                 <tr>
+                                     <th>Key path</th>
+                                     <th>Address</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                 @foreach (var sample in  Model.AddressTypes[ScriptPubKeyType.SegwitP2SH].Item2)
+                                 {
+                                     <tr>
+                                         <td>@sample.Key</td>
+                                         <td>@sample.Value</td>
+                                     </tr>
+                                 }
+                                 </tbody>
+                             </table>
+                         </div>
+                     </div>
+                     <div class="tab-pane p-2" id="tab-hd-segwit" role="tabpanel">
+                         <div class="form-group">
+                             <label class="control-label">BTCPay / BTCTransmuter compatible xpub for segwit addresses</label>
+                             <input readonly class="form-control" value="@Model.AddressTypes[ScriptPubKeyType.Segwit].Item1"/>
+                         </div>
+                         <div class="form-group">
+                             <table class="table table-sm table-responsive-md">
+                                 <thead>
+                                 <tr>
+                                     <th>Key path</th>
+                                     <th>Address</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                 @foreach (var sample in  Model.AddressTypes[ScriptPubKeyType.Segwit].Item2)
+                                 {
+                                     <tr>
+                                         <td>@sample.Key</td>
+                                         <td>@sample.Value</td>
+                                     </tr>
+                                 }
+                                 </tbody>
+                             </table>
+                         </div>
+                     </div>
+                 }
 	            <div class="tab-pane p-2" id="tab-singular" role="tabpanel" >
-		            <div class="form-group">
+                    <div class="form-group">
                         <label class="control-label">Root Legacy Address</label>
-                        <input readonly class="form-control" value="@address"/>
+                        <input readonly class="form-control" value="@Model.Address"/>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Root Segwit Address</label>
-                        <input readonly class="form-control" value="@segwitAddress"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Root Segwit-P2SH Address</label>
-                        <input readonly class="form-control" value="@p2shAddress"/>
-                    </div>
+                     @if (Model.Network.NBitcoinNetwork.Consensus.SupportSegwit)
+                     {
+                         <div class="form-group">
+                             <label class="control-label">Root Segwit Address</label>
+                             <input readonly class="form-control" value="@Model.SegwitAddress"/>
+                         </div>
+                         <div class="form-group">
+                             <label class="control-label">Root Segwit-P2SH Address</label>
+                             <input readonly class="form-control" value="@Model.P2SHAddress"/>
+                         </div>
+                     }
 	            </div>
 	        </div>
         </div>

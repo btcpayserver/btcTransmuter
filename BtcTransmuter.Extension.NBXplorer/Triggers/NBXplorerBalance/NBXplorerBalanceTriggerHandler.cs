@@ -12,7 +12,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
     {
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         public override string TriggerId => NBXplorerBalanceTrigger.Id;
         public override string Name => "Balance Check";
@@ -30,12 +29,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
         public NBXplorerBalanceTriggerHandler(
             NBXplorerClientProvider nbXplorerClientProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             DerivationSchemeParser derivationSchemeParser)
         {
             _nbXplorerClientProvider = nbXplorerClientProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _derivationSchemeParser = derivationSchemeParser;
         }
 
@@ -48,7 +45,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Triggers.NBXplorerBalance
             var walletService = new NBXplorerWalletService(recipeTrigger.ExternalService,
                 _nbXplorerPublicWalletProvider,
                 _derivationSchemeParser,
-                _derivationStrategyFactoryProvider,
                 _nbXplorerClientProvider);
 
             var walletData = walletService.GetData();

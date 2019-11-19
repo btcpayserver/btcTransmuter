@@ -14,7 +14,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerGetBalance
     {
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         public override string ActionId => "NBXplorerGetBalance";
         public override string Name => "Get balance of wallet";
@@ -33,12 +32,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerGetBalance
         public NBXplorerGetBalanceDataActionHandler(
             NBXplorerClientProvider nbXplorerClientProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             DerivationSchemeParser derivationSchemeParser)
         {
             _nbXplorerClientProvider = nbXplorerClientProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _derivationSchemeParser = derivationSchemeParser;
         }
 
@@ -48,7 +45,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Actions.NBXplorerGetBalance
 
             var externalService = await recipeAction.GetExternalService();
             var walletService = new NBXplorerWalletService(externalService, _nbXplorerPublicWalletProvider,
-                _derivationSchemeParser, _derivationStrategyFactoryProvider, _nbXplorerClientProvider);
+                _derivationSchemeParser, _nbXplorerClientProvider);
             var walletData = walletService.GetData();
             var wallet = await walletService.ConstructClient();
             var result = await

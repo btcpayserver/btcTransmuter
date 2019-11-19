@@ -16,7 +16,6 @@ namespace BtcTransmuter.Extension.NBXplorer.Tests
                 return new NBXplorerGetBalanceDataActionHandler(
                     (NBXplorerClientProvider) setupArgs.Single(o => o is NBXplorerClientProvider),
                     (NBXplorerPublicWalletProvider) setupArgs.Single(o => o is NBXplorerPublicWalletProvider),
-                    (DerivationStrategyFactoryProvider) setupArgs.Single(o => o is DerivationStrategyFactoryProvider),
                     (DerivationSchemeParser) setupArgs.Single(o => o is DerivationSchemeParser));
             }
 

@@ -31,7 +31,6 @@ namespace BtcTransmuter.Extension.Presets
         private readonly IExternalServiceManager _externalServiceManager;
         private readonly UserManager<User> _userManager;
         private readonly NBXplorerOptions _nbXplorerOptions;
-        private readonly DerivationStrategyFactoryProvider _derivationStrategyFactoryProvider;
         private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
         private readonly DerivationSchemeParser _derivationSchemeParser;
         private readonly NBXplorerClientProvider _nbXplorerClientProvider;
@@ -44,7 +43,6 @@ namespace BtcTransmuter.Extension.Presets
             IExternalServiceManager externalServiceManager,
             UserManager<User> userManager,
             NBXplorerOptions nbXplorerOptions,
-            DerivationStrategyFactoryProvider derivationStrategyFactoryProvider,
             NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
             DerivationSchemeParser derivationSchemeParser,
             NBXplorerClientProvider nbXplorerClientProvider,
@@ -53,7 +51,6 @@ namespace BtcTransmuter.Extension.Presets
             _externalServiceManager = externalServiceManager;
             _userManager = userManager;
             _nbXplorerOptions = nbXplorerOptions;
-            _derivationStrategyFactoryProvider = derivationStrategyFactoryProvider;
             _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
             _derivationSchemeParser = derivationSchemeParser;
             _nbXplorerClientProvider = nbXplorerClientProvider;
@@ -165,8 +162,7 @@ namespace BtcTransmuter.Extension.Presets
                 else
                 {
                     var data = new NBXplorerWalletService(service, _nbXplorerPublicWalletProvider,
-                        _derivationSchemeParser,
-                        _derivationStrategyFactoryProvider, _nbXplorerClientProvider).GetData();
+                        _derivationSchemeParser, _nbXplorerClientProvider).GetData();
                     if (data.CryptoCode != viewModel.CryptoCode)
                     {
                         viewModel.AddModelError(
@@ -251,8 +247,7 @@ namespace BtcTransmuter.Extension.Presets
                                 "Wallet chosen is wrong... ヽ༼ ಠ益ಠ ༽ﾉ ", ModelState);
                         }
                         else if (
-                            new NBXplorerWalletService(service, _nbXplorerPublicWalletProvider, _derivationSchemeParser,
-                                _derivationStrategyFactoryProvider, _nbXplorerClientProvider).GetData().CryptoCode !=
+                            new NBXplorerWalletService(service, _nbXplorerPublicWalletProvider, _derivationSchemeParser, _nbXplorerClientProvider).GetData().CryptoCode !=
                             viewModel.CryptoCode)
                         {
                             viewModel.AddModelError(
@@ -268,10 +263,8 @@ namespace BtcTransmuter.Extension.Presets
                     {
                         try
                         {
-                            var factory =
-                                _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
                             address = BitcoinAddress.Create(viewModelPaymentDestination.DestinationAddress,
-                                factory.Network);
+                                _nbXplorerClientProvider.GetClient(viewModel.CryptoCode).Network.NBitcoinNetwork);
                         }
                         catch (Exception)
                         {
@@ -286,8 +279,8 @@ namespace BtcTransmuter.Extension.Presets
                     {
                         try
                         {
-                            var factory =
-                                _derivationStrategyFactoryProvider.GetDerivationStrategyFactory(viewModel.CryptoCode);
+                            var factory = _nbXplorerClientProvider.GetClient(viewModel.CryptoCode).Network
+                                .DerivationStrategyFactory;
 
                             derivationStrategy = _derivationSchemeParser.Parse(factory,
                                 viewModelPaymentDestination.DerivationStrategy);
@@ -406,8 +399,7 @@ namespace BtcTransmuter.Extension.Presets
                 {
                     var service = vm.Services.Items.Cast<ExternalServiceData>()
                         .Single(serviceData => serviceData.Id == destinationExternalServiceId);
-                    data = new NBXplorerWalletService(service, _nbXplorerPublicWalletProvider, _derivationSchemeParser,
-                        _derivationStrategyFactoryProvider, _nbXplorerClientProvider).GetData();
+                    data = new NBXplorerWalletService(service, _nbXplorerPublicWalletProvider, _derivationSchemeParser, _nbXplorerClientProvider).GetData();
                 }
 
                 var recipeAction = new RecipeAction()

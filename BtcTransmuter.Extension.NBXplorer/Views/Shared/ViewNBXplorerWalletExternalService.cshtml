@@ -5,11 +5,10 @@
 @using NBitcoin
 @inject NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider
 @inject DerivationSchemeParser derivationSchemeParser
-@inject DerivationStrategyFactoryProvider derivationStrategyFactoryProvider
 @inject NBXplorerClientProvider nbXplorerClientProvider
 
 @{
-    var service = new NBXplorerWalletService(Model, nbXplorerPublicWalletProvider, derivationSchemeParser, derivationStrategyFactoryProvider , nbXplorerClientProvider);
+    var service = new NBXplorerWalletService(Model, nbXplorerPublicWalletProvider, derivationSchemeParser , nbXplorerClientProvider);
     var data = service.GetData();
     string balance = null;
     try

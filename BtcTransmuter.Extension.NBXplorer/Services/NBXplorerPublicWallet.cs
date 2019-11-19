@@ -154,9 +154,9 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 case AddressTrackedSource addressTrackedSource:
                     return addressTrackedSource.Address;
                 case DerivationSchemeTrackedSource derivationSchemeTrackedSource:
-                    return BitcoinAddress.Create((await _explorerClient.GetUnusedAsync(
+                    return (await _explorerClient.GetUnusedAsync(
                         derivationSchemeTrackedSource.DerivationStrategy,
-                        derivationFeature, 0, true)).Address, _explorerClient.Network.NBitcoinNetwork);
+                        derivationFeature, 0, true)).Address;
             }
 
             throw new InvalidOperationException();
