@@ -10,7 +10,7 @@ namespace BTCTransmuter.Extension.Tor.Configuration
         public BTCTransmuterTorOptions(IConfiguration configuration)
         {
             TorrcFile = configuration.GetValue<string>(nameof(TorrcFile), null);
-            TransmuterHiddenServiceName = configuration.GetValue<string>(nameof(TransmuterHiddenServiceName), null);
+            TransmuterHiddenServiceName = configuration.GetValue(nameof(TransmuterHiddenServiceName), "BTCTransmuter");
         }
     }
 }
