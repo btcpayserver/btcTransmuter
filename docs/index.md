@@ -13,7 +13,22 @@ There are 3 main components in BtcTransmuter - External Services, Recipes and Ex
 
 
 ## How do I deploy?
-You don't, this is alpha software man!
+
+First, create a new A Record in the DNS Settings of your web domain host, for example `transmuter.example.com`
+The IP should be the same one used for your BTCPay Server.
+
+If you set up BTCPay using any dockerized install method, you can enable BTC Transmuter. First, [SSH](https://github.com/JeffVandrewJr/patron/blob/master/SSH.md) into your server:
+
+```bash
+sudo su -
+cd btcpayserver-docker
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-add-btctransmuter"
+export BTCTRANSMUTER_HOST="transmuter.example.com"
+. btcpay-setup.sh -i
+```
+Replace `example.com` with the domain where you want to host the Transmuter.
+
+Once completed, your Transmuter will be available at transmuter.example.com where the first account to register becomes the Transmuter admin. Open that link in your browser and you’ll see the homepage.
 
 ## What extensions are provided?
 Currently there are 3 extensions that come bundled with the main application:
