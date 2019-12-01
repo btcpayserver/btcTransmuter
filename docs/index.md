@@ -23,11 +23,7 @@ If you set up BTCPay using any dockerized install method, you can enable BTC Tra
 sudo su -
 cd btcpayserver-docker
 
-# retrieve your currently used environment variables
-echo $BTCPAYGEN_ADDITIONAL_FRAGMENTS
-
-# add btcTransmuter to your environment variables list that is shown (example below: pruning, btcTransmuter)
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage-s;opt-add-btctransmuter"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
 
 export BTCTRANSMUTER_HOST="transmuter.example.com"
 . btcpay-setup.sh -i
