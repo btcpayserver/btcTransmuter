@@ -24,8 +24,8 @@ sudo su -
 cd btcpayserver-docker
 
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
-
 export BTCTRANSMUTER_HOST="transmuter.example.com"
+
 . btcpay-setup.sh -i
 ```
 Replace `example.com` with the domain where you want to host the Transmuter.
