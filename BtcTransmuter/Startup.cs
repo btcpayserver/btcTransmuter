@@ -130,7 +130,9 @@ namespace BtcTransmuter
 
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
-            app.UseStaticFiles();
+
+            app.UseStaticFiles(options.RootPath);
+            app.UsePathBase(options.RootPath);
             app.UseAuthentication();
             app.UseExtensions();
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings()

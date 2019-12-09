@@ -12,6 +12,7 @@ namespace BtcTransmuter
         public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger logger)
         {
             
+            RootPath = configuration.GetValue("RootPath", "");
             DatabaseConnectionString = configuration.GetValue<string>("Database");
             DataProtectionDir = configuration.GetValue<string>("DataProtectionDir");
             DatabaseType = configuration.GetValue<DatabaseType>("DatabaseType", DatabaseType.Sqlite);
@@ -39,7 +40,7 @@ namespace BtcTransmuter
             logger.LogInformation($"Extensions Dir: {ExtensionsDir}, Data Protection Dir: {DataProtectionDir}");
             logger.LogInformation($"Database Column Encryption is {(UseDatabaseColumnEncryption?"Enabled": "Disabled")}");
         }
-
+        public string RootPath { get; set; } = "";
         public string ExtensionsDir { get; set; }
 
         public string DatabaseConnectionString { get; set; }
