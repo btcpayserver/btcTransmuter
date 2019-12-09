@@ -70,7 +70,7 @@ namespace BTCTransmuter.Extension.Tor.Services
                         var torService = new TorService()
                         {
                             Name = service.ServiceName,
-                            OnionHost = onionHost,
+                            OnionHost = $"http://{onionHost}",
                             VirtualPort = service.VirtualPort
                         };
                         result.Add(torService);
