@@ -29,7 +29,13 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             }
 
             _logger.LogWarning($"Creating NBXplorer Client {cryptoCode}");
-            var client = new ExplorerClient(_nbXplorerNetworkProvider.GetFromCryptoCode(cryptoCode), _options.Uri);
+            var network = _nbXplorerNetworkProvider.GetFromCryptoCode(cryptoCode);
+            if (network == null)
+            {
+                _logger.LogWarning($"Skipping {cryptoCode}");
+                return null;
+            }
+            var client = new ExplorerClient(network, _options.Uri);
 
             if (string.IsNullOrEmpty(_options.CookieFile) && !_options.UseDefaultCookie)
             {

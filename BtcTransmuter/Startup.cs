@@ -130,7 +130,7 @@ namespace BtcTransmuter
 
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
-
+            app.UseForwardedHeaders();
             app.UseStaticFiles(options.RootPath);
             app.UsePathBase(options.RootPath);
             app.UseAuthentication();

@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -35,10 +36,7 @@ namespace BtcTransmuter
                 
                 }
             }
-            
-            logger.LogInformation($"Connecting to {DatabaseType} db with: {DatabaseConnectionString}");
-            logger.LogInformation($"Extensions Dir: {ExtensionsDir}, Data Protection Dir: {DataProtectionDir}");
-            logger.LogInformation($"Database Column Encryption is {(UseDatabaseColumnEncryption?"Enabled": "Disabled")}");
+            logger.LogWarning($"{JObject.FromObject(this)}");
         }
         public string RootPath { get; set; } = "";
         public string ExtensionsDir { get; set; }

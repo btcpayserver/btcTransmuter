@@ -46,7 +46,7 @@ namespace BtcTransmuter.Extension.Lightning.ExternalServices.LightningNode
             var data = lightningNodeExternalServiceData ?? GetData();
 
             var client = _nbXplorerClientProvider.GetClient(data.CryptoCode);
-            return LightningClientFactory.CreateClient(data.ConnectionString, client.Network.NBitcoinNetwork);
+            return client == null ? null : LightningClientFactory.CreateClient(data.ConnectionString, client.Network.NBitcoinNetwork);
         }
 
         public async Task<bool> TestAccess(bool isOnion)
