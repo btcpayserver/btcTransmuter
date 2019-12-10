@@ -239,19 +239,25 @@ namespace BtcTransmuter.Extension.Presets
         [Required]
         public string SelectedSMTPExternalServiceId { get; set; }
 
+        [Display(Name = "When the BTCPay invoice status becomes ")]
         public string Status { get; set; }
-[Display(Name = "Send email to the address registered on the BTCPay invoice")]
+        [Display(Name = "Send email to the address registered on the BTCPay invoice")]
         public bool SendToCustomer { get; set; }
         [EmailAddress]
         
-        [Display(Name = "Send email to this address (BCC recipient)")]
+        [Display(Name = "Send email to this address")]
         public string AlternateEmail { get; set; }
 
         [Display(Name = "Email Subject")]
         public string Subject { get; set; }
 
         [Display(Name = "Email Body( in HTML)")]
-        public string HTMLBody { get; set; }
+        public string HTMLBody { get; set; } = @"<div style='text-align:center; width:100%'>
+   Thank you for your contribution ( via {{TriggerData.Invoice.ItemDesc}}) <br> 
+   <p>Please make sure you have the contents of this email available to present at BTCPay Day. </p>
+   <p>You can find more information regarding agenda and schedule at <a href='https://day.btcpayserver.org' target='_blank'>day.btcpayserver.org</a></p>
+   <p> <img src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data={{TriggerData.Invoice.Url}}'><br> Invoice Id: <a target='_blank' href='{{TriggerData.Invoice.Url}}'>{{TriggerData.Invoice.Id}}</a> </p>
+</div>";
 
         [Display(Name = "Email to send from")]
         [EmailAddress]
