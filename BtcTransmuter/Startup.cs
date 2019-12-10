@@ -80,8 +80,8 @@ namespace BtcTransmuter
                 .SetApplicationName("btctransmuter")
                 .PersistKeysToFileSystem(Directory.CreateDirectory(options.DataProtectionDir));
 
-            services.ConfigureApplicationCookie(options => {
-                options.Cookie.Name = ".AspNet.Cookie.btctransmuter";
+            services.ConfigureApplicationCookie(x => {
+                x.Cookie.Name = ".AspNet.Cookie.btctransmuter";
             });
             
             services.AddDefaultIdentity<User>()
