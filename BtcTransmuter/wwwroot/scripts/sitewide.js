@@ -97,6 +97,21 @@ $(document).ready(function () {
 
     $(".only-for-js").show();
 
+    $('.richtext.html').on('summernote.init', function () {
+        $(this).summernote('codeview.activate');
+    });
+    
+    $(".richtext").summernote({
+        height: 300,
+        codemirror: {
+            mode: 'text/html',
+            htmlMode: true,
+            lineNumbers: true,
+            theme: 'monokai',
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+        }
+    });
+    
     function handleInputGroupClearButtonDisplay(element) {
         var inputs = $(element).parents(".input-group").find("input");
 
@@ -110,13 +125,3 @@ $(document).ready(function () {
         }
     }
 });
-
-function switchTimeFormat() {
-    $(".switchTimeFormat").each(function (index) {
-        var htmlVal = $(this).html();
-        var switchVal = $(this).attr("data-switch");
-
-        $(this).html(switchVal);
-        $(this).attr("data-switch", htmlVal);
-    });
-}

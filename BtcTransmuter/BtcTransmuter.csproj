@@ -73,6 +73,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\vendors\bootstrap" />
+    <Folder Include="wwwroot\vendors\codemirror\mode" />
   </ItemGroup>
 
 </Project>

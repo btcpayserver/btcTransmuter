@@ -1,0 +1,113 @@
+@using BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
+@using BtcTransmuter.Extension.Email.ExternalServices.Smtp
+@model BtcTransmuter.Extension.Presets.CreateBTCPayEmailReceiptsViewModel    
+
+@{
+    ViewData["Title"] = "Create BTCPay Email Receipts";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Choose your BTCPay store</h5>
+            <div class="form-group">
+                <label asp-for="SelectedBTCPayExternalServiceId" class="control-label"></label>
+                @if (!Model.BTCPayServices.Any())
+                {
+                    <br/>
+                    <span class="text-danger">
+                        There are no BTCPay stores connected to your Transmuter account.
+
+                        <a asp-controller="ExternalServices" asp-action="CreateExternalService" asp-route-selectedType="@BtcPayServerService.BtcPayServerServiceType">Please create one first.</a>
+                    </span>
+                }
+                else
+                {
+                    
+                    <select asp-for="SelectedBTCPayExternalServiceId" asp-items="Model.BTCPayServices" class="form-control"></select>
+                }
+                <span asp-validation-for="SelectedBTCPayExternalServiceId" class="text-danger"></span>
+            </div>
+
+        </div>
+    </div>
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Choose your email sending service</h5>
+            <div class="form-group">
+                <label asp-for="SelectedSMTPExternalServiceId" class="control-label"></label>
+                @if (!Model.SMTPServices.Any())
+                {
+                    <br/>
+                    <span class="text-danger">
+                        There are no SMTP services connected to your Transmuter account.
+
+                        <a asp-controller="ExternalServices" asp-action="CreateExternalService" asp-route-selectedType="@SmtpService.SmtpExternalServiceType">Please create one first.</a>
+                    </span>
+                }
+                else
+                {
+                    <select asp-for="SelectedSMTPExternalServiceId" asp-items="Model.BTCPayServices" class="form-control"></select>
+                }
+                
+                <span asp-validation-for="SelectedSMTPExternalServiceId" class="text-danger"></span>
+            </div>
+
+        </div>
+    </div>
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">When do you want to send the email?</h5>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedStatuses, "Value", "Text", Model.Status))" class="form-control"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Who do you want to send the email to?</h5>
+            <div class="form-group">
+                <input type="checkbox" asp-for="SendToCustomer" class="form-check-inline"/>
+                <label asp-for="SendToCustomer" class="control-label"></label>
+                <span asp-validation-for="SendToCustomer" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AlternateEmail" class="control-label"></label>
+                <input asp-for="AlternateEmail" type="email" class="form-control"/>
+                <span asp-validation-for="AlternateEmail" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">What do you want to send in the email?</h5>
+            <p>
+                Keep in mind that you can use data from the invoice. For example, <code>{{TriggerData.Invoice.Id}}</code> would be replaced with the invoice id.<br/> <code>&lt;img src=&quot;https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data={{TriggerData.Invoice.Url}}&quot;/&gt;</code> would show a QR code which links to the invoice.
+            </p>
+            <div class="form-group">
+                <label asp-for="Subject" class="control-label"></label>
+                <input type="text" asp-for="Subject" class="form-control"/>
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HTMLBody" class="control-label"></label>
+                <textarea asp-for="HTMLBody" rows="10" cols="40" class="form-control richtext html"></textarea>
+                <span asp-validation-for="HTMLBody" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>

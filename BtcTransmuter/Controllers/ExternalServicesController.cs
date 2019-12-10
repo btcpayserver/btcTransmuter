@@ -44,13 +44,14 @@ namespace BtcTransmuter.Controllers
         }
 
         [HttpGet("create")]
-        public IActionResult CreateExternalService(string statusMessage)
+        public IActionResult CreateExternalService(string statusMessage, string selectedType = null)
         {
             return View(new CreateExternalServiceViewModel()
             {
                 StatusMessage = statusMessage,
+                Type = selectedType,
                 Types = new SelectList(_externalServiceDescriptors,
-                    nameof(IExternalServiceDescriptor.ExternalServiceType), nameof(IExternalServiceDescriptor.Name))
+                    nameof(IExternalServiceDescriptor.ExternalServiceType), nameof(IExternalServiceDescriptor.Name), selectedType)
             });
         }
 
