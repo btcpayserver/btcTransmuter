@@ -27,10 +27,6 @@ namespace BtcTransmuter.Extension.Presets
     {
         private readonly IExternalServiceManager _externalServiceManager;
         private readonly UserManager<User> _userManager;
-        private readonly NBXplorerOptions _nbXplorerOptions;
-        private readonly NBXplorerPublicWalletProvider _nbXplorerPublicWalletProvider;
-        private readonly DerivationSchemeParser _derivationSchemeParser;
-        private readonly NBXplorerClientProvider _nbXplorerClientProvider;
         private readonly IRecipeManager _recipeManager;
         public string Id { get; } = "BTCPayEmailReceipts";
         public string Name { get; } = "BTCPay Email Receipts";
@@ -39,18 +35,10 @@ namespace BtcTransmuter.Extension.Presets
         public BTCPayEmailReceiptsController(
             IExternalServiceManager externalServiceManager,
             UserManager<User> userManager,
-            NBXplorerOptions nbXplorerOptions,
-            NBXplorerPublicWalletProvider nbXplorerPublicWalletProvider,
-            DerivationSchemeParser derivationSchemeParser,
-            NBXplorerClientProvider nbXplorerClientProvider,
             IRecipeManager recipeManager)
         {
             _externalServiceManager = externalServiceManager;
             _userManager = userManager;
-            _nbXplorerOptions = nbXplorerOptions;
-            _nbXplorerPublicWalletProvider = nbXplorerPublicWalletProvider;
-            _derivationSchemeParser = derivationSchemeParser;
-            _nbXplorerClientProvider = nbXplorerClientProvider;
             _recipeManager = recipeManager;
         }
 
@@ -82,25 +70,6 @@ namespace BtcTransmuter.Extension.Presets
             });
             var btcPayServices = services.Where(data => data.Type == BtcPayServerService.BtcPayServerServiceType);
             var smtpServices = services.Where(data => data.Type == SmtpService.SmtpExternalServiceType);
-            var stubOption = new ExternalServiceData()
-            {
-                Id = null,
-                Name = "None"
-            };
-//            if (!btcPayServices.Any())
-//            {
-//                var newServices = btcPayServices.ToList();
-//                newServices.Insert(0, stubOption);
-//                btcPayServices = newServices;
-//            }
-//
-//            if (!smtpServices.Any())
-//            {
-//                var newServices = smtpServices.ToList();
-//                newServices.Insert(0, stubOption);
-//                smtpServices = newServices;
-//            }
-
             return (btcPayServices, smtpServices);
         }
 

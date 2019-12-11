@@ -9,7 +9,7 @@ namespace BtcTransmuter.Models
         public string Id { get; set; }
         public string StatusMessage { get; set; }
         [Required] public string Name { get; set; }
-        [Required] public string Description { get; set; }
+        public string Description { get; set; }
         [Required] public bool Enabled { get; set; }
 
         public IEnumerable<RecipeAction> Actions { get; set; }

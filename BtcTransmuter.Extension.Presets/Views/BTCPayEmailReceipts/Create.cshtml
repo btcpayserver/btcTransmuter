@@ -60,10 +60,10 @@
         <div class="card-body">
             <h5 class="card-title">When do you want to send the email?</h5>
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedStatuses, "Value", "Text", Model.Status))" class="form-control"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
+                                  <label asp-for="Status" class="control-label"></label>
+                                  <select asp-for="Status" asp-items="@(new SelectList(BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged.InvoiceStatusChangedController.AllowedStatuses, "Value", "Text", Model.Status))" class="form-control"></select>
+                                  <span asp-validation-for="Status" class="text-danger"></span>
+                              </div>
         </div>
     </div>
     <div class="card  mb-2">
