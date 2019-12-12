@@ -4,9 +4,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-BtcTransmuter-065A2226-96CE-4371-A96D-97EFFCF0B153</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <Version>0.0.38</Version>
+    <Version>0.0.44</Version>
     <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
-    <PackageVersion>0.0.38</PackageVersion>
+    <PackageVersion>0.0.44</PackageVersion>
 
   </PropertyGroup>
 
