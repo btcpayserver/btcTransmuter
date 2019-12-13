@@ -29,6 +29,8 @@
                 else
                 {
                     <select asp-for="SelectedBTCPayExternalServiceId" asp-items="Model.BTCPayServices" class="form-control"></select>
+                    
+                    <a asp-controller="ExternalServices" asp-action="CreateExternalService" asp-route-selectedType="@BtcPayServerService.BtcPayServerServiceType">Create</a>
                 }
                 <span asp-validation-for="SelectedBTCPayExternalServiceId" class="text-danger"></span>
             </div>
@@ -76,6 +78,7 @@
                             <label asp-for="Conditions[index].ExchangeServiceId" class="control-label"></label>
 
                             <select asp-for="Conditions[index].ExchangeServiceId" asp-items="Model.ExchangeServices" class="form-control exchange-input" data-index="@index"></select>
+                               <a asp-controller="ExternalServices" asp-action="CreateExternalService" asp-route-selectedType="@ExchangeService.ExchangeServiceType">Create</a>
                             <span asp-validation-for="Conditions[index].ExchangeServiceId" class="text-danger"></span>
                         </div>
 

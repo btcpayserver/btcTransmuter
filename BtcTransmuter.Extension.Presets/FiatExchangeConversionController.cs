@@ -260,7 +260,7 @@ namespace BtcTransmuter.Extension.Presets
             [Required]
             public string MarketSymbol { get; set; }
             
-            [Display(Name = "Is it a buy or sell market order?")]
+            [Display(Name = "Is it a buy market order?")]
             [Required]
             public bool  IsBuy { get; set; }
         }
