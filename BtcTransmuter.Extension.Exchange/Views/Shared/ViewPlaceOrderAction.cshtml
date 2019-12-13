@@ -7,5 +7,5 @@
 }
 
 <div>
-    Place @(data.IsMargin ? "Margin" : "") @(data.IsBuy ? "Buy" : "Sell") @Enum.GetName(typeof(OrderType), data.OrderType) Order @data.Price on @data.MarketSymbol
+    Place <kbd>@(data.IsMargin ? "Margin" : "") @(data.IsBuy ? "Buy" : "Sell") @Enum.GetName(typeof(OrderType), data.OrderType)</kbd> Order of <kbd>@data.Amount</kbd> @if(!string.IsNullOrEmpty(@data.Price)){<kbd>at @data.Price</kbd>} on <kbd>@data.MarketSymbol</kbd>
 </div>
