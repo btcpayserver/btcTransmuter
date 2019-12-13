@@ -172,33 +172,27 @@ namespace BtcTransmuter.Extension.Presets
             {
                 RecipeId = recipe.Id
             };
-            
+
             foreach (var condition in vm.Conditions)
             {
                 await _recipeManager.AddRecipeActionGroup(recipeActionGroup);
                 var recipeActionGroupIndex = 0;
-
-                var balances = new List<string>();
-                foreach (var paymentType in GetPaymentsFromInvoiceController.PaymentTypes)
+                var getPayments = new RecipeAction()
                 {
-                    var getPayments =  new RecipeAction()
+                    RecipeId = recipe.Id,
+                    RecipeActionGroupId = recipeActionGroup.Id,
+                    ActionId = new GetPaymentsFromInvoiceDataActionHandler().ActionId,
+                    ExternalServiceId = vm.SelectedBTCPayExternalServiceId,
+                    Order = recipeActionGroupIndex,
+                    DataJson = JsonConvert.SerializeObject(new GetPaymentsFromInvoiceData()
                     {
-                        RecipeId = recipe.Id,
-                        RecipeActionGroupId = recipeActionGroup.Id,
-                        ActionId = new GetPaymentsFromInvoiceDataActionHandler().ActionId,
-                        ExternalServiceId = vm.SelectedBTCPayExternalServiceId,
-                        Order = recipeActionGroupIndex,
-                        DataJson = JsonConvert.SerializeObject(new GetPaymentsFromInvoiceData()
-                        {
-                            CryptoCode = condition.CryptoCode,
-                            InvoiceId = "{{TriggerData.Invoice.Id}}",
-                            PaymentType = paymentType.Value
-                        })
-                    };
-                    recipeActionGroupIndex++;
-                    await _recipeManager.AddOrUpdateRecipeAction(getPayments);
-                    balances.Add($"ActionData{recipeActionGroupIndex}.Sum(info => info.Value)");
-                }
+                        CryptoCode = condition.CryptoCode,
+                        InvoiceId = "{{TriggerData.Invoice.Id}}",
+                        PaymentType = ""
+                    })
+                };
+                recipeActionGroupIndex++;
+                await _recipeManager.AddOrUpdateRecipeAction(getPayments);
                 var tradeAction = new RecipeAction()
                 {
                     RecipeId = recipe.Id,
@@ -208,13 +202,13 @@ namespace BtcTransmuter.Extension.Presets
                     Order = recipeActionGroupIndex,
                     DataJson = JsonConvert.SerializeObject(new PlaceOrderData()
                     {
-                        Amount = "{{"+string.Join(" + ", balances)+"}}",
+                        Amount = "{{PreviousAction.Sum("+nameof(InvoicePaymentInfo.Value)+")}}",
                         IsBuy = condition.IsBuy,
                         MarketSymbol = condition.MarketSymbol,
                         OrderType = OrderType.Market
                     })
                 };
-                
+
                 recipeActionGroupIndex++;
                 await _recipeManager.AddOrUpdateRecipeAction(tradeAction);
             }
