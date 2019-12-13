@@ -35,11 +35,12 @@ namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
             var client = service.ConstructClient();
             var invoice = await client.GetInvoiceAsync<BtcPayInvoice>(invoiceId);
 
-            var payments = invoice.CryptoInfo.SingleOrDefault(info => info.CryptoCode.Equals(actionData.CryptoCode))?
-                               .Payments.Where(x =>
+            var payments = invoice.CryptoInfo.Where(info => info.CryptoCode.Equals(actionData.CryptoCode))
+                               .SelectMany(info => info.Payments)
+                               .Where(x =>
                                    string.IsNullOrEmpty(actionData.PaymentType) ||
                                    x.PaymentType.Equals(actionData.PaymentType))
-                               .ToList() ?? new List<InvoicePaymentInfo>();
+                               .ToList();
             
             return new BtcPayServerActionHandlerResult<List<InvoicePaymentInfo>>()
             {

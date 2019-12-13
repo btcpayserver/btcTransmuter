@@ -24,6 +24,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Actions.GetPaymentsFromInvoice
 
         public static readonly SelectListItem[] PaymentTypes =
         {
+            new SelectListItem("Any", ""),
             new SelectListItem("On-Chain", "BTCLike"),
             new SelectListItem("Off-Chain", "LightningLike")
         };
