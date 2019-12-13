@@ -76,10 +76,29 @@ namespace BtcTransmuter
                 }
             });
 
-            services.AddDataProtection()
-//                .SetApplicationName("btctransmuter")
-                .PersistKeysToFileSystem(Directory.CreateDirectory(options.DataProtectionDir));
 
+            var dataProtectionBuilder = services.AddDataProtection()
+                .PersistKeysToFileSystem(Directory.CreateDirectory(options.DataProtectionDir));
+            if (!string.IsNullOrEmpty(options.DataProtectionApplicationName))
+            {
+                var existingFiles = Directory.GetFiles(options.DataProtectionDir);
+                var markerFile = Path.Combine(options.DataProtectionDir, "appnamemarker");
+                if (!existingFiles.Any())
+                {
+                    //new install, no keys
+                    dataProtectionBuilder.SetApplicationName(options.DataProtectionApplicationName);
+                    using (StreamWriter sw = File.CreateText(markerFile)) {}
+                }else if (existingFiles.Contains("appnamemarker"))
+                {
+                    //marker was found, we can use the app name
+                    dataProtectionBuilder.SetApplicationName(options.DataProtectionApplicationName);
+                }
+                else
+                {
+                    //keys found with no marker, stay with old way
+                }
+            }
+            
             services.ConfigureApplicationCookie(x => {
                 x.Cookie.Name = ".AspNet.Cookie.btctransmuter";
             });

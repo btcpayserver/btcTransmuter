@@ -16,6 +16,7 @@ namespace BtcTransmuter
             RootPath = configuration.GetValue("RootPath", "");
             DatabaseConnectionString = configuration.GetValue<string>("Database");
             DataProtectionDir = configuration.GetValue<string>("DataProtectionDir");
+            DataProtectionApplicationName = configuration.GetValue<string>("DataProtectionApplicationName");
             DatabaseType = configuration.GetValue<DatabaseType>("DatabaseType", DatabaseType.Sqlite);
             UseDatabaseColumnEncryption = configuration.GetValue<bool>("UseDatabaseColumnEncryption", false);
             ExtensionsDir = configuration.GetValue<string>("ExtensionsDir",
@@ -39,6 +40,7 @@ namespace BtcTransmuter
             logger.LogWarning($"{JObject.FromObject(this)}");
         }
         public string RootPath { get; set; } = "";
+        public string DataProtectionApplicationName { get; set; } = "";
         public string ExtensionsDir { get; set; }
 
         public string DatabaseConnectionString { get; set; }
