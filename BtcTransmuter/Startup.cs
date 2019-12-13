@@ -77,7 +77,7 @@ namespace BtcTransmuter
             });
 
             services.AddDataProtection()
-                .SetApplicationName("btctransmuter")
+//                .SetApplicationName("btctransmuter")
                 .PersistKeysToFileSystem(Directory.CreateDirectory(options.DataProtectionDir));
 
             services.ConfigureApplicationCookie(x => {
