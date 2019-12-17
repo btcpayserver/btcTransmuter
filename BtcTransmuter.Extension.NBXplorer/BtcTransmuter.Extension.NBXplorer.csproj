@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         
-<TargetFramework>netcoreapp3.0</TargetFramework>
+<TargetFramework>netcoreapp3.1</TargetFramework>
 <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <OutputType>Library</OutputType>
     </PropertyGroup>
@@ -15,7 +15,7 @@
       <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="NBXplorer.Client" Version="2.0.0.26" />
+      <PackageReference Include="NBXplorer.Client" Version="3.0.1" />
     </ItemGroup>
     <ItemGroup>
       <UpToDateCheckInput Remove="Views\NBXplorerCreatePSBT\EditData.cshtml" />

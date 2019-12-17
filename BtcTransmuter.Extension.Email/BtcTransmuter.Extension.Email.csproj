@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         
-<TargetFramework>netcoreapp3.0</TargetFramework>
+<TargetFramework>netcoreapp3.1</TargetFramework>
 <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <OutputType>Library</OutputType>
     </PropertyGroup>
@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MailKit" Version="2.1.5.1" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0" />
+      <PackageReference Include="MailKit" Version="2.4.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.0" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />

@@ -73,7 +73,7 @@ namespace BtcTransmuter.Extension.Email.HostedServices
             await inbox.OpenAsync(FolderAccess.ReadOnly);
 
             var emailIds =
-                await inbox.SearchAsync(new DateSearchQuery(SearchTerm.SentAfter,
+                await inbox.SearchAsync(new DateSearchQuery(SearchTerm.DeliveredAfter,
                     data.LastCheck.GetValueOrDefault(data.PairedDate)));
 
 
