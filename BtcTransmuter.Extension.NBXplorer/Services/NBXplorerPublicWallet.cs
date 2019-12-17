@@ -66,6 +66,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             IEnumerable<PrivateKeyDetails> privateKeyDetails = null, FeeRate feeRate = null, Money fee = null)
         {
             var txBuilder = await CreateTransactionBuilder();
+            await AddTxOutsToTransaction(txBuilder, outgoing);
+            
             if (feeRate == null && fee == null)
             {
                 feeRate = (await _explorerClient.GetFeeRateAsync(20, new FeeRate(100L, 1))).FeeRate;
@@ -80,7 +82,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 txBuilder.SendEstimatedFees(feeRate);
             }
 
-            await AddTxOutsToTransaction(txBuilder, outgoing);
+            
 
             if (!(privateKeyDetails?.Any() ?? false)) return txBuilder.BuildTransaction(true);
             foreach (var privateKeyDetail in privateKeyDetails)

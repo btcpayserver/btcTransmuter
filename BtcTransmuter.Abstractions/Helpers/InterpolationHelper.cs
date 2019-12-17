@@ -1,15 +1,46 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Linq.Dynamic.Core.CustomTypeProviders;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using BtcTransmuter.Abstractions.Extensions;
 using Newtonsoft.Json;
 
 namespace BtcTransmuter.Abstractions.Helpers
 {
-    public class InterpolationHelper
+    public class TransmuterInterpolationTypeProvider : DefaultDynamicLinqCustomTypeProvider
     {
+        private readonly Type[] _types;
 
+        public TransmuterInterpolationTypeProvider(params Type[] types)
+        {
+            _types = types;
+        }
+        public override HashSet<Type> GetCustomTypes()
+        {
+            return _types.ToHashSet();
+        }
+    }
+    
+    public sealed class InterpolationTypeProvider : DefaultDynamicLinqCustomTypeProvider {
+        private readonly IEnumerable<DefaultDynamicLinqCustomTypeProvider> _typeProviders;
+
+        public InterpolationTypeProvider(IEnumerable<TransmuterInterpolationTypeProvider> typeProviders)
+        {
+            _typeProviders = typeProviders;
+            ParsingConfig.Default.CustomTypeProvider = this;
+            
+        }
+
+        public override HashSet<Type> GetCustomTypes()
+        {
+            return _typeProviders.SelectMany(provider => provider.GetCustomTypes()).ToHashSet();
+        }
+    }
+    public static class InterpolationHelper
+    {
         /// <summary>
         /// https://dotnetfiddle.net/MoqJFk
         /// </summary>
@@ -17,7 +48,6 @@ namespace BtcTransmuter.Abstractions.Helpers
         {
             try
             {
-            
                 var parameterExpressions =
                     data.Select(pair => Expression.Parameter(pair.Value.GetType(), pair.Key)).ToList();
              
@@ -27,7 +57,7 @@ namespace BtcTransmuter.Abstractions.Helpers
                         var processed =  JsonFunc(match.Groups[1].Value, data);
                         try
                         {
-                            var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(parameterExpressions.ToArray(), null,
+                            var e = DynamicExpressionParser.ParseLambda(parameterExpressions.ToArray(), null,
                                 processed);
                       
                             return (e.Compile().DynamicInvoke(data.Values.ToArray()) ?? "").ToString();
@@ -58,7 +88,7 @@ namespace BtcTransmuter.Abstractions.Helpers
              
                       
                                 var processed =  JsonFunc(match.Groups[1].Value, data);
-                                var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(parameterExpressions.ToArray(), null,
+                                var e = DynamicExpressionParser.ParseLambda(parameterExpressions.ToArray(), null,
                                     processed);
                       
                         return JsonConvert.SerializeObject(e.Compile().DynamicInvoke(data.Values.ToArray()));

@@ -9,7 +9,7 @@
         <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
         <PackageReference Include="NetCore.AutoRegisterDi" Version="1.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-        <PackageReference Include="wilx.System.Linq.Dynamic.Core" Version="2.1.0" />
+        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.19" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj" />

@@ -207,7 +207,7 @@ namespace BtcTransmuter.Extension.Presets
                     {
                         viewModel.AddModelError(
                             model => model.PaymentDestinations[index].AmountPercentage,
-                            "Your total amounts across all outputs exceeds 100% We're not a central bank and can't print more money than you own, sorry.",
+                            "Your total amounts across all outputs exceeds 100%. We're not a central bank and can't print more money than you own, sorry.",
                             ModelState);
                     }
 
@@ -412,11 +412,10 @@ namespace BtcTransmuter.Extension.Presets
                     DataJson = JsonConvert.SerializeObject(new GenerateNextAddressData())
                 };
                 await _recipeManager.AddOrUpdateRecipeAction(recipeAction);
-
                 ouputs.Add(new SendTransactionData.TransactionOutput()
                 {
-                    DestinationAddress = "{{Action" + recipeActionGroupIndex + "}}",
-                    Amount = "{{TriggerData.Balance * (" + paymentDestination.AmountPercentage + "/100)}}",
+                    DestinationAddress = "{{ActionData" + recipeActionGroupIndex + "}}",
+                    Amount = "{{TriggerData.Balance.ToDecimal(MoneyUnit.BTC) * (" + paymentDestination.AmountPercentage + "/100)}}",
                     SubtractFeesFromOutput = paymentDestination.SubtractFeesFromOutput
                 });
 

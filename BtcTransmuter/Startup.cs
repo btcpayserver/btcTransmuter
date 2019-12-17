@@ -58,6 +58,7 @@ namespace BtcTransmuter
             var options = new BtcTransmuterOptions(Configuration, _hostingEnvironment, _logger);
             services.AddSingleton(options);
             services.AddSingleton<IBtcTransmuterOptions>(options);
+            services.AddSingleton<InterpolationTypeProvider>();
             services.AddDbContext<ApplicationDbContext>(builder =>
             {
                 switch (options.DatabaseType)
@@ -115,7 +116,7 @@ namespace BtcTransmuter
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, BtcTransmuterOptions options,
-            IServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory, InterpolationTypeProvider interpolationTypeProvider)
         {
             DependencyHelper.ServiceScopeFactory = serviceScopeFactory;
             using (var scope = serviceScopeFactory.CreateScope())

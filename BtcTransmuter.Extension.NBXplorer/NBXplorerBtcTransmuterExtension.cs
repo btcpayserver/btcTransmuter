@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using BtcTransmuter.Abstractions.Extensions;
+using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Extension.NBXplorer.HostedServices;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using BtcTransmuter.Extension.NBXplorer.Services;
@@ -48,6 +49,8 @@ namespace BtcTransmuter.Extension.NBXplorer
             serviceCollection.AddSingleton<NBXplorerClientProvider>();
             serviceCollection.AddSingleton<DerivationSchemeParser>();
             serviceCollection.AddSingleton<NBXplorerPublicWalletProvider>();
+            serviceCollection.AddSingleton(provider =>
+                new TransmuterInterpolationTypeProvider(typeof(Money), typeof(MoneyExtensions), typeof(MoneyUnit)));
             serviceCollection.AddSingleton(provider =>
             {
                 var options = provider.GetService<NBXplorerOptions>();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
+using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Abstractions.Triggers;
 using ExtCore.Infrastructure;
 using ExtCore.Infrastructure.Actions;
@@ -57,6 +58,7 @@ namespace BtcTransmuter.Abstractions.Extensions
                 typeof(ITriggerDescriptor),
                 typeof(ITriggerHandler),
                 typeof(IExternalServiceDescriptor),
+                typeof(TransmuterInterpolationTypeProvider),
             });
             RegisterInstances(serviceCollection, new Type[]
             {
