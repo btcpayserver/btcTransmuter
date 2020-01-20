@@ -67,12 +67,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="entrypoint.sh">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\vendors\bootstrap" />
     <Folder Include="wwwroot\vendors\codemirror\mode" />
   </ItemGroup>
