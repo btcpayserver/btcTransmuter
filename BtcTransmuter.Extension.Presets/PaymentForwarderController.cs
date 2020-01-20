@@ -415,7 +415,8 @@ namespace BtcTransmuter.Extension.Presets
                 ouputs.Add(new SendTransactionData.TransactionOutput()
                 {
                     DestinationAddress = "{{ActionData" + recipeActionGroupIndex + "}}",
-                    Amount = "{{TriggerData.Balance.ToDecimal(MoneyUnit.BTC) * (" + paymentDestination.AmountPercentage + "/100)}}",
+                    Amount = "{{TriggerData.Balance.ToDecimal(MoneyUnit.BTC) * " +
+                             paymentDestination.AmountPercentage / 100 + "}}",
                     SubtractFeesFromOutput = paymentDestination.SubtractFeesFromOutput
                 });
 
