@@ -31,7 +31,7 @@ namespace BtcTransmuter.Services
                     using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                     {
                         var result = await context.Settings.SingleOrDefaultAsync(settings =>
-                            settings.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase));
+                            settings.Key == key);
                         return result == null ? Activator.CreateInstance<T>() : result.Get<T>();
                     }
                 }
@@ -44,7 +44,7 @@ namespace BtcTransmuter.Services
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
-                    var existing = await context.Settings.SingleOrDefaultAsync(settings1 => settings1.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase));
+                    var existing = await context.Settings.SingleOrDefaultAsync(settings1 => settings1.Key == key);
                     if (existing == null)
                     {
                         existing = new Settings()
