@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BtcTransmuter.Data.Entities
 {
-    public class RecipeInvocation
+    public class RecipeInvocation: BaseIdEntity
     {
-        public string Id { get; set; }
         public string RecipeId { get; set; }
         
         public string RecipeAction { get; set; }

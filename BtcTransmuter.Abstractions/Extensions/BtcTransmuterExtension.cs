@@ -6,8 +6,6 @@ using BtcTransmuter.Abstractions.Actions;
 using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Helpers;
 using BtcTransmuter.Abstractions.Triggers;
-using ExtCore.Infrastructure;
-using ExtCore.Infrastructure.Actions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace BtcTransmuter.Abstractions.Extensions
 {
-    public abstract class BtcTransmuterExtension: ExtensionBase, IExtension, IConfigureAction, IConfigureServicesAction
+    public abstract class BtcTransmuterExtension: IExtension
     {
 
         public abstract string Name { get; }
@@ -44,10 +42,6 @@ namespace BtcTransmuter.Abstractions.Extensions
         {
             Execute(serviceCollection);
         }
-
-        int IConfigureServicesAction.Priority => 0;
-
-        int IConfigureAction.Priority=> 0;
 
         public virtual void Execute(IServiceCollection serviceCollection)
         {

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace BtcTransmuter.Controllers
 {
@@ -21,12 +22,12 @@ namespace BtcTransmuter.Controllers
     {
         private readonly IEnumerable<BtcTransmuterExtension> _btcTransmuterExtensions;
         private readonly UserManager<User> _userManager;
-        private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IApplicationLifetime _applicationLifetime;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IHostApplicationLifetime _applicationLifetime;
 
         public ExtensionsController(IEnumerable<BtcTransmuterExtension> btcTransmuterExtensions,
             UserManager<User> userManager,
-            IHostingEnvironment hostingEnvironment, IApplicationLifetime applicationLifetime)
+            IWebHostEnvironment hostingEnvironment, IHostApplicationLifetime applicationLifetime)
         {
             _btcTransmuterExtensions = btcTransmuterExtensions;
             _userManager = userManager;
