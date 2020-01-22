@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
@@ -63,6 +62,8 @@
     <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\GetRecipeLogs.cshtml" />
     <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\GetRecipes.cshtml" />
     <_ContentIncludedByDefault Remove="Views\AdminRecipeAccess\RemoveRecipe.cshtml" />
+    <_ContentIncludedByDefault Remove="Extensions\BtcTransmuter.Extension.Lightning\web.config" />
+    <_ContentIncludedByDefault Remove="Extensions\BtcTransmuter.Extension.Lightning\BtcTransmuter.Extension.Lightning.deps.json" />
   </ItemGroup>
 
   <ItemGroup>

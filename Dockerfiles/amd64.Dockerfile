@@ -10,14 +10,12 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build
 WORKDIR /src
-COPY ["BtcTransmuter/BtcTransmuter.csproj", "BtcTransmuter/"]
-RUN dotnet restore "BtcTransmuter/BtcTransmuter.csproj"
 COPY . .
 WORKDIR "/src/BtcTransmuter"
-RUN dotnet build "BtcTransmuter.csproj" -c Release -o /app
+RUN dotnet restore
 
 FROM build AS publish
-RUN dotnet publish "BtcTransmuter.csproj" -c Release -o /app
+RUN dotnet publish -c Release -o /app
 
 FROM base AS final
 WORKDIR /app

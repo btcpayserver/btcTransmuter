@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="BTCPayServer.Lightning.All" Version="1.1.8" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+        
         <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
         <PackageReference Include="NBitcoin" Version="5.0.13" />
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
