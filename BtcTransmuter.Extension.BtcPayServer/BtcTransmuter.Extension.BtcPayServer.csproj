@@ -1,12 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     </PropertyGroup>
-
     <ItemGroup>
-
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj"/>
         <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj"/>
     </ItemGroup>
@@ -16,10 +13,4 @@
         <PackageReference Include="NBitcoin" Version="5.0.13"/>
         <PackageReference Include="NBitpayClient" Version="1.0.0.37"/>
     </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**"/>
-    </ItemGroup>
-
-
 </Project>

@@ -4,11 +4,6 @@
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <OutputType>Library</OutputType>
     </PropertyGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
-    </ItemGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
     </ItemGroup>

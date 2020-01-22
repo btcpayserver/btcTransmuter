@@ -4,23 +4,14 @@
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <OutputType>Library</OutputType>
     </PropertyGroup>
-
     <ItemGroup>
-        
       <PackageReference Include="DigitalRuby.ExchangeSharp" Version="0.6.4" />
     </ItemGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
       <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
-    </ItemGroup>
-
     <ItemGroup>
       <UpToDateCheckInput Remove="Views\SendEmail\EditData.cshtml" />
     </ItemGroup>
-
 </Project>

@@ -21,7 +21,7 @@ namespace BtcTransmuter
             var extensions = new List<BtcTransmuterExtension>();
 
             var loadedPluginAssemblies = GetDefaultLoadedPluginAssemblies();
-            providers.AddRange(loadedPluginAssemblies.Select(CreateEmbeddedFileProviderForAssembly));
+            // providers.AddRange(loadedPluginAssemblies.Select(CreateEmbeddedFileProviderForAssembly));
             extensions.AddRange(loadedPluginAssemblies.SelectMany(assembly =>
                 GetAllExtensionTypesFromAssembly(assembly).Select(GetExtensionInstanceFromType)));
 
@@ -41,7 +41,7 @@ namespace BtcTransmuter
                 mvcBuilder.AddPluginLoader(plugin);
 
                 var pluginAssembly = plugin.LoadDefaultAssembly();
-                providers.Add(CreateEmbeddedFileProviderForAssembly(pluginAssembly));
+                // providers.Add(CreateEmbeddedFileProviderForAssembly(pluginAssembly));
                 extensions.AddRange(GetAllExtensionTypesFromAssembly(pluginAssembly)
                     .Select(GetExtensionInstanceFromType));
             }

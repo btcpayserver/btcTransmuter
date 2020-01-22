@@ -4,17 +4,13 @@
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <OutputType>Library</OutputType>
     </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="BTCPayServer.Lightning.All" Version="1.1.8" />
-        
-        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
         <PackageReference Include="NBitcoin" Version="5.0.13" />
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />
     </ItemGroup>
-
     <ItemGroup>
       <UpToDateCheckInput Remove="Views\PlaceOrder\EditData.cshtml" />
     </ItemGroup>

@@ -5,8 +5,6 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-        
-        <EmbeddedResource Include="Styles\**;Views\**;Scripts\**" />
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
     </ItemGroup>
     <ItemGroup>
