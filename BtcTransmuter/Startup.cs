@@ -106,7 +106,7 @@ namespace BtcTransmuter
                 .AddDefaultTokenProviders();
 
 
-            var mvcBuilder = services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            var mvcBuilder = services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
         }
 
