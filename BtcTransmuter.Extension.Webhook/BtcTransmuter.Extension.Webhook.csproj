@@ -1,7 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        
+<TargetFramework>netcoreapp3.1</TargetFramework>
+<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,6 +13,6 @@
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.0" />
     </ItemGroup>
 </Project>

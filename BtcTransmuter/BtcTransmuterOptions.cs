@@ -1,4 +1,5 @@
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -10,7 +11,7 @@ namespace BtcTransmuter
     public class BtcTransmuterOptions : IBtcTransmuterOptions
     {
         public const string configPrefix = "TRANSMUTER_";
-        public BtcTransmuterOptions(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger logger)
+        public BtcTransmuterOptions(IConfiguration configuration, IWebHostEnvironment hostingEnvironment, ILogger logger)
         {
             
             RootPath = configuration.GetValue("RootPath", "");

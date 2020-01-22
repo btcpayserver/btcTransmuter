@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Extension.NBXplorer.Extensions;
 using BtcTransmuter.Extension.NBXplorer.Models;
 using NBitcoin;
 using NBXplorer;
@@ -28,7 +29,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
 
         public Money GetBalance(UTXOChanges utxoChanges)
         {
-            return utxoChanges.GetUnspentUTXOs().Select(c => c.Value).Sum();
+            return new Money(utxoChanges.GetUnspentUTXOs().Select(c => c.Value).Sum(money => money.GetValue(null)), MoneyUnit.BTC);
         }
 
         public async Task<UTXOChanges> GetUTXOs()

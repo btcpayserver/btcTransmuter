@@ -117,7 +117,7 @@ namespace BtcTransmuter.Extension.Presets
                     if (!symbols.Contains(condition.MarketSymbol))
                     {
                         viewModel.AddModelError(
-                            model => model.Conditions[index].MarketSymbol,
+                            $"{nameof(viewModel.Conditions)}[{index}].{nameof(CreateFiatExchangeConversionViewModel.ConversionConditionItem.MarketSymbol)}",
                             $"The market symbols you entered is invalid. Please choose from the following: {string.Join(",", symbols)}", ModelState);
                     }
                 }

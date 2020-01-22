@@ -15,8 +15,8 @@ namespace BtcTransmuter.Extension.Presets
         {
             _transmuterPresets = transmuterPresets;
         }
-        
 
+        [HttpGet]
         public async Task<IActionResult> ChoosePreset()
         {
             return View(new ChoosePresetViewModel()
@@ -24,8 +24,6 @@ namespace BtcTransmuter.Extension.Presets
                 Presets = _transmuterPresets
             });
         }
-
-
         public class ChoosePresetViewModel
         {
             public IEnumerable<ITransmuterPreset> Presets { get; set; }

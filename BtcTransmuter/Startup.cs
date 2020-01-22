@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BtcTransmuter.Abstractions.Extensions;
@@ -15,18 +14,18 @@ using BtcTransmuter.Services;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using ILogger = Microsoft.VisualStudio.Web.CodeGeneration.ILogger;
 
 namespace BtcTransmuter
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly Microsoft.Extensions.Logging.ILogger _logger;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly ILogger _logger;
 
-        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration,  ILoggerFactory logFactory)
+        public Startup(IWebHostEnvironment hostingEnvironment, IConfiguration configuration,  ILoggerFactory logFactory)
         {
             _hostingEnvironment = hostingEnvironment;
             _logger = logFactory.CreateLogger(nameof(Startup));
@@ -69,9 +68,6 @@ namespace BtcTransmuter
                     case DatabaseType.Postgres:
                         builder.UseNpgsql(options.DatabaseConnectionString);
                         break;
-                    case DatabaseType.SqlServer:
-                        builder.UseSqlServer(options.DatabaseConnectionString);
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -110,12 +106,12 @@ namespace BtcTransmuter
                 .AddDefaultTokenProviders();
 
 
-            var mvcBuilder = services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            var mvcBuilder = services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BtcTransmuterOptions options,
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BtcTransmuterOptions options,
             IServiceScopeFactory serviceScopeFactory, InterpolationTypeProvider interpolationTypeProvider)
         {
             DependencyHelper.ServiceScopeFactory = serviceScopeFactory;
