@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BtcTransmuter.Abstractions.Extensions;
@@ -24,7 +23,7 @@ namespace BtcTransmuter
     public class Startup
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly Microsoft.Extensions.Logging.ILogger _logger;
+        private readonly ILogger _logger;
 
         public Startup(IWebHostEnvironment hostingEnvironment, IConfiguration configuration,  ILoggerFactory logFactory)
         {
@@ -112,7 +111,7 @@ namespace BtcTransmuter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BtcTransmuterOptions options,
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BtcTransmuterOptions options,
             IServiceScopeFactory serviceScopeFactory, InterpolationTypeProvider interpolationTypeProvider)
         {
             DependencyHelper.ServiceScopeFactory = serviceScopeFactory;
