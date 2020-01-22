@@ -412,11 +412,11 @@ namespace BtcTransmuter.Extension.Presets
                     DataJson = JsonConvert.SerializeObject(new GenerateNextAddressData())
                 };
                 await _recipeManager.AddOrUpdateRecipeAction(recipeAction);
+                var noDecimalParse = paymentDestination.AmountPercentage / 100;
                 ouputs.Add(new SendTransactionData.TransactionOutput()
                 {
                     DestinationAddress = "{{ActionData" + recipeActionGroupIndex + "}}",
-                    Amount = "{{TriggerData.Balance.ToDecimal(MoneyUnit.BTC) * " +
-                             paymentDestination.AmountPercentage / 100 + "}}",
+                    Amount = "{{TriggerData.Balance.ToDecimal(MoneyUnit.BTC) * " + noDecimalParse + "}}",
                     SubtractFeesFromOutput = paymentDestination.SubtractFeesFromOutput
                 });
 
