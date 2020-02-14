@@ -81,6 +81,8 @@ namespace BtcTransmuter.Abstractions.Actions
                 {
                     return BadRequest("what you tryin to pull bro");
                 }
+
+                modelResult.ToSave.ExternalService = externalService;
             }
 
             await _recipeManager.AddOrUpdateRecipeAction(modelResult.ToSave);
