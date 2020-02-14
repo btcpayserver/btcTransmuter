@@ -141,6 +141,14 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
         public async Task SignTransaction(TransactionBuilder transactionBuilder, ExtKey extKey)
         {
             var utxos = await GetUTXOs();
+            
+            transactionBuilder.AddKeys(utxos.GetKeys(extKey));
+            if (TrackedSource is DerivationSchemeTrackedSource derivationSchemeTrackedSource)
+            {
+                transactionBuilder.AddKeys(utxos.GetKeys(extKey.Derive(GetDerivationKeyPath(
+                    GetScriptPubKeyType(derivationSchemeTrackedSource.DerivationStrategy), 0,
+                    _explorerClient.Network))));
+            }
             transactionBuilder.AddKeys(utxos.GetKeys(extKey));
         }
 
@@ -163,6 +171,36 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             }
 
             throw new InvalidOperationException();
+        }
+        
+        public  static KeyPath GetDerivationKeyPath(ScriptPubKeyType scriptPubKeyType, int accountNumber,
+            NBXplorerNetwork network)
+        {
+            var keyPath = new KeyPath(scriptPubKeyType == ScriptPubKeyType.Legacy ? "44'" :
+                scriptPubKeyType == ScriptPubKeyType.Segwit ? "84'" :
+                scriptPubKeyType == ScriptPubKeyType.SegwitP2SH ? "49'" :
+                throw new NotSupportedException(scriptPubKeyType.ToString())); // Should never happen
+            return keyPath.Derive(network.CoinType)
+                .Derive(accountNumber, true);
+        }
+        
+        public ScriptPubKeyType GetScriptPubKeyType(DerivationStrategyBase derivationStrategyBase)
+        {
+            if (IsSegwitCore(derivationStrategyBase))
+            {
+                return NBitcoin.ScriptPubKeyType.Segwit;
+            }
+
+            return (derivationStrategyBase is P2SHDerivationStrategy p2shStrat && IsSegwitCore(p2shStrat.Inner))
+                ? NBitcoin.ScriptPubKeyType.SegwitP2SH
+                : NBitcoin.ScriptPubKeyType.Legacy;
+            
+        }
+        
+        private static bool IsSegwitCore(DerivationStrategyBase derivationStrategyBase)
+        {
+            return (derivationStrategyBase is P2WSHDerivationStrategy) ||
+                   (derivationStrategyBase is DirectDerivationStrategy direct) && direct.Segwit;
         }
     }
 }
