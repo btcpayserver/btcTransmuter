@@ -77,7 +77,7 @@ namespace BtcTransmuter.Services
 					var queryable = context.RecipeInvocations
 						.Include(invocation => invocation.Recipe)
 						.ThenInclude(recipe => recipe.RecipeTrigger)
-						.AsQueryable();
+						.AsEnumerable();
 					if (query.OrderBy != null)
 					{
 						switch (query.OrderBy.Field)
@@ -92,10 +92,10 @@ namespace BtcTransmuter.Services
 						}
 					}
 
-					return await queryable
+					return queryable
 						.Where(invocation =>
 							invocation.RecipeId.Equals(query.RecipeId, StringComparison.InvariantCultureIgnoreCase))
-						.Skip(query.Skip).Take(query.Take).ToListAsync();
+						.Skip(query.Skip).Take(query.Take).ToList();
 				}
 			}
 		}
