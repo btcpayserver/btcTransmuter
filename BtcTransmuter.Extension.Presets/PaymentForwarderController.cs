@@ -18,8 +18,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.VisualBasic;
 using NBitcoin;
 using NBXplorer.DerivationStrategy;
+using NBXplorer.Models;
 using Newtonsoft.Json;
 
 namespace BtcTransmuter.Extension.Presets
@@ -313,17 +315,22 @@ namespace BtcTransmuter.Extension.Presets
 
             if (vm.GenerateSourceWallet)
             {
-                var newSeed = new Mnemonic(Wordlist.English, WordCount.Twelve);
+                var genResponse = await client.GenerateWalletAsync(new GenerateWalletRequest()
+                {
+                    ScriptPubKeyType = client.Network.NBitcoinNetwork.Consensus.SupportSegwit
+                        ? ScriptPubKeyType.SegwitP2SH
+                        : ScriptPubKeyType.Legacy,
+                });
                 
                 var data = new NBXplorerWalletExternalServiceData()
                 {
                     CryptoCode = vm.CryptoCode,
-                    DerivationStrategy = newSeed.DeriveExtKey().Neuter().ToString(client.Network.NBitcoinNetwork) + (client.Network.NBitcoinNetwork.Consensus.SupportSegwit? "-[p2sh]": "-[legacy]"),
+                    DerivationStrategy = genResponse.DerivationScheme.ToString(),
                     PrivateKeys = new List<PrivateKeyDetails>()
                     {
                         new PrivateKeyDetails()
                         {
-                            MnemonicSeed = newSeed.ToString()
+                            MnemonicSeed = genResponse.Mnemonic
                         }
                     }
                 };
