@@ -20,7 +20,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=build /app .
 
 ENV TRANSMUTER_Database="Data Source=data/btctransmuter.db;"
 ENV TRANSMUTER_DatabaseType="sqlite"
