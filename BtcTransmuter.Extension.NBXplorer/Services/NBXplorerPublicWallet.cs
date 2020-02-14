@@ -73,9 +73,10 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             {
                 feeRate = (await _explorerClient.GetFeeRateAsync(20, new FeeRate(100L, 1))).FeeRate;
             }
-            else if (fee != null)
+            
+            if (fee != null)
             {
-                txBuilder.SendFeesSplit(fee);
+                txBuilder.SendFees(fee);
             }
 
             if (feeRate != null)
