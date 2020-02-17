@@ -112,7 +112,7 @@ namespace BtcTransmuter.Services
 					}
 					else
 					{
-						context.Recipes.Attach(recipe).State = EntityState.Modified;
+						context.Entry(recipe).State = EntityState.Modified;
 					}
 
 					await context.SaveChangesAsync();
@@ -160,7 +160,7 @@ namespace BtcTransmuter.Services
 					}
 					else
 					{
-						context.RecipeActions.Attach(action).State = EntityState.Modified;
+						context.Entry(action).State = EntityState.Modified;
 					}
 
 					await context.SaveChangesAsync();
@@ -180,7 +180,7 @@ namespace BtcTransmuter.Services
 					}
 					else
 					{
-						context.RecipeActionGroups.Attach(recipeActionGroup).State = EntityState.Modified;
+						context.Entry(recipeActionGroup).State = EntityState.Modified;
 					}
 
 					await context.SaveChangesAsync();
@@ -191,13 +191,17 @@ namespace BtcTransmuter.Services
 		public async Task ReorderRecipeActionGroupActions(string recipeActionGroupId,
 			Dictionary<string, int> actionsOrder)
 		{
+			if (!(actionsOrder?.Any() ?? false))
+			{
+				return;
+			}
 			using (var scope = _serviceScopeFactory.CreateScope())
 			{
 				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
 				{
 					var actionGroup = await context.RecipeActionGroups.Include(group => group.RecipeActions)
 						.SingleAsync(group =>
-							group.Id.Equals(recipeActionGroupId, StringComparison.InvariantCultureIgnoreCase));
+							group.Id == recipeActionGroupId);
 
 
 					actionGroup.RecipeActions.ForEach(action =>

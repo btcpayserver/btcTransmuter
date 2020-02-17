@@ -260,9 +260,8 @@ namespace BtcTransmuter.Controllers
             {
                 return GetNotFoundActionResult();
             }
-
             await _recipeManager.ReorderRecipeActionGroupActions(actionGroupId,
-                vm.UpdateActionGroupOrderItems.ToDictionary(item => item.RecipeActionId, item => item.Order));
+                vm.UpdateActionGroupOrderItems?.ToDictionary(item => item.RecipeActionId, item => item.Order));
             return RedirectToAction("EditRecipe",
                 new {id = recipe.Id, statusMessage = "Recipe Action group order updated"});
         }
