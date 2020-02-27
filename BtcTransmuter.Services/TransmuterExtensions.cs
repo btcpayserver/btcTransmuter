@@ -3,6 +3,7 @@ using BtcTransmuter.Abstractions.ExternalServices;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Settings;
 using BtcTransmuter.Abstractions.Triggers;
+using BtcTransmuter.Abstractions.U2F;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BtcTransmuter.Services
@@ -16,6 +17,7 @@ namespace BtcTransmuter.Services
             collection.AddSingleton<IActionDispatcher, ActionDispatcher>();
             collection.AddSingleton<ITriggerDispatcher, TriggerDispatcher>();
             collection.AddSingleton<ISettingsManager, SettingsManager>();
+            collection.AddSingleton<IU2FService, U2FService>();
         }
     }
 }

@@ -26,7 +26,8 @@ namespace BtcTransmuter.Data
         public DbSet<RecipeInvocation> RecipeInvocations { get; set; }
         public DbSet<RecipeTrigger> RecipeTriggers { get; set; }
         public DbSet<RecipeAction> RecipeActions { get; set; }
-        public DbSet<Settings> Settings { get; set; }
+        public DbSet<Settings> Settings { get; set; } 
+        public DbSet<U2FDevice> U2FDevices { get; set; }   
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -44,6 +44,7 @@ namespace BtcTransmuter
                 identityOptions.Password.RequireUppercase = false;
                 identityOptions.Password.RequiredUniqueChars = 0;
                 identityOptions.Password.RequireNonAlphanumeric = false;
+                identityOptions.User.RequireUniqueEmail = true;
             });
             
             services.Configure<SecurityStampValidatorOptions>(validatorOptions =>  validatorOptions.ValidationInterval = TimeSpan.FromSeconds(50));

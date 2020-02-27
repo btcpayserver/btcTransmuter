@@ -5,7 +5,10 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj"/>
-        <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj"/>
+        <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+        <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="U2F.Core" Version="2.0.1" />
     </ItemGroup>
 </Project>
