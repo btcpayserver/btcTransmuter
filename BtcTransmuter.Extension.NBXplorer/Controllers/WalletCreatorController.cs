@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BtcTransmuter.Extension.NBXplorer.Models;
@@ -34,28 +33,30 @@ namespace BtcTransmuter.Extension.NBXplorer.Controllers
             });
         }
 
-        [HttpGet("{cryptoCode}/{mnemonic?}")]
-        public IActionResult GetWallet(string cryptoCode, string mnemonic)
+        [HttpPost("{cryptoCode}")]
+        public IActionResult GetWallet(string cryptoCode, [FromForm] string mnemonic)
         {
-            if (string.IsNullOrEmpty(mnemonic))
-            {
-                return RedirectToAction("GetWallet", new
-                {
-                    cryptoCode = cryptoCode,
-                    mnemonic = new Mnemonic(Wordlist.English).ToString()
-                });
-            }
+            return ActionResult(cryptoCode, string.IsNullOrEmpty(mnemonic) ? null : new Mnemonic(mnemonic));
+        }
 
+        [HttpGet("{cryptoCode}")]
+        public IActionResult GetWallet(string cryptoCode)
+        {
+            return ActionResult(cryptoCode);
+        }
+
+        private IActionResult ActionResult(string cryptoCode, Mnemonic mnemonic = null)
+        {
             var network = _nbXplorerClientProvider.GetClient(cryptoCode).Network;
 
             var addressTypes = new Dictionary<ScriptPubKeyType, GetWalletViewModel.GetWalletViewModelAddressType>();
-            var mnemonicSeed = new Mnemonic(mnemonic);
+            var mnemonicSeed = mnemonic ?? new Mnemonic(Wordlist.English);
             var extKey = mnemonicSeed.DeriveExtKey();
             var wif = extKey.GetWif(network.NBitcoinNetwork);
             var privateKey = extKey.PrivateKey;
             var secret = privateKey.GetBitcoinSecret(network.NBitcoinNetwork);
-
             
+
             if (network.NBitcoinNetwork.Consensus.SupportSegwit)
             {
                 var segwitExtPubkey = extKey
@@ -70,24 +71,26 @@ namespace BtcTransmuter.Extension.NBXplorer.Controllers
                 var segwit = _derivationSchemeParser.Parse(network.DerivationStrategyFactory, $"{segwitExtPubkey}");
                 var p2sh = _derivationSchemeParser.Parse(network.DerivationStrategyFactory, $"{p2shExtPubKey}-[p2sh]");
 
-                
+
                 addressTypes.Add(ScriptPubKeyType.Segwit, new GetWalletViewModel.GetWalletViewModelAddressType()
                 {
                     Description = "BTCPay / BTCTransmuter compatible xpub for segwit addresses",
                     DerivationScheme = segwit.ToString(),
                     Addresses = GenerateAddresses(segwit, network),
-                    RootKeyPath = NBXplorerPublicWallet.GetDerivationKeyPath(ScriptPubKeyType.Segwit, 0, network).ToString()
+                    RootKeyPath ="m/" + NBXplorerPublicWallet.GetDerivationKeyPath(ScriptPubKeyType.Segwit, 0, network)
+                        .ToString()
                 });
-                
+
                 addressTypes.Add(ScriptPubKeyType.SegwitP2SH, new GetWalletViewModel.GetWalletViewModelAddressType()
                 {
                     Description = "BTCPay / BTCTransmuter compatible xpub for p2sh addresses",
                     DerivationScheme = p2sh.ToString(),
                     Addresses = GenerateAddresses(p2sh, network),
-                    RootKeyPath = NBXplorerPublicWallet.GetDerivationKeyPath(ScriptPubKeyType.SegwitP2SH, 0, network).ToString()
+                    RootKeyPath = "m/" + NBXplorerPublicWallet.GetDerivationKeyPath(ScriptPubKeyType.SegwitP2SH, 0, network)
+                        .ToString()
                 });
             }
-            
+
             var legacyExtPubkey = extKey
                 .Derive(NBXplorerPublicWallet.GetDerivationKeyPath(ScriptPubKeyType.Legacy, 0, network)).Neuter()
                 .ToString(network.NBitcoinNetwork);
@@ -99,18 +102,19 @@ namespace BtcTransmuter.Extension.NBXplorer.Controllers
                 Description = "BTCPay / BTCTransmuter compatible xpub for legacy addresses",
                 DerivationScheme = legacy.ToString(),
                 Addresses = GenerateAddresses(legacy, network),
-                RootKeyPath = NBXplorerPublicWallet.GetDerivationKeyPath(ScriptPubKeyType.Legacy, 0, network).ToString()
+                RootKeyPath = "m/" +NBXplorerPublicWallet.GetDerivationKeyPath(ScriptPubKeyType.Legacy, 0, network).ToString()
             });
 
             return View(new GetWalletViewModel()
             {
-                Mnemonic = mnemonic,
+                Mnemonic = mnemonicSeed.ToString(),
                 Network = network,
                 CryptoCode = cryptoCode,
                 CryptoCodes = _nbXplorerOptions.Cryptos,
                 PrivateKey = privateKey,
                 WIF = wif,
                 ExtPubKey = extKey.Neuter().ToString(network.NBitcoinNetwork),
+                Fingerprint = extKey.Neuter().PubKey.GetHDFingerPrint().ToString(),
                 AddressTypes = addressTypes,
                 Address = secret.GetAddress(ScriptPubKeyType.Legacy),
                 SegwitAddress = network.NBitcoinNetwork.Consensus.SupportSegwit
@@ -118,7 +122,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Controllers
                     : null,
                 P2SHAddress = network.NBitcoinNetwork.Consensus.SupportSegwit
                     ? secret.GetAddress(ScriptPubKeyType.SegwitP2SH)
-                    : null
+                    : null,
+                
             });
         }
 
@@ -147,8 +152,8 @@ namespace BtcTransmuter.Extension.NBXplorer.Controllers
             public Key PrivateKey { get; set; }
             public BitcoinExtKey WIF { get; set; }
             public string ExtPubKey { get; set; }
-
-            public Dictionary<ScriptPubKeyType,GetWalletViewModelAddressType> AddressTypes { get; set; }
+            public string Fingerprint { get; set; }
+            public Dictionary<ScriptPubKeyType, GetWalletViewModelAddressType> AddressTypes { get; set; }
             public BitcoinAddress SegwitAddress { get; set; }
             public BitcoinAddress Address { get; set; }
             public BitcoinAddress P2SHAddress { get; set; }
@@ -158,7 +163,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Controllers
                 public string Description { get; set; }
                 public string DerivationScheme { get; set; }
                 public string RootKeyPath { get; set; }
-                public Dictionary<string , string> Addresses { get; set; }
+                public Dictionary<string, string> Addresses { get; set; }
             }
         }
     }

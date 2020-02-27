@@ -20,7 +20,12 @@
     <div class="card-body">
         <div class="form-group">
             <label class="control-label">Mnemonic Seed</label>
-            <input readonly class="form-control" value="@Model.Mnemonic"/>
+            <form class="input-group" method="post" asp-action="GetWallet" asp-route-cryptoCode="@Model.CryptoCode">
+                <input asp-for="Mnemonic" class="form-control"/>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary">Load</button>
+                </div>
+            </form>
         </div>
         <div class="form-group">
             <label class="control-label">Master Private Key</label>
@@ -34,13 +39,17 @@
             <label class="control-label">Master Extended Public key</label>
             <input readonly class="form-control" value="@Model.ExtPubKey"/>
         </div>
+        <div class="form-group">
+            <label class="control-label">Root Fingerprint</label>
+            <input readonly class="form-control" value="@Model.Fingerprint"/>
+        </div>
         <div class="card">
             <nav>
                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                @for (int i = 0; i < Model.AddressTypes.Count; i++)
-                {
-                    var item = Model.AddressTypes.ElementAt(i);
-                        <a class="nav-item nav-link @(i == 0? "active": "")" href="#tab-hd-@item.Key" id="nav-hd-@item.Key" data-toggle="tab" h role="tab">@item.Key</a>
+                    @for (int i = 0; i < Model.AddressTypes.Count; i++)
+                    {
+                        var item = Model.AddressTypes.ElementAt(i);
+                        <a class="nav-item nav-link @(i == 0 ? "active" : "")" href="#tab-hd-@item.Key" id="nav-hd-@item.Key" data-toggle="tab" h role="tab">@item.Key</a>
                     }
 
                     <a class="nav-item nav-link" href="#tab-singular" id="nav-singular" data-toggle="tab" role="tab">Singular Addresses</a>
@@ -50,10 +59,14 @@
                 @for (int i = 0; i < Model.AddressTypes.Count; i++)
                 {
                     var item = Model.AddressTypes.ElementAt(i);
-                    <div class="tab-pane p-2 @(i == 0? "show active": "")" id="tab-hd-@item.Key" role="tabpanel" id="tab-hd-@item.Key">
+                    <div class="tab-pane p-2 @(i == 0 ? "show active" : "")" id="tab-hd-@item.Key" role="tabpanel" id="tab-hd-@item.Key">
                         <div class="form-group">
                             <label class="control-label">@item.Value.Description</label>
                             <input readonly class="form-control" value="@item.Value.DerivationScheme"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Account Key Path</label>
+                            <input readonly class="form-control" value="@item.Value.RootKeyPath"/>
                         </div>
                         <div class="form-group">
                             <table class="table table-sm table-responsive-md">
@@ -67,14 +80,15 @@
                                 @foreach (var sample in item.Value.Addresses)
                                 {
                                     <tr>
-                                        <td><span class="text-muted ">@item.Value.RootKeyPath/</span>@sample.Key</td>
+                                        <td>
+                                            <span class="text-muted ">@item.Value.RootKeyPath/</span>@sample.Key</td>
                                         <td>@sample.Value</td>
                                     </tr>
                                 }
                                 </tbody>
                             </table>
                         </div>
-                    </div>   
+                    </div>
                 }
 
                 <div class="tab-pane p-2" id="tab-singular" role="tabpanel">
