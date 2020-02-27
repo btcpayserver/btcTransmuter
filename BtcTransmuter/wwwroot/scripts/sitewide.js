@@ -100,18 +100,30 @@ $(document).ready(function () {
     $('.richtext.html').on('summernote.init', function () {
         $(this).summernote('codeview.activate');
     });
-    
-    $(".richtext").summernote({
-        height: 300,
-        codemirror: {
-            mode: 'text/html',
-            htmlMode: true,
-            lineNumbers: true,
-            theme: 'monokai',
-            extraKeys: {"Ctrl-Space": "autocomplete"},
-        }
+
+    $(".richtext").each(function () {
+        $(this).summernote({
+            height: 300,
+            codemirror: {
+                mode: 'text/html',
+                htmlMode: true,
+                lineNumbers: true,
+                theme: 'monokai',
+                extraKeys: {"Ctrl-Space": "autocomplete"},
+            }
+        });
     });
-    
+
+
+    $(".qr-code").each(function () {
+        new QRCode($(this).get(0),
+            {
+                text: $(this).data("url"),
+                width: 150,
+                height: 150
+            });
+    });
+
     function handleInputGroupClearButtonDisplay(element) {
         var inputs = $(element).parents(".input-group").find("input");
 
