@@ -150,6 +150,8 @@ namespace BtcTransmuter.Services
 
 		public async Task AddOrUpdateRecipeAction(RecipeAction action)
 		{
+			var oldES = action.ExternalService;
+			action.ExternalService = null;
 			using (var scope = _serviceScopeFactory.CreateScope())
 			{
 				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
@@ -160,10 +162,12 @@ namespace BtcTransmuter.Services
 					}
 					else
 					{
+						
 						context.Entry(action).State = EntityState.Modified;
 					}
 
 					await context.SaveChangesAsync();
+					action.ExternalService = oldES;
 				}
 			}
 		}
