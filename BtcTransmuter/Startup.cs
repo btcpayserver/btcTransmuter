@@ -12,7 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -97,10 +100,13 @@ namespace BtcTransmuter
                 }
             }
             
-            services.ConfigureApplicationCookie(x => {
-                x.Cookie.Name = ".AspNet.Cookie.btctransmuter";
+            services.ConfigureApplicationCookie(authenticationOptions => {
+                authenticationOptions.Cookie.Name = ".AspNet.Cookie.btctransmuter";
+                authenticationOptions.ForwardDefaultSelector = context =>
+                    context.Request.Path.StartsWithSegments(new PathString("/api"))
+                        ? nameof(AuthenticationSchemes.Basic)
+                        : CookieAuthenticationDefaults.AuthenticationScheme;
             });
-            
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
