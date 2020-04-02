@@ -21,6 +21,9 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Input.AllowBasicAuth"></label>
+                <input asp-for="Input.AllowBasicAuth" class="form-check"/>
+                <span asp-validation-for="Input.AllowBasicAuth" class="text-danger"></span>
             </div>
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>

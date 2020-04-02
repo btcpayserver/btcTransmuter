@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.Helpers;
+using BtcTransmuter.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -105,7 +106,8 @@ namespace BtcTransmuter
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-
+            services.AddAuthentication().AddCookie().AddBasicAuth();
+                
             var mvcBuilder = services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
         }

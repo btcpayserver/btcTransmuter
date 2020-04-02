@@ -11,4 +11,9 @@ namespace BtcTransmuter.Data.Entities
 
         [Encrypted] public string DataJson { get; set; }
     }
+
+    public class UserBlob
+    {
+        public bool BasicAuth { get; set; }
+    }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
+using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,8 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account.Manage
         {
             [Required] [EmailAddress] public string Email { get; set; }
 
+            [Display(Name = "Allow Basic Auth using this account")]
+            public bool AllowBasicAuth { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -53,6 +56,7 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 Email = email,
+                AllowBasicAuth = user.Get<UserBlob>().BasicAuth
             };
 
             return Page();
@@ -66,6 +70,7 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await _userManager.GetUserAsync(User);
+            var blob = user.Get<UserBlob>();
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
