@@ -101,6 +101,7 @@ namespace BtcTransmuter
             }
             
             services.ConfigureApplicationCookie(authenticationOptions => {
+                
                 authenticationOptions.Cookie.Name = ".AspNet.Cookie.btctransmuter";
                 authenticationOptions.ForwardDefaultSelector = context =>
                     context.Request.Path.StartsWithSegments(new PathString("/api"))
@@ -112,7 +113,7 @@ namespace BtcTransmuter
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication().AddCookie().AddBasicAuth();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie().AddBasicAuth();
                 
             var mvcBuilder = services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
