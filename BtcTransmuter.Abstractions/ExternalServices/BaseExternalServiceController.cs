@@ -35,7 +35,7 @@ namespace BtcTransmuter.Abstractions.ExternalServices
             {
                 return result.Error;
             }
-
+            
             return View(await BuildViewModel(result.Data));
         }
 
