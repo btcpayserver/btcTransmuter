@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.Models;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
@@ -13,6 +14,7 @@ namespace BtcTransmuter.Controllers
 {
     [Authorize]
     [Route("recipes")]
+    [Route("api/recipes", Order = 2)]
     public class RecipesController : Controller
     {
         private readonly IRecipeManager _recipeManager;
@@ -31,8 +33,7 @@ namespace BtcTransmuter.Controllers
             {
                 UserId = GetUserId()
             });
-
-            return View("GetRecipes",new GetRecipesViewModel()
+            return this.ViewOrJson("GetRecipes", new GetRecipesViewModel()
             {
                 StatusMessage = statusMessage,
                 Recipes = recipes,
@@ -65,6 +66,10 @@ namespace BtcTransmuter.Controllers
             }
 
             await _recipeManager.RemoveRecipe(id);
+            if (this.IsApi())
+            {
+                return Ok();
+            }
             return RedirectToAction("GetRecipes", new
             {
                 statusMessage = new StatusMessageModel()
@@ -97,7 +102,7 @@ namespace BtcTransmuter.Controllers
                 }
             });
 
-            return View(new GetRecipeLogsViewModel()
+            return this.ViewOrJson(new GetRecipeLogsViewModel()
             {
                 Name = recipe.Name,
                 Id = id,
@@ -113,6 +118,10 @@ namespace BtcTransmuter.Controllers
 	        var result = await _recipeManager.CloneRecipe(id, enabled, name);
 	        if (result == null)
 	        {
+                if (this.IsApi())
+                {
+                    return BadRequest();
+                }
 		        return RedirectToAction(nameof(GetRecipes), new
 		        {
 			        statusMessage = new StatusMessageModel()
@@ -123,6 +132,10 @@ namespace BtcTransmuter.Controllers
 		        });
 	        }
 
+            if (this.IsApi())
+            {
+                return await EditRecipe(result.Id, (string)null);
+            }
 	        return RedirectToAction(nameof(EditRecipe), new
 	        {
 		        id = result.Id,
@@ -148,7 +161,7 @@ namespace BtcTransmuter.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(viewModel);
+                return this.ViewOrBadRequest(viewModel);
             }
 
             var recipe = new Recipe()
@@ -162,9 +175,13 @@ namespace BtcTransmuter.Controllers
             if (string.IsNullOrEmpty(recipe.Id))
             {
                 ModelState.AddModelError(string.Empty, "Could not save recipe");
-                return View(viewModel);
+                return this.ViewOrBadRequest(viewModel);
             }
 
+            if (this.IsApi())
+            {
+                return await EditRecipe(recipe.Id, (string) null);
+            }
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe created"});
         }
 
@@ -182,7 +199,7 @@ namespace BtcTransmuter.Controllers
             {
                 group.RecipeActions = group.RecipeActions.OrderBy(action => action.Order).ToList();
             });
-            return View(new EditRecipeViewModel()
+            return this.ViewOrJson(new EditRecipeViewModel()
             {
                 Id = id,
                 StatusMessage = statusMessage,
@@ -215,6 +232,10 @@ namespace BtcTransmuter.Controllers
 
             await _recipeManager.AddOrUpdateRecipe(recipe);
 
+            if (this.IsApi())
+            {
+                return await EditRecipe(recipe.Id, (string) null);
+            }
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe edited"});
         }
 
@@ -231,6 +252,10 @@ namespace BtcTransmuter.Controllers
             {
                 RecipeId = recipe.Id
             });
+            if (this.IsApi())
+            {
+                return await EditRecipe(recipe.Id, (string) null);
+            }
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe Action group added"});
         }
 
@@ -246,6 +271,10 @@ namespace BtcTransmuter.Controllers
             }
 
             await _recipeManager.RemoveRecipeActionGroup(actionGroupId);
+            if (this.IsApi())
+            {
+                return await EditRecipe(recipe.Id, (string) null);
+            }
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe Action group removed"});
         }
 
@@ -262,13 +291,21 @@ namespace BtcTransmuter.Controllers
             }
             await _recipeManager.ReorderRecipeActionGroupActions(actionGroupId,
                 vm.UpdateActionGroupOrderItems?.ToDictionary(item => item.RecipeActionId, item => item.Order));
+            if (this.IsApi())
+            {
+                return await EditRecipe(recipe.Id, (string) null);
+            }
             return RedirectToAction("EditRecipe",
                 new {id = recipe.Id, statusMessage = "Recipe Action group order updated"});
         }
 
 
-        private RedirectToActionResult GetNotFoundActionResult()
+        private ActionResult GetNotFoundActionResult()
         {
+            if (this.IsApi())
+            {
+                return NotFound();
+            }
             return RedirectToAction("GetRecipes", new
             {
                 statusMessage = new StatusMessageModel()
