@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -55,10 +56,14 @@ namespace BtcTransmuter.Auth
             {
                 return AuthenticateResult.Fail("This user does not have basic auth enabled.");
             }
+            
             var claims = new List<Claim>()
             {
                 new Claim(_identityOptions.CurrentValue.ClaimsIdentity.UserIdClaimType, user.Id),
+               
             };
+            var roles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(roles.Select(s =>  new Claim(_identityOptions.CurrentValue.ClaimsIdentity.RoleClaimType, s) ));
 
             return AuthenticateResult.Success(new AuthenticationTicket(
                 new ClaimsPrincipal(new ClaimsIdentity(claims, nameof(AuthenticationSchemes.Basic))),

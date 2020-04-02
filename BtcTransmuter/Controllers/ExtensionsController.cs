@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace BtcTransmuter.Controllers
 {
@@ -23,16 +22,14 @@ namespace BtcTransmuter.Controllers
         private readonly IEnumerable<BtcTransmuterExtension> _btcTransmuterExtensions;
         private readonly UserManager<User> _userManager;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly IHostApplicationLifetime _applicationLifetime;
 
         public ExtensionsController(IEnumerable<BtcTransmuterExtension> btcTransmuterExtensions,
             UserManager<User> userManager,
-            IWebHostEnvironment hostingEnvironment, IHostApplicationLifetime applicationLifetime)
+            IWebHostEnvironment hostingEnvironment)
         {
             _btcTransmuterExtensions = btcTransmuterExtensions;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
-            _applicationLifetime = applicationLifetime;
         }
 
         [HttpGet("")]
@@ -53,8 +50,7 @@ namespace BtcTransmuter.Controllers
         public async Task<IActionResult> UploadExtension(List<IFormFile> files)
         {
             var dest = Path.Combine(_hostingEnvironment.ContentRootPath, "Extensions");
-
-
+            
             foreach (var formFile in files)
             {
                 if (formFile.Length > 0)
@@ -76,7 +72,6 @@ namespace BtcTransmuter.Controllers
                 }
             }
 
-//            _applicationLifetime.StopApplication();
             return RedirectToAction("Extensions", new
             {
                 StatusMessage = "Files uploaded, restart server to load plugins"
