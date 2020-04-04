@@ -1,0 +1,29 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "BTC Transmuter API",
+        "description": "A full API to use your BTCTransmuter programmatically",
+        "version": "v1"
+    },
+    "servers": [
+    ],
+    "paths": {
+    },
+    "components": {
+    },
+    "securitySchemes": {
+        "Basic": {
+            "type": "http",
+            "description": "BTCTransmuter supports authenticating and authorizing users through the Basic HTTP authentication scheme. Send the user and password encoded in base64 with the format `Basic {base64(username:password)}`.",
+            "name": "Authorization",
+            "in": "header",
+            "scheme": "Basic"
+        }
+    },
+    "security": [
+        {
+            "Basic": []
+        }
+    ],
+    "tags": []
+}
