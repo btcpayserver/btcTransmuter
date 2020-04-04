@@ -123,7 +123,8 @@ namespace BtcTransmuter
             var mvcBuilder = services.AddMvc(mvcOptions =>
             {
                 mvcOptions.EnableEndpointRouting = false;
-            });
+            })
+                .AddNewtonsoftJson();
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
         }
 
