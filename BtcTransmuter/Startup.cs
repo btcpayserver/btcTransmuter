@@ -13,6 +13,7 @@ using BtcTransmuter.Data;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.HttpSys;
@@ -103,19 +104,26 @@ namespace BtcTransmuter
             services.ConfigureApplicationCookie(authenticationOptions => {
                 
                 authenticationOptions.Cookie.Name = ".AspNet.Cookie.btctransmuter";
-                authenticationOptions.ForwardDefaultSelector = context =>
-                    context.Request.Path.StartsWithSegments(new PathString("/api"))
-                        ? nameof(AuthenticationSchemes.Basic)
-                        : CookieAuthenticationDefaults.AuthenticationScheme;
             });
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie().AddBasicAuth();
+            services.AddAuthentication().AddCookie().AddBasicAuth();
                 
-            var mvcBuilder = services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+            services
+                .AddAuthorization(options =>
+                {
+                    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme,nameof(AuthenticationSchemes.Basic))
+                        .Build();
+                });
+            var mvcBuilder = services.AddMvc(mvcOptions =>
+            {
+                mvcOptions.EnableEndpointRouting = false;
+            });
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
         }
 
