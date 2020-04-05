@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -66,8 +67,7 @@ namespace BtcTransmuter.Auth
             claims.AddRange(roles.Select(s =>  new Claim(_identityOptions.CurrentValue.ClaimsIdentity.RoleClaimType, s) ));
 
             return AuthenticateResult.Success(new AuthenticationTicket(
-                new ClaimsPrincipal(new ClaimsIdentity(claims, nameof(AuthenticationSchemes.Basic))),
-                nameof(AuthenticationSchemes.Basic)));
+                new ClaimsPrincipal(new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme)),IdentityConstants.ApplicationScheme));
         }
     }
 }
