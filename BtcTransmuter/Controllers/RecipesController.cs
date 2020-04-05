@@ -239,7 +239,7 @@ namespace BtcTransmuter.Controllers
             return RedirectToAction("EditRecipe", new {id = recipe.Id, statusMessage = "Recipe edited"});
         }
 
-        [HttpGet("{id}/action-groups/add")]
+        [HttpPost("{id}/action-groups/add")]
         public virtual async Task<IActionResult> AddRecipeActionGroup(string id)
         {
             var recipe = await _recipeManager.GetRecipe(id, GetUserId());

@@ -139,7 +139,9 @@
 
     </div>
     <div class="card-footer">
-        <a asp-action="AddRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.Id">Add Action Group</a>
+        <form asp-action="AddRecipeActionGroup" asp-controller="Recipes" asp-route-id="@Model.Id">
+            <button type="submit" class="btn btn-link">Add Action Group</button>
+        </form>       
     </div>
 </div>
 <div class="mt-2">
