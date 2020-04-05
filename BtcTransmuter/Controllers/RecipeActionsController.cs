@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Actions;
+using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
@@ -14,6 +15,7 @@ namespace BtcTransmuter.Controllers
 {
     [Authorize]
     [Route("recipes/{id}/actions")]
+    [Route("api/recipes/{id}/actions", Order=2)]
     public class RecipeActionsController : Controller
     {
         private readonly IRecipeManager _recipeManager;
@@ -47,7 +49,7 @@ namespace BtcTransmuter.Controllers
                 }
             }
 
-            return View(new EditRecipeActionViewModel()
+            return this.ViewOrJson(new EditRecipeActionViewModel()
             {
                 RecipeId = id,
                 ActionId = recipeAction?.ActionId,
@@ -80,7 +82,7 @@ namespace BtcTransmuter.Controllers
                 model.RecipeAction = recipeAction;
                 model.Actions = new SelectList(_actionDescriptors, nameof(IActionDescriptor.ActionId),
                     nameof(IActionDescriptor.Name), model.ActionId);
-                return View(model);
+                return this.ViewOrBadRequest(model);
             }
 
             if (string.IsNullOrEmpty(recipeActionId) || recipeAction.ActionId != model.ActionId)
@@ -142,6 +144,10 @@ namespace BtcTransmuter.Controllers
             }
 
             await _recipeManager.RemoveRecipeAction(recipeActionId);
+            if (this.IsApi())
+            {
+                return Ok();
+            }
             return RedirectToAction("EditRecipe", "Recipes", new
             {
                 id,
@@ -153,8 +159,12 @@ namespace BtcTransmuter.Controllers
             });
         }
 
-        private RedirectToActionResult GetNotFoundActionResult()
+        private ActionResult GetNotFoundActionResult()
         {
+            if (this.IsApi())
+            {
+                return NotFound();
+            }
             return RedirectToAction("GetRecipes", "Recipes", new
             {
                 statusMessage = new StatusMessageModel()
