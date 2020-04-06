@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -60,12 +59,12 @@ namespace BtcTransmuter.Auth
             
             var claims = new List<Claim>()
             {
-                new Claim(_identityOptions.CurrentValue.ClaimsIdentity.UserIdClaimType, user.Id),
-               
+                new Claim(_identityOptions.CurrentValue.ClaimsIdentity.UserIdClaimType, user.Id)
             };
+            
             var roles = await _userManager.GetRolesAsync(user);
             claims.AddRange(roles.Select(s =>  new Claim(_identityOptions.CurrentValue.ClaimsIdentity.RoleClaimType, s) ));
-
+            Context.SetIsApi(true);
             return AuthenticateResult.Success(new AuthenticationTicket(
                 new ClaimsPrincipal(new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme)),IdentityConstants.ApplicationScheme));
         }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,22 @@ namespace BtcTransmuter.Abstractions.Extensions
 
         public static bool IsApi(this Controller controller)
         {
-            return controller.Request.Path.StartsWithSegments(new PathString("/api"));
+            return controller.HttpContext.IsApi();
+        }
+        
+        public static bool IsApi(this HttpContext context)
+        {
+            if (context.Items.TryGetValue("API", out var val))
+            {
+                return val is true;
+            }
+
+            return false;
+        }
+        
+        public static void SetIsApi(this HttpContext context, bool val)
+        {
+            context.Items.TryAdd("API", val);
         }
         public static IActionResult ViewOrJson<T>(this Controller controller, string viewName, T payload)
         {
