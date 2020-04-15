@@ -22,7 +22,7 @@ First, [SSH](https://github.com/JeffVandrewJr/patron/blob/master/SSH.md) into yo
 Then run the following commands:
 ```bash
 sudo su -
-cd btcpayserver-docker
+cd BTCPayServer-docker
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
 
 . btcpay-setup.sh -i
