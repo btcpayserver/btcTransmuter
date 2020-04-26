@@ -25,7 +25,7 @@ sudo su -
 cd BTCPayServer-docker
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
 
-. btcpay-setup.sh -i
+. ./btcpay-setup.sh -i
 ```
 
 Once completed, your Transmuter will be available at your configured BTCPay website under `/btctransmuter/`, where the first account to register becomes the Transmuter admin. Open that link in your browser and you’ll see the homepage.
