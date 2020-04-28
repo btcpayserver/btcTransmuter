@@ -15,7 +15,6 @@ namespace BtcTransmuter.Controllers
 {
     [Authorize]
     [Route("recipes/{id}/actions")]
-    [Route("api/recipes/{id}/actions", Order=2)]
     public class RecipeActionsController : Controller
     {
         private readonly IRecipeManager _recipeManager;
