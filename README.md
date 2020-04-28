@@ -47,6 +47,12 @@ Currently there are 12 extensions that come bundled with the main application:
 * Timer - Run X every Y
 * WebHook - Trigger Recipes with an http call or execute external web hooks with a recipe
 
+## What preset recipes are provided?
+Currently there are three preset recipes that you can enable easily. In addition to the list below, you can create your own recipes for automating other tasks.
+1. On-chain Forwarder - Forward funds from a wallet elsewhere
+2. [BTCPay Email Receipts](docs/EmailReceiptsPreset.md) - Send an email when a BTCPay invoice gets paid
+3. Fiat Conversion - Convert incoming money to fiat on an exchange by market selling when BTCPay invoice statuses change.
+
 ## How do I write an extension?
 
 An extension must be its own .net core class library project that references `BtcTransmuter.Abstractions`
