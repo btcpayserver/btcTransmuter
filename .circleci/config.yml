@@ -81,6 +81,9 @@ jobs:
             sudo docker manifest annotate $DOCKERHUB_REPO:$LATEST_TAG $DOCKERHUB_REPO:$LATEST_TAG-arm64v8 --os linux --arch arm64 --variant v8
             sudo docker manifest push $DOCKERHUB_REPO:$LATEST_TAG -p
   trigger_docs_build:
+    machine:
+      enabled: true
+      image: circleci/classic:201808-01
     steps:  
       - run:
           command: |
