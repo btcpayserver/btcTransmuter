@@ -80,12 +80,23 @@ jobs:
             sudo docker manifest annotate $DOCKERHUB_REPO:$LATEST_TAG $DOCKERHUB_REPO:$LATEST_TAG-arm32v7 --os linux --arch arm --variant v7
             sudo docker manifest annotate $DOCKERHUB_REPO:$LATEST_TAG $DOCKERHUB_REPO:$LATEST_TAG-arm64v8 --os linux --arch arm64 --variant v8
             sudo docker manifest push $DOCKERHUB_REPO:$LATEST_TAG -p
-
+  trigger_docs_build:
+    steps:  
+      - run:
+          command: |
+            curl -X POST -u "$GH_PAT" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/dennisreimann/btcpayserver-doc/dispatches --data '{"event_type": "build_docs"}'
 workflows:
   version: 2
 
   publish:
     jobs:
+      - trigger_docs_build:
+          filters:
+            branches:
+              only: master
+            # only act on version tags
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
       - publish_docker_linuxamd64:
           filters:
             # ignore any commit on any branch by default
