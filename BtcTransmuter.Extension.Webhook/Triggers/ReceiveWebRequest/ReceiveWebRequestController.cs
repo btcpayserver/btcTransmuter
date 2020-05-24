@@ -74,6 +74,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
         }
 
         [Route("trigger/{relativeUrl?}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Trigger(string relativeUrl)
         {
             string body = null;

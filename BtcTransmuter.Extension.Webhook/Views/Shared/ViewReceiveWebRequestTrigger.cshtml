@@ -11,7 +11,8 @@
         @Url.Action("Trigger", "ReceiveWebRequest", new
         {
             relativeUrl = data.RelativeUrl
-        }, Context.Request.Scheme)</kbd>
+        }, Context.Request.Scheme)
+    </kbd>
     @if (!string.IsNullOrEmpty(@data.Body))
     {
         <span> with a body <kbd>@Enum.GetName(typeof(ReceiveWebRequestTriggerParameters.FieldComparer), data.BodyComparer) </kbd>@data.Body</span>
