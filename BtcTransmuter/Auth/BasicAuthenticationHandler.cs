@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -9,12 +10,25 @@ using BtcTransmuter.Abstractions.Extensions;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace BtcTransmuter.Auth
 {
+    public class BasicAuthenticationAuthorizationHandler : IAuthorizationHandler{
+        public async Task HandleAsync(AuthorizationHandlerContext context)
+        {
+            if (context.User.Identity.AuthenticationType != nameof(AuthenticationSchemes.Basic))
+            {
+                return;
+            }
+        }
+    }
+    
+    
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationOptions>
     {
         private readonly IOptionsMonitor<IdentityOptions> _identityOptions;
@@ -66,7 +80,7 @@ namespace BtcTransmuter.Auth
             claims.AddRange(roles.Select(s =>  new Claim(_identityOptions.CurrentValue.ClaimsIdentity.RoleClaimType, s) ));
             Context.SetIsApi(true);
             return AuthenticateResult.Success(new AuthenticationTicket(
-                new ClaimsPrincipal(new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme)),IdentityConstants.ApplicationScheme));
+                new ClaimsPrincipal(new ClaimsIdentity(claims, nameof(AuthenticationSchemes.Basic))), nameof(AuthenticationSchemes.Basic)));
         }
     }
 }
