@@ -22,7 +22,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
             ReceiveWebRequestTriggerData triggerData,
             ReceiveWebRequestTriggerParameters parameters)
         {
-            if (triggerData.Method != parameters.Method)
+            if (!string.IsNullOrEmpty(parameters.Method) && triggerData.Method != parameters.Method)
             {
                 return Task.FromResult(false);
             }

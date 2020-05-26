@@ -26,6 +26,7 @@ namespace BtcTransmuter.Extension.Webhook.Triggers.ReceiveWebRequest
 
         public static readonly List<string> AllowedMethods = new List<string>()
         {
+            "",
             HttpMethod.Get.ToString(),
             HttpMethod.Put.ToString(),
             HttpMethod.Head.ToString(),

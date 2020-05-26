@@ -6,14 +6,19 @@
 }
 
 <div>
-    Receive a <kbd>@data.Method</kbd> HTTP request at
+    Receive a 
+    @if (!string.IsNullOrEmpty(data.Method))
+    {
+        <kbd>@data.Method</kbd>
+    }
+    HTTP request at
     <kbd>
         @Url.Action("Trigger", "ReceiveWebRequest", new
         {
             relativeUrl = data.RelativeUrl
         }, Context.Request.Scheme)
     </kbd>
-    @if (!string.IsNullOrEmpty(@data.Body))
+    @if (!string.IsNullOrEmpty(data.Body))
     {
         <span> with a body <kbd>@Enum.GetName(typeof(ReceiveWebRequestTriggerParameters.FieldComparer), data.BodyComparer) </kbd>@data.Body</span>
     }
