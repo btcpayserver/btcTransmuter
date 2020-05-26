@@ -53,8 +53,8 @@
     </tbody>
     <tfoot>
     <tr>
-        <td colspan="3" class="d-flex justify-content-center">
-            <nav aria-label="Page navigation example">
+        <td colspan="3" >
+            <nav class="d-flex justify-content-center">
                 <ul class="pagination">
                     <li class="page-item"><a class="page-link" asp-action="GetRecipeLogs" asp-route-id="@Model.Id" asp-route-skip="@(Math.Max(0, Model.Skip-Model.Take))" asp-route-take="@Model.Skip+ Model.Take">Previous</a></li>
                     <li class="page-item"><a class="page-link" href="#">Showing @(Model.Skip +1) - @(Model.Skip+ Model.Take)  </a></li>
