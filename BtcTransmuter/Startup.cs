@@ -33,7 +33,7 @@ namespace BtcTransmuter
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ILogger _logger;
 
-        public Startup(IWebHostEnvironment hostingEnvironment, IConfiguration configuration,  ILoggerFactory logFactory)
+        public Startup(IWebHostEnvironment hostingEnvironment, IConfiguration configuration, ILoggerFactory logFactory)
         {
             _hostingEnvironment = hostingEnvironment;
             _logger = logFactory.CreateLogger(nameof(Startup));
@@ -53,8 +53,9 @@ namespace BtcTransmuter
                 identityOptions.Password.RequiredUniqueChars = 0;
                 identityOptions.Password.RequireNonAlphanumeric = false;
             });
-            
-            services.Configure<SecurityStampValidatorOptions>(validatorOptions =>  validatorOptions.ValidationInterval = TimeSpan.FromSeconds(50));
+
+            services.Configure<SecurityStampValidatorOptions>(validatorOptions =>
+                validatorOptions.ValidationInterval = TimeSpan.FromSeconds(50));
 
             services.AddHttpClient();
             services.AddOptions();
@@ -92,8 +93,9 @@ namespace BtcTransmuter
                 {
                     //new install, no keys
                     dataProtectionBuilder.SetApplicationName(options.DataProtectionApplicationName);
-                    using (StreamWriter sw = File.CreateText(markerFile)) {}
-                }else if (existingFiles.Contains("appnamemarker"))
+                    using (File.CreateText(markerFile)){ }
+                }
+                else if (existingFiles.Contains("appnamemarker"))
                 {
                     //marker was found, we can use the app name
                     dataProtectionBuilder.SetApplicationName(options.DataProtectionApplicationName);
@@ -103,34 +105,44 @@ namespace BtcTransmuter
                     //keys found with no marker, stay with old way
                 }
             }
-            
+
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication().AddCookie().AddBasicAuth();
+            services.AddAuthentication(sharedOptions =>
+                {
+                    sharedOptions.DefaultScheme = "smart";
+                    sharedOptions.DefaultChallengeScheme = "smart";
+                })
+                .AddPolicyScheme("smart", "", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                        if (authHeader?.StartsWith("Basic ") is true)
+                        {
+                            return nameof(AuthenticationSchemes.Basic);
+                        }
+
+                        return IdentityConstants.ApplicationScheme;
+                    };
+                })
+                .AddCookie().AddBasicAuth();
             
             services.ConfigureApplicationCookie(authenticationOptions => {
-                
                 authenticationOptions.Cookie.Name = ".AspNet.Cookie.btctransmuter";
             });
-            
-            
-            services
-                .AddAuthorization(options =>
-                {
-                    options.DefaultPolicy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme,nameof(AuthenticationSchemes.Basic))
-                        .Build();
-                });
-            var mvcBuilder = services.AddMvc(mvcOptions =>
-            {
-                mvcOptions.EnableEndpointRouting = false;
-            })
-                .AddNewtonsoftJson();
+
+            var mvcBuilder = services.AddMvc(mvcOptions => { mvcOptions.EnableEndpointRouting = false; })
+                .AddNewtonsoftJson().AddRazorRuntimeCompilation();
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
+            
+            
+            var cookiesAfter = services
+                .Where( s => s.ServiceType == typeof(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler) )
+                .ToList(); // count == 1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -143,7 +155,7 @@ namespace BtcTransmuter
                 using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     if (context.Database.IsSqlite())
-                    {                       
+                    {
                         context.Database.EnsureCreated();
                     }
                     else
@@ -178,6 +190,7 @@ namespace BtcTransmuter
             app.UseStaticFiles(options.RootPath);
             app.UsePathBase(options.RootPath);
             app.UseAuthentication();
+
             app.UseExtensions();
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
             {
@@ -186,15 +199,13 @@ namespace BtcTransmuter
                         .Where(extension => extension.JsonConverters != null)
                         .SelectMany(extension => extension.JsonConverters).ToList()
             };
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            
-            
         }
     }
 }

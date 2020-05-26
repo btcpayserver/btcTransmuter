@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using BtcTransmuter.Abstractions.Recipes;
 using BtcTransmuter.Abstractions.Settings;
+using BtcTransmuter.Auth;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BtcTransmuter.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = TransmuterSchemes.Local)]
     [Route("[controller]")]
     public class AdminController : Controller
     {
