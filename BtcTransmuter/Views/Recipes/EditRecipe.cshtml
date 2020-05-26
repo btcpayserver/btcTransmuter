@@ -75,43 +75,34 @@
     </div>
 
 </div>
-
-
-<div class="card mb-2">
-    <div class="card-body">
-        <h5 class="card-title">Actions</h5>
-        <ul class="list-group list-group-flush ">
             @{
                 var validActions = Model.Actions.Where(action => action.RecipeActionGroup == null);
             }
-            @foreach (var action in validActions)
-            {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div style="max-width: 70%;">
-                        @await Component.InvokeAsync("ViewRecipeAction", action)
-                    </div>
-                    <div>
-                        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
-                        -
-                        <a asp-action="RemoveRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Remove</a>
+@if (validActions.Any())
+{
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Actions</h5>
+            <ul class="list-group list-group-flush ">
 
-                    </div>
-                </li>
-            }
+                @foreach (var action in validActions)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div style="max-width: 70%;">
+                            @await Component.InvokeAsync("ViewRecipeAction", action)
+                        </div>
+                        <div>
+                            <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Edit</a>
+                            -
+                            <a asp-action="RemoveRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id" asp-route-recipeActionId="@action.Id">Remove</a>
 
-            @if (!validActions.Any())
-            {
-                <li class="list-group-item border-top-0">
-                    No Actions.
-                </li>
-            }
-
-        </ul>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
     </div>
-    <div class="card-footer">
-        <a asp-action="EditRecipeAction" asp-controller="RecipeActions" asp-route-id="@Model.Id">Add Action</a>
-    </div>
-</div>
+}
 <div class="card mb-2">
     <div class="card-body">
         <h5 class="card-title">Action Groups</h5>
