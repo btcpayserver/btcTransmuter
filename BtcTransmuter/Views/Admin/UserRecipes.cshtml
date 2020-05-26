@@ -95,18 +95,16 @@
                     </ul>
                 </li>
             </ul>
-            <div class="card-footer">
-
-                <div class="float-right">
-                    @if (recipe.Enabled)
-                    {
-                        <span class="badge badge-info">Enabled</span>
-                    }
-                    else
-                    {
-                        <span class="badge badge-danger">Disabled</span>
-                    }
-                </div>
+            <div class="card-footer d-flex  justify-content-between">
+                <span></span>
+                @if (recipe.Enabled)
+                {
+                    <span class="badge badge-info">Enabled</span>
+                }
+                else
+                {
+                    <span class="badge badge-danger">Disabled</span>
+                }
             </div>
 
         </div>
