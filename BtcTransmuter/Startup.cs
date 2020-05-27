@@ -138,11 +138,6 @@ namespace BtcTransmuter
             var mvcBuilder = services.AddMvc(mvcOptions => { mvcOptions.EnableEndpointRouting = false; })
                 .AddNewtonsoftJson().AddRazorRuntimeCompilation();
             services.AddExtensions(options.ExtensionsDir, mvcBuilder);
-            
-            
-            var cookiesAfter = services
-                .Where( s => s.ServiceType == typeof(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler) )
-                .ToList(); // count == 1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
