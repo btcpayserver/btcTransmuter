@@ -5,8 +5,8 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="BTCPayServer.Lightning.All" Version="1.1.8" />
-        <PackageReference Include="NBitcoin" Version="5.0.13" />
+        <PackageReference Include="BTCPayServer.Lightning.All" Version="1.1.15" />
+        <PackageReference Include="NBitcoin" Version="5.0.40" />
         <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />

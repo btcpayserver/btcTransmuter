@@ -5,7 +5,7 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="DigitalRuby.ExchangeSharp" Version="0.6.4" />
+      <PackageReference Include="DigitalRuby.ExchangeSharp" Version="0.7.2" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />

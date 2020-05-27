@@ -5,11 +5,11 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj"/>
-        <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj"/>
+        <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+        <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="MailKit" Version="2.4.1"/>
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.1"/>
+        <PackageReference Include="MailKit" Version="2.6.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.4" />
     </ItemGroup>
 </Project>
