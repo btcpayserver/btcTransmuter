@@ -6,7 +6,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - BtcTransmuter</title>
-    
+
     @await Component.InvokeAsync("ExtensionHeaders")
     <partial name="JqueryScripts"/>
     @RenderSection("Scripts", required: false)
@@ -24,8 +24,6 @@
     <main role="main">
         @RenderBody()
     </main>
-
-    <partial name="Footer"/>
 }
 else
 {
@@ -33,10 +31,10 @@ else
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-
-        <partial name="Footer"/>
     </div>
 }
+
+<partial name="Footer"/>
 
 </body>
 </html>
