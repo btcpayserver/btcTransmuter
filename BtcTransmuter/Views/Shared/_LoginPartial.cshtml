@@ -12,26 +12,26 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item mr-3">
-        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
+    <li class="nav-item">
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="nav-link">Account</a>
     </li>
     <li class="nav-item">
-        <form asp-area="Identity" asp-page="/Account/Logout"
+        <form class="nav-link" asp-area="Identity" asp-page="/Account/Logout"
               asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})" method="post" id="logoutForm"
-              style="margin-top: -2px;">
-            <button type="submit" class="btn btn-link p-0">Logout</button>
+              style="margin-top:-1px;">
+            <button type="submit" class="btn p-0">Logout</button>
         </form>
     </li>
 }
 else
 {
     @if (!settings.DisableRegistration)
-     {
-         <li class="nav-item mr-3">
-             <a asp-area="Identity" asp-page="/Account/Register">Register</a>
-         </li>
-     }
+    {
+       <li class="nav-item">
+           <a asp-area="Identity" asp-page="/Account/Register" class="nav-link">Register</a>
+       </li>
+    }
     <li class="nav-item">
-        <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">Login</a>
     </li>
 }

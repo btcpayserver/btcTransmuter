@@ -1,41 +1,49 @@
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow @(ViewData.ContainsKey("FullLayout")? "" :"mb-3" )">
+<header class="btcpay-header">
+    <nav id="mainNav" class="navbar navbar-expand-sm navbar-toggleable-sm@(ViewData.ContainsKey("FullLayout")? "" : " mb-3")">
         <div class="container">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="~/assets/logo.png" height="30"  class="d-inline-block align-top"/>BTC Transmuter
+                <img src="~/assets/logo.png" height="30" class="d-inline-block align-top mr-1" alt="" />
+                BTC Transmuter
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav flex-wrap ml-auto">
                     @if (User.Claims.Any())
                     {
                         if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item mr-3">
-                                <a asp-area="" asp-controller="Admin" asp-action="Users">Admin</a>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Admin" asp-action="Users" class="nav-link">Admin</a>
                             </li>
                         }
-                        <li class="nav-item mr-3">
-                            <a asp-area="" asp-controller="Extensions" asp-action="Extensions">Extensions</a>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Extensions" asp-action="Extensions" class="nav-link">Extensions</a>
                         </li>
-                        <li class="nav-item mr-3">
-                            <a asp-area="" asp-controller="Recipes" asp-action="GetRecipes">Recipes</a>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Recipes" asp-action="GetRecipes" class="nav-link">Recipes</a>
                         </li>
-                        <li class="nav-item mr-3">
-                            <a asp-area="" asp-controller="ExternalServices" asp-action="GetServices">External Services</a>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="ExternalServices" asp-action="GetServices" class="nav-link">External Services</a>
                         </li>
                     }
                     @await Component.InvokeAsync("ExtensionMenus")
                     <partial name="_LoginPartial"/>
                 </ul>
-
             </div>
+            <button class="btcpay-theme-switch">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10">
+                    <path class="btcpay-theme-switch-dark" transform="translate(1 1)" d="M2.72 0A3.988 3.988 0 000 3.78c0 2.21 1.79 4 4 4 1.76 0 3.25-1.14 3.78-2.72-.4.13-.83.22-1.28.22-2.21 0-4-1.79-4-4 0-.45.08-.88.22-1.28z"/>
+                    <path class="btcpay-theme-switch-light" transform="translate(1 1)" d="M4 0c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5S4.28 0 4 0zM1.5 1c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm5 0c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM4 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM.5 3.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm7 0c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM1.5 6c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm5 0c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM4 7c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5S4.28 7 4 7z"/>
+                </svg>
+            </button>
+            <script src="~/scripts/theme-switch.js"></script>
+            <noscript><style>.btcpay-theme-switch { display: none; }</style></noscript>
         </div>
     </nav>
-    <div class="container">
-        <div class="w-100 alert alert-warning text-center">This project is still in its early development. There are bugs and you may lose money; be careful or embrace #reckless!</div>
-    </div>
-    </header>
+</header>
+
+<div class="container">
+    <div class="w-100 alert alert-warning text-center mt-3 mb-4">This project is still in its early development. There are bugs and you may lose money; be careful or embrace #reckless!</div>
+</div>
