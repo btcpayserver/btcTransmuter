@@ -1,7 +1,8 @@
 @using BtcTransmuter.Helpers
 <footer class="btcpay-footer footer mt-auto py-3 text-center">
     <div class="container">
-        BTC Transmuter was made with ❤ @@ <a href="https://btcpayserver.org" target="_blank">BtcPayServer</a>
+        <a href="https://github.com/btcpayserver/btcTransmuter">BTC Transmuter</a> was made with ❤ @@
+        <a href="https://btcpayserver.org" target="_blank">BTCPay Server</a>
         @if (User.Claims.Any() && User.IsInRole("Admin"))
         {
             <span>| Version @VersionHelper.CurrentVersion</span>
