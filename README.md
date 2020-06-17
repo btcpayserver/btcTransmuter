@@ -16,7 +16,7 @@ This project is still in early development and most likely has some bugs and qui
 
 ## How do I deploy?
 
-If you set up BTCPay using any [dockerized install method](https://docs.btcpayserver.org/deployment/dockerdeployment), you can enable BTC Transmuter easily. 
+If you set up BTCPay using any [dockerized install method](https://docs.btcpayserver.org/Docker/), you can enable BTC Transmuter easily.
 
 First, [SSH](https://github.com/JeffVandrewJr/patron/blob/master/SSH.md) into your server.
 Then run the following commands:
