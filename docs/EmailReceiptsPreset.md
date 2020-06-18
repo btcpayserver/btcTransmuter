@@ -41,15 +41,15 @@ Next create an email sending SMTP service.
 
 ![CreateExternalService_SMTP](./img/CreateExternalService_SMTP.png)
 
-See this [SMTP settings example](https://github.com/btcpayserver/btcpayserver-doc/blob/master/FAQ/FAQ-ServerSettings.md#how-to-configure-smtp-settings-in-btcpay) for setup. Save after data is updated, and return to preset of Email Forwarder.
+See this [SMTP settings example](https://docs.btcpayserver.org/FAQ/FAQ-ServerSettings/#how-to-configure-smtp-settings-in-btcpay) for setup. Save after data is updated, and return to preset of Email Forwarder.
 
 ![InvoiceStatusTrigger](./img/InvoiceStatusTrigger.png)
 
-Choose the invoice status to send ticket email receipts on. During testing, use the **New** invoice status, so that payment is not required to send emails. Once everything is setup correctly and working properly, choose a status like [Paid or Confirmed](https://github.com/btcpayserver/btcpayserver-doc/blob/master/Invoices.md).
+Choose the invoice status to send ticket email receipts on. During testing, use the **New** invoice status, so that payment is not required to send emails. Once everything is setup correctly and working properly, choose a status like [Paid or Confirmed](https://docs.btcpayserver.org/Invoices/).
 
 ![SendEmailToCustomerEmail](./img/SendEmailToCustomerEmail.png)
 
-Select send email to the address registered on the BTCPay Invoice. Be sure that the refund email setting has not been [disabled](https://github.com/btcpayserver/btcpayserver-doc/blob/master/FAQ/FAQ-Stores.md#how-to-disable-email-on-invoices) in your BTCPay store, in order to prompt customers to provide their email before paying the invoice.
+Select send email to the address registered on the BTCPay Invoice. Be sure that the refund email setting has not been [disabled](https://docs.btcpayserver.org/FAQ/FAQ-Stores/#how-to-disable-email-on-invoices) in your BTCPay store, in order to prompt customers to provide their email before paying the invoice.
 
 Next supply the sending email address, email subject and email body. Note the highlighted line in the picture below, it uses http://goqr.me/api to create a QR code of the invoice payment which will be used as the event ticket inside the customer's receipt email.
 
