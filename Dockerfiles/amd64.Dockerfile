@@ -2,6 +2,9 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build
 WORKDIR /src
 COPY . .
 WORKDIR "/src/BtcTransmuter"
+
+ENV BTCPAY_DATADIR=/datadir
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app
 
@@ -21,4 +24,6 @@ ENV TRANSMUTER_Database="Data Source=data/btctransmuter.db;"
 ENV TRANSMUTER_DatabaseType="sqlite"
 ENV TRANSMUTER_DataProtectionDir="data"
 
+ENV BTCPAY_DATADIR=/datadir
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENTRYPOINT ["dotnet", "BtcTransmuter.dll"]
