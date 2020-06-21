@@ -24,14 +24,14 @@ namespace BtcTransmuter.Extension.Operators.Actions.ChooseNumericValue
         {
         }
 
-        protected override async Task<ChooseNumericValueViewModel> BuildViewModel(RecipeAction from)
+        protected override Task<ChooseNumericValueViewModel> BuildViewModel(RecipeAction from)
         {
             var fromData = from.Get<ChooseNumericValueData>();
-            return new ChooseNumericValueViewModel
+            return Task.FromResult(new ChooseNumericValueViewModel
             {
                 RecipeId = @from.RecipeId,
                 Items =  fromData.Items
-            };
+            });
         }
 
         protected override async Task<(RecipeAction ToSave, ChooseNumericValueViewModel showViewModel)> BuildModel(

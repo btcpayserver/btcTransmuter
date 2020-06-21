@@ -18,18 +18,17 @@ namespace BtcTransmuter.Extension.Operators.Actions.Condition
         public override string ControllerName => "Condition";
 
 
-        protected override async Task<TypedActionHandlerResult<string>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override Task<TypedActionHandlerResult<string>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             ConditionData actionData)
         {
             var condition = InterpolateString(actionData.Condition, data);
             
-            
-            return new TypedActionHandlerResult<string>()
+            return Task.FromResult(new TypedActionHandlerResult<string>()
             {
                 TypedData = condition,
                 Executed = condition.Equals("true", StringComparison.InvariantCultureIgnoreCase),
                 Result = $"Data value was: {condition}"
-            };
+            });
         }
     }
 }

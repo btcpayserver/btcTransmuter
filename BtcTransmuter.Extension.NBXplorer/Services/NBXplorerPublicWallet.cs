@@ -95,7 +95,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             return txBuilder.BuildTransaction(true);
         }
 
-        public async Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
+        private Task<TransactionBuilder> AddTxOutsToTransaction(TransactionBuilder transactionBuilder,
             IEnumerable<(Money amount, IDestination destination, bool subtractFee)> outgoing)
         {
             foreach (var tuple in outgoing)
@@ -119,7 +119,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                     break;
             }
 
-            return transactionBuilder;
+            return Task.FromResult(transactionBuilder);
         }
 
         public static ExtKey GetKeyFromDetails(PrivateKeyDetails privateKeyDetails, Network network)

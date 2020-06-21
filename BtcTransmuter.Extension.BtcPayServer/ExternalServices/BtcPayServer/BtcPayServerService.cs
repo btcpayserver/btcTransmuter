@@ -52,7 +52,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.ExternalServices.BtcPayServer
                 var client = ConstructClient();
                 return client != null && await client.TestAccessAsync(Facade.Merchant);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

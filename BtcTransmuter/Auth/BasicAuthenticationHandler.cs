@@ -18,17 +18,7 @@ using Microsoft.Extensions.Options;
 
 namespace BtcTransmuter.Auth
 {
-    public class BasicAuthenticationAuthorizationHandler : IAuthorizationHandler{
-        public async Task HandleAsync(AuthorizationHandlerContext context)
-        {
-            if (context.User.Identity.AuthenticationType != nameof(AuthenticationSchemes.Basic))
-            {
-                return;
-            }
-        }
-    }
-    
-    
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationOptions>
     {
         private readonly IOptionsMonitor<IdentityOptions> _identityOptions;

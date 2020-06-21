@@ -18,7 +18,7 @@ namespace BtcTransmuter.Extension.Operators.Actions.ChooseNumericValue
         public override string ControllerName => "ChooseNumericValue";
 
 
-        protected override async Task<TypedActionHandlerResult<string>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
+        protected override Task<TypedActionHandlerResult<string>> Execute(Dictionary<string, object> data, RecipeAction recipeAction,
             ChooseNumericValueData actionData)
         {
             ChooseNumericValueData.ChooseNumericValueDataItem selectedItem = null;
@@ -53,12 +53,12 @@ namespace BtcTransmuter.Extension.Operators.Actions.ChooseNumericValue
                 }
 
             });
-            return new TypedActionHandlerResult<string>()
+            return Task.FromResult(new TypedActionHandlerResult<string>()
             {
                 TypedData = selectedItem.ValueToChoose,
                 Executed = true,
                 Result = $"chose {selectedItem.ValueToChoose}"
-            };
+            });
         }
     }
 }

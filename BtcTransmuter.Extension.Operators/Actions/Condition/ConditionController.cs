@@ -24,14 +24,14 @@ namespace BtcTransmuter.Extension.Operators.Actions.Condition
         {
         }
 
-        protected override async Task<ConditionViewModel> BuildViewModel(RecipeAction from)
+        protected override Task<ConditionViewModel> BuildViewModel(RecipeAction from)
         {
             var fromData = from.Get<ConditionData>();
-            return new ConditionViewModel
+            return Task.FromResult(new ConditionViewModel
             {
                 RecipeId = @from.RecipeId,
                 Condition = fromData.Condition
-            };
+            });
         }
 
         protected override async Task<(RecipeAction ToSave, ConditionViewModel showViewModel)> BuildModel(

@@ -62,7 +62,7 @@ namespace BtcTransmuter.Abstractions.Helpers
                       
                             return (e.Compile().DynamicInvoke(data.Values.ToArray()) ?? "").ToString();
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
                             return processed;
                         }

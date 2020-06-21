@@ -9,7 +9,7 @@ namespace BtcTransmuter.Tests
     public class InterpolationTests
     {
         [Fact]
-        public async Task CanInterpolate()
+        public void CanInterpolate()
         {
             Assert.Equal("hello world",InterpolationHelper.InterpolateString("{{Data1 +\" \" + Data2}}", new Dictionary<string, object>()
             {

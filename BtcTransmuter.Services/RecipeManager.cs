@@ -70,34 +70,30 @@ namespace BtcTransmuter.Services
 
 		public async Task<IEnumerable<RecipeInvocation>> GetRecipeInvocations(RecipeInvocationsQuery query)
 		{
-			using (var scope = _serviceScopeFactory.CreateScope())
+			using var scope = _serviceScopeFactory.CreateScope();
+			await using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+			var queryable = context.RecipeInvocations
+				.Include(invocation => invocation.Recipe)
+				.ThenInclude(recipe => recipe.RecipeTrigger)
+				.AsEnumerable();
+			if (query.OrderBy != null)
 			{
-				using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+				switch (query.OrderBy.Field)
 				{
-					var queryable = context.RecipeInvocations
-						.Include(invocation => invocation.Recipe)
-						.ThenInclude(recipe => recipe.RecipeTrigger)
-						.AsEnumerable();
-					if (query.OrderBy != null)
-					{
-						switch (query.OrderBy.Field)
-						{
-							case RecipeInvocationsQuery.RecipeInvocationsQueryOrderBy.Timestamp:
-								queryable = query.OrderBy.Direction == OrderDirection.Ascending
-									? queryable.OrderBy(invocation => invocation.Timestamp)
-									: queryable.OrderByDescending(invocation => invocation.Timestamp);
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-
-					return queryable
-						.Where(invocation =>
-							invocation.RecipeId.Equals(query.RecipeId, StringComparison.InvariantCultureIgnoreCase))
-						.Skip(query.Skip).Take(query.Take).ToList();
+					case RecipeInvocationsQuery.RecipeInvocationsQueryOrderBy.Timestamp:
+						queryable = query.OrderBy.Direction == OrderDirection.Ascending
+							? queryable.OrderBy(invocation => invocation.Timestamp)
+							: queryable.OrderByDescending(invocation => invocation.Timestamp);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 			}
+
+			return queryable
+				.Where(invocation =>
+					invocation.RecipeId.Equals(query.RecipeId, StringComparison.InvariantCultureIgnoreCase))
+				.Skip(query.Skip).Take(query.Take).ToList();
 		}
 
 		public async Task AddOrUpdateRecipe(Recipe recipe)
