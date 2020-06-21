@@ -15,7 +15,8 @@
     border-top: none;
     height: 200px;
     max-height: 50vh;
-    overflow: scroll
+    overflow: scroll;
+    color: var(--btcpay-color-neutral-700);
 }
 .algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
     cursor: pointer;
