@@ -1,0 +1,126 @@
+@using System.Globalization
+@using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
+@using BtcTransmuter.Extension.Timer.Triggers.Timer
+@model BtcTransmuter.Extension.Presets.CreateDCAViewModel
+
+@{
+    ViewData["Title"] = "Create automated Dollar Cost Averaging";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Choose your Exchange</h5>
+            <div class="form-group">
+                @if (!Model.ExchangeServices.Any())
+                {
+                    <div class="list-group-item ">
+                        <span class="text-danger">
+                            There are no Exchange services connected to your Transmuter account.
+
+                            <a asp-controller="ExternalServices" asp-action="CreateExternalService" asp-route-selectedType="@ExchangeService.ExchangeServiceType">Please create one first.</a>
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    <select asp-for="SelectedExchangeServiceId" asp-items="Model.ExchangeServices" class="form-control"></select>
+
+                    <a asp-controller="ExternalServices" asp-action="CreateExternalService" asp-route-selectedType="@ExchangeService.ExchangeServiceType">Create</a>
+                }
+                <span asp-validation-for="SelectedExchangeServiceId" class="text-danger"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">When do you want to execute the trade?</h5>
+            <div class="form-group">
+                <label asp-for="StartOn" class="control-label"></label>
+                <div class="input-group">
+                    <input type="datetime-local" asp-for="StartOn"
+                           value="@(Model.StartOn?.ToString("u", CultureInfo.InvariantCulture))"
+                           class="form-control flatdtpicker" placeholder="Start from"/>
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary input-group-clear" type="button" title="Clear">
+                            &times;
+                        </button>
+                    </div>
+                </div>
+                <span asp-validation-for="StartOn" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="TriggerEveryAmount" class="control-label"></label>
+                <div class="input-group">
+                    <input type="number" asp-for="TriggerEveryAmount" placeholder="Amount" class="form-control">
+                    <select class="custom-select" asp-for="TriggerEvery" asp-items="@Html.GetEnumSelectList(typeof(TimerTriggerParameters.TimerResetEvery))">
+                    </select>
+                </div>
+                <span asp-validation-for="TriggerEveryAmount" class="text-danger"></span>
+                <span asp-validation-for="TriggerEvery" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="card  mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Set up your trading conditions</h5>
+
+            <div class="form-group">
+                <label asp-for="MarketSymbol" class="control-label"></label>
+                <input asp-for="MarketSymbol" class="form-control autocomplete" data-datasrc="availableMarketSymbols" placeholder="Start typing to see a list of available trading pairs"/>
+                <span asp-validation-for="MarketSymbol" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="IsBuy" class="control-label"></label>
+                <input type="checkbox" asp-for="IsBuy" class="form-check"/>
+                <span asp-validation-for="IsBuy" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FiatAmount" class="control-label"></label>
+                <input type="number" step="any" asp-for="FiatAmount" class="form-control"/>
+                <span asp-validation-for="FiatAmount" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="GetServices" asp-controller="ExternalServices" class="btn btn-secondary">Back to recipe</a>
+    </div>
+</form>
+
+<script>
+var actionUrlMapping = @Json.Serialize(Model.ExchangeServices.ToDictionary(item => item.Value, item => @Url.Action("GetAvailableMarketSymbols", "PlaceOrder", new {ExternalServiceId = item.Value})));;
+var availableMarketSymbols = [];
+$(document).ready(function(){
+    $("#SelectedExchangeServiceId").on("input", populateAvailableMarketSymbols);
+    function populateAvailableMarketSymbols(){
+        var value =  $("#SelectedExchangeServiceId").val();
+        if(!value){
+            availableMarketSymbols = [];
+        }else{
+            $.ajax({
+                url: actionUrlMapping[value],
+                success: function(response){
+                    availableMarketSymbols = response;
+                },
+                error: function(){                    
+                    availableMarketSymbols = [];
+                }       
+            });
+        }        
+    }
+    populateAvailableMarketSymbols();
+})
+</script>
