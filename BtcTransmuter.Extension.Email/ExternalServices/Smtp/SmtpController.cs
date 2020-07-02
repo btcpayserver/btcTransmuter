@@ -51,7 +51,6 @@ namespace BtcTransmuter.Extension.Email.ExternalServices.Smtp
                 var error = await SendTestEmail(smtpService, viewModel.TestEmail);
                 if (string.IsNullOrEmpty(error))
                 {
-                    ModelState.AddModelError(nameof(viewModel.TestEmail), "Email sent successfully, confirm that you received it");
                     viewModel.TestEmail = string.Empty;
                 }
                 else
