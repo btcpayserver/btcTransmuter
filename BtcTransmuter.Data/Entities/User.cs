@@ -15,5 +15,12 @@ namespace BtcTransmuter.Data.Entities
     public class UserBlob
     {
         public bool BasicAuth { get; set; }
+        public BTCPayAuthDetails BTCPayAuthDetails { get; set; } = new BTCPayAuthDetails();
+    }
+
+    public class BTCPayAuthDetails
+    {
+        public string UserId { get; set; }
+        public string AccessToken { get; set; }
     }
 }

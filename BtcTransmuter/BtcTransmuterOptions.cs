@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -15,11 +16,19 @@ namespace BtcTransmuter
         {
             
             RootPath = configuration.GetValue("RootPath", "");
+            
+            BTCPayAuthServer = configuration.GetValue<Uri>("BTCPayAuthServer", null);
             DatabaseConnectionString = configuration.GetValue<string>("Database");
             DataProtectionDir = configuration.GetValue<string>("DataProtectionDir");
             DataProtectionApplicationName = configuration.GetValue<string>("DataProtectionApplicationName");
             DatabaseType = configuration.GetValue<DatabaseType>("DatabaseType", DatabaseType.Sqlite);
             UseDatabaseColumnEncryption = configuration.GetValue<bool>("UseDatabaseColumnEncryption", false);
+            DisableInternalAuth = configuration.GetValue<bool>("DisableInternalAuth", false);
+            if (DisableInternalAuth && BTCPayAuthServer == null)
+            {
+                DisableInternalAuth = false;
+                logger.LogWarning($"Cannot disable internal auth while not setting BTCPayAuthServer");
+            }
             ExtensionsDir = configuration.GetValue<string>("ExtensionsDir",
                 Path.Combine(hostingEnvironment.ContentRootPath, "Extensions"));
 
@@ -49,5 +58,9 @@ namespace BtcTransmuter
 
         public DatabaseType DatabaseType { get; set; }
         public bool UseDatabaseColumnEncryption { get; set; }
+        public bool DisableInternalAuth { get; set; }
+
+        public Uri BTCPayAuthServer { get; set; }
+        
     }
 }

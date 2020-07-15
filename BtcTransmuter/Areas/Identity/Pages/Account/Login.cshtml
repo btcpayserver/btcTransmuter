@@ -8,6 +8,7 @@
 }
 
 @inject ISettingsManager SettingsManager
+@inject BtcTransmuterOptions Options;
 @{
     var settings = await SettingsManager.GetSettings<SystemSettings>(nameof(SystemSettings));
 }
@@ -37,11 +38,20 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
+                    <button type="submit" class="btn btn-primary">
+                        Log in
+                        @if (Options.DisableInternalAuth)
+                        {
+                            <span> with BTCPay Server account</span>
+                        }
+                        else if (Options.BTCPayAuthServer != null)
+                        {
+                            <span> (local account or BTCPay Server account)</span>
+                        }
+                    </button>
                 </div>
                 @if (!settings.DisableRegistration)
                 {
-                
                     <div class="form-group">
                         @* <p> *@
                         @*     <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a> *@
