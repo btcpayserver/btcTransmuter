@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace BtcTransmuter

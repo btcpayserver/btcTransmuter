@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BtcTransmuter.Areas.Identity.Pages.Account
 {
@@ -104,7 +105,7 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account
                             ModelState.AddModelError(string.Empty, "You need to verify your email on BTCPay Server first.");
                             return Page();
                         }
-                        var matchedUser = _userManager.Users.SingleOrDefault(user =>
+                        var matchedUser = _userManager.Users.AsEnumerable().SingleOrDefault(user =>
                             user.Get<UserBlob>().BTCPayAuthDetails.UserId == parsedResponse.Id);
                         bool generateKey;
                         if (matchedUser == null)
@@ -129,26 +130,33 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account
                         else
                         {
                             var blob = matchedUser.Get<UserBlob>();
-                            request.Headers.Authorization = new AuthenticationHeaderValue("token ", blob.BTCPayAuthDetails.AccessToken);
-                            response = await client.SendAsync(request);
-                            if (!response.IsSuccessStatusCode)
+                            if (string.IsNullOrEmpty(blob.BTCPayAuthDetails.AccessToken))
                             {
-                                //need to regenerate the api key
-                                
-                                generateKey = true;
+                                generateKey = true; 
                             }
                             else
                             {
-                                await _signInManager.SignInAsync(matchedUser, Input.RememberMe);
-                                _logger.LogInformation("User logged in using BTCPay.");
-                                return LocalRedirect(returnUrl);
+                                request = new HttpRequestMessage(HttpMethod.Get, fetchUserId);
+                                request.Headers.Authorization = new AuthenticationHeaderValue("token", blob.BTCPayAuthDetails.AccessToken);
+                                response = await client.SendAsync(request);
+                                if (!response.IsSuccessStatusCode)
+                                {
+                                    //need to regenerate the api key
+                                
+                                    generateKey = true;
+                                }
+                                else
+                                {
+                                    await _signInManager.SignInAsync(matchedUser, Input.RememberMe);
+                                    _logger.LogInformation("User logged in using BTCPay.");
+                                    return LocalRedirect(returnUrl);
+                                }
                             }
                         }
 
                         if (generateKey && matchedUser != null)
                         {
-                            request.Method = HttpMethod.Post;
-                            request.RequestUri = new Uri(_btcTransmuterOptions.BTCPayAuthServer, "/api/v1/api-keys");
+                            request = new HttpRequestMessage(HttpMethod.Post, new Uri(_btcTransmuterOptions.BTCPayAuthServer, "/api/v1/api-keys"));
                             request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{Input.Email}:{Input.Password}")));
                             request.Content = new StringContent(JsonConvert.SerializeObject(new
                             {
@@ -165,9 +173,9 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account
                             else if(response.IsSuccessStatusCode)
                             {
                                 var accessTokenResponse =
-                                    JsonConvert.DeserializeObject<dynamic>((await response.Content.ReadAsStringAsync()));
+                                    JsonConvert.DeserializeObject<JObject>((await response.Content.ReadAsStringAsync()));
                                 var blob = matchedUser.Get<UserBlob>();
-                                blob.BTCPayAuthDetails.AccessToken = accessTokenResponse.apiKey;
+                                blob.BTCPayAuthDetails.AccessToken = accessTokenResponse["apiKey"].Value<string>();
                                 matchedUser.Set(blob);
                                 await _userManager.UpdateAsync(matchedUser);
                             }
