@@ -1,0 +1,30 @@
+@using BtcTransmuter.Data.Entities
+@using Microsoft.AspNetCore.Identity
+@inject IBtcTransmuterOptions BtcTransmuterOptions
+@inject BTCPayAuthService BTCPayAuthService
+@inject UserManager<User> UserManager
+@inject SignInManager<User> SignInManager
+@{
+    if (BtcTransmuterOptions.BTCPayAuthServer == null)
+    {
+        return;
+    }
+    var user = await UserManager.GetUserAsync(User);
+    var currentTokenValid = await BTCPayAuthService.CheckToken(user);
+    @if (user != null && !await UserManager.HasPasswordAsync(user) && (currentTokenValid is null))
+    {
+        await SignInManager.SignOutAsync();
+        <script>
+            window.location.reload();
+        </script>
+    }
+    if (user!= null && currentTokenValid != null && BtcTransmuterOptions.DisableInternalAuth)
+    {
+        if (!user.Email.Equals(currentTokenValid.Email, StringComparison.InvariantCultureIgnoreCase))
+        {
+            user.Email = currentTokenValid.Email;
+            user.UserName = currentTokenValid.Email;
+            await UserManager.UpdateAsync(user);
+        }
+    }
+}

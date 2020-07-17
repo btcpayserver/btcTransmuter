@@ -1,12 +1,23 @@
 ﻿@using BtcTransmuter.Data.Entities
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
+@inject IBtcTransmuterOptions BtcTransmuterOptions;
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <ul class="nav nav-pills flex-column">
     <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+        @if (!BtcTransmuterOptions.DisableInternalAuth)
+        {
+            
+            <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+        }
+        @if (BtcTransmuterOptions.BTCPayAuthServer != null)
+        {
+            <li class="nav-item"><a class="nav-link @ManageNavPages.BTCPayAccountLinkNavClass(ViewContext)" id="btcpay-account-link" asp-page="./BTCPayAccountLinkNavClass">BTCPay account link</a></li>
+      
+        }
+
     @if (hasExternalLogins)
     {
         <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>

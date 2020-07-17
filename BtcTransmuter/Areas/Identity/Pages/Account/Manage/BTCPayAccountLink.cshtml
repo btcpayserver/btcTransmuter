@@ -1,0 +1,27 @@
+﻿@page
+@model BTCPayAccountLinkModel
+@{
+    ViewData["Title"] = "BTCPay Account Link";
+    ViewData["ActivePage"] = ManageNavPages.BTCPayAccountLink;
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="change-password-form" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.AccessToken"></label>
+                <input asp-for="Input.AccessToken" class="form-control" />
+                <span asp-validation-for="Input.AccessToken" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
