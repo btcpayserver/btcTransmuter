@@ -8,6 +8,7 @@ using BtcTransmuter.Areas.Identity.Pages.Account;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -62,7 +63,17 @@ namespace BtcTransmuter
                         AccessToken = key
                     }
                 });
-                await _userManager.CreateAsync(matchedUser);
+                if ((await _userManager.CreateAsync(matchedUser)).Succeeded)
+                {
+                    if (await _userManager.Users.CountAsync() == 1)
+                    {
+                        await _userManager.AddToRoleAsync(matchedUser, "Admin");
+                    }
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
