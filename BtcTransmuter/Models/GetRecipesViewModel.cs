@@ -10,7 +10,7 @@ namespace BtcTransmuter.Models
         public string StatusMessage { get; set; }
         public IEnumerable<Recipe> Recipes { get; set; }
         [JsonIgnore]
-        public ListMode ViewMode { get; set; } = ListMode.Cards;
+        public ListMode ViewMode { get; set; } = ListMode.List;
 
         public enum ListMode
         {
