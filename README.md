@@ -52,6 +52,7 @@ Currently there are three preset recipes that you can enable easily. In addition
 1. On-chain Forwarder - Forward funds from a wallet elsewhere
 2. [BTCPay Email Receipts](docs/EmailReceiptsPreset.md) - Send an email when a BTCPay invoice gets paid
 3. Fiat Conversion - Convert incoming money to fiat on an exchange by market selling when BTCPay invoice statuses change.
+4. [Dollar Cost Average](docs/DCA.md) - Schedule daily purchases of Bitcoin
 
 ## How do I write an extension?
 
