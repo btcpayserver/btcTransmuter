@@ -22,11 +22,13 @@ First, [SSH](https://github.com/JeffVandrewJr/patron/blob/master/SSH.md) into yo
 Then run the following commands:
 ```bash
 sudo su -
-cd BTCPayServer-docker
+cd btcpayserver-docker
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
 
 . ./btcpay-setup.sh -i
 ```
+
+If you have trouble starting your server after running the setup command, verify you have [added the environment variable](https://docs.btcpayserver.org/FAQ/FAQ-Deployment/#how-can-i-modify-or-deactivate-environment-variables) correctly to enable Transmuter.
 
 Once completed, your Transmuter will be available at your configured BTCPay website under `/btctransmuter/`, where the first account to register becomes the Transmuter admin. Open that link in your browser and you’ll see the homepage.
 
