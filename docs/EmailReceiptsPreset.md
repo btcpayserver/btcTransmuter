@@ -1,4 +1,4 @@
-## BTCPay Email Receipts - Ticket Sale Guide
+# BTCPay Email Receipts - Ticket Sale Guide
 
 ![FrontPage](./img/FrontPage.png)
 
