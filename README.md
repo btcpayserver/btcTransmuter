@@ -43,7 +43,7 @@ Currently there are 12 extensions that come bundled with the main application:
 * Email - Provides you with a way to check a POP3 for incoming emails and a way to send Email via SMTP
 * Exchange - Provides you a way to connect to a variety of exchanges and place orders on them
 * Lightning - Provides you interoperability with lightning nodes to be able to do basic channel and invoice management 
-* NBXplorer - Provides you ways to detect detect incoming funds, send funds, and generate addresses.
+* NBXplorer - Provides you ways to detect incoming funds, send funds, and generate addresses.
 * Operators - Lets you create conditional workflows
 * Recipe - Lets you manage existing or create recipes with your workflows
 * Timer - Run X every Y
