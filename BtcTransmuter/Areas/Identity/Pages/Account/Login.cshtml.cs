@@ -137,7 +137,11 @@ namespace BtcTransmuter.Areas.Identity.Pages.Account
         public bool EmailConfirmed { get; set; } 
 
         [JsonProperty("requiresEmailConfirmation")]
-        public bool RequiresEmailConfirmation { get; set; }
+        public bool RequiresEmailConfirmation { get; set; }       
+        
+
+        [JsonProperty("roles")]
+        public string[] Roles { get; set; }
 
         public override string ToString()
         {

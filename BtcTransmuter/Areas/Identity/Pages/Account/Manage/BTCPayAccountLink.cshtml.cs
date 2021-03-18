@@ -1,15 +1,10 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace BtcTransmuter.Areas.Identity.Pages.Account.Manage
 {

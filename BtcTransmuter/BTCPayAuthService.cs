@@ -9,6 +9,7 @@ using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,12 +21,16 @@ namespace BtcTransmuter
         private readonly UserManager<User> _userManager;
         private readonly IBtcTransmuterOptions _btcTransmuterOptions;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<BTCPayAuthService> _logger;
 
-        public BTCPayAuthService(UserManager<User> userManager, IBtcTransmuterOptions btcTransmuterOptions, IHttpClientFactory httpClientFactory)
+        public BTCPayAuthService(
+            UserManager<User> userManager, IBtcTransmuterOptions btcTransmuterOptions,
+            IHttpClientFactory httpClientFactory, ILogger<BTCPayAuthService> logger)
         {
             _userManager = userManager;
             _btcTransmuterOptions = btcTransmuterOptions;
             _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
 
         public async Task<User> LoginAndRegisterIfNeeded(string user, string pass)
@@ -40,6 +45,7 @@ namespace BtcTransmuter
             {
                 return null;
             }
+
             var matchedUser = await FindUserByBTCPayUserId(response.Id);
             if (matchedUser == null)
             {
@@ -48,6 +54,7 @@ namespace BtcTransmuter
                 {
                     return null;
                 }
+
                 //create account
                 matchedUser = new User()
                 {
@@ -65,7 +72,8 @@ namespace BtcTransmuter
                 });
                 if ((await _userManager.CreateAsync(matchedUser)).Succeeded)
                 {
-                    if (await _userManager.Users.CountAsync() == 1)
+                    
+                    if (response.Roles.Contains("ServerAdmin") || await _userManager.Users.CountAsync() == 1)
                     {
                         await _userManager.AddToRoleAsync(matchedUser, "Admin");
                     }
@@ -78,16 +86,26 @@ namespace BtcTransmuter
             else
             {
                 var tokenResponse = await CheckToken(matchedUser);
-                
-                if (!(tokenResponse?.ToString()?.Equals(response.ToString()) is true) && await GenerateKeyAndSet(user, pass, matchedUser))
+
+                if (!(tokenResponse?.ToString()?.Equals(response.ToString()) is true) &&
+                    await GenerateKeyAndSet(user, pass, matchedUser))
                 {
                     await _userManager.UpdateAsync(matchedUser);
-                }else if (!(tokenResponse?.ToString()?.Equals(response.ToString()) is true))
+                }
+                else if (!(tokenResponse?.ToString()?.Equals(response.ToString()) is true))
                 {
                     return null;
                 }
             }
-
+            if (response.Roles.Contains("ServerAdmin"))
+            {
+                await _userManager.AddToRoleAsync(matchedUser, "Admin");
+            }
+            else if(!await _userManager.HasPasswordAsync(matchedUser))
+            {
+                await _userManager.RemoveFromRoleAsync(matchedUser, "Admin");                        
+            }
+            
             return matchedUser;
         }
 
@@ -100,29 +118,33 @@ namespace BtcTransmuter
             }
 
             var blob = matchedUser.Get<UserBlob>();
-            blob.BTCPayAuthDetails.AccessToken  = key;
+            blob.BTCPayAuthDetails.AccessToken = key;
             if (_btcTransmuterOptions.DisableInternalAuth || !await _userManager.HasPasswordAsync(matchedUser))
             {
                 matchedUser.Email = user;
-                matchedUser.UserName= user;
+                matchedUser.UserName = user;
             }
+
             matchedUser.Set(blob);
             return true;
         }
+
         public async Task<string> GenerateKey(string user, string pass)
         {
             var client = _httpClientFactory.CreateClient("BTCPayAuthServer");
-            var request = new HttpRequestMessage(HttpMethod.Post, new Uri(_btcTransmuterOptions.BTCPayAuthServer, "/api/v1/api-keys"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{pass}")));
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                new Uri(_btcTransmuterOptions.BTCPayAuthServer, "/api/v1/api-keys"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Basic",
+                Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{pass}")));
             request.Content = new StringContent(JsonConvert.SerializeObject(new
             {
                 label = "transmuter login access token",
-                permissions = new[]{ "btcpay.user.canmodifyprofile"}
+                permissions = new[] {"btcpay.user.canmodifyprofile"}
             }), Encoding.UTF8, "application/json");
-                            
+
             var response = await client.SendAsync(request);
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var accessTokenResponse =
                     JsonConvert.DeserializeObject<JObject>((await response.Content.ReadAsStringAsync()));
@@ -131,6 +153,7 @@ namespace BtcTransmuter
 
             return null;
         }
+
         public async Task<User> FindUserByBTCPayUserId(string userId)
         {
             return _userManager.Users.AsEnumerable().SingleOrDefault(user =>
@@ -143,18 +166,27 @@ namespace BtcTransmuter
             {
                 return null;
             }
-            
-            var client = _httpClientFactory.CreateClient("BTCPayAuthServer");
-            var fetchUserId = new Uri(_btcTransmuterOptions.BTCPayAuthServer, "api/v1/users/me");
-            var request = new HttpRequestMessage(HttpMethod.Get, fetchUserId);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{pass}")));
-            var response = await client.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
+
+            try
             {
-                return null;
+                var client = _httpClientFactory.CreateClient("BTCPayAuthServer");
+                var fetchUserId = new Uri(_btcTransmuterOptions.BTCPayAuthServer, "api/v1/users/me");
+                var request = new HttpRequestMessage(HttpMethod.Get, fetchUserId);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic",
+                    Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{pass}")));
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<GetCurrentUserResponse>(
+                        await response.Content.ReadAsStringAsync());
+                }
             }
-            return JsonConvert.DeserializeObject<GetCurrentUserResponse>(
-                    await response.Content.ReadAsStringAsync());
+            catch (Exception e)
+            {
+                _logger.LogError(e, "error while attempting to authenticate with btcpay");
+            }
+
+            return null;
         }
 
         public async Task<GetCurrentUserResponse> CheckToken(User user)
@@ -163,23 +195,25 @@ namespace BtcTransmuter
             {
                 return null;
             }
+
             var blob = user.Get<UserBlob>();
             return await CheckToken(blob.BTCPayAuthDetails.AccessToken);
         }
+
         public async Task<GetCurrentUserResponse> CheckToken(string token)
         {
             if (_btcTransmuterOptions.BTCPayAuthServer is null)
             {
                 return null;
             }
-            
+
             var client = _httpClientFactory.CreateClient("BTCPayAuthServer");
 
             if (string.IsNullOrEmpty(token))
             {
                 return null;
             }
-            
+
             var fetchUserId = new Uri(_btcTransmuterOptions.BTCPayAuthServer, "api/v1/users/me");
             var request = new HttpRequestMessage(HttpMethod.Get, fetchUserId);
             request.Headers.Authorization = new AuthenticationHeaderValue("token", token);
@@ -188,10 +222,9 @@ namespace BtcTransmuter
             {
                 return null;
             }
+
             return JsonConvert.DeserializeObject<GetCurrentUserResponse>(
                 await response.Content.ReadAsStringAsync());
         }
-        
-        
     }
 }

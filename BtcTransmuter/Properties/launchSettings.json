@@ -28,7 +28,8 @@
 		"NBXplorer_Uri": "http://127.0.0.1:32838/",
 		"NBXplorer_NetworkType":"Regtest",
 		"NBXplorer_UseDefaultCookie": "1",
-        "BTCPayAuthServer": "https://localhost:14142"
+        "BTCPayAuthServer": "http://localhost:14142",
+        "DisableInternalAuth": "false"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
