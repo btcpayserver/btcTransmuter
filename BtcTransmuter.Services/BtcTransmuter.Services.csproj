@@ -5,7 +5,10 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj"/>
-        <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj"/>
+        <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
+        <ProjectReference Include="..\BtcTransmuter.Data\BtcTransmuter.Data.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 </Project>

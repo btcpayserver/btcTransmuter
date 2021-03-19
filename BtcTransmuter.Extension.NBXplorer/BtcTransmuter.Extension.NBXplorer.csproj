@@ -9,7 +9,8 @@
       <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="NBXplorer.Client" Version="3.0.15" />
+      <PackageReference Include="NBXplorer.Client" Version="3.0.20" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
     <ItemGroup>
       <UpToDateCheckInput Remove="Views\NBXplorerCreatePSBT\EditData.cshtml" />

@@ -64,7 +64,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
                 error = ex.Message;
             }
 
-            if (status != null && error == null && status.NetworkType != _options.NetworkType)
+            if (status != null && error == null && status.NetworkType != new ChainName(_options.NetworkType.ToString()))
             {
                 error =
                     $"{client.CryptoCode}: NBXplorer is on a different ChainType (actual: {status.NetworkType}, expected: {_options.NetworkType})";

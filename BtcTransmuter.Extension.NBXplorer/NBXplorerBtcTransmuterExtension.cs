@@ -54,7 +54,7 @@ namespace BtcTransmuter.Extension.NBXplorer
             serviceCollection.AddSingleton(provider =>
             {
                 var options = provider.GetService<NBXplorerOptions>();
-                return new NBXplorerNetworkProvider(options.NetworkType);
+                return new NBXplorerNetworkProvider(new ChainName(options.NetworkType.ToString()));
             });
         }
   

@@ -18,7 +18,7 @@ namespace BtcTransmuter.Extension.NBXplorer.Services
             _options = options;
             _logger = logger;
 
-            _nbXplorerNetworkProvider = new NBXplorerNetworkProvider(_options.NetworkType);
+            _nbXplorerNetworkProvider = new NBXplorerNetworkProvider(new ChainName(_options.NetworkType.ToString()));
         }
 
         public ExplorerClient GetClient(string cryptoCode)

@@ -12,4 +12,7 @@
         <ProjectReference Include="..\BtcTransmuter.Extension.NBXplorer\BtcTransmuter.Extension.NBXplorer.csproj" />
         <ProjectReference Include="..\BtcTransmuter.Extension.Timer\BtcTransmuter.Extension.Timer.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
 </Project>
