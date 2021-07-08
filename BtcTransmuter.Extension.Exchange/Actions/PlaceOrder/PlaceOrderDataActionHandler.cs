@@ -43,7 +43,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
             {
 				var result = await client.PlaceOrderAsync(orderRequest);
                 System.Threading.Thread.Sleep(500);
-                result = await client.GetOrderDetailsAsync(result.OrderId);
+                result = await client.GetOrderDetailsAsync(result.OrderId, orderRequest.MarketSymbol);
                 return new TypedActionHandlerResult<ExchangeOrderResult>()
                 {
                     Executed = true,
