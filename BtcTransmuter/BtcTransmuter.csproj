@@ -6,9 +6,9 @@
 <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <UserSecretsId>aspnet-BtcTransmuter-065A2226-96CE-4371-A96D-97EFFCF0B153</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <Version>0.0.57</Version>
+    <Version>0.0.58</Version>
     <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
-    <PackageVersion>0.0.57</PackageVersion>
+    <PackageVersion>0.0.58</PackageVersion>
 
   </PropertyGroup>
 
