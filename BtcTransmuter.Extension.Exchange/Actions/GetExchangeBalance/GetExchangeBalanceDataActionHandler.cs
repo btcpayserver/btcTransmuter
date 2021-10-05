@@ -28,7 +28,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
             
             var externalService = await recipeAction.GetExternalService();
             var exchangeService = new ExchangeService(externalService);
-            var client = exchangeService.ConstructClient();
+            var client = await exchangeService.ConstructClient();
 
             var result = await client.GetAmountsAsync();
 

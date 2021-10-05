@@ -25,10 +25,10 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
 
         protected override string ExternalServiceType => ExchangeService.ExchangeServiceType;
 
-        protected override Task<EditExchangeExternalServiceDataViewModel> BuildViewModel(ExternalServiceData data)
+        protected override async Task<EditExchangeExternalServiceDataViewModel> BuildViewModel(ExternalServiceData data)
         {
-            return Task.FromResult(new EditExchangeExternalServiceDataViewModel(new ExchangeService(data).GetData(),
-                ExchangeService.GetAvailableExchanges()));
+            return new EditExchangeExternalServiceDataViewModel(new ExchangeService(data).GetData(),
+                await ExchangeService.GetAvailableExchanges());
         }
 
         protected override async
@@ -41,7 +41,7 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
             if (!ModelState.IsValid)
             {
                 return (null,
-                    new EditExchangeExternalServiceDataViewModel(viewModel, ExchangeService.GetAvailableExchanges()));
+                    new EditExchangeExternalServiceDataViewModel(viewModel, await ExchangeService.GetAvailableExchanges()));
             }
 
             //current External Service data
@@ -54,7 +54,7 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
                     "Could not connect with current settings. Transmuter tests against fetching your balance amount from the exchange so you would need to enable that option if available");
 
                 return (null,
-                    new EditExchangeExternalServiceDataViewModel(viewModel, ExchangeService.GetAvailableExchanges()));
+                    new EditExchangeExternalServiceDataViewModel(viewModel, await ExchangeService.GetAvailableExchanges()));
             }
 
             return (externalServiceData, null);

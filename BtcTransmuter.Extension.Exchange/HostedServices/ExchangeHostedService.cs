@@ -52,7 +52,7 @@ namespace BtcTransmuter.Extension.NBXplorer.HostedServices
                 await Task.WhenAll(exchangeExternalServices.Select(async data =>
                 {
                     var exchangeService = new ExchangeService(data);
-                    var client = exchangeService.ConstructClient();
+                    var client = await exchangeService.ConstructClient();
                     var amounts = await client.GetAmountsAsync();
                     foreach (var keyValuePair in amounts)
                     {

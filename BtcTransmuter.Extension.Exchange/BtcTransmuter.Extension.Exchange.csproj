@@ -5,13 +5,13 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="Custom.DigitalRuby.ExchangeSharp" Version="0.7.4" />
-    </ItemGroup>
-    <ItemGroup>
       <ProjectReference Include="..\BtcTransmuter.Abstractions\BtcTransmuter.Abstractions.csproj" />
       <ProjectReference Include="..\BtcTransmuter.Extension.DynamicServices\BtcTransmuter.Extension.DynamicServices.csproj" />
     </ItemGroup>
     <ItemGroup>
       <UpToDateCheckInput Remove="Views\SendEmail\EditData.cshtml" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="DigitalRuby.ExchangeSharp" Version="0.9.0" />
     </ItemGroup>
 </Project>

@@ -36,7 +36,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeBalance
             var serviceData =
                 await _externalServiceManager.GetExternalServiceData(externalServiceId, GetUserId());
             var exchangeService = new ExchangeService(serviceData);
-            var symbols = await exchangeService.ConstructClient().GetCurrenciesAsync();
+            var symbols = await (await exchangeService.ConstructClient()).GetCurrenciesAsync();
 
             return symbols.Keys.ToArray();
         }

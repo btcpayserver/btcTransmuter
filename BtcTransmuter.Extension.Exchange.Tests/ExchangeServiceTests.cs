@@ -2,6 +2,7 @@ using System;
 using BtcTransmuter.Data.Entities;
 using BtcTransmuter.Data.Models;
 using System.Linq;
+using System.Threading.Tasks;
 using BtcTransmuter.Extension.Exchange.ExternalServices.Exchange;
 using BtcTransmuter.Tests.Base;
 using Xunit;
@@ -12,9 +13,9 @@ namespace BtcTransmuter.Extension.Exchange.Tests
     public class ExchangeServiceTests:BaseExternalServiceTest<ExchangeService,ExchangeExternalServiceData >
     {
         [Fact]
-        public void ExchangeService_GetAvailableExchanges()
+        public async Task ExchangeService_GetAvailableExchanges()
         {
-            Assert.True(ExchangeService.GetAvailableExchanges().Any());
+            Assert.True((await ExchangeService.GetAvailableExchanges()).Any());
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace BtcTransmuter.Extension.Exchange.Tests
         }
         
         [Fact]
-        public void ExchangeService_CanConstructClient()
+        public async Task ExchangeService_CanConstructClient()
         {
             var InvalidData = new ExchangeExternalServiceData()
             {
@@ -64,7 +65,7 @@ namespace BtcTransmuter.Extension.Exchange.Tests
             externalServiceData.Set(InvalidData);
            
             var exchangeService = GetExternalService(externalServiceData);
-            Assert.ThrowsAny<Exception>(() => exchangeService.ConstructClient());
+            await Assert.ThrowsAnyAsync<Exception>(async () => await exchangeService.ConstructClient());
             
             
             var validData = new ExchangeExternalServiceData()

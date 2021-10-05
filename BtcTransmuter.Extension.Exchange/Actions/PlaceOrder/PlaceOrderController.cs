@@ -38,7 +38,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
             var serviceData =
                 await _externalServiceManager.GetExternalServiceData(externalServiceId, GetUserId());
             var exchangeService = new ExchangeService(serviceData);
-            return (await exchangeService.ConstructClient().GetMarketSymbolsAsync()).ToArray();
+            return (await (await exchangeService.ConstructClient()).GetMarketSymbolsAsync()).ToArray();
         }
 
         protected override async Task<PlaceOrderViewModel> BuildViewModel(RecipeAction from)
@@ -79,7 +79,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.PlaceOrder
                 var serviceData =
                     await _externalServiceManager.GetExternalServiceData(viewModel.ExternalServiceId, GetUserId());
                 var exchangeService = new ExchangeService(serviceData);
-                var symbols = (await exchangeService.ConstructClient().GetMarketSymbolsAsync()).ToArray();
+                var symbols = (await (await exchangeService.ConstructClient()).GetMarketSymbolsAsync()).ToArray();
                 if (symbols.Contains(viewModel.MarketSymbol))
                 {
                     mainModel.ExternalServiceId = viewModel.ExternalServiceId;

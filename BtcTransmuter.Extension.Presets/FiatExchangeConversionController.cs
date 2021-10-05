@@ -113,7 +113,7 @@ namespace BtcTransmuter.Extension.Presets
                     var serviceData =
                         await _externalServiceManager.GetExternalServiceData(condition.ExchangeServiceId, GetUserId());
                     var exchangeService = new ExchangeService(serviceData);
-                    var symbols = (await exchangeService.ConstructClient().GetMarketSymbolsAsync()).ToArray();
+                    var symbols = (await (await exchangeService.ConstructClient()).GetMarketSymbolsAsync()).ToArray();
                     if (!symbols.Contains(condition.MarketSymbol))
                     {
                         viewModel.AddModelError(

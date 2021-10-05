@@ -55,7 +55,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeRate
                 var serviceData =
                     await _externalServiceManager.GetExternalServiceData(viewModel.ExternalServiceId, GetUserId());
                 var exchangeService = new ExchangeService(serviceData);
-                var symbols = (await exchangeService.ConstructClient().GetMarketSymbolsAsync()).ToArray();
+                var symbols = (await (await exchangeService.ConstructClient()).GetMarketSymbolsAsync()).ToArray();
                 if (symbols.Contains(viewModel.MarketSymbol))
                 {
                     mainModel.ExternalServiceId = viewModel.ExternalServiceId;

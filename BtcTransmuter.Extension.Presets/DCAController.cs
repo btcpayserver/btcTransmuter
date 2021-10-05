@@ -87,7 +87,7 @@ namespace BtcTransmuter.Extension.Presets
                 var serviceData =
                     await _externalServiceManager.GetExternalServiceData(viewModel.SelectedExchangeServiceId, GetUserId());
                 var exchangeService = new ExchangeService(serviceData);
-                var symbols = (await exchangeService.ConstructClient().GetMarketSymbolsAsync()).ToArray();
+                var symbols = (await (await exchangeService.ConstructClient()).GetMarketSymbolsAsync()).ToArray();
                 if (!symbols.Contains(viewModel.MarketSymbol))
                 {
                     viewModel.AddModelError(nameof(viewModel.MarketSymbol), $"The market symbols you entered is invalid. Please choose from the following: {string.Join(",", symbols)}", ModelState);

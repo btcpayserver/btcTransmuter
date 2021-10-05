@@ -25,17 +25,17 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
         {
         }
 
-        public static IExchangeAPI[] GetAvailableExchanges()
+        public static async Task<IExchangeAPI[]> GetAvailableExchanges()
         {
-            return ExchangeAPI.GetExchangeAPIs();
+            return await ExchangeAPI.GetExchangeAPIsAsync();
         }
 
 
-        public ExchangeAPI ConstructClient()
+        public async Task<ExchangeAPI> ConstructClient()
         {
             var data = GetData();
 
-            var result = ExchangeAPI.GetExchangeAPI(data.ExchangeName);
+            var result = await ExchangeAPI.GetExchangeAPIAsync(data.ExchangeName);
             if (result is ExchangeAPI api)
             {
                 if (!string.IsNullOrEmpty(data.OverrideUrl))
@@ -52,7 +52,7 @@ namespace BtcTransmuter.Extension.Exchange.ExternalServices.Exchange
 
         public async Task<bool> TestAccess()
         {
-            var client = ConstructClient();
+            var client = await ConstructClient();
             if (client == null)
             {
                 return false;

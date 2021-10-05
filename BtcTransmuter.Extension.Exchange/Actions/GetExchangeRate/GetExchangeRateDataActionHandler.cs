@@ -26,7 +26,7 @@ namespace BtcTransmuter.Extension.Exchange.Actions.GetExchangeRate
         {
             var externalService = await recipeAction.GetExternalService();
             var exchangeService = new ExchangeService(externalService);
-            var client = exchangeService.ConstructClient();
+            var client = await exchangeService.ConstructClient();
 
             var result = await client.GetTickerAsync(actionData.MarketSymbol);
 
