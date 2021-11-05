@@ -12,6 +12,6 @@
       <UpToDateCheckInput Remove="Views\SendEmail\EditData.cshtml" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="DigitalRuby.ExchangeSharp" Version="0.9.0" />
+      <PackageReference Include="Custom.DigitalRuby.ExchangeSharp" Version="0.9.0" />
     </ItemGroup>
 </Project>
