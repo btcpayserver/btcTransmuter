@@ -30,6 +30,7 @@ namespace BtcTransmuter.Extension.BtcPayServer.Triggers.InvoiceStatusChanged
         {
             new SelectListItem() {Text = "New", Value = Invoice.STATUS_NEW},
             new SelectListItem() {Text = "Paid", Value = Invoice.STATUS_PAID},
+            new SelectListItem() {Text = "Settled", Value = Invoice.STATUS_SETTLED},
             new SelectListItem() {Text = "Invalid", Value = Invoice.STATUS_INVALID},
             new SelectListItem() {Text = "Confirmed", Value = Invoice.STATUS_CONFIRMED},
             new SelectListItem() {Text = "Complete", Value = Invoice.STATUS_COMPLETE},
