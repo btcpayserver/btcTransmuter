@@ -1,5 +1,9 @@
 # BtcTransmuter Docs
 
+## Note: This project is not maintained
+
+Btctransmuter is no longer maintained and will not be updated with new features. Avoid using it, if you can.
+
 ## Introduction - What is BtcTransmuter?
 
 BtcTransmuter is a free, open-source & self-hosted tool that allows you to configure actions that execute automatically upon specified conditions. Its primary focus is the integration of cryptocurrency services to help users manage their funds and business workflow.
